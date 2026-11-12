@@ -177,15 +177,15 @@ dist/             打包输出（gitignored）
 
 ## 验证状态
 
-**公开发布验证（2026-11-13，v0.4.0 候选发布树）**
+**公开发布验证（2026-11-13，tag v0.4.0）**
 
-- **快照边界**：本版本为 2026-11-13 05:23 (+08:00) 导出的公开快照；导出后上游仍有 Ballista 相关修复，将在后续版本另行发布；本快照内 Ballista 支持范围按 partial 声明。知识与规则版本审计见 `docs/evidence/extracted/version-audit.json` 的 `release_snapshot`。
-- **环境**：Windows 10（10.0.19045）、PowerShell 7.6.10（脚本要求 5.1+）、Python 3.12.14（在发布目录内新建 `.venv`）。
-- **dataset**：`data.sqlite` sha256 = `afa79e9fda0023b2ed09f4cbe8e07da436e0c74c03f34f80772da471c0adb8ab`，与 `data/current.json` 一致。
-- **已执行命令与结果**：
-  - `scripts/fetch_dataset.ps1`：dataset 已存在且 sha256 匹配时 PASS；从 GitHub Release 实际下载待发布后验证。
-  - `scripts/le.ps1 doctor`：**PASS**（解释器/模块导入/dataset 指针/文件 sha256/SQLite 可读/解析路由；Node/JDK/Ghidra 为可选 INFO）。
-  - `scripts/le.ps1 knowledge rebuild`：**OK**（126 条目，`source_digest=sha256:bac0d7e258bdf2a89db5313d60ab86ef281ceabc15f7f8b11d08c28adbcac7e4`）；`knowledge search --query "node:fr11mv:9"` 命中 3 条 exact。
-  - 合成最小输入（不依赖真实构筑）：`le_calc check --snapshot fixtures/min-case/input-snapshot.json` 通过（含预期的 `calc_input_missing` issue，属合成夹具说明范围）；`le_calc run ... --out reports/min-case-demo` 生成 `result.json` 与离线 `black-hole-damage.html`（2.16 MB）。
-  - 测试套件（逐套件运行，非 `--suite all`）：`save_import` PASS 24/0；`knowledge` PASS 91/0；`affix_db` PASS 71/skip 23；`build_import` PASS 35/skip 15；`phase3` PASS 613/skip 113；`ingest` PASS 188/skip 38。跳过项为依赖作者本地案例/报告的测试模块，缺少数据时通过 skip 护栏显式 SKIP，不是失败。
-- **未验证项（如实列出）**：GitHub Release 实际下载（仓库尚未发布）、真实用户存档的完整首接（需自备可选 Node + `lastepochsupertools v1.3.1`）、planner payload 手工流程的端到端操作、完整 `test --suite all` 与完整网页验收矩阵。能力边界见 [docs/current-status.md](docs/current-status.md) §4。
+- **仓库与 Release**：<https://github.com/BlaCatFishLE/LastEpoch-AIBuildSimulator>；dataset 通过 Release 附件 `data.sqlite` 分发。已在干净 clone 中实测 `scripts/fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator` 从 Release 下载并校验通过（251.2 MB / 263,401,472 bytes，sha256 `afa79e9fda0023b2ed09f4cbe8e07da436e0c74c03f34f80772da471c0adb8ab`）。
+- **验证环境**：Windows 10（10.0.19045）、PowerShell 7.6.10（脚本声明 5.1+）、Python 3.12.14（干净 clone 内新建 `.venv`）。
+- **干净 clone（`--branch v0.4.0`，826 文件）已执行**：
+  - 结构/隐私/死链/体积检查：PASS（0 个人路径、0 断开链接、0 无效 JSON、0 个 >100 MB 的跟踪文件）；
+  - `le.ps1 doctor`：PASS（解释器/模块导入/dataset 指针/文件 sha256/SQLite/解析路由）；
+  - `knowledge rebuild`：OK；`knowledge search --query "node:fr11mv:9"`：3/3 命中；
+  - 合成最小输入 `fixtures/min-case/input-snapshot.json`：`le_calc check` 通过（含预期的 synthetic `calc_input_missing` issue）；`le_calc run --snapshot ... --out reports/min-case-demo` 生成 `result.json` 与 `black-hole-damage.html`；
+  - 测试套件：`save_import` 24/0、`knowledge` 91/0、`affix_db` 71/skip 23、`build_import` 35/skip 15、`phase3` 613/skip 113、`ingest` 188/skip 38，全部 PASS（skip 为依赖作者本地案例/报告的模块，缺少数据时显式跳过）。
+- **快照边界**：tag v0.4.0 为 2026-11-13 05:23 (+08:00) 导出的公开快照；导出后上游 Ballista 相关修复不在该 tag 内，将在后续版本发布；本快照内 Ballista 支持范围按 partial 声明。版本审计见 `docs/evidence/extracted/version-audit.json` 的 `release_snapshot`。
+- **未验证项（如实列出）**：真实用户存档的完整首接（需自备可选 Node + `lastepochsupertools v1.3.1`）、planner payload 手工流程的端到端操作、原生 Windows PowerShell 5.1 实机（脚本声明 5.1+ 兼容）、完整 `test --suite all` 与完整网页验收矩阵。能力边界见 [docs/current-status.md](docs/current-status.md) §4。

@@ -54,7 +54,7 @@
 
 **最近验证（作者本地，2026-11-13）**：Ballista Armed Construction partial 交付完成（统一 plan-v4 `v4-actor` 路径；结果 validate PASS、HTML 已生成）。这属于作者本地候选验证，**不是**干净 clone 上的公开发布验证。
 
-**公开发布验证**：由发布者在干净 clone 上按 [README](../README.md)“快速开始”执行后填写，见 README 末尾的“验证状态”区块。当前候选树内：
+**公开发布验证（tag v0.4.0，2026-11-13）**：已在干净 clone + Release 下载环境完成，命令与结果见 [README](../README.md) 末尾的“验证状态”区块。当前发布树内：
 
 - 代码、配置、测试与测试夹具保留；依赖作者本地案例/报告的测试在缺少数据时会显式 **SKIP**（不是失败）。
 - `test --suite <name>` 按套件运行；完整 `--suite all` 不属于默认验证要求。
