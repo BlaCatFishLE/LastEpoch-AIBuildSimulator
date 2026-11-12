@@ -1,0 +1,75 @@
+{
+ "source": "local game 1.5.3 GameAssembly.dll (BlackHoleTree.updateMutator native disassembly, capstone) + 1.5.3 bh2 node data",
+ "game_version": "1.5.3",
+ "unity": "6000.4.8f1",
+ "buildid": "26087601",
+ "method": {
+  "class": "BlackHoleTree",
+  "method": "updateMutator",
+  "rva": "0x24bd660",
+  "va": "0x1824bd660",
+  "note": "switch over internal node effect labels retrieved from ScriptString (script.json), e.g. \"Black Hole Binary Star\", \"Black Hole One Hole Only\", \"Black Hole Convert To Fire\", \"Black Hole Ignite Chance Per Second\", \"Black Hole Additional Charge\", \"Black Hole Added Duration and Cooldown\", \"Black Hole Damage and Less Pull\", \"Black Hole Increased Damage\", \"Black Hole Increased Fire Damage\", \"Black Hole Added Fire Damage\", \"Black Hole Added Cold Damage\", \"Black Hole Extra Black Hole\"."
+ },
+ "effects": {
+  "heat_wave": {
+   "label": "Black Hole Ignite Chance Per Second",
+   "behavior": "accumulator += points * 2.0 (percent units; 2% per point), later turned into ignite-chance-per-second stat",
+   "matches": "node tooltip +2%/point; alt text 100% fire res +1 point = 200%/s; code in BlackHoleMutator.Mutate multiplies by uncapped fire resistance and applies aura with interval 0.5s, applyOnStart=true",
+   "status": "confirmed"
+  },
+  "red_giant": {
+   "label": "Black Hole Convert To Fire",
+   "behavior": "sets conversion flags; duration accumulator += 0.8 (+80%); pull disabled",
+   "constants": {
+    "duration_add": 0.8
+   },
+   "status": "confirmed"
+  },
+  "tidal_force": {
+   "label": "Black Hole Damage and Less Pull",
+   "behavior": "adds Stats.Stat(property=Damage(0), tags=0, increased=0, more=points*0.15); pull strength accumulator -= points*0.15",
+   "status": "confirmed"
+  },
+  "flaming": {
+   "label": "Black Hole Increased Fire Damage",
+   "behavior": "adds Stats.Stat(property=Damage(0), tags=8(Fire), more=points*0.10)",
+   "status": "confirmed"
+  },
+  "endless_maw": {
+   "label": "Black Hole Added Duration and Cooldown",
+   "behavior": "duration accumulator += points*0.3 (+30%/point); cooldown accumulator += points*2 (seconds)",
+   "status": "confirmed"
+  },
+  "pocket_dimension": {
+   "label": "Black Hole Additional Charge",
+   "behavior": "charge accumulator += points (+1 charge)",
+   "status": "confirmed"
+  },
+  "binary_system": {
+   "label": "Black Hole Binary Star",
+   "behavior": "sets binary-star flag AND adds Stats.Stat(property=Damage(0), tags=0, increased=0, more=points*1.0) => +100% more damage (in addition to structural two-component cold->fire copy found in BlackHoleMutator.Mutate)",
+   "status": "open_high_impact",
+   "open": "whether structural copy (2 components, addBaseDamage is simple +=) stacks with +100% more for 4x body; whether the damage more stat is inherited by Ignite (user rule 5) making Ignite also 2x. v1 currently models structural only (extra_more=0) and does not grant Binary more to Ignite."
+  },
+  "singularity": {
+   "label": "Black Hole One Hole Only",
+   "behavior": "sets one-hole-per-cast flag AND adds Stats.Stat(property=Damage(0), tags=0, more=points*1.0) => +100% more",
+   "status": "confirmed (v1 already applies node 28 more=1.0)"
+  },
+  "extra_black_hole": {
+   "label": "Black Hole Extra Black Hole",
+   "behavior": "extra black-hole accumulator (Scattered/Armageddon family); runtime semantics (spawn extra hole per cast?) pending",
+   "status": "open"
+  }
+ },
+ "base_damage_helpers": {
+  "getBaseDamage": "DamageStatsHolder.getBaseDamage(DamageType) -> damageStats.baseDamage[type]",
+  "addBaseDamage": "DamageStatsHolder.addBaseDamage(DamageType,float) -> damageStats.baseDamage[type] += value (simple addition, disassembled RVA 0x2372e80)"
+ },
+ "open_items": [
+  "Binary System: structural 2 components + separate +100% more stat; resolve stacking and Ignite inheritance before ruleset update",
+  "Recurrence (property 70 Cooldown Reduction) vs v1 ICR-pool assumption; cooldown/charge formula pending",
+  "forceSingleBlackHole / extraBlackHoles runtime semantics",
+  "cast time formula from Ability/AbilityAnimation code"
+ ]
+}

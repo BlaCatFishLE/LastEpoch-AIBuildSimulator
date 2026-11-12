@@ -1,0 +1,200 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-dual-wield-added",
+  "revision": 2,
+  "title": {
+    "zh": "双持武器 added damage 求和与武器 attackRate 不参与",
+    "en": "Dual-wield added damage summing and weapon attackRate exclusion"
+  },
+  "aliases": [
+    "dual wield",
+    "双持",
+    "added sum",
+    "Rune Hammer",
+    "Katana",
+    "weapon attackRate"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "equipment:weapon1",
+        "equipment:weapon2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "dual_wield"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "dual_wield flag",
+      "source": "current:matched_instances",
+      "unit": "bool"
+    },
+    {
+      "parameter": "added_damage_policy",
+      "source": "current:matched_instances",
+      "note": "sum（用户裁决）"
+    },
+    {
+      "parameter": "weapon slots",
+      "source": "current:matched_instances",
+      "note": "weapon1/weapon2 的基底、attackRate、implicit、词条"
+    },
+    {
+      "parameter": "added rows by slot",
+      "source": "current:matched_instances",
+      "unit": "flat"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R2",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/attack_model/dual_wield；#/rules id=R2/R3"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_inputs",
+    "symbol": "_apply_weapon_added_policy",
+    "note": "sum（候选 A，与第三方 runtime 一致）为默认；average（候选 B）保留为备选但被用户裁决取代"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "user_conversation#2026-11-07",
+      "note": "双持：两把武器都生效，added damage 直接相加（不取平均）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#items entity_id=item:letools:itemList.equippable_7:10",
+      "note": "Rune Hammer：attackRate 0.94、implicit +64 melee damage"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#items entity_id=item:letools:itemList.equippable_9:9",
+      "note": "Katana：attackRate 1.2、implicit +38 melee damage"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#R2",
+      "note": "武器数据与合成口径候选"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#2 R2 双持",
+      "note": "研究阶段候选 A/B；第二批用户裁决选求和"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/dual_wield",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/added_damage_policy",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/slots",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[raw.item_instance_id in (equipment.weapon1, equipment.weapon2)]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "fr-hit-added-scaling",
+      "requirement": "求和后的 added 进同一组件池并乘 scaling",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/attack_model/dual_wield"
+    },
+    {
+      "with": "fr-hit-offhand-exalted",
+      "requirement": "副手 Exalted 时 weapon2 的全部 stats 先 ×(1+97%) 再进池",
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/offhand_exalted_effect"
+    },
+    {
+      "with": "fr-hit-attack-speed",
+      "requirement": "双持时基率仍取技能 as；候选 B（average）不采用",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/attack_model/alternatives"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "真实游戏里双持是否交替武器/取平均无游戏真值（OQ3）；用户裁决选定求和外加引擎默认",
+      "若 Lead 再切换策略，需要新 run 与新 expected；本条目按当前确认口径登记"
+    ],
+    "requery_when": [
+      "换武器/换副手",
+      "用户改判双持合成策略"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "added",
+    "stacking_policy": "additive",
+    "order_policy": "两把武器的 added 全部进池后统一乘 added_damage_scaling；不取平均",
+    "more_group_source": "n/a（added 池策略，不是 more 组）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

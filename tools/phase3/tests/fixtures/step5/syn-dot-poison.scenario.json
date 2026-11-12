@@ -1,0 +1,16 @@
+{
+  "schema": "le-skill-scenario-v3",
+  "scenario_id": "syn-dot-poison-default",
+  "template_id": "syn-dot-poison",
+  "states": {},
+  "target": {
+    "monster_level": 100,
+    "resistance": 0.0,
+    "monster_damage_reduction": 0.0,
+    "resistances": {
+      "cold": 0.0,
+      "poison": 0.0,
+      "fire": 0.5
+    }
+  }
+}

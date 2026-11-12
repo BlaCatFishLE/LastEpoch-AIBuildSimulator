@@ -1,0 +1,135 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-effect-surge-pyroclasm",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Surge Pyroclasm：额外施放 Flame Reave（未建模）",
+    "en": "Surge Pyroclasm: extra Flame Reave cast (not modeled)"
+  },
+  "source_path": "knowledge/mechanisms/fr-effect-surge-pyroclasm.json",
+  "evidence_state": "unresolved",
+  "implementation_state": "not_implemented",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "surge_pyroclasm",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=surge_pyroclasm",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_effect:surge_pyroclasm 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=su5g3；#nodes node:letools:su5g3:28",
+      "note": "Surge node 28 Pyroclasm：Surge 可额外触发 Flame Reave",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Surge Pyroclasm：额外施放 Flame Reave（未建模）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency；伤害标签：Fire、Melee；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=frequency；叠层策略=unknown；顺序/汇总=若纳入循环，额外 FR 施放会改变施放次数与 Rhythm 层数；当前未实现；more 分组依据=n/a",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "仅作为 not_modeled 候选筛查；rotation 不含 Surge 施放",
+      "source": "$.handler_ref.note（le_calc.hit_buffs.screen_buffs）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：effect definition、surge tree node、rotation policy",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/not_modeled_effects[id=surge_pyroclasm]"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/dps/rotation"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "R4：Surge 触发额外 FR 的触发率/冷却/条件未量化；单技能模型不含其它技能伤害",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "若纳入：需同时建模 Surge 自身施放、Rhythm 补层与其它资源",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "blocks_full_dps=true（skill template unsupported）",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

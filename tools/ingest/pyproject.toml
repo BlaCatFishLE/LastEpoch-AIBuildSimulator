@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "le-data"
+version = "0.1.0"
+description = "Last Epoch phase-1 data extraction and normalized database pipeline"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+# Local game asset extraction only; the web pipeline itself has no third-party deps.
+game = ["UnityPy>=1.20"]
+
+[project.scripts]
+le-data = "le_data.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

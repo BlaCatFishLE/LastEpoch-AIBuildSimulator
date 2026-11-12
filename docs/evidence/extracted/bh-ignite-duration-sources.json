@@ -1,0 +1,109 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-ignite-duration-sources",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Ignite 持续时间乘区来源池",
+    "en": "Ignite duration multiplier source pool"
+  },
+  "source_path": "knowledge/mechanisms/bh-ignite-duration-sources.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "case_bound",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-duration",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-duration]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-ignite-duration 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Ignite 持续时间乘区来源池",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ignite、duration；伤害标签：Fire、Ailment；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Ignite 持续时间乘区 = 1 + Σ(increased Ignite duration 行)，来源包括玩家装备/神像/被动，以及条件通道追加的跨技能行（Eternal Flames 被动/激活）。持续时间乘区直接按总伤害乘区处理（每层总伤害 ∝ 持续时间），不需要单独的『每秒伤害』换算。与 Black Hole 本体 duration（bh-duration）是两个独立的池，不能混用。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "收集 stat_key=ailment_duration 的 increased/added 行（target=ignite/all）→ duration_multiplier；条件通道追加行后重算同一池。",
+      "source": "$.handler_ref.note（le_calc.ignite._ignite_duration）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：player duration rows、duration rows detail、conditional additions、duration result",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/parameter_bindings/0/source",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_total"
+    },
+    {
+      "pointer": "$/parameter_bindings/1/source",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_rows"
+    },
+    {
+      "pointer": "$/parameter_bindings/3/source",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/duration"
+    },
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/duration"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.ignite_total]"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/assumptions_applied"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.ignite_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_rows"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/duration"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "持续时间行来源在当前案例为装备/神像/被动；是否还有技能等级或其它隐藏 duration 来源未穷举。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "『持续时间延长按总伤害乘区』是用户规则 6 + 参考模型口径；游戏内逐来源叠加的加法性未单独验证。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

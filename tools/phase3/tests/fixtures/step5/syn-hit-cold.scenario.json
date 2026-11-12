@@ -1,0 +1,12 @@
+{
+  "schema": "le-skill-scenario-v3",
+  "scenario_id": "syn-hit-cold-default",
+  "template_id": "syn-hit-cold",
+  "states": {},
+  "target": {
+    "monster_level": 100,
+    "resistance": 0.2,
+    "monster_damage_reduction": 0.5,
+    "penetration": 0.1
+  }
+}

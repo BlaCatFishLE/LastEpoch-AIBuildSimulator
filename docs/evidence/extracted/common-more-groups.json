@@ -1,0 +1,86 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "common-more-groups",
+  "kind": "mechanism",
+  "title": {
+    "zh": "more 分组与逐组独立相乘",
+    "en": "More/less grouping: per-group additive, cross-group multiplicative"
+  },
+  "source_path": "knowledge/mechanisms/common-more-groups.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-more-aggregation",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-more-aggregation]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-bh-more-aggregation 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "more 分组与逐组独立相乘",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、dot、tick、ignite、body；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "同一 group 内的多条 more 先相加，每组产生一个因子 (1+Σmore)，不同 group 之间相乘。group 必须显式来自机制/规则定义（ruleset effect.group），不能从词条文本推定。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "分组相加 → 每组 factor=(1+Σ) → 组间乘积；tree_more_groups 负责把 ruleset 技能树 more 行接入同一分组器。",
+      "source": "$.handler_ref.note（le_calc.damage.group_more_rows）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：more_group、more_value",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "当前 ruleset 的技能树 more 值是「当前案例点数」的冻结 value_total；引擎不读输入节点点数。复用同一节点到不同点数的新 BD 时必须重算规则/新增规则条目（见 bh-skill-tree-more-nodes）。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "FR hit 模型有自己的 more 分组实现，尚未与 BH 合并为同一入口（实施方案 §6.2 先适配后合并）。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "每层独立相乘（multiplicative_per_stack）在 BH 当前节点里未出现；schema 的 stacking_policy 保留该选项，但本案例只用 additive。",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

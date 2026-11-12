@@ -1,0 +1,77 @@
+# =============================================================================
+# LastEpoch-BuildSimulator（公开版）— 版本控制排除规则
+#
+# 原则：
+#   * 仓库跟踪：源代码、规则、schema、知识库、基础数据、契约文档、
+#     测试与测试夹具、案例模板（examples/_template/）。
+#   * 不跟踪：用户本地产物（案例、存档、构筑 revision、报告）、可重建缓存、
+#     体积过大的离线 dataset（走 GitHub Release 附件）、本机配置与虚拟环境。
+# =============================================================================
+
+# --- Python -----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+
+# --- 本地临时工作区 ----------------------------------------------------------
+.scratch/
+_verify/
+*.log
+*.tmp
+*.bak
+
+# --- 用户案例（只保留模板） --------------------------------------------------
+# 新案例在 examples/<case>/ 下本地工作，由 le.ps1 import 生成，不入库。
+examples/*
+!examples/_template/
+!examples/_template/**
+
+# --- 用户产物：报告 / 构筑 / 原始输入 / 缓存 ---------------------------------
+reports/
+data/builds/
+data/raw/
+data/staging/
+data/normalized/
+data/cache/
+
+# --- 离线 dataset（Release 附件；data/current.json + manifest.json 仍跟踪） ---
+data/releases/*/data.sqlite
+data/releases/**/*.sqlite-wal
+data/releases/**/*.sqlite-shm
+*.part
+
+# --- 第三方原始数据快照（只用于本地重建 affix DB，不随仓库分发） -------------
+data/affix-db/v1/source-snapshot/
+
+# --- 打包产物 ----------------------------------------------------------------
+/package-manifest.json
+/release/
+*.zip
+*.7z
+
+# --- 外部运行时/研究工具（不随包分发） --------------------------------------
+tools/node/
+tools/jdk-*/
+tools/ghidra_*/
+
+# --- 本机配置 / 凭据 ---------------------------------------------------------
+config/local.json
+config/*.local.json
+config/sources.json
+.env
+.env.*
+
+# --- 操作系统/编辑器杂项 -----------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

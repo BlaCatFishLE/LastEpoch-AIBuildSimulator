@@ -1,0 +1,101 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-eternal-flames-passive",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Eternal Flames 被动（+Ignite 持续时间）",
+    "en": "Eternal Flames passive (increased ignite duration)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-eternal-flames-passive.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "enchant_weapon.eternal_flames.passive",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=enchant_weapon.eternal_flames.passive]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+      "note": "conditional_effect:enchant_weapon.eternal_flames.passive 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Eternal Flames 被动（+Ignite 持续时间）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ignite、duration；伤害标签：Fire、Ailment；条件 code：none；必要节点：node:sb44eQ:9",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Enchant Weapon 专精树节点 9 的常驻被动：Ignite 持续时间 increased；不需要激活 Enchant Weapon。它是 build_base 相对 legacy_single_skill 的当前差异来源（条件重算通道以 auto 效果应用）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "生成 ailment_duration(target=ignite, increased) 贡献；build_base 基线纳入 auto 效果，legacy 基线排除（见 bh-baseline-profiles）。",
+      "source": "$.handler_ref.note（le_calc.conditional.recompute.recompute_scenario）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、effect values、ignite duration pool",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/3"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/enchant_weapon.eternal_flames.passive"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/assumptions_applied"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.single_cast_total]"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/0/nodes/1/points"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_total"
+    },
+    {
+      "pointer": "$/interaction_requirements/0/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline_profile"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.single_cast_total]"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "『Ignites you inflict』是否覆盖 Black Hole 的 Heat Wave 点燃：注册表保留为假设并在重算中标注 assume:ignite-inheritance；不是 confirmed 机制。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

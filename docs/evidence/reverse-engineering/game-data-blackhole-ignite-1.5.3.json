@@ -1,0 +1,129 @@
+{
+ "source": "local game 1.5.3 PermaLoad.bundle (UnityPy 1.25.4, read-only)",
+ "game_version": "1.5.3",
+ "steam_buildid": "26087601",
+ "unity": "6000.4.8f1",
+ "ability": {
+  "path_id": 2849192406665115231,
+  "gameobject": null,
+  "m_Name": "BlackHole",
+  "abilityName": "Black Hole",
+  "playerAbilityID": "bh2",
+  "scalars": {
+   "m_Name": "BlackHole",
+   "abilityName": "Black Hole",
+   "playerAbilityID": "bh2",
+   "abilityID": null,
+   "tags": 4356,
+   "useDuration": 0.6000000238418579,
+   "animationSpeed": null,
+   "maxCharges": 1.0,
+   "manaCost": 35.0,
+   "cooldown": null,
+   "cooldownDuration": null,
+   "sharedCooldown": 0,
+   "isChanneled": null,
+   "castTime": null,
+   "useType": null,
+   "abilityType": null
+  }
+ },
+ "repeatedly_damage_component": [
+  {
+   "path_id": 2064363195564901928,
+   "gameobject": "BlackHoleSpell",
+   "scalars": {
+    "damageInterval": 0.30000001192092896,
+    "damageIncreasePerInterval": 0.0,
+    "maxDamageIncreaseFromInterval": 0.0,
+    "limitMaxDamageIncreaseFromInterval": 0,
+    "damageAtStart": 1,
+    "undodgeable": 0,
+    "radius": 3.0,
+    "minRadius": 0.0,
+    "maxTargets": 0,
+    "alsoDamageParent": 0,
+    "delay": 0.0,
+    "modifyRadiusOverTime": 0,
+    "radiusChangePerSecond": 0.0
+   }
+  }
+ ],
+ "ignite_ailment": {
+  "path_id": 4341026275637133918,
+  "m_Name": "Ignite",
+  "displayName": "Ignite",
+  "scalars": {
+   "m_Name": "Ignite",
+   "displayName": "Ignite",
+   "id": 1,
+   "duration": 2.5,
+   "maxInstances": 0,
+   "positive": 0,
+   "dealsDamage": 1,
+   "dealsAllDamageAtEnd": 0,
+   "dealsDamageWhenHit": 0,
+   "effectOfIncreasedEffectiveness": 1,
+   "additionalPenetrationDamageType": 1,
+   "tags": 4096,
+   "themeConversions": 0,
+   "baseDamage": {
+    "damage": [
+     0.0,
+     40.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "critChance": 0.0,
+    "critMultiplier": 1.0,
+    "critType": 1,
+    "isHit": 0,
+    "cullPercent": 0.0,
+    "flatCull": 0.0,
+    "cullChance": 0.0,
+    "increasedStunChance": 0.0,
+    "increasedStunDuration": 0.0,
+    "addedDamageScaling": 0.0,
+    "additionalLeech": 0.0,
+    "leechVsPlayers": 0.0,
+    "freezeRate": 0.0,
+    "convertAllAddedDamage": 0,
+    "damageTypeToConvertTo": 0,
+    "conditionalEffects": [],
+    "penetration": []
+   },
+   "moreBuffEffectAgainstBosses": 0.0,
+   "spreads": 0,
+   "triggerEventOnApplication": 0
+  }
+ },
+ "enums": {
+  "DamageType": {
+   "FIRE": 1,
+   "COLD": 2,
+   "PHYSICAL": 0,
+   "LIGHTNING": 3,
+   "NECROTIC": 4,
+   "VOID": 5,
+   "POISON": 6
+  },
+  "AilmentID": {
+   "Ignite": 1,
+   "Bleed": 2,
+   "Chill": 3,
+   "Shock": 5,
+   "Poison": 7,
+   "ArmourShred": 8,
+   "Frostbite": 23,
+   "SpreadingFlames": 24
+  },
+  "Ailment.EffectOfIncreasedEffectiveness": {
+   "MoreDamageAndBuffEffect": 0,
+   "AdditionalPenetration": 1
+  },
+  "locator": "<author-archive>/rev/il2cppdump-v39/dump.cs (global-metadata v39 dump; local 1.5.3)"
+ }
+}

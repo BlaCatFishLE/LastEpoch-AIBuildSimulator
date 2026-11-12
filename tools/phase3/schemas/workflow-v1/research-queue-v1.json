@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/research-queue-v1.json",
+  "title": "Research queue v1",
+  "description": "resolve_build 的 gaps 转成可交接研究任务（le-research-task-v1 形状）；由 artifacts.write_analysis_artifacts 写为 research-queue.json。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "input_fingerprint",
+    "readiness",
+    "summary",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "le-research-queue-v1"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "input_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "readiness": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "partial",
+        "needs_research",
+        "needs_input"
+      ]
+    },
+    "summary": {
+      "type": "object"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "schema_version",
+          "task_id",
+          "gap_id",
+          "input_fingerprint",
+          "question",
+          "related_mechanism_refs",
+          "researched_already",
+          "affected",
+          "deliverable_kind",
+          "verification_required"
+        ],
+        "properties": {
+          "schema_version": {
+            "const": "le-research-task-v1"
+          },
+          "task_id": {
+            "type": "string"
+          },
+          "gap_id": {
+            "type": "string"
+          },
+          "input_fingerprint": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "related_mechanism_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "researched_already": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "affected": {
+            "type": "object",
+            "required": [
+              "components",
+              "blocks_target"
+            ],
+            "properties": {
+              "components": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "blocks_target": {
+                "type": "boolean"
+              }
+            }
+          },
+          "deliverable_kind": {
+            "type": "string",
+            "enum": [
+              "mapping",
+              "parameter_rule",
+              "handler",
+              "bounded_assumption"
+            ]
+          },
+          "verification_required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

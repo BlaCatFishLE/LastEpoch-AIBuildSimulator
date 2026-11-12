@@ -1,0 +1,151 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-skill-level-scaling",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 技能等级（实际 27 级只影响节点数量，不缩放伤害）",
+    "en": "Flame Reave skill level (27 levels affect node points only, not damage)"
+  },
+  "source_path": "knowledge/mechanisms/fr-skill-level-scaling.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "not_implemented",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R16",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/rules id=R16",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R16 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skills entity_id=skill:letools:LEAbilities.abilityList:fr11mv",
+      "note": "extensions.levelScaling=[] → 无每级伤害系数",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 技能等级（实际 27 级只影响节点数量，不缩放伤害）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire、Melee；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=none；叠层策略=none；顺序/汇总=无伤害路径：等级只决定可分配节点数量；+Level of Skills 词条只进 level_modifiers 显示；more 分组依据=n/a",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "记录 base_level/level/level_modifiers/level_note；不生成任何伤害 contribution（dataset levelScaling 为空）",
+      "source": "$.handler_ref.note（le_calc.hit_inputs._skill_level_info）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：level facts、points_total、case structure expectation、levelScale",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/level_modifiers"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/flame-reave/README.md#3.2 技能等级 27"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/level；#/base_level；#/specialization_points_total；#/level_modifiers；#/level_note"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/structure_counts/fr11mv_points_total；archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/points_total"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/case.legacy-hit.json#/snapshot_expectations/fr11mv_points_total"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/interaction_requirements/0/evidence_locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/level_modifiers"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "离线存档显示 20 级是读取/显示 bug；用户裁决实际 27 级（R16 confirmed）",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "+1/+4 Level of Skills 词条在 level_modifiers 记录但无伤害路径；若未来 dataset 提供 levelScaling 需要重开条目",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "技能等级与 27 点建树为案例私有事实；换 BD 必须重新核 points_total 与 snapshot_expectations",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

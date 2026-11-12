@@ -1,0 +1,164 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "common-monster-dr",
+  "revision": 2,
+  "title": {
+    "zh": "怪物等级减伤（Monster DR）",
+    "en": "Monster damage reduction by monster level (target-side factor)"
+  },
+  "aliases": [
+    "怪物减伤",
+    "monster DR",
+    "Monster Damage Reduction",
+    "mobdr",
+    "Enemy Damage Reduction",
+    "Tunklab mobdr"
+  ],
+  "selectors": [
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "common-monster-dr"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "monster_damage_reduction"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "target.monster_level"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "target_side"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "目标侧独立乘区：因子 = 1 - DR(等级)。等级 0 = 关闭（计算器便利值），1..100 来自来源表。BH 与 FR 共用同一张表与同一取值函数；应用位置/顺序由各模型的 target-side 条目描述。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-target-monster-dr-table",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-target-monster-dr-table]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "monster_level",
+      "source": "current:matched_instances",
+      "unit": "level",
+      "note": "场景字段；0 表示关闭怪物 DR。"
+    },
+    {
+      "parameter": "monster_damage_reduction",
+      "source": "tools/phase3/data/monster_dr.json#/levels",
+      "unit": "fraction",
+      "note": "按等级查表；表数值不复制进知识库。"
+    },
+    {
+      "parameter": "target.monster_damage_reduction",
+      "source": "current:matched_instances",
+      "unit": "fraction",
+      "note": "运行产物：report 注入到 scenario 的显式覆盖值。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.monster_dr",
+    "symbol": "describe",
+    "note": "查表/因子入口：load_monster_dr / dr_for_level / factor_for_level；describe 生成结果元数据。 文件 tools/phase3/src/le_calc/monster_dr.py；数据 tools/phase3/data/monster_dr.json。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "tools/phase3/data/monster_dr.json",
+      "note": "来源表本地副本（含 source、sha256；覆盖 1..100 级）。"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "机制索引 3.3：表值 confirmed；应用方式为独立乘区 assumption。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#18",
+      "note": "本地 1.5.3 逆向记录：怪物等级减伤接入。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario/monster_damage_reduction",
+      "note": "当前 run 场景注入 0.87（等级 100），DR 因子 0.13。"
+    },
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-target-monster-dr-table]",
+      "note": "tunklab 表来源与 sha256 在规则包内冻结。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/target/monster_level",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/scenario/monster_damage_reduction",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_monster_dr.py::MonsterDRTableTest::test_known_table_values",
+    "tools/phase3/tests/test_monster_dr.py::MonsterDRTableTest::test_table_covers_1_to_100_and_matches_ruleset_hash",
+    "tools/phase3/tests/test_monster_dr.py::MonsterDRIntegrationTest::test_level_100_applies_13_percent_factor",
+    "tools/phase3/tests/test_monster_dr.py::MonsterDRIntegrationTest::test_sensitivity_view_matches_engine_table",
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[consistency.all_pass]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-target-resistance-penetration",
+      "requirement": "最终目标乘区 = (1 - 有效抗性) × (1 - monster_dr)；两个因子都作用在 body 与 ignite 上，不得把 DR 折进抗性后再与穿透相减。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#_target_multiplier"
+    },
+    {
+      "with": "common-frequency-cooldown",
+      "requirement": "怪物 DR 只缩放伤害，不改变充能/施法频率；level 0 仅用于与旧口径对比。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/monster_dr/dps_by_level"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/data/monster_dr.json",
+      "docs/evidence/reverse-engineering/README.zh-CN.md#18",
+      "docs/mechanisms.md#35-机制条目总表",
+      "tools/phase3/tests/test_monster_dr.py"
+    ],
+    "open_questions": [
+      "怪物 DR 与抗性/穿透的乘法顺序尚未在游戏内单独验证：BH 侧规则 rule-target-monster-dr-application 仍是 assumed。",
+      "两模型集成未对齐（handover §2.2）：FR 由 monster_level 重新查表并忽略 scenario 显式 monster_damage_reduction，BH 尊重显式覆盖；若要用同一场景跨模型对比需先裁定。"
+    ],
+    "requery_when": [
+      "目标侧结算收敛（P2 计划）后",
+      "tunklab 表更新或游戏版本变化时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "reuse_mode": "shared"
+}

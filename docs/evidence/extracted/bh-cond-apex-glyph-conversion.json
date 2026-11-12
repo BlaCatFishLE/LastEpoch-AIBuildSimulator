@@ -1,0 +1,127 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-apex-glyph-conversion",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Apex of Thought · Glyph of Dominion 异常几率转换",
+    "en": "Apex of Thought: Glyph of Dominion ailment-chance conversion"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-apex-glyph-conversion.json",
+  "evidence_state": "unresolved",
+  "implementation_state": "draft",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "equipment.apex_glyph_conversion",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=equipment.apex_glyph_conversion]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+      "note": "conditional_effect:equipment.apex_glyph_conversion 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments:42",
+      "note": "Fire Resistance Shred 基础数值来源之一（本地 catalog）。",
+      "source": "$.evidence_refs[4]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Apex of Thought · Glyph of Dominion 异常几率转换",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ignite_application、penetration、target_side；伤害标签：Fire、Ailment；条件 code：player.standing_on_glyph_of_dominion",
+      "source": "$.applicability"
+    },
+    {
+      "text": "站在 Glyph of Dominion 上时：全部 Ignite Chance 转为 Fire Resistance Shred Chance（Heat Wave 也在内），同时冰缓/感电转冰/电抗削减。当前构筑技能栏/技能树没有 Glyph of Dominion，只能人工声明；基线不生效。机制状态 mechanism_unresolved（作用范围/覆盖率/净影响未确认），重算通道有固定条件模型。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "_apex_glyph_config / _resolve_glyph_mode / _glyph_applied_entry 实现固定条件 glyph 模型（Heat Wave 点燃转 shred、Boss/非 Boss 不同削减幅度与穿透相加、固定层数维持假设（数值见注册表））。",
+      "source": "$.handler_ref.note（le_calc.conditional.recompute.recompute_scenario）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：head item、conversion text、duration text、effect values、state、glyph model",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/8"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/glyph_model"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/equipment.apex_glyph_conversion"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/items/0"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/14"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/15"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.standing_on_glyph_of_dominion"
+    },
+    {
+      "pointer": "$/evidence_refs/9/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/glyph_model"
+    },
+    {
+      "pointer": "$/interaction_requirements/2/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/glyph_model"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/glyph_model"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/equipment.apex_glyph_conversion"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "Heat Wave 的每秒点燃几率是否被算作『Ignite Chance』并被转换未确认（代码路径）。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "Fire Resistance Shred 的叠加/结算公式（持续时间/层数/每层数值/Boss 效果，见注册表 values）未在游戏内验证。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "Glyph of Dominion 是否存在于本地数据库/本构筑是否可获得：注册表标记 resolved（本地 catalog 有），但本构筑技能栏无此技能，只能人工声明。",
+      "source": "$.research_notes.open_questions[2]"
+    },
+    {
+      "text": "shred 的逐层刷新时序、Heat Wave 之外的其他点燃来源未逐项建模。",
+      "source": "$.research_notes.open_questions[3]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

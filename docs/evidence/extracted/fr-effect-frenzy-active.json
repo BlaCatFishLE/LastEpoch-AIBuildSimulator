@@ -1,0 +1,158 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-effect-frenzy-active",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Frenzy（ailment 34）active：increased attack speed 与 Frenzied Flame 的 added fire",
+    "en": "Frenzy (ailment 34) active buff: increased attack speed and Frenzied Flame added fire"
+  },
+  "source_path": "knowledge/mechanisms/fr-effect-frenzy-active.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "frenzy_active",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=frenzy_active；#/rules id=R4",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_effect:frenzy_active 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments entity_id=ailment:letools:LEAbilities.ailmentList:34",
+      "note": "Frenzy：duration/max_instances/buffs（property 2/3）",
+      "source": "$.evidence_refs[1]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=fr11mv source_id=6",
+      "note": "Frenzied Flame：chance/duration/+8 added fire",
+      "source": "$.evidence_refs[2]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects+effect_values owner_entity_id=node:letools:fr11mv:6",
+      "note": "node 6 的三个 stat",
+      "source": "$.evidence_refs[3]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Frenzy（ailment 34）active：increased attack speed 与 Frenzied Flame 的 added fire",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、frequency；伤害标签：Fire、Melee；条件 code：frenzy_active",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=increased；叠层策略=additive；顺序/汇总=Frenzy 的攻速为 increased 池；Frenzied Flame 的 added fire 进 Fire added 池；两者都不改变 FR 冷却；more 分组依据=n/a（increased/added，不是 more 组）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "条件满足时加 attack_speed increased 行与 added fire 行；攻速行由 hit_simulate._attack_speed_pools 汇总",
+      "source": "$.handler_ref.note（le_calc.hit_damage._effect_rows）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：effect definition、ailment definition、effect of frenzy on you、node 6 added fire、state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json#/candidates"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods property=120 special_tag=34"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=6)/effects[stat_index=1]"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/frenzy_active"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "复合效果边界：本条保留旧技能附加火伤组合；通用 Frenzy 攻速查 buff-frenzy-speed，Sword Catcher 条件点伤查 item-sword-catcher-frenzy-added-melee。不得向其它技能套用旧节点点伤。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    },
+    {
+      "text": "R4：Frenzy 由 FR 命中 10% 触发（1 点），实际 uptime 未模拟；scenario 用固定状态",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "Frenzy 的 +128% increased Effect of Frenzy 来自 relic/ring1 词条；换装备需重读",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "+8 during Frenzy 的落地形式（added flat fire vs increased）按 added 处理（assumed）",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-conflagrate",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Conflagrate（Enchant Weapon 激活：消费点燃并立即结算）",
+    "en": "Conflagrate (Enchant Weapon activation consumes ignites)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-conflagrate.json",
+  "evidence_state": "assumed",
+  "implementation_state": "not_implemented",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "enchant_weapon.conflagrate",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=enchant_weapon.conflagrate]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+      "note": "conditional_effect:enchant_weapon.conflagrate 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Conflagrate（Enchant Weapon 激活：消费点燃并立即结算）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ignite、ignite_application；伤害标签：Fire、Ailment；条件 code：player.enchant_weapon_active；必要节点：node:sb44eQ:10",
+      "source": "$.applicability"
+    },
+    {
+      "text": "激活动作：消费附近敌人身上全部点燃层数并立即结算；Searing Conflagration 使被消费点燃 +more。它改变伤害归属与 cohort 生命周期（不是单纯增伤）。固定条件模式不执行动作，也不伪造其副作用。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "注册与求值可识别该效果；重算通道以 needs_action_or_time_simulation 跳过（无消费/结算实现）。",
+      "source": "$.handler_ref.note（le_calc.conditional.evaluate.evaluate_scenario）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、effect values",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/16"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/enchant_weapon.conflagrate"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/0/nodes/2/points"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/enchant_weapon.conflagrate"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "消费的点燃是否按每层剩余伤害全额立即结算未确认。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "消费后点燃 cohort 的尾部是否完全消失未确认。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "Searing 的 more 是否作用于点燃剩余伤害总量未确认。",
+      "source": "$.research_notes.open_questions[2]"
+    },
+    {
+      "text": "无法在固定条件模式中执行该动作；需要显式动作序列 + cohort 消费接口（P3 以后）。",
+      "source": "$.research_notes.open_questions[3]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,155 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cond-eternal-flames-passive",
+  "revision": 2,
+  "title": {
+    "zh": "Eternal Flames 被动（+Ignite 持续时间）",
+    "en": "Eternal Flames passive (increased ignite duration)"
+  },
+  "aliases": [
+    "Eternal Flames",
+    "永恒之火",
+    "ignite duration",
+    "Enchant Weapon 被动",
+    "enchant_weapon.eternal_flames.passive"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "sb44eQ:9"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ignite",
+      "duration"
+    ],
+    "tags": [
+      "Fire",
+      "Ailment"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Enchant Weapon 专精树节点 9 的常驻被动：Ignite 持续时间 increased；不需要激活 Enchant Weapon。它是 build_base 相对 legacy_single_skill 的当前差异来源（条件重算通道以 auto 效果应用）。",
+    "required_nodes": [
+      "node:sb44eQ:9"
+    ]
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "enchant_weapon.eternal_flames.passive",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=enchant_weapon.eternal_flames.passive]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "current:matched_instances",
+      "unit": "points",
+      "note": "Enchant Weapon node 9（被动部分）。"
+    },
+    {
+      "parameter": "effect values",
+      "source": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/3/values"
+    },
+    {
+      "parameter": "ignite duration pool",
+      "source": "current:matched_instances",
+      "unit": "fraction",
+      "note": "被动行之外的玩家池；条件重算另行追加。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional.recompute",
+    "symbol": "recompute_scenario",
+    "note": "生成 ailment_duration(target=ignite, increased) 贡献；build_base 基线纳入 auto 效果，legacy 基线排除（见 bh-baseline-profiles）。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/3",
+      "note": "注册表条目（support=needs_rule_mapping；research open question 点燃覆盖已 resolved）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/3",
+      "note": "当前 run 求值：auto_active（唯一自动激活效果）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/enchant_weapon.eternal_flames.passive",
+      "note": "条件重算通道：applied_both，并带假设 assume:ignite-inheritance:…。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/assumptions_applied",
+      "note": "点燃继承假设的显式落账。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.single_cast_total]",
+      "note": "build_base 基线被 expected 冻结。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/0/nodes/1/points",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_total",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeEffectDirectionTests::test_eternal_flames_passive_plus_active_stacks",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeBaselineTests::test_baseline_single_equals_legacy_within_1e9",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeReviewFixTests::test_ignite_inheritance_assumptions_are_explicit"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-baseline-profiles",
+      "requirement": "build_base 的差异来源；报告必须成对保留两基线，不能只留一个。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline_profile"
+    },
+    {
+      "with": "bh-ignite-duration-sources",
+      "requirement": "持续时间行进入同一 duration 乘区池。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_duration"
+    },
+    {
+      "with": "bh-cond-eternal-flames-active",
+      "requirement": "激活时节点总计翻倍；激活增量与被动行必须分开避免重复计入。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/4/values"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/3",
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/4",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states",
+      "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.single_cast_total]"
+    ],
+    "open_questions": [
+      "『Ignites you inflict』是否覆盖 Black Hole 的 Heat Wave 点燃：注册表保留为假设并在重算中标注 assume:ignite-inheritance；不是 confirmed 机制。"
+    ],
+    "requery_when": [
+      "点燃覆盖分支实测确认后"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared"
+}

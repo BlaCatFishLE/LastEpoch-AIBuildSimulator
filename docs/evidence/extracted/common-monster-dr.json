@@ -1,0 +1,96 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "common-monster-dr",
+  "kind": "mechanism",
+  "title": {
+    "zh": "怪物等级减伤（Monster DR）",
+    "en": "Monster damage reduction by monster level (target-side factor)"
+  },
+  "source_path": "knowledge/mechanisms/common-monster-dr.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-target-monster-dr-table",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-target-monster-dr-table]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-target-monster-dr-table 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "tools/phase3/data/monster_dr.json",
+      "note": "来源表本地副本（含 source、sha256；覆盖 1..100 级）。",
+      "source": "$.evidence_refs[0]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "怪物等级减伤（Monster DR）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：target_side；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "目标侧独立乘区：因子 = 1 - DR(等级)。等级 0 = 关闭（计算器便利值），1..100 来自来源表。BH 与 FR 共用同一张表与同一取值函数；应用位置/顺序由各模型的 target-side 条目描述。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "查表/因子入口：load_monster_dr / dr_for_level / factor_for_level；describe 生成结果元数据。 文件 tools/phase3/src/le_calc/monster_dr.py；数据 tools/phase3/data/monster_dr.json。",
+      "source": "$.handler_ref.note（le_calc.monster_dr.describe）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：monster_level、monster_damage_reduction、target.monster_damage_reduction",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario/monster_damage_reduction"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/target/monster_level"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/scenario/monster_damage_reduction"
+    },
+    {
+      "pointer": "$/validation_refs/4",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[consistency.all_pass]"
+    },
+    {
+      "pointer": "$/interaction_requirements/1/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/monster_dr/dps_by_level"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "怪物 DR 与抗性/穿透的乘法顺序尚未在游戏内单独验证：BH 侧规则 rule-target-monster-dr-application 仍是 assumed。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "两模型集成未对齐（handover §2.2）：FR 由 monster_level 重新查表并忽略 scenario 显式 monster_damage_reduction，BH 尊重显式覆盖；若要用同一场景跨模型对比需先裁定。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

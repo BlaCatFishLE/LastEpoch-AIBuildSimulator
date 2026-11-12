@@ -1,0 +1,729 @@
+{
+  "build_meta": {
+    "build": {
+      "build_id": "letools:min-case",
+      "revision_id": "rev-test",
+      "content_sha256": "test"
+    },
+    "dataset": {
+      "dataset_id": "phase1-dataset-003",
+      "target_game_version": "1.5.2"
+    },
+    "calc_input": {
+      "path": "synthetic",
+      "sha256": "test",
+      "mod_count": 153,
+      "unresolved_inputs": 0
+    },
+    "build_spec_sha256": "test-build-spec",
+    "calc_input_sha256": "test-calc-input",
+    "database_sha256": "test-db",
+    "dataset_logical_content_sha256": "test-dataset"
+  },
+  "character": {
+    "level": 100,
+    "class": "Mage",
+    "mastery": "Sorcerer"
+  },
+  "attributes": {
+    "strength": 10.0,
+    "vitality": 10.0,
+    "intelligence": 5.0,
+    "dexterity": 2.0,
+    "attunement": 2.0
+  },
+  "resistances": {
+    "fire": {
+      "total": 760.0,
+      "cap": 75.0,
+      "capped": 75.0,
+      "overcapped": 685.0
+    },
+    "cold": {
+      "total": 129.0,
+      "cap": 75.0,
+      "capped": 75.0,
+      "overcapped": 54.0
+    }
+  },
+  "derived": {
+    "mana_max": 177.6
+  },
+  "issues": [],
+  "excluded_sources": [
+    {
+      "source_id": "skill_tree:sb44eQ",
+      "label": "Enchant Weapon",
+      "reason": "out of scope",
+      "category": "scope"
+    }
+  ],
+  "contributions": [
+    {
+      "contribution_id": "test:fire-res",
+      "source_kind": "equipment",
+      "source_label": "+X% Fire Resistance",
+      "source_path": "test:fire-res",
+      "stat_name": "+X% Fire Resistance",
+      "stat_key": "resistance",
+      "operation": "added",
+      "value": 760.0,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": "fire",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:fire-res"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:cold-res",
+      "source_kind": "equipment",
+      "source_label": "test:cold-res",
+      "source_path": "test:cold-res",
+      "stat_name": "resistance",
+      "stat_key": "resistance",
+      "operation": "added",
+      "value": 129.0,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": "cold",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:cold-res"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:inc-fire",
+      "source_kind": "equipment",
+      "source_label": "test:inc-fire",
+      "source_path": "test:inc-fire",
+      "stat_name": "damage",
+      "stat_key": "damage",
+      "operation": "increased",
+      "value": 1.77,
+      "unit": "percent",
+      "damage_tags": [
+        "Fire"
+      ],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:inc-fire"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:inc-elem-dot",
+      "source_kind": "equipment",
+      "source_label": "test:inc-elem-dot",
+      "source_path": "test:inc-elem-dot",
+      "stat_name": "damage",
+      "stat_key": "damage",
+      "operation": "increased",
+      "value": 8.35,
+      "unit": "percent",
+      "damage_tags": [
+        "Elemental",
+        "DoT"
+      ],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:inc-elem-dot"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:inc-dot",
+      "source_kind": "equipment",
+      "source_label": "test:inc-dot",
+      "source_path": "test:inc-dot",
+      "stat_name": "damage",
+      "stat_key": "damage",
+      "operation": "increased",
+      "value": 0.6,
+      "unit": "percent",
+      "damage_tags": [
+        "DoT"
+      ],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:inc-dot"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:inc-spell",
+      "source_kind": "equipment",
+      "source_label": "test:inc-spell",
+      "source_path": "test:inc-spell",
+      "stat_name": "damage",
+      "stat_key": "damage",
+      "operation": "increased",
+      "value": 2.0,
+      "unit": "percent",
+      "damage_tags": [
+        "Spell"
+      ],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:inc-spell"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:inc-idol-fire",
+      "source_kind": "equipment",
+      "source_label": "test:inc-idol-fire",
+      "source_path": "test:inc-idol-fire",
+      "stat_name": "damage",
+      "stat_key": "damage",
+      "operation": "increased",
+      "value": 0.71,
+      "unit": "percent",
+      "damage_tags": [
+        "Fire"
+      ],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:inc-idol-fire"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:added-spell",
+      "source_kind": "equipment",
+      "source_label": "test:added-spell",
+      "source_path": "test:added-spell",
+      "stat_name": "added_damage",
+      "stat_key": "added_damage",
+      "operation": "added",
+      "value": 65.0,
+      "unit": "flat",
+      "damage_tags": [
+        "Spell"
+      ],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:added-spell"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:ignite-dur-1",
+      "source_kind": "equipment",
+      "source_label": "test:ignite-dur-1",
+      "source_path": "test:ignite-dur-1",
+      "stat_name": "ailment_duration",
+      "stat_key": "ailment_duration",
+      "operation": "increased",
+      "value": 0.52,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": "ignite",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:ignite-dur-1"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:ignite-dur-2",
+      "source_kind": "equipment",
+      "source_label": "test:ignite-dur-2",
+      "source_path": "test:ignite-dur-2",
+      "stat_name": "ailment_duration",
+      "stat_key": "ailment_duration",
+      "operation": "increased",
+      "value": 0.21,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": "ignite",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:ignite-dur-2"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:ignite-dur-3",
+      "source_kind": "equipment",
+      "source_label": "test:ignite-dur-3",
+      "source_path": "test:ignite-dur-3",
+      "stat_name": "ailment_duration",
+      "stat_key": "ailment_duration",
+      "operation": "increased",
+      "value": 0.21,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": "ignite",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:ignite-dur-3"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:ignite-dur-4",
+      "source_kind": "equipment",
+      "source_label": "test:ignite-dur-4",
+      "source_path": "test:ignite-dur-4",
+      "stat_name": "ailment_duration",
+      "stat_key": "ailment_duration",
+      "operation": "increased",
+      "value": 0.23,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": "ignite",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:ignite-dur-4"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:ignite-dur-5",
+      "source_kind": "equipment",
+      "source_label": "test:ignite-dur-5",
+      "source_path": "test:ignite-dur-5",
+      "stat_name": "ailment_duration",
+      "stat_key": "ailment_duration",
+      "operation": "increased",
+      "value": 0.24,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": "ignite",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:ignite-dur-5"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:chill-dur",
+      "source_kind": "equipment",
+      "source_label": "test:chill-dur",
+      "source_path": "test:chill-dur",
+      "stat_name": "ailment_duration",
+      "stat_key": "ailment_duration",
+      "operation": "increased",
+      "value": 0.52,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": "chill",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": false,
+      "exclusion_reason": "chill duration is out of scope",
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:chill-dur"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:ailment-effect",
+      "source_kind": "equipment",
+      "source_label": "test:ailment-effect",
+      "source_path": "test:ailment-effect",
+      "stat_name": "ailment_effect",
+      "stat_key": "ailment_effect",
+      "operation": "increased",
+      "value": 0.35,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": "ignite",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:ailment-effect"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:fire-pen",
+      "source_kind": "equipment",
+      "source_label": "test:fire-pen",
+      "source_path": "test:fire-pen",
+      "stat_name": "penetration",
+      "stat_key": "penetration",
+      "operation": "added",
+      "value": 0.26,
+      "unit": "percent",
+      "damage_tags": [
+        "Fire"
+      ],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:fire-pen"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:cast-speed",
+      "source_kind": "equipment",
+      "source_label": "test:cast-speed",
+      "source_path": "test:cast-speed",
+      "stat_name": "cast_speed",
+      "stat_key": "cast_speed",
+      "operation": "increased",
+      "value": 0.108,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:cast-speed"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:cdr-waist",
+      "source_kind": "equipment",
+      "source_label": "test:cdr-waist",
+      "source_path": "test:cdr-waist",
+      "stat_name": "cooldown_recovery_speed",
+      "stat_key": "cooldown_recovery_speed",
+      "operation": "increased",
+      "value": 0.32,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:cdr-waist"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:cdr-ring",
+      "source_kind": "equipment",
+      "source_label": "test:cdr-ring",
+      "source_path": "test:cdr-ring",
+      "stat_name": "cooldown_recovery_speed",
+      "stat_key": "cooldown_recovery_speed",
+      "operation": "increased",
+      "value": 0.08,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:cdr-ring"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:cdr-gloves",
+      "source_kind": "equipment",
+      "source_label": "test:cdr-gloves",
+      "source_path": "test:cdr-gloves",
+      "stat_name": "cooldown_recovery_speed",
+      "stat_key": "cooldown_recovery_speed",
+      "operation": "increased",
+      "value": 0.0675,
+      "unit": "percent",
+      "damage_tags": [],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": true,
+      "exclusion_reason": null,
+      "value_source": "source",
+      "status": "derived",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:cdr-gloves"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:melee-dmg",
+      "source_kind": "equipment",
+      "source_label": "test:melee-dmg",
+      "source_path": "test:melee-dmg",
+      "stat_name": "damage",
+      "stat_key": "damage",
+      "operation": "increased",
+      "value": 0.9,
+      "unit": "percent",
+      "damage_tags": [
+        "Melee"
+      ],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": false,
+      "exclusion_reason": "melee damage does not apply to a spell",
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:melee-dmg"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:minion-fire-res",
+      "source_kind": "equipment",
+      "source_label": "test:minion-fire-res",
+      "source_path": "test:minion-fire-res",
+      "stat_name": "resistance",
+      "stat_key": "resistance",
+      "operation": "added",
+      "value": 0.12,
+      "unit": "percent",
+      "damage_tags": [
+        "Minion"
+      ],
+      "target": "fire",
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": false,
+      "exclusion_reason": "minion modifier",
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:minion-fire-res"
+        }
+      ],
+      "notes": null
+    },
+    {
+      "contribution_id": "test:spell-hit-dmg",
+      "source_kind": "equipment",
+      "source_label": "test:spell-hit-dmg",
+      "source_path": "test:spell-hit-dmg",
+      "stat_name": "damage",
+      "stat_key": "damage",
+      "operation": "increased",
+      "value": 0.5,
+      "unit": "percent",
+      "damage_tags": [
+        "Spell",
+        "Hit"
+      ],
+      "target": null,
+      "condition_code": null,
+      "condition_status": "always",
+      "group": null,
+      "included": false,
+      "exclusion_reason": "hit-only modifier",
+      "value_source": "source",
+      "status": "confirmed",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "synthetic test fixture",
+          "locator": "test:spell-hit-dmg"
+        }
+      ],
+      "notes": null
+    }
+  ]
+}

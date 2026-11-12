@@ -1,0 +1,1020 @@
+{
+  "schema": "le-ballista-gamecode-mechanics-v1",
+  "generated_at": "2026-11-13",
+  "task": "task-1",
+  "scope": {
+    "ability": "ba1574 (Ballista)",
+    "main_dps_unit": "ability_gen327 / AbilityID 626 ballistaExplosion (Armed Construction on-death explosion)",
+    "build_points_verified": {
+      "ba1574": {
+        "2": 2,
+        "5": 4,
+        "10": 4,
+        "11": 1,
+        "12": 1,
+        "14": 1,
+        "15": 2,
+        "18": 1,
+        "22": 3,
+        "23": 3,
+        "25": 3,
+        "26": 1,
+        "27": 4,
+        "31": 1
+      },
+      "ex4tp": {
+        "2": 1,
+        "7": 1,
+        "8": 2,
+        "9": 1,
+        "10": 1,
+        "11": 1,
+        "19": 2,
+        "20": 1,
+        "21": 1,
+        "23": 1,
+        "24": 2,
+        "25": 2,
+        "26": 1,
+        "27": 1,
+        "28": 3,
+        "29": 1,
+        "30": 2,
+        "31": 1
+      }
+    },
+    "excluded_by_lead": [
+      "Explosive Delivery bolt direct hit",
+      "Explosive Delivery bolt explosion",
+      "ignite DoT",
+      "target-side mitigation (Boss Dummy, 0 resistance)"
+    ]
+  },
+  "sources": {
+    "il_diffable_cs": "<author-archive>/cpp2il_cs/DiffableCs/LE/",
+    "il_isil_named": "<author-archive>/cpp2il_isil_ca/IsilDump/LE/",
+    "il_isil_plain": "<author-archive>/cpp2il_isil/IsilDump/LE/",
+    "il2_assembly": "<author-archive>/cpp2il_il2/LE.dll",
+    "letools_raw_js": "letools version150 planner js (本机 Editor/lastepochsupertools_v1.3.1)；本轮导出产物在 <author-archive>/re-gamecode/letools/",
+    "dataset": "data/releases/phase1-dataset-003/data.sqlite",
+    "gameassembly": "<game-install>/GameAssembly.dll (.rdata static float constants; PE mapping in <author-archive>/re-gamecode/pe_sections.json)",
+    "prior_data_evidence": "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json, docs/evidence/ballista/explosion-and-trap-components-20261112.json",
+    "version_caveat": "本机 IL 与 letools version150 数据可能来自不同补丁位（calculation-input 记为 1.5.2）；机制语义以本机 IL 为准，数据表数值单独标注"
+  },
+  "ability_facts": {
+    "ba1574": {
+      "internal_name": "summonBallista",
+      "ability_id": 379,
+      "mana_cost": 44,
+      "use_duration_s": 0.6,
+      "use_delay_s": 0.15,
+      "speed_scaler": "SP.None(54) -> 施放时间不随 AttackSpeed/CastSpeed 缩放",
+      "speed_multiplier": 1.0,
+      "tags": 0,
+      "fake_tags": 8192,
+      "attribute_scaling": [
+        {
+          "attribute": "Dexterity(key 3)",
+          "sp": 0,
+          "sp_name": "Damage",
+          "tags": 8192,
+          "increased_per_point": 0.04
+        },
+        {
+          "attribute": "Dexterity(key 3)",
+          "sp": 2,
+          "sp_name": "AttackSpeed",
+          "tags": 8192,
+          "increased_per_point": 0.01
+        }
+      ],
+      "level_scaling": [
+        {
+          "sp": 7,
+          "sp_name": "Health",
+          "added": 75.0,
+          "tags": 8192
+        }
+      ],
+      "evidence": [
+        "<author-archive>/re-gamecode/letools/ability_ba1574.json",
+        "BallistaMutator.txt:ISIL 036 SetInitialAbility(379)"
+      ]
+    },
+    "entity_bbl7_57": {
+      "internal_name": "ballistaBolt",
+      "ability_id": 380,
+      "use_duration_s": 2.3,
+      "use_delay_s": 1.6,
+      "speed_multiplier": 1.5,
+      "speed_scaler": "SP.AttackSpeed(2)",
+      "tags": 2049,
+      "damage": {
+        "type": "Physical",
+        "base": 40.0,
+        "added_damage_effectiveness_pct": 200.0,
+        "crit_chance": 0.05,
+        "crit_multiplier": 2.0,
+        "damage_tags": 2048
+      },
+      "evidence": [
+        "<author-archive>/re-gamecode/letools/ability_entity_bbl7_57.json",
+        "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json"
+      ]
+    },
+    "ability_gen327": {
+      "internal_name": "ballistaExplosion",
+      "ability_id": 626,
+      "mana_cost": 0,
+      "use_duration_s": 1.0,
+      "use_delay_s": 0.5,
+      "tags": 2056,
+      "tags_decoded": [
+        "Bow(2048)",
+        "Fire(8)"
+      ],
+      "damage": {
+        "type": "Fire",
+        "base": 50.0,
+        "added_damage_effectiveness_pct": 250.0,
+        "crit_chance": 0.05,
+        "crit_multiplier": 2.0,
+        "damage_tags": 2048,
+        "hit": true
+      },
+      "note": "ability_gen237(smallExplosion, 40Fire/200%, damageTags 1024 Throwing) 是另一个爆炸，不属于 Ballista，禁止混用",
+      "evidence": [
+        "<author-archive>/re-gamecode/letools/ability_ability_gen327.json",
+        "docs/evidence/ballista/explosion-and-trap-components-20261112.json"
+      ]
+    },
+    "ex4tp": {
+      "internal_name": "explosiveTrap",
+      "ability_id": 734,
+      "mana_cost": 8,
+      "use_duration_s": 1.35,
+      "use_delay_s": 0.4,
+      "speed_multiplier": 1.8,
+      "speed_scaler": "SP.AttackSpeed(2)",
+      "combo_time_limit": 2.9,
+      "prefab_components": [
+        {
+          "type": "DestroyAfterDuration",
+          "duration": 0.3
+        },
+        {
+          "type": "CreateAbilityObjectOnDeath",
+          "ability": "ex4tp_fi9_1 (explosiveTrapOnGround, 749)"
+        }
+      ],
+      "evidence": [
+        "<author-archive>/re-gamecode/letools/ability_ex4tp.json"
+      ]
+    },
+    "minion_100053": {
+      "gen_id": "rogue_ballista",
+      "abilities": [
+        "entity_bbl7_57"
+      ],
+      "base_stats": [
+        {
+          "sp": 0,
+          "sp_name": "Damage",
+          "added": 0.0,
+          "increased": 0.0,
+          "more": [
+            0.5
+          ]
+        },
+        {
+          "sp": 2,
+          "sp_name": "AttackSpeed",
+          "added": 0.0,
+          "increased": 0.2,
+          "more": []
+        }
+      ],
+      "cast_speed_manager_overrides": [
+        {
+          "ability": "entity_fm8_2",
+          "useDelay": 1.1,
+          "useDuration": 2.0,
+          "as": 0.55000126
+        }
+      ],
+      "override_note": "override 列表不含 ballistaBolt(380)，因此 bolt 攻击节奏不受该 override 影响",
+      "evidence": [
+        "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json#minions",
+        "<author-archive>/re-gamecode/letools/entity_100053.json"
+      ]
+    }
+  },
+  "static_constants_read_from_rdata": {
+    "0x18457CF18": 0.25,
+    "0x18457CDAC": 0.01,
+    "0x18457CDB8": 0.1,
+    "0x18457CC3C": 3.0,
+    "0x18457CC00": 0.2,
+    "0x18457CC18": 1.0,
+    "0x18457CC54": 20.0,
+    "0x18457D0D0": 0.4,
+    "0x18457D128": 1.25,
+    "0x18457D270": 0.7,
+    "0x18457CDBC": 0.3,
+    "0x184738630": 0.06,
+    "0x18473872C": 0.12,
+    "0x184738744": -0.05,
+    "0x1847385A0": 0.15,
+    "0x184738F7C": -0.4,
+    "0x184738588": 0.02,
+    "0x1845832F8": 0.03,
+    "0x184738600": 0.04,
+    "0x184738790": 11.0,
+    "0x1847387C4": 0.08,
+    "0x184738814": -0.08,
+    "0x18457CDB0": 0.05
+  },
+  "stat_model": {
+    "stat_ctor": "Stats.Stat(SP property, AT tags, float addedValue, float increasedValue, float moreValue, byte specialTag=0, int extraTag=0)",
+    "isil_arg_slots": {
+      "addedValue": "xmm3",
+      "increasedValue": "caller stack+0x20",
+      "moreValue": "caller stack+0x28",
+      "specialTag": "caller stack+0x30",
+      "extraTag": "caller stack+0x38"
+    },
+    "verified_by": [
+      "Stats_NestedType_Stat.txt .ctor(SP,AT,float,float,float,byte,int) 反汇编",
+      "Stats.MoreStat ca ISIL",
+      "BallistaExplosionMutator.getTempStats ca ISIL 029-058"
+    ],
+    "copy_scaling": "new Stat(sourceStat, multiplier) -> Stat.CopyFrom 将 addedValue/increasedValue/moreValues 逐项乘以 multiplier，保留 SP/AT/specialTag/extraTag（lead 已核 CopyFrom；本文件引用）"
+  },
+  "node_mappings": {
+    "ba1574": [
+      {
+        "node": 2,
+        "name": "Efficient Construction",
+        "points": 2,
+        "switch_case": "Ballista Less Cost And Duration",
+        "targets": [
+          {
+            "field": "increasedManaCost",
+            "offset": "0xC4",
+            "op": "field-=",
+            "per_point": -0.25,
+            "total": -0.5
+          },
+          {
+            "field": "increasedDuration",
+            "offset": "0x150",
+            "op": "field-=",
+            "per_point": -0.2,
+            "total": -0.4
+          }
+        ]
+      },
+      {
+        "node": 5,
+        "name": "Armed Construction",
+        "points": 4,
+        "switch_case": "Ballista Explodes On Death",
+        "targets": [
+          {
+            "field": "ballistaExplodesOnEnd",
+            "offset": "0x178",
+            "op": "=true",
+            "per_point": null
+          },
+          {
+            "field": "ballistaExplosionMoreDamagePerDexterity",
+            "offset": "0x17C",
+            "op": "field+=",
+            "per_point": 0.01,
+            "total": 0.04
+          },
+          {
+            "field": "ballistaExplosionIncreasedAreaPerDexterity",
+            "offset": "0x180",
+            "op": "field+=",
+            "per_point": 0.01,
+            "total": 0.04
+          }
+        ]
+      },
+      {
+        "node": 10,
+        "name": "Flaming Shots",
+        "points": 4,
+        "switch_case": "Ballista Fire Damage And Ignite",
+        "targets": [
+          {
+            "field": "addedFireDamage",
+            "offset": "0x170",
+            "op": "field+=",
+            "per_point": 3.0,
+            "total": 12.0,
+            "note": "只写入 BallistaBoltMutator/BallistaShotMutator，不写 BallistaExplosionMutator -> 不作用于爆炸"
+          },
+          {
+            "stat": {
+              "sp": 1,
+              "sp_name": "AilmentChance",
+              "slot": "increasedValue",
+              "per_point": 0.1,
+              "total": 0.4
+            },
+            "note": "给 minion，ignite chance"
+          }
+        ]
+      },
+      {
+        "node": 11,
+        "name": "Rapid Fire",
+        "points": 1,
+        "switch_case": "Ballista Increased Attack Speed",
+        "targets": [
+          {
+            "stat": {
+              "sp": 2,
+              "sp_name": "AttackSpeed",
+              "slot": "increasedValue",
+              "per_point": 0.06,
+              "total": 0.06
+            }
+          }
+        ]
+      },
+      {
+        "node": 12,
+        "name": "Explosive Delivery",
+        "points": 1,
+        "switch_case": "Ballista Arrows Explode On Expiration",
+        "targets": [
+          {
+            "field": "arrowsFireExplodeOnEnd",
+            "offset": "0x184",
+            "op": "=true"
+          },
+          {
+            "stat": {
+              "sp": 2,
+              "sp_name": "AttackSpeed",
+              "slot": "moreValue",
+              "per_point": -0.4,
+              "total": -0.4
+            }
+          }
+        ],
+        "note": "只影响 bolt/shot；不改变 Armed Construction 爆炸伤害或触发"
+      },
+      {
+        "node": 14,
+        "name": "Practical Build",
+        "points": 1,
+        "switch_case": "Ballista Damage And Attack Speed Less Duration",
+        "targets": [
+          {
+            "field": "increasedDuration",
+            "offset": "0x150",
+            "op": "field-=",
+            "per_point": -0.25,
+            "total": -0.25
+          },
+          {
+            "stat": {
+              "sp": 0,
+              "sp_name": "Damage",
+              "slot": "moreValue",
+              "per_point": 0.4,
+              "total": 0.4
+            }
+          },
+          {
+            "stat": {
+              "sp": 2,
+              "sp_name": "AttackSpeed",
+              "slot": "moreValue",
+              "per_point": 0.4,
+              "total": 0.4
+            }
+          }
+        ]
+      },
+      {
+        "node": 15,
+        "name": "Sturdy Foundation",
+        "points": 2,
+        "switch_case": "Ballista More Health And Duration",
+        "targets": [
+          {
+            "stat": {
+              "sp": 7,
+              "sp_name": "Health",
+              "slot": "moreValue",
+              "per_point": 0.25,
+              "total": 0.5
+            }
+          },
+          {
+            "field": "increasedDuration",
+            "offset": "0x150",
+            "op": "field+=",
+            "per_point": 0.15,
+            "total": 0.3
+          }
+        ]
+      },
+      {
+        "node": 18,
+        "name": "Agile Engineering",
+        "points": 1,
+        "switch_case": "Ballista Placement Speed",
+        "targets": [
+          {
+            "field": "placementSpeedPerDexterity",
+            "offset": "0x190",
+            "op": "field+=",
+            "per_point": 0.01,
+            "total": 0.01
+          },
+          {
+            "field": "attackSpeedPer5Dexterity",
+            "offset": "0x194",
+            "op": "field+=",
+            "per_point": 0.01,
+            "total": 0.01
+          }
+        ],
+        "usage": "Mutate ISIL 117-171: Stats.IncreasedStat(SP=2, value=(Dex/5)*attackSpeedPer5Dexterity) 加入 minion statList"
+      },
+      {
+        "node": 22,
+        "name": "Shared Enhancements",
+        "points": 3,
+        "switch_case": "Ballista Modifiers Apply To Ballista",
+        "targets": [
+          {
+            "field": "playerDamageModifierEffectivenessRatio",
+            "offset": "0x138",
+            "op": "field+=",
+            "per_point": 0.25,
+            "total": 0.75
+          }
+        ]
+      },
+      {
+        "node": 23,
+        "name": "Heavy Bolts",
+        "points": 3,
+        "switch_case": "Ballista Slower And More Damage",
+        "targets": [
+          {
+            "stat": {
+              "sp": 2,
+              "sp_name": "AttackSpeed",
+              "slot": "moreValue",
+              "per_point": -0.05,
+              "total": -0.15
+            }
+          },
+          {
+            "stat": {
+              "sp": 0,
+              "sp_name": "Damage",
+              "slot": "moreValue",
+              "per_point": 0.12,
+              "total": 0.36
+            }
+          }
+        ]
+      },
+      {
+        "node": 25,
+        "name": "Elixir of Construction",
+        "points": 3,
+        "switch_case": "Ballista More Damage After Potion",
+        "targets": [
+          {
+            "field": "moreDamageAfterPotion",
+            "offset": "0x168",
+            "op": "field+=",
+            "per_point": 0.15,
+            "total": 0.45
+          }
+        ]
+      },
+      {
+        "node": 26,
+        "name": "Sharpened Tips",
+        "points": 1,
+        "switch_case": "Ballista Added Crit Chance",
+        "targets": [
+          {
+            "stat": {
+              "sp": 4,
+              "sp_name": "CriticalChance",
+              "slot": "addedValue",
+              "per_point": 0.03,
+              "total": 0.03
+            }
+          }
+        ]
+      },
+      {
+        "node": 27,
+        "name": "Perfect Aim",
+        "points": 4,
+        "switch_case": "Ballista Crit Modifiers Applies To Ballista",
+        "targets": [
+          {
+            "field": "playerCritChanceEffectivenessRatio",
+            "offset": "0x13C",
+            "op": "field+=",
+            "per_point": 0.25,
+            "total": 1.0
+          },
+          {
+            "field": "playerCritMultiEffectivenessRatio",
+            "offset": "0x140",
+            "op": "field+=",
+            "per_point": 0.25,
+            "total": 1.0
+          }
+        ]
+      },
+      {
+        "node": 31,
+        "name": "Care Package",
+        "points": 1,
+        "switch_case": "Ballista Potion Chance",
+        "targets": [
+          {
+            "field": "maxPotionsDropped",
+            "offset": "0x164",
+            "op": "field+=(int)",
+            "per_point": 1,
+            "total": 1
+          }
+        ]
+      },
+      {
+        "node": null,
+        "note": "本树其余 case 名与每点常量已在 MD §2 列出；未在本构筑，不逐一展开",
+        "cases": [
+          "Ballista Being Nearby Buffs",
+          "Ballista Wider Shield",
+          "Ballista Explosions Converted To Cold",
+          "Ballista Slow Chance",
+          "Ballista Harpoon",
+          "Ballista Ailment Chance Applies To Ballista",
+          "Ballista Faster And Less Damage",
+          "Ballista Pierce",
+          "Ballista Extra Projectile Chance",
+          "Ballista Double Shot Chance",
+          "Ballista Armor Shred Chance",
+          "Ballista Gains Attack Speed On Hit",
+          "Ballista Has Shield",
+          "Ballista Tripwire",
+          "Ballista Acid Flask Gives Poison Chance"
+        ]
+      }
+    ],
+    "mechanism": "BallistaTree.updateMutator 遍历 LocalTreeData.nodes（id@0x10, pointsAllocated@0x11），按节点内部名为字符串 hash switch；每点数值为生成代码内硬编码常量（本文件从 .rdata 直读校验）；最终一次性写回 BallistaMutator（写回块 ISIL 929-985）。节点 stat 的 property/值运行时不读。",
+    "evidence": [
+      "<author-archive>/cpp2il_isil/IsilDump/LE/BallistaTree.txt (updateMutator ISIL 001-1030; strings 257-891; final writes 929-985)"
+    ]
+  },
+  "summon_lifecycle": {
+    "base_limit": 2,
+    "base_summon_count": 1,
+    "limit_expression": "2 + AbilityStatsMutatorManager.addedMaximumBallistae(0x1F74)，若 ballistaMaxActive(0x1F8C)>0 再 min",
+    "summon_count_expression": "1 + (ballistaAddedSpawnPerCast(0x1F88)>0 ? ballistaAddedSpawnPerCast : 0)，再按 limit 截断",
+    "duration_expression": "(SummonEntityOnDeath.duration(0xFC) + addedDuration(0x14C)) * (1 + increasedDuration(0x150))",
+    "build_duration_s": 6.5,
+    "build_duration_calc": "10 * (1 + 0.30 - 0.40 - 0.25) = 6.5",
+    "duration_is_multiplicative_composition": "base+added 先相加，再乘 (1+increased)；不是多次乘算",
+    "expiry": {
+      "path": "SummonEntityOnDeath.Summon ISIL 8508-8521 -> UnsummonAfterDelay.Add(go,duration,unsummonWithNormalDestructionDelay) -> UnsummonAfterDelay.OnUpdateTick ISIL 014-039 -> Summoned.unsummon(...,false,false) -> Dying.die (Summoned ISIL 165)",
+      "is_death_event": true
+    },
+    "limit_replacement": {
+      "path": "SummonEntityOnDeath.Summon ISIL 1484-1556 -> getLowestPriority -> Summoned.unsummon -> SelfDestroyer.die",
+      "is_death_event": true,
+      "replacement_policy": "选最旧/最低优先级(未逐指令核对排序 key)；总之是 unsummon+die，不是静默 Destroy"
+    },
+    "stats_snapshot": "SummonEntityOnDeath.statList 在召唤时写入：BallistaMutator.statList + GetStatsFromPlayer() + node18 attackSpeed stat + AbilityStatsMutatorManager ballista stats（BallistaMutator.Mutate ISIL 114-419）",
+    "evidence": [
+      "<author-archive>/cpp2il_isil_ca/IsilDump/LE/SummonEntityOnDeath.txt",
+      "<author-archive>/cpp2il_isil_ca/IsilDump/LE/UnsummonAfterDelay.txt",
+      "<author-archive>/cpp2il_isil_ca/IsilDump/LE/Summoned.txt",
+      "<author-archive>/cpp2il_isil/IsilDump/LE/BallistaMutator.txt (Mutate ISIL 040-500)"
+    ]
+  },
+  "explosion": {
+    "ability": "ability_gen327 / 626",
+    "attach": "BallistaAdapter.adapt ISIL 485-497: ballistaExplodesOnEnd(0x58)!=0 -> GetComponent(CreateAbilityObjectOnDeath) -> abilityToInstantiateRef(+0x28)=626, enabled(+0x60)=1",
+    "trigger": "death event (CreateAbilityObjectOnDeath.CreateAbilityObject(Dying)); expiry & limit-replacement are both death",
+    "explosions_per_death": 1,
+    "mutator_fields_from_adapter": {
+      "explodeConvertedToCold": "0x130",
+      "ballistaExplosionMoreDamage": "0x134",
+      "ballistaExplosionIncreasedArea": "0x138",
+      "isBallistaExplosion": "0x13C (unknown writer -> inferred serialized true)",
+      "creator": "0x148"
+    },
+    "per_dex_more_damage": {
+      "expression": "ballistaExplosionMoreDamage = Dex * (0.01 * node5_points)",
+      "build": "0.04 * Dex",
+      "application": "BallistaExplosionMutator.getTempStats: if isBallistaExplosion && ballistaExplosionMoreDamage>0 -> new Stat(SP=Damage, more=value) -> 爆炸命中吃 (1+0.04*Dex) more",
+      "evidence": [
+        "<author-archive>/cpp2il_isil_ca/IsilDump/LE/BallistaExplosionMutator.txt ISIL 018-058",
+        "BallistaAdapter.txt ISIL 235-251",
+        "BallistaMutator.txt ISIL 420-474"
+      ]
+    },
+    "area": {
+      "expression": "radiusMult = GetIncreasedRadiusAfterAdditiveAreaIncrease(0, statsArea + Dex*0.01*node5_points); if isBallistaExplosion: radiusMult=(radiusMult+1)*1.25-1",
+      "inherent_more_radius": 0.25,
+      "applies_to": [
+        "SphereCollider.radius",
+        "CreateVfxOnDeath.increasedRadius"
+      ],
+      "note": "area 只影响覆盖范围；Boss Dummy 单体场景不改变 DPS，除非命中判定依赖半径",
+      "evidence": [
+        "<author-archive>/cpp2il_isil_ca/IsilDump/LE/BallistaExplosionMutator.txt ISIL 041-188"
+      ]
+    },
+    "base_hit": {
+      "fire_damage": 50.0,
+      "added_damage_effectiveness_pct": 250.0,
+      "crit_chance": 0.05,
+      "crit_multiplier": 2.0
+    },
+    "additional_damage_untested": "addedDamageScaling=2.5 只放大 added damage 池；玩家 flat added bow damage 是否有转移通道未确认(U-2)"
+  },
+  "transfers": {
+    "shared_enhancements": {
+      "node": 22,
+      "points": 3,
+      "ratio_field": "playerDamageModifierEffectivenessRatio(0x138) = 0.75",
+      "sp_copied": [
+        0
+      ],
+      "operation": "GetStatsFromPlayer: new Stat(playerStat, 0.75) -> Stat.CopyFrom 把 addedValue/increasedValue/moreValues 各项 ×0.75；保留 AT/特殊标签；召唤时快照"
+    },
+    "perfect_aim": {
+      "node": 27,
+      "points": 4,
+      "fields": {
+        "playerCritChanceEffectivenessRatio": "0x13C=1.0",
+        "playerCritMultiEffectivenessRatio": "0x140=1.0"
+      },
+      "sp_copied": [
+        4,
+        5
+      ],
+      "operation": "同上：玩家 CriticalChance / CriticalMultiplier Stat 100% 复制到 minion"
+    },
+    "ailment_ratio": {
+      "field": "playerAilmentChanceEffectivenessRatio(0x144)",
+      "sp": [
+        1,
+        42,
+        43
+      ],
+      "build_points": 0
+    },
+    "get_value_multiplier": {
+      "sp0_Damage": "playerDamageModifierEffectivenessRatio",
+      "sp4_CriticalChance": "playerCritChanceEffectivenessRatio",
+      "sp5_CriticalMultiplier": "playerCritMultiEffectivenessRatio",
+      "sp1_42_43_Ailment": "playerAilmentChanceEffectivenessRatio",
+      "else": 0,
+      "rule": "ratio<=0 -> 0"
+    },
+    "snapshot": "BallistaMutator.Mutate ISIL 173-181 AddRange 到 SummonEntityOnDeath.statList -> 召唤时快照",
+    "evidence": [
+      "<author-archive>/cpp2il_isil/IsilDump/LE/BallistaMutator.txt (GetValueMultiplier ISIL 3897-3956; GetStatsFromPlayer ISIL 3957-4284)",
+      "<author-archive>/cpp2il_isil_ca/IsilDump/LE/Stats_NestedType_Stat.txt"
+    ]
+  },
+  "minion_baseline": {
+    "more_damage": 0.5,
+    "increased_attack_speed": 0.2,
+    "note": "minion 100053 自带 SP=Damage moreValues=[0.5] 与 SP=AttackSpeed increased=0.2，和其他 Stat 按 Stats 通用规则汇总"
+  },
+  "attack_frequency": {
+    "formula_skeleton": {
+      "use_speed_multiplier": "baseUseSpeedMultiplier(=1.0 默认) * Ability.speedMultiplier(0x60) * getSpeedMultiplierStat(AbilityInfo, tags, increaseFromMutator)；clamp 下限 0.1",
+      "effective_use_duration": "Ability.useDuration / useSpeedMultiplier",
+      "effective_use_delay": "Ability.useDelay / useSpeedMultiplier",
+      "min_duration_rule": "if effUseDuration < effUseDelay: effUseDuration = effUseDelay + 0.01"
+    },
+    "ballista_bolt": {
+      "interval_formula": "max(2.3, 1.6) / (1.5 * (1+sumIncreasedAS) * prod(1+moreAS)) = 2.3 / (1.5*ASmult)",
+      "raw_values": {
+        "useDuration": 2.3,
+        "useDelay": 1.6,
+        "speedMultiplier": 1.5,
+        "speedScaler": "AttackSpeed(2)"
+      },
+      "build_note": "minion AS 池 = 基础+20% increased、节点11 +6% increased、节点14 +40% more、节点23 -15% more、节点12 -40% more、节点18 (Dex/5)*1% increased、attributeScaling Dex*1% increased、manager increasedBallistaAttackSpeed；精确 more/additive 组合由 getSpeedMultiplierStat 决定（未完全解码,U-4）"
+    },
+    "player_summon_ba1574": {
+      "cast_time_s": 0.6,
+      "speed_scaler": "None(54)",
+      "note": "不受 Attack/Cast Speed 缩放"
+    },
+    "ex4tp_throw": {
+      "formula": "effUseDuration ~= 1.35/(1.8*(1+AS)), effUseDelay ~= 0.4/(1.8*(1+AS))；每秒施放数还取决于 combo/动画/玩家操作（外部输入）",
+      "raw_values": {
+        "useDuration": 1.35,
+        "useDelay": 0.4,
+        "speedMultiplier": 1.8,
+        "speedScaler": "AttackSpeed(2)"
+      }
+    },
+    "evidence": [
+      "<author-archive>/cpp2il_isil_ca/IsilDump/LE/UsingAbility.txt ISIL 204-319",
+      "<author-archive>/cpp2il_isil_ca/IsilDump/LE/CastSpeedManager.txt",
+      "<author-archive>/cpp2il_isil_ca/IsilDump/LE/UsingAbility.txt getBaseUseSpeedMultiplier(0x154)"
+    ]
+  },
+  "siege_engineering": {
+    "node": 30,
+    "points": 2,
+    "per_point_chance": 0.1,
+    "total_chance": 0.2,
+    "chain": [
+      {
+        "step": 1,
+        "location": "ExplosiveTrapTree.updateMutator case 'Explosive Trap Drops Ballistas'",
+        "action": "ExplosiveTrapMutator.chanceForBallistaOnDetonation(0x19C) += 0.10/点",
+        "evidence": "ExplosiveTrapTree.txt ISIL 294-304; final write ISIL 1059"
+      },
+      {
+        "step": 2,
+        "location": "ExplosiveTrapMutator.Mutate ISIL 7332-7338",
+        "action": "复制到地面陷阱 ExplosiveTrapOnGroundMutator: [0x140]=[0x19C]",
+        "evidence": "ExplosiveTrapMutator.txt"
+      },
+      {
+        "step": 3,
+        "location": "ExplosiveTrapOnGroundMutator.Mutate ISIL 833-836",
+        "action": "复制到 ExplosiveTrapDamageMutator: [0x134]=[0x140]",
+        "evidence": "ExplosiveTrapOnGroundMutator.txt"
+      },
+      {
+        "step": 4,
+        "location": "ExplosiveTrapDamageMutator.Mutate ISIL 676-740",
+        "action": "每个引爆陷阱独立 Rng.Roll(0x134)；成功则给陷阱加 CreateAbilityObjectOnDeath: ability=379(Awake 缓存于 ExplosiveTrapDamageMutator+0x1C0), requireAndChargeMana=1, increasedManaCost=-0.5, useCreatorAbilityObjectConstruct=1, mana=creator BaseMana",
+        "evidence": "ExplosiveTrapDamageMutator.txt ISIL 676-740; Awake ISIL 34-37"
+      }
+    ],
+    "mana": {
+      "cost_expression": "(1 + increasedManaCost(-0.5)) * BaseMana.getManaCost(ability 379) = 0.5 * 44 = 22",
+      "insufficient_mana_behavior": "默认 allowPayingIntoNegativeMana(0x93)=false；若 currentMana < cost 则跳转跳过整个创建（不扣 mana）。证据：CreateAbilityObjectOnDeath.createAbilityObject ISIL 183-214（getManaCost/reduceMana/跳转 1856）",
+      "evidence": [
+        "<author-archive>/cpp2il_isil_ca/IsilDump/LE/CreateAbilityObjectOnDeath.txt ISIL 156-214"
+      ]
+    },
+    "trigger_event": "trap death/detonation，每个引爆的陷阱最多判定 1 次；判定成功才挂组件，因此触发概率即召唤概率"
+  },
+  "explosive_trap_frequency": {
+    "known_nodes": [
+      {
+        "node": 24,
+        "name": "Clustered Explosives",
+        "points": 2,
+        "case": "Explosive Trap Additional Traps Per Throw",
+        "target": "additionalTrapsThrown(0x1B0) += points (int)",
+        "result": "+2 traps per throw",
+        "confidence": "high",
+        "evidence": "ExplosiveTrapTree.txt ISIL 576-584 (Add stack0xAC,stack0xAC,rsi) + final write ISIL 1069"
+      },
+      {
+        "node": 28,
+        "name": "Trap Sprinkler",
+        "points": 3,
+        "case": "Explosive Trap Drops Traps",
+        "target": "chanceForNewTrap(0x198) += 0.10/点",
+        "result": "30%",
+        "confidence": "high",
+        "evidence": "ExplosiveTrapTree.txt ISIL 840-850 (xmm10=0.10) + final write ISIL 1057"
+      },
+      {
+        "node": 29,
+        "name": "Automated Bombardment",
+        "points": 1,
+        "case": "Explosive Trap Chance To Drop Fresh Traps",
+        "target": "chanceForNewFinalTrap(0x1A0) += 0.70/点; addedManaCost += 11/点",
+        "result": "70%",
+        "confidence": "high",
+        "evidence": "ExplosiveTrapTree.txt ISIL 486-501 (0.70 与 11) + final write ISIL 1060-1065"
+      },
+      {
+        "node": 23,
+        "name": "Mine Field",
+        "points": 1,
+        "case": "Explosive Trap Mine Field",
+        "target": "additionalMaxTraps(0x1AC) (int) 相关；分支还写 stack0xA4/A8(0x1A4/0x1A8)",
+        "result": "+1 max trap(目录)",
+        "confidence": "low-medium",
+        "evidence": "ExplosiveTrapTree.txt ISIL 595-616 + final write ISIL 1068"
+      },
+      {
+        "node": 26,
+        "name": "Blast Rain",
+        "points": 1,
+        "case": "Explosive Trap Blast Rain",
+        "target": "firesArrows(0x141)=1",
+        "result": "陷阱走弓箭版",
+        "confidence": "medium",
+        "evidence": "ExplosiveTrapTree.txt ISIL 673-680 + final write ISIL 988-989"
+      },
+      {
+        "node": 27,
+        "name": "Impact Trigger",
+        "points": 1,
+        "case": "Explosive Trap Blast Rain Instant Detonation When Hitting Ground",
+        "target": "arrowTrapsInstantlyDetonate(0x140)=1; AddedStat(SP=45, 0.75/点)",
+        "confidence": "low-medium",
+        "evidence": "ExplosiveTrapTree.txt ISIL 620-642 + final write ISIL 986-987"
+      }
+    ],
+    "excess_trap_limiter": {
+      "constants": {
+        "MAX_EXCESS_TRAP_TRIGGERS": 3,
+        "EXCESS_TRAP_TIMEFRAME": 2,
+        "MAX_ACTIVE_TRAPS": 6
+      },
+      "semantics": "TriggerExcessTraps: maxTraps = limitedToOneTrap?1:get_maxTraps(); activeTraps.Count>maxTraps 时对超出部分 AttemptTriggerExcessTrap；后者在滑动 2s 窗口内最多强制引爆 3 次（记录 Time.time 历史），超过则跳过",
+      "evidence": [
+        "<author-archive>/cpp2il_isil_ca/IsilDump/LE/ExplosiveTrapMutator.txt TriggerExcessTraps ISIL 055-158; AttemptTriggerExcessTrap ISIL 089-133"
+      ]
+    },
+    "unverified": "Trap Sprinkler 逐颗判定位置、Automated Bombardment 链的 spawn 位置/是否受 6 上限、Blast Rain 弹数、其余 ex4tp 节点映射(U-3)",
+    "frequency_chain_upper_bound": {
+      "lambda_detonate": "lambda_throw * (1 + additionalTrapsThrown) * (1 + chanceForNewTrap) * (1/(1-chanceForNewFinalTrap))",
+      "lambda_summon": "lambda_detonate * 0.20",
+      "lambda_explosion": "== lambda_summon (steady state; 每个召唤最终对应一次死亡=一次爆炸)",
+      "build_substitution": "3 * 1.30 * 3.333 * 0.20 = 2.6 * lambda_throw (upper-bound; 链式与逐颗判定未完全核实)",
+      "constraints": [
+        "最多 2 个 Ballista 在场",
+        "持续时间 6.5s：lambda_summon>2/6.5=0.3077/s 时始终满员并频繁替换",
+        "超出上限强制引爆受 ≤3 次/2s 限制",
+        "mana：8/施放 + 22/成功召唤，mana 不足则该次召唤跳过（场景假设）"
+      ]
+    }
+  },
+  "elixir_of_construction": {
+    "node": 25,
+    "points": 3,
+    "per_point_more": 0.15,
+    "total_more": 0.45,
+    "window": {
+      "onPotionUse": "BallistaMutator.onPotionUse ISIL 1165-1201: 若 moreDamageAfterPotion>0 -> StopAllCoroutines + PotionUsedRecentlyTimer",
+      "timer": "potionUsedRecently(0x198)=1 -> WaitForSeconds(potionUsedRecentlyTime(0x19C)) -> =0；时长为序列化配置，按 4s 口径使用（U-8）",
+      "evidence": [
+        "<author-archive>/cpp2il_isil/IsilDump/LE/BallistaMutator.txt",
+        "<author-archive>/cpp2il_isil/IsilDump/LE/BallistaMutator_NestedType__PotionUsedRecentlyTimer_d__62.txt MoveNext"
+      ]
+    },
+    "snapshot": "BallistaMutator.Mutate ISIL 588-591: 仅当 potionUsedRecently 为 true 时把 moreDamageAfterPotion 写入 adapter(0x48)",
+    "application": "BallistaAdapter.adapt ISIL 434-467: new Stat(SP=Damage, more=value) + Buff(stat, 20.0s)，加进 Ballista StatBuffs -> 持续20s(>6.5s lifetime 等效全程)",
+    "care_package": {
+      "node": 31,
+      "field": "maxPotionsDropped(0x164) += 1",
+      "effect": "药水掉落来源(非直接 DPS)"
+    }
+  },
+  "crit_composition": {
+    "base": {
+      "chance": 0.05,
+      "multi": 2.0
+    },
+    "sharpened_tips": {
+      "node": 26,
+      "added_crit_chance": 0.03,
+      "slot": "addedValue(SP=4)"
+    },
+    "perfect_aim": "玩家 crit chance/crit multi Stat ×1.0 复制到 minion（保留原槽位，再按 Stats 通用规则汇总）",
+    "note": "暴击率 = 5% + 3% + 转移玩家暴击率汇总；暴伤 = 200% + 转移玩家暴伤汇总"
+  },
+  "damage_composition_build": {
+    "base_fire": 50.0,
+    "added_effectiveness": 2.5,
+    "increased_damage_sources": [
+      "玩家 Damage 池 ×0.75 (Shared Enhancements)",
+      "node? none else"
+    ],
+    "more_damage_sources": [
+      {
+        "source": "minion 100053 base",
+        "value": 0.5
+      },
+      {
+        "source": "node 23 Heavy Bolts 3/3",
+        "value": 0.36
+      },
+      {
+        "source": "node 14 Practical Build 1/1",
+        "value": 0.4
+      },
+      {
+        "source": "node 5 Armed Construction per-Dex",
+        "value": "0.04 * Dex"
+      },
+      {
+        "source": "node 25 Elixir (仅召唤时 potionUsedRecently)",
+        "value": 0.45
+      }
+    ],
+    "crit_expected": "1 + critChance*(critMulti-1)",
+    "note": "乘区按 Stats 通用规则聚合（1+Σincreased 与 Π(1+more)）；本构筑的爆炸不做 cold conversion（节点13 未点）"
+  },
+  "unknowns": [
+    {
+      "id": "U-1",
+      "question": "isBallistaExplosion(0x13C) 由谁置 true",
+      "status": "inferred_true",
+      "reason": "IL 无写点；组件与 mutator 在 Ballista 实体 prefab 上，极可能序列化默认 true；若 false 则节点5 的 25% radius 与 per-Dex more 永不生效，与节点存在矛盾",
+      "blocking": "影响 per-Dex more 是否生效"
+    },
+    {
+      "id": "U-2",
+      "question": "玩家 flat added bow damage 是否可能进入爆炸 added 池",
+      "status": "unknown",
+      "reason": "IL 未见 ballista 转移通道；addedDamageScaling=2.5 仅放大 added 池；标签匹配未确认",
+      "blocking": "影响 added 伤害建模，本构筑可能为 0"
+    },
+    {
+      "id": "U-3",
+      "question": "ExplosiveTrapTree 33 个节点完整映射（尤其 Trap Sprinkler 逐颗判定、Automated Bombardment 链、Blast Rain 弹数、Impact Trigger、Trapas、Ash Compartment、Lightning Bomb、Sky Signal 等）",
+      "status": "partial",
+      "reason": "switch case 名与最终字段写回块已提取；已核对 6 个节点；其余需逐分支常量解析",
+      "blocking": "影响 n_trap 与 λ_detonate 的精确值"
+    },
+    {
+      "id": "U-4",
+      "question": "getSpeedMultiplierStat 精确公式（additive/more 组合、Ability.as 在 IL 中对应字段、动画因子）",
+      "status": "unknown",
+      "reason": "UsingAbility ISIL 204-319 三层虚调用未完全解码；已确认 speedMultiplier 乘性、下限 0.1、duration/delay 均除同一 U",
+      "blocking": "影响 ballista 攻击频率与 trap 施放频率绝对值"
+    },
+    {
+      "id": "U-5",
+      "question": "角色等级 minion 伤害缩放是否真实作用于伤害结算",
+      "status": "unknown",
+      "reason": "CharacterClass.getMoreMinionDamageFromCharacterLevel 公式已核（level>=first: (level-first+1)*perLevel；L100/26/0.008 -> 0.60），但全工程仅 CharacterSheet（面板显示）调用，未找到应用点",
+      "blocking": "是否乘 ×1.60 未定"
+    },
+    {
+      "id": "U-6",
+      "question": "爆炸命中时最终 AT tag 集合",
+      "status": "partial",
+      "reason": "ability tags=2056={Bow,Fire}；组件 damageTags=2048={Bow}；Hit 等是否并入由 DamageEnemyOnHit.setStandardVariables 决定，未定位调用点",
+      "blocking": "影响哪些 increased/more 标签 Stat 命中"
+    },
+    {
+      "id": "U-7",
+      "question": "CreateAbilityObjectOnDeath 序列化参数（minimumAge/delay/createAt 位置/additionalCasts）",
+      "status": "unknown",
+      "reason": "adapt 只设 ability/enabled；其余来自 prefab 序列化，IL 不可见",
+      "blocking": "按默认“死亡即刻、Ballista 位置、1 次”建模"
+    },
+    {
+      "id": "U-8",
+      "question": "potionUsedRecentlyTime 具体值",
+      "status": "configured_4s",
+      "reason": "字段为序列化默认值，IL 未赋常量；按 4s 口径",
+      "blocking": "Elixir 覆盖率的场景假设"
+    },
+    {
+      "id": "U-9",
+      "question": "ex4tp 每次施放实际陷阱数/arm time/触发半径/上限 6 的运行时行为",
+      "status": "partial",
+      "reason": "MAX_ACTIVE_TRAPS=6、MAX_EXCESS_TRAP_TRIGGERS=3、EXCESS_TRAP_TIMEFRAME=2 常量与 TriggerExcessTraps/AttemptTriggerExcessTrap 逻辑已核；节点修正未全解",
+      "blocking": "λ_detonate 终值"
+    }
+  ],
+  "for_unified_dps_model": {
+    "output_unit": "Armed Construction on-death explosion (ability_gen327/626) only",
+    "single_explosion_damage_formula": "(50 Fire * (1 + increased_damage_sum) * prod(1 + more_damage_sources) * crit_expected + added_pool*2.5) * (1+0.04*Dex more included in more_damage_sources)",
+    "events_per_second": "lambda_explosion = lambda_throw * n_traps_per_throw * (1+p_sprinkler) * E_automated_chain * p_siege; 见 explosive_trap_frequency.upper_bound",
+    "external_inputs": [
+      "玩家 Explosive Trap 施放速率 lambda_throw (AS/操作)",
+      "mana 供给假设",
+      "玩家 Dexterity",
+      "玩家 Damage/CritChance/CritMultiplier Stats（快照值）",
+      "目标侧定义（Boss Dummy 0 抗性，本任务不建模）"
+    ],
+    "do_not_model": [
+      "bolt 直击",
+      "Explosive Delivery bolt 爆炸",
+      "ignite DoT",
+      "explosion area 对单体 DPS 的影响（除非命中覆盖不足）"
+    ]
+  }
+}

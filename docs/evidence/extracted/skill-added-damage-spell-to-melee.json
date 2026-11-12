@@ -1,0 +1,80 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "skill-added-damage-spell-to-melee",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Arcane Severance：每 4 点附加法术伤害转为附加近战伤害",
+    "en": "Arcane Severance: added spell damage converts into added melee damage per 4 points"
+  },
+  "source_path": "knowledge/mechanisms/skill-added-damage-spell-to-melee.json",
+  "evidence_state": "assumed",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 hit_inputs 派生行保留为迁移对照；新路径与旧值逐位一致"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "plan-v2 rules.added_damage_conversion（迁移规则数据）",
+    "path": "knowledge/definitions/fr-flame-reave-v3.json",
+    "locator": "#/definition/rules/added_damage_conversion",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/fr-flame-reave-v3.json#definition.rules",
+      "note": "kind=none，但 ref 指向的定义规则段 'added_damage_conversion' 已在文件中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=fr11mv node=12",
+      "note": "节点 12 stat_index 1：Melee Damage per 4 Spell Damage；当前 3 点值 3.0",
+      "source": "$.evidence_refs[0]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Arcane Severance：每 4 点附加法术伤害转为附加近战伤害",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Melee；条件 code：none；必要节点：fr11mv:12",
+      "source": "$.applicability"
+    },
+    {
+      "text": "只作用于显式带 Spell 标签且无其它标签的 added damage 行；输出为 Melee 标签的 added damage。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "聚合操作=added；叠层策略=linear_per_stack；顺序/汇总=转换结果进入 Fire 组件 added 池（无类型附加按自适应 Fire）；不重复叠加原 Spell 行；more 分组依据=n/a（added 不是 more 组）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "编译期按规则声明从行池求和并绑定节点值，生成 derived added_damage 贡献（assumed：伤害类型按无类型附加处理）",
+      "source": "$.handler_ref.note（le_calc.plan_compiler.compile_from_resolved_model）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：conversion ratio、source pool、divisor",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/flame-reave/verify-baseline-flame-reave-20261110T1245/result.json#/single_hit/components/0/added_rows"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "转换伤害类型：转换后的伤害类型按无类型附加处理为 Fire（assumed），未逐类型拆组件。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,154 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-effect-ignite-sources",
+  "kind": "mechanism",
+  "title": {
+    "zh": "FR 命中模型相关的 Ignite 来源（Arcane Flames / Sunwreath / Firebrand Flare）",
+    "en": "Ignite sources relevant to the FR hit model (Arcane Flames / Sunwreath / Firebrand Flare)"
+  },
+  "source_path": "knowledge/mechanisms/fr-effect-ignite-sources.json",
+  "evidence_state": "derived",
+  "implementation_state": "not_implemented",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "ignite_source_ring2",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=ignite_source_ring2；#/effects id=fire_aura_ignite_sources",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_effect:ignite_source_ring2 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#items entity_id=item:letools:uniqueList.uniques:150",
+      "note": "Sunwreath：+43% chance to ignite on melee hit（roll）",
+      "source": "$.evidence_refs[1]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=passive_bonus source_id=mg-1",
+      "note": "Arcane Flames node 7：点燃邻近敌人/5s CD/+5% vs ignited",
+      "source": "$.evidence_refs[2]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=f1b4d source_id=23",
+      "note": "Firebrand Flare ignite chance",
+      "source": "$.evidence_refs[3]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill_entity_id=skill:letools:LEAbilities.abilityList:fr11mv",
+      "note": "FR 本体无 ignite 组件",
+      "source": "$.evidence_refs[4]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "FR 命中模型相关的 Ignite 来源（Arcane Flames / Sunwreath / Firebrand Flare）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire、Melee；条件 code：ignited",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=none；叠层策略=unknown；顺序/汇总=ignited 是目标状态开关；来源决定可达性但不做时间模拟。ignite DoT 伤害不在 hit 模型内；more 分组依据=n/a",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "只做候选筛查；ignite 施加/DoT/uptime 均未实现",
+      "source": "$.handler_ref.note（le_calc.hit_buffs.screen_buffs）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：effect definitions、Sunwreath ignite、Arcane Flames、Firebrand Flare、FR 自身、ignited state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods equipment.ring2#unique_mod#0"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/ignited"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/interaction_requirements/2/evidence_locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/ignited"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "R5：谁可靠施加 Ignite、真实 uptime、Arcane Flames 是否点燃主目标（5s CD/邻近敌人）均未实测",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "ignite DoT 伤害作为独立组件未建模（ruleset.open_questions R15）",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "用户裁决：只建模 FR 自身相关来源；其它技能点燃来源不建模",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

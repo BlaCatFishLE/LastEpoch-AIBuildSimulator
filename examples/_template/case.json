@@ -1,0 +1,47 @@
+{
+ "schema": "le-case-v1",
+ "case_id": "your-case",
+ "title": "<你的构筑标题>",
+ "description": "<一句话描述本次构筑/场景；不要复制其它案例的输入或预期值>",
+ "created": "<YYYY-MM-DD>",
+ "game_version": "1.5.2",
+ "monster_level": 100,
+ "dataset": "data/current.json",
+ "dataset_expected": {},
+ "build": {},
+ "affix_db": "data/affix-db/v1/normalized/affix-db.sqlite",
+ "ruleset": {},
+ "conditional_registry": {},
+ "inputs": {
+  "bd": null,
+  "calculation_input": null,
+  "corrections": null,
+  "idol_refraction_selection": null,
+  "snapshot": null,
+  "scenario": null
+ },
+ "source": {
+  "character_save": null,
+  "stash": null,
+  "planner_build_response": null,
+  "tool_native_wire": null,
+  "tool_native_run_summary": null
+ },
+ "input_sha256": {},
+ "snapshot_expectations": {},
+ "output": {
+  "root": "reports/your-case",
+  "run_id_template": "{case_id}-{utcstamp}"
+ },
+ "expected": null,
+ "notes": [
+  "这是字段说明模板，不是可运行案例；路径/数值为空或占位，复制后必须补齐或让 le.ps1 import 生成骨架。",
+  "新建案例推荐直接运行 le.ps1 import，由工具生成目录、case.json 与 bd.json；本模板只用于理解字段。",
+  "构建/计算输入/场景/预期值必须来自你当前导入的存档或 planner payload，不得复用其它案例。"
+ ],
+ "model": null,
+ "main_skill": {
+  "ability_id": null
+ },
+ "calculation": {}
+}

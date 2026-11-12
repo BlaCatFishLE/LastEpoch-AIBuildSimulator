@@ -1,0 +1,191 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-node-rolling-flames",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave 树节点 25 Rolling Flames（射程，不影响命中伤害）",
+    "en": "Rolling Flames (Flame Reave tree node 25)"
+  },
+  "aliases": [
+    "Rolling Flames",
+    "fr11mv:25",
+    "node:fr11mv:25"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:25"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "area"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:fr11mv:25"
+    ],
+    "notes": "范围/几何类节点：为树完整性登记，不参与伤害计算。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "current:matched_instances",
+      "unit": "points",
+      "note": "当前 BD 已分配点数"
+    },
+    {
+      "parameter": "value_per_point",
+      "source": "current:matched_instances",
+      "unit": "按 effect unit",
+      "per_point": true
+    },
+    {
+      "parameter": "value_total",
+      "source": "current:matched_instances",
+      "unit": "按 effect unit",
+      "per_point": false
+    },
+    {
+      "parameter": "contribution rows",
+      "source": "current:matched_instances",
+      "unit": "按 stat_key",
+      "note": "role=stat 的 effect 生成 contribution；info/ignored 不生成"
+    }
+  ],
+  "rule_ref": {
+    "kind": "dataset_entity",
+    "ref": "node:letools:fr11mv:25",
+    "path": "data/releases/phase1-dataset-003/data.sqlite",
+    "locator": "#nodes node_index=25；#effects owner_entity_id=node:letools:fr11mv:25"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_inputs",
+    "symbol": "FR_SKILL_NODE_SEMANTICS",
+    "note": "key '25'；role=ignored，exclusion_reason：range/width has no effect on hit damage"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes entity_id=node:letools:fr11mv:25",
+      "note": "Rolling Flames 节点描述/类型/上限"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:25",
+      "note": "Range +15%/点（ignored）"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#node:25",
+      "note": "facts 的逐节点效果聚合（per_point × points）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=25)",
+      "note": "快照冻结的节点效果（role=stat/info/ignored/derived）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "note": "FR 机制研究：节点参数与说明"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/nodes(node_id=25)/points",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=25)/effects[*]/value_per_point",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=25)/effects[*]/value_total",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[contribution_id prefix=skill:fr11mv:25:]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "fr-hit-single-hit-chain",
+      "requirement": "节点贡献作为单次命中池的来源之一",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model"
+    },
+    {
+      "with": "fr-hit-conditional-state-eval",
+      "requirement": "带 condition_code 的节点行必须按 scenario states 求值",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/states"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "射程/范围变化对单目标贴脸 DPS 无数值影响；若目标在边缘或需要几何覆盖，需新的空间模型"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "none",
+    "stacking_policy": "none",
+    "order_policy": "Range +15%/点；仅改变命中几何，不进入单次命中伤害或频率",
+    "more_group_source": "n/a"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

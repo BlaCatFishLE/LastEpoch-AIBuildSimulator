@@ -1,0 +1,29 @@
+{
+  "schema": "le-attribute-conversion-rules-v1",
+  "ruleset_id": "attribute-conversions-v1",
+  "brutality": {
+    "selector": {
+      "property": 98,
+      "tags": 650,
+      "special_tag": 0
+    },
+    "more_per_point_per_mana": 0.0002,
+    "mana_cost_cap": 20,
+    "health_leech_reduction_per_point": 0.005,
+    "damage_tags": [
+      "Melee",
+      "Hit"
+    ],
+    "status": "derived",
+    "evidence": [
+      {
+        "kind": "game_data",
+        "locator": "dataset source_records translation:Properties.Property_Player_650_AltText"
+      },
+      {
+        "kind": "user_rule",
+        "locator": "用户本轮引用的完整词条说明"
+      }
+    ]
+  }
+}

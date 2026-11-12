@@ -1,0 +1,815 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lastepoch-buildsimulator/schemas/calculation-input-v1.json",
+  "title": "calculator input export v1 (BuildSpec -> third-stage calculator)",
+  "description": "Flat, read-only export of one published BuildSpec v1 revision for a third-stage calculator. Every in-scope modifier is one entry with a stable mod_id, stat/property association, restored numeric value (when known), declared range, honest status/source, and provenance. Hidden/non-rollable unique mods are included; unique-tooltip descriptions are kind=description. 2026-11-04 re-review R1 scope: non-DPS effects (drop-rate, identified by source property identity NON_DPS_PROPERTIES = propertyList 104) are excluded from this DPS input document and reported in excluded_non_dps*; the BuildSpec/source archive keeps them. No combat semantics, no DPS, no cross-item aggregation is claimed. The schema is intentionally permissive about additional properties so new honest fields can be added without invalidating older consumers.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_at",
+    "build_id",
+    "revision_id",
+    "source",
+    "game_version",
+    "dataset_id",
+    "scope",
+    "character",
+    "skills",
+    "passive_tree",
+    "items",
+    "mods",
+    "excluded_non_dps",
+    "excluded_non_dps_properties",
+    "excluded_non_dps_mod_ids",
+    "unresolved_inputs",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "calculation-input-v1"
+    },
+    "generated_at": {
+      "type": "string",
+      "description": "Only timestamp of the document. Defaults to the revision published_at so re-exporting one immutable revision is byte-identical; an explicit export time may be supplied by the caller."
+    },
+    "build_id": {
+      "type": "string"
+    },
+    "revision_id": {
+      "type": "string"
+    },
+    "revision_seq": {
+      "type": ["integer", "null"]
+    },
+    "content_sha256": {
+      "type": ["string", "null"],
+      "description": "Published BuildSpec revision content hash (provenance extra; not a calculation input)."
+    },
+    "source": {
+      "type": "string"
+    },
+    "game_version": {
+      "type": ["string", "null"]
+    },
+    "dataset_id": {
+      "type": ["string", "null"]
+    },
+    "scope": {
+      "$ref": "#/$defs/scope"
+    },
+    "character": {
+      "$ref": "#/$defs/character"
+    },
+    "skills": {
+      "$ref": "#/$defs/skills"
+    },
+    "passive_tree": {
+      "$ref": "#/$defs/passive_tree"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    },
+    "mods": {
+      "type": "array",
+      "description": "Every flattened DPS mod/description in stable order; the same dicts as the concatenation of items[].mods. Non-DPS effects excluded by the 2026-11-04 R1 scope are NOT present here (see excluded_non_dps*).",
+      "items": {
+        "$ref": "#/$defs/mod"
+      }
+    },
+    "excluded_non_dps": {
+      "type": "integer",
+      "description": "Number of effects removed from this DPS input by the 2026-11-04 re-review R1 scope (non-DPS by source property identity). The removed effects remain in the BuildSpec/source archive; they are not deleted."
+    },
+    "excluded_non_dps_properties": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "description": "Source property identities treated as non-DPS (excluded). Currently [104] = coreDB.propertyList 104 Increased Drop Rate; filtering is by property identity, never by display text."
+    },
+    "excluded_non_dps_mod_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Stable mod_id values of the excluded effects (traceability; these ids never appear in mods/items[].mods)."
+    },
+    "unresolved_inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/unresolved_input"
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "required": ["included_sections", "excluded_features", "notes"],
+      "properties": {
+        "scope_version": {
+          "type": ["string", "null"],
+          "description": "null for historical revisions that predate the scope block."
+        },
+        "included_sections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "excluded_features": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "character": {
+      "type": "object",
+      "required": ["level", "class", "mastery"],
+      "properties": {
+        "level": {
+          "type": ["integer", "null"]
+        },
+        "class": {
+          "$ref": "#/$defs/ref_entity_or_null"
+        },
+        "mastery": {
+          "$ref": "#/$defs/ref_entity_or_null"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ref_entity": {
+      "type": "object",
+      "required": ["entity_id", "name", "status"],
+      "properties": {
+        "entity_id": {
+          "type": ["string", "null"]
+        },
+        "name": {
+          "type": ["string", "null"]
+        },
+        "status": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "ref_entity_or_null": {
+      "type": ["object", "null"],
+      "properties": {
+        "entity_id": {
+          "type": ["string", "null"]
+        },
+        "name": {
+          "type": ["string", "null"]
+        },
+        "status": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "skills": {
+      "type": "object",
+      "required": ["specializations", "action_bar", "active_buffs"],
+      "properties": {
+        "specializations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/specialization"
+          }
+        },
+        "action_bar": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/action_bar_slot"
+          }
+        },
+        "active_buffs": {
+          "$ref": "#/$defs/active_buffs"
+        }
+      },
+      "additionalProperties": true
+    },
+    "specialization": {
+      "type": "object",
+      "required": ["tree", "owner_skill", "nodes"],
+      "properties": {
+        "slot_number": {
+          "type": ["integer", "null"]
+        },
+        "source_level": {
+          "type": ["integer", "null"]
+        },
+        "tree": {
+          "type": "object"
+        },
+        "owner_skill": {
+          "type": "object"
+        },
+        "tree_version": {
+          "type": ["integer", "null"]
+        },
+        "catalog_tree_version": {
+          "type": ["integer", "null"]
+        },
+        "node_entries": {
+          "type": ["integer", "null"]
+        },
+        "points_total": {
+          "type": ["integer", "null"]
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "node": {
+      "type": "object",
+      "required": ["node_id"],
+      "properties": {
+        "node_id": {
+          "type": ["string", "null"]
+        },
+        "name": {
+          "type": ["string", "null"]
+        },
+        "points": {
+          "type": ["integer", "null"]
+        },
+        "node_type": {
+          "type": ["string", "null"]
+        },
+        "max_points": {
+          "type": ["integer", "null"]
+        },
+        "explicit_zero": {
+          "type": ["boolean", "null"]
+        },
+        "status": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "action_bar_slot": {
+      "type": "object",
+      "required": ["slot"],
+      "properties": {
+        "slot": {
+          "type": ["integer", "null"]
+        },
+        "entity_id": {
+          "type": ["string", "null"]
+        },
+        "name": {
+          "type": ["string", "null"]
+        },
+        "specialization_slot": {
+          "type": ["integer", "null"]
+        },
+        "status": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "active_buffs": {
+      "type": "object",
+      "required": ["skills"],
+      "properties": {
+        "skills": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "buffs": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "ailments": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "note": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "passive_tree": {
+      "type": "object",
+      "required": ["tree", "points_total", "nodes"],
+      "properties": {
+        "tree": {
+          "type": ["object", "null"]
+        },
+        "points_total": {
+          "type": ["integer", "null"]
+        },
+        "node_entries": {
+          "type": ["integer", "null"]
+        },
+        "status": {
+          "type": ["string", "null"]
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/node"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "item": {
+      "type": "object",
+      "required": [
+        "instance_id",
+        "role",
+        "slot",
+        "display_name",
+        "base_name",
+        "item_type",
+        "rarity",
+        "mods"
+      ],
+      "properties": {
+        "instance_id": {
+          "type": "string"
+        },
+        "role": {
+          "type": ["string", "null"]
+        },
+        "slot": {
+          "type": ["string", "null"]
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "base_name": {
+          "type": ["string", "null"]
+        },
+        "item_type": {
+          "type": ["string", "null"]
+        },
+        "rarity": {
+          "type": ["object", "null"],
+          "description": "readable.rarity when available; {code,label_zh,label_en,confidence} or null when the source cannot prove rarity."
+        },
+        "source_path": {
+          "type": ["string", "null"]
+        },
+        "encoded_id": {
+          "type": ["string", "null"]
+        },
+        "definition_entity_id": {
+          "type": ["string", "null"]
+        },
+        "base_entity_id": {
+          "type": ["string", "null"]
+        },
+        "position": {
+          "type": ["object", "null"]
+        },
+        "mods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mod"
+          }
+        },
+        "_item": {
+          "type": "object",
+          "description": "Contract §4 sample spelling: duplicate of the item metadata (everything except mods)."
+        }
+      },
+      "additionalProperties": true
+    },
+    "mod": {
+      "type": "object",
+      "required": [
+        "mod_id",
+        "item_instance_id",
+        "source",
+        "channel",
+        "kind",
+        "stat",
+        "property",
+        "tags",
+        "special_tag",
+        "modifier_type",
+        "value_numeric",
+        "display_value",
+        "value_status",
+        "value_source",
+        "roll",
+        "range",
+        "hidden",
+        "unique",
+        "affix",
+        "readable_text",
+        "provenance"
+      ],
+      "properties": {
+        "mod_id": {
+          "type": "string",
+          "description": "Stable calculator key, e.g. equipment.amulet#unique_mod#1. description entries use #unique_description#<index>."
+        },
+        "item_instance_id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["affix", "implicit", "unique_mod"]
+        },
+        "channel": {
+          "type": "string",
+          "enum": ["unique", "implicit", "normal", "sealed", "primordial", "corrupted"]
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["mod", "description"],
+          "description": "kind=description entries are unique-tooltip description lines: no numeric value (value_numeric=null, value_status=missing), readable_text carries the rendered description."
+        },
+        "stat": {
+          "$ref": "#/$defs/stat"
+        },
+        "property": {
+          "type": ["integer", "null"],
+          "description": "catalog property id (selector), null when unresolved."
+        },
+        "tags": {
+          "type": ["integer", "null"]
+        },
+        "special_tag": {
+          "type": ["integer", "null"]
+        },
+        "modifier_type": {
+          "type": ["integer", "null"],
+          "description": "0 = added/base, 1 = increased/reduced, 2 = more/less (source definition value)."
+        },
+        "value_numeric": {
+          "type": ["number", "null"],
+          "description": "Restored value in the stat's normalized unit (e.g. 0.11 = 11%). null means no actual value is known; never treat null as 0."
+        },
+        "display_value": {
+          "type": ["string", "null"],
+          "description": "Display string copied from the BuildSpec, e.g. 11% or a range text; not a second numeric source."
+        },
+        "value_status": {
+          "type": "string",
+          "enum": ["actual", "range", "constant", "missing", "unresolved"]
+        },
+        "value_source": {
+          "type": "string",
+          "enum": ["source", "local_input", "local_value_override"]
+        },
+        "roll": {
+          "$ref": "#/$defs/roll"
+        },
+        "range": {
+          "$ref": "#/$defs/range"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "unique": {
+          "$ref": "#/$defs/unique"
+        },
+        "affix": {
+          "$ref": "#/$defs/affix"
+        },
+        "readable_text": {
+          "type": ["string", "null"],
+          "description": "Player-readable line for non-hidden emitted lines; null for hidden mods, description-less revisions and legacy revisions without a readable layer."
+        },
+        "derived_display_value": {
+          "type": ["number", "null"],
+          "description": "Planner average-branch value when no source roll exists (display-only, explicitly not a source roll). Also mirrored inside effective_value_policy."
+        },
+        "effective_value_policy": {
+          "type": ["object", "null"]
+        },
+        "stat_resolution": {
+          "type": ["string", "null"]
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        }
+      },
+      "additionalProperties": true
+    },
+    "stat": {
+      "type": "object",
+      "required": ["stat_id", "name", "unit", "resolved"],
+      "properties": {
+        "stat_id": {
+          "type": ["string", "null"]
+        },
+        "name": {
+          "type": ["string", "null"]
+        },
+        "unit": {
+          "type": ["string", "null"],
+          "description": "flat/percent/... when resolved; null otherwise."
+        },
+        "resolved": {
+          "type": "boolean",
+          "description": "true only when the BuildSpec proves both stat_id and stat name; unresolved unique mods may keep a stat_id fallback but are resolved=false."
+        }
+      },
+      "additionalProperties": true
+    },
+    "roll": {
+      "type": "object",
+      "required": ["kind", "raw", "roll_id", "index", "status"],
+      "properties": {
+        "kind": {
+          "enum": ["affix_roll", "unique_roll", "implicit_roll", null]
+        },
+        "raw": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 255,
+          "description": "Source roll byte 0..255; r=0 is a valid present roll; null when absent/null/non-rollable."
+        },
+        "roll_id": {
+          "type": ["integer", "null"],
+          "description": "unique mod rollId (unique_roll only)."
+        },
+        "index": {
+          "type": ["integer", "null"],
+          "description": "implicit definition index (implicit_roll only)."
+        },
+        "status": {
+          "type": ["string", "null"],
+          "description": "present / absent / null / local_input / ... copied from the BuildSpec restoration result."
+        }
+      },
+      "additionalProperties": true
+    },
+    "range": {
+      "type": "object",
+      "required": ["min", "max", "direction", "range_text"],
+      "properties": {
+        "min": {
+          "type": ["number", "null"],
+          "description": "Declared range endpoint in definition order (may be > max for inverted ranges)."
+        },
+        "max": {
+          "type": ["number", "null"]
+        },
+        "direction": {
+          "enum": ["ascending", "inverted", "constant", null]
+        },
+        "range_text": {
+          "type": ["string", "null"],
+          "description": "Display range text only when the readable layer provides one for a declared-range (non-actual) line; null for actual values."
+        }
+      },
+      "additionalProperties": true
+    },
+    "unique": {
+      "type": ["object", "null"],
+      "required": ["mod_index", "roll_id", "can_roll", "description_indexes"],
+      "properties": {
+        "mod_index": {
+          "type": ["integer", "null"]
+        },
+        "roll_id": {
+          "type": ["integer", "null"]
+        },
+        "can_roll": {
+          "type": "boolean"
+        },
+        "description_indexes": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "Unique-tooltip description indexes covering this hidden mod. Empty on current BuildSpec revisions because the readable layer does not store the mod->description mapping; do not assume full coverage."
+        }
+      },
+      "additionalProperties": true
+    },
+    "affix": {
+      "type": ["object", "null"],
+      "required": ["entity_id", "name", "source_tier", "tier_index", "channel", "encoded_id", "affix_slot"],
+      "properties": {
+        "entity_id": {
+          "type": ["string", "null"]
+        },
+        "name": {
+          "type": ["string", "null"]
+        },
+        "source_tier": {
+          "type": ["integer", "null"],
+          "description": "source tier as stored in the payload (1-based from the site)."
+        },
+        "tier_index": {
+          "type": ["integer", "null"],
+          "description": "normalized catalog tier index (source tier - 1)."
+        },
+        "channel": {
+          "enum": ["normal", "sealed", "primordial", "corrupted", null]
+        },
+        "encoded_id": {
+          "type": ["string", "null"]
+        },
+        "affix_slot": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source_path", "encoded_id", "input_id"],
+      "properties": {
+        "source_path": {
+          "type": ["string", "null"],
+          "description": "Source payload/ BuildSpec path of the value (affix source_path, ...ur, ...ir, or item path for descriptions)."
+        },
+        "encoded_id": {
+          "type": ["string", "null"]
+        },
+        "input_id": {
+          "type": ["string", "null"],
+          "description": "local-input entry id when value_source is local_input/local_value_override."
+        }
+      },
+      "additionalProperties": true
+    },
+    "unresolved_input": {
+      "type": "object",
+      "required": ["kind", "instance_path", "suggested_command"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["affix_roll", "unique_mod_roll", "implicit_roll"]
+        },
+        "instance_path": {
+          "type": "string",
+          "description": "affix instance source_path (affix_roll), item source_path (unique_mod_roll/implicit_roll)."
+        },
+        "item_instance_id": {
+          "type": ["string", "null"]
+        },
+        "item_label": {
+          "type": ["string", "null"]
+        },
+        "channel": {
+          "type": ["string", "null"]
+        },
+        "affix_entity_id": {
+          "type": ["string", "null"]
+        },
+        "affix_name": {
+          "type": ["string", "null"]
+        },
+        "source_tier": {
+          "type": ["integer", "null"]
+        },
+        "label": {
+          "type": ["string", "null"],
+          "description": "readable label for the missing value (current readable line / stat label)."
+        },
+        "readable_text": {
+          "type": ["string", "null"]
+        },
+        "range_text": {
+          "type": ["string", "null"],
+          "description": "Current declared range text from the readable layer, when available."
+        },
+        "value_status": {
+          "type": "string",
+          "enum": ["actual", "range", "constant", "missing", "unresolved"]
+        },
+        "roll_id": {
+          "type": ["integer", "null"],
+          "description": "unique mod rollId (unique_mod_roll only; one entry per rollId)."
+        },
+        "index": {
+          "type": ["integer", "null"],
+          "description": "implicit definition index (implicit_roll only)."
+        },
+        "mod_indexes": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "All unique mod indexes sharing the missing rollId (unique_mod_roll only)."
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "suggested_command": {
+          "type": "string",
+          "description": "CLI command template; the roll value is the literal placeholder <0-255> and everything else (build id, kind, target) is concrete."
+        },
+        "variables": {
+          "type": "array",
+          "description": "Per-variable rows behind one missing roll slot: one roll can drive several displayed values (e.g. a unique rollId shared by Level of Skills + Physical Resistance, or a multi-value affix). Each variable can be supplied directly by its own explicit_value input using a displayed in-game value.",
+          "items": {
+            "$ref": "#/$defs/input_variable"
+          }
+        },
+        "suggested_variable_commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "CLI command templates for per-variable explicit_value inputs (displayed value placeholder)."
+        }
+      },
+      "additionalProperties": true
+    },
+    "input_variable": {
+      "type": "object",
+      "required": ["label", "unit", "percent"],
+      "properties": {
+        "value_index": {
+          "type": ["integer", "null"],
+          "description": "Affix value index (affix_roll targets only)."
+        },
+        "affix_value_index": {
+          "type": ["integer", "null"],
+          "description": "Affix value index for explicit_value target=affix."
+        },
+        "mod_index": {
+          "type": ["integer", "null"],
+          "description": "Unique mod index for explicit_value target=unique_mod."
+        },
+        "index": {
+          "type": ["integer", "null"],
+          "description": "Implicit index for explicit_value target=implicit."
+        },
+        "label": {
+          "type": ["string", "null"],
+          "description": "Readable line text for this variable."
+        },
+        "stat_name": {
+          "type": ["string", "null"]
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["percent", "flat"]
+        },
+        "percent": {
+          "type": "boolean",
+          "description": "True when the typed displayed value must be divided by 100 to obtain value_numeric."
+        },
+        "range_text": {
+          "type": ["string", "null"]
+        },
+        "roll_min": {
+          "type": ["number", "null"]
+        },
+        "roll_max": {
+          "type": ["number", "null"]
+        },
+        "direction": {
+          "type": ["string", "null"]
+        },
+        "raw_value": {
+          "type": ["number", "null"]
+        },
+        "max_value": {
+          "type": ["number", "null"]
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

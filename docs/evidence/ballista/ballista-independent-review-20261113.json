@@ -1,0 +1,125 @@
+{
+  "date": "2026-11-13",
+  "scope": "independent_review_no_implementation_changes",
+  "run": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-1",
+  "manifest_files": {
+    "calculation-plan.json": true,
+    "compile-result.json": true,
+    "dps-report.html": true,
+    "input-snapshot.json": true,
+    "plan-diagnostics.json": true,
+    "report-binding.json": true,
+    "report-capabilities.json": true,
+    "result.json": true,
+    "scenario.json": true,
+    "source-ledger.json": true,
+    "validation-result.json": true
+  },
+  "manifest_file_count": 11,
+  "saved_result_exactly_reproduced": true,
+  "readonly_validate_stage_passed": true,
+  "baseline": {
+    "horizon_dps": 205207.9021057712,
+    "single_explosion": 256509.87763221402,
+    "event_rate_per_s": 0.8
+  },
+  "probes": [
+    {
+      "id": "P1-A",
+      "mutation": "Remove Fire from shared hit matching tags; preserve base Fire and adaptive Fire",
+      "horizon_dps": 142016.2486627662,
+      "note": "diagnostic counterexample only, not corrected game oracle",
+      "baseline_fire_added_effect": "actor:100053:transfer:shared_enhancements_added:mod_equipment_weapon1_unique_mod_0",
+      "value": 10.5,
+      "applied_types": [
+        "Physical",
+        "Fire",
+        "Cold",
+        "Lightning",
+        "Void",
+        "Necrotic",
+        "Poison"
+      ]
+    },
+    {
+      "id": "P1-B1",
+      "layer": "FrozenContext -> bind_template -> compile_from_resolved_model -> execute_plan_v4",
+      "mutation": "Explosive Trap node 30 points = 0 in in-memory current calculation input",
+      "accepted": true,
+      "horizon_dps": 205207.9021057712,
+      "event_rate_per_s": 0.8
+    },
+    {
+      "id": "P1-B2",
+      "layer": "FrozenContext -> bind_template -> compile_from_resolved_model -> execute_plan_v4",
+      "mutation": "actor.source_entity = minion:nonexistent:999999",
+      "accepted": true,
+      "horizon_dps": 205207.9021057712
+    },
+    {
+      "id": "P1-B3",
+      "layer": "resolve_derived_frequency -> derived_event_rate",
+      "mutation": "Remove ex4tp specialization from in-memory current input",
+      "accepted": true,
+      "event_rate_per_s": 0.8
+    },
+    {
+      "id": "P1-C",
+      "layer": "validate_result_v6 + stage_validation_checks",
+      "accepted_tampers": [
+        "coverage complete/0/[]",
+        "applications_ledger[0].component_id nonexistent:component",
+        "components[0].damage_total 999999999"
+      ],
+      "stage_checks_passed_per_probe": 10,
+      "additional_direct_validator_accepted": "contributions[0].value 999999999"
+    },
+    {
+      "id": "P1-D1",
+      "layer": "execute_plan_v4 after refreshing execution_sha256 and plan_sha256",
+      "mutation": "First crit_absorbed effect value from 0.03 to 100",
+      "horizon_dps": 205207.9021057712,
+      "numbers_unchanged": true
+    },
+    {
+      "id": "P1-D2",
+      "layer": "_aggregate_crit synthetic input",
+      "input": "included=False, condition_status=not_satisfied, tags=[Spell], crit_multiplier added=5",
+      "base_multiplier": 2,
+      "actual_multiplier": 7
+    },
+    {
+      "id": "P2-controls",
+      "mutation": "runtime points_siege_engineering = 0",
+      "horizon_dps": 205207.9021057712,
+      "note": "Compiled probability overrides exposed control"
+    },
+    {
+      "id": "P2-zero",
+      "mutation": "runtime trap_detonation_rate_per_s = 0 (schema min 0)",
+      "error": "FrequencyError: event_rate_per_s=0.0 must be > 0"
+    }
+  ],
+  "directed_tests": {
+    "count": 8,
+    "failures": 0,
+    "errors": 0,
+    "selectors": [
+      "test_step5_v4_actor_frequency.HitScopeFilterTest",
+      "test_step5_v4_actor_frequency.StatTransferPerRowTest",
+      "test_step5_v4_actor_frequency.ActorNativeAssemblyTest.test_actor_component_scope_and_crit_aggregation",
+      "test_step5_v4_actor_frequency.ActorNativeAssemblyTest.test_frequency_gate_from_skill_node_points",
+      "test_step5_v4_actor_frequency.DerivedAssemblyEndToEndTest.test_execute_validate_and_render_derived_frequency"
+    ]
+  },
+  "knowledge_files_loaded": 11,
+  "not_performed": [
+    "full_38_test_file",
+    "full_regression",
+    "HTTP/browser_interaction",
+    "game_measurement",
+    "independent_IL_reversal",
+    "historical_case_group_runs"
+  ],
+  "conclusion": "recoverable_artifacts_confirmed; calculation_and_gate_require_repairs_before_acceptance"
+}

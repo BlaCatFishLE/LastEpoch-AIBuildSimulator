@@ -1,0 +1,181 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-rhythm-of-fire-consume",
+  "revision": 2,
+  "title": {
+    "zh": "Rhythm of Fire 消耗 12 层：+130% more damage（条件效果）",
+    "en": "Rhythm of Fire consume effect (+130% more when consuming max stacks)"
+  },
+  "aliases": [
+    "Rhythm of Fire",
+    "consume 12 stacks",
+    "more damage",
+    "node 3",
+    "条件效果"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:3"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "consume_rhythm_of_fire"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Hit"
+    ],
+    "conditions": [
+      "consume_rhythm_of_fire"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effect definition",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=rhythm_of_fire_consume",
+      "note": "condition: consume_rhythm_of_fire==true；stacks_state: rhythm_of_fire_stacks；max_stacks 12"
+    },
+    {
+      "parameter": "more value",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "consume state",
+      "source": "current:matched_instances",
+      "unit": "bool"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "rhythm_of_fire_consume",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=rhythm_of_fire_consume"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "_effect_rows",
+    "note": "_effect_condition_satisfied 判 consume 状态；满足时把 more 行加进命中池（group=effect:rhythm_of_fire_consume）"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=rhythm_of_fire_consume",
+      "note": "ruleset 条件效果声明（status assumed）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects+effect_values owner_entity_id=node:letools:fr11mv:3",
+      "note": "node 3：12 层消耗 +130% more damage/range/width"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#R4.rhythm_of_fire",
+      "note": "facts 的层数/消耗/循环参数"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#4.5 Rhythm of Fire",
+      "note": "研究阶段推导：+130% 为单乘区"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=3)/effects[stat_index=3]/value_total",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/single_hit/states/consume_rhythm_of_fire；#/profiles/*/states",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "consume 状态来自 scenario/snapshot state；不可判定时 fail-closed",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/states"
+    },
+    {
+      "with": "fr-hit-rhythm-rotation",
+      "requirement": "单次消耗加成与循环平均是两种口径，不能叠加重复计入",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/rhythm_of_fire"
+    },
+    {
+      "with": "fr-hit-events-weights",
+      "requirement": "消耗命中仍按 4 击权重结算；单次/窗口口径与命中权重共同决定消耗收益",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/hit_events"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "+130% 是 more 还是 increased：节点描述 multiplicative，本模型按 more（assumed）",
+      "消耗阈值 12 层与 +4 层/次来自 dataset；其它技能补层会改变节律（OQ8）",
+      "消耗是否作用于该次施放的全部 4 击：当前模型单次命中口径，DPS 用单一值"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "more",
+    "stacking_policy": "none",
+    "order_policy": "单次消耗命中的单个 more 乘区（×2.3 口径）；与循环平均因子互斥",
+    "more_group_source": "ruleset.rotation.rhythm_of_fire 与 #/effects id=rhythm_of_fire_consume（R18 assumed）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

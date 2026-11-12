@@ -1,0 +1,707 @@
+[
+  {
+    "baseTypeID": 0,
+    "baseTypeName": "Helmets",
+    "displayName": "Helmet",
+    "isEquippable": 1,
+    "type": 0,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 73
+  },
+  {
+    "baseTypeID": 1,
+    "baseTypeName": "Body Armor",
+    "displayName": "Body Armor",
+    "isEquippable": 1,
+    "type": 1,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.5,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 3
+    },
+    "subItemCount": 73
+  },
+  {
+    "baseTypeID": 2,
+    "baseTypeName": "Belts",
+    "displayName": "Belt",
+    "isEquippable": 1,
+    "type": 2,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 1
+    },
+    "subItemCount": 16
+  },
+  {
+    "baseTypeID": 3,
+    "baseTypeName": "Boots",
+    "displayName": "Boots",
+    "isEquippable": 1,
+    "type": 3,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 16
+  },
+  {
+    "baseTypeID": 4,
+    "baseTypeName": "Gloves",
+    "displayName": "Gloves",
+    "isEquippable": 1,
+    "type": 4,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 16
+  },
+  {
+    "baseTypeID": 5,
+    "baseTypeName": "1H Axes",
+    "displayName": "One-Handed Axe",
+    "isEquippable": 1,
+    "type": 5,
+    "isWeapon": 1,
+    "affixEffectModifier": 0.75,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 3
+    },
+    "subItemCount": 18
+  },
+  {
+    "baseTypeID": 6,
+    "baseTypeName": "1H Dagger",
+    "displayName": "Dagger",
+    "isEquippable": 1,
+    "type": 6,
+    "isWeapon": 1,
+    "affixEffectModifier": 0.75,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 1,
+      "y": 2
+    },
+    "subItemCount": 16
+  },
+  {
+    "baseTypeID": 7,
+    "baseTypeName": "1H Maces",
+    "displayName": "One-Handed Mace",
+    "isEquippable": 1,
+    "type": 7,
+    "isWeapon": 1,
+    "affixEffectModifier": 0.75,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 1,
+      "y": 3
+    },
+    "subItemCount": 16
+  },
+  {
+    "baseTypeID": 8,
+    "baseTypeName": "1H Scepter",
+    "displayName": "Sceptre",
+    "isEquippable": 1,
+    "type": 8,
+    "isWeapon": 1,
+    "affixEffectModifier": 0.75,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 1,
+      "y": 3
+    },
+    "subItemCount": 15
+  },
+  {
+    "baseTypeID": 9,
+    "baseTypeName": "1H Swords",
+    "displayName": "One-Handed Sword",
+    "isEquippable": 1,
+    "type": 9,
+    "isWeapon": 1,
+    "affixEffectModifier": 0.75,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 1,
+      "y": 3
+    },
+    "subItemCount": 17
+  },
+  {
+    "baseTypeID": 10,
+    "baseTypeName": "Wands",
+    "displayName": "Wand",
+    "isEquippable": 1,
+    "type": 10,
+    "isWeapon": 1,
+    "affixEffectModifier": 0.75,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 1,
+      "y": 3
+    },
+    "subItemCount": 16
+  },
+  {
+    "baseTypeID": 12,
+    "baseTypeName": "2H Axes",
+    "displayName": "Two-Handed Axe",
+    "isEquippable": 1,
+    "type": 12,
+    "isWeapon": 1,
+    "affixEffectModifier": 2.2,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 4
+    },
+    "subItemCount": 19
+  },
+  {
+    "baseTypeID": 13,
+    "baseTypeName": "2H Maces",
+    "displayName": "Two-Handed Mace",
+    "isEquippable": 1,
+    "type": 13,
+    "isWeapon": 1,
+    "affixEffectModifier": 2.2,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 4
+    },
+    "subItemCount": 15
+  },
+  {
+    "baseTypeID": 14,
+    "baseTypeName": "2H Polearm",
+    "displayName": "Two-Handed Spear",
+    "isEquippable": 1,
+    "type": 14,
+    "isWeapon": 1,
+    "affixEffectModifier": 2.2,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 4
+    },
+    "subItemCount": 20
+  },
+  {
+    "baseTypeID": 15,
+    "baseTypeName": "2H Staff",
+    "displayName": "Two-Handed Staff",
+    "isEquippable": 1,
+    "type": 15,
+    "isWeapon": 1,
+    "affixEffectModifier": 2.2,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 1,
+      "y": 4
+    },
+    "subItemCount": 20
+  },
+  {
+    "baseTypeID": 16,
+    "baseTypeName": "2H Swords",
+    "displayName": "Two-Handed Sword",
+    "isEquippable": 1,
+    "type": 16,
+    "isWeapon": 1,
+    "affixEffectModifier": 2.2,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 4
+    },
+    "subItemCount": 17
+  },
+  {
+    "baseTypeID": 17,
+    "baseTypeName": "Quiver",
+    "displayName": "Quiver",
+    "isEquippable": 1,
+    "type": 17,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 3
+    },
+    "subItemCount": 12
+  },
+  {
+    "baseTypeID": 18,
+    "baseTypeName": "Shield",
+    "displayName": "Shield",
+    "isEquippable": 1,
+    "type": 18,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.17,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 3
+    },
+    "subItemCount": 23
+  },
+  {
+    "baseTypeID": 19,
+    "baseTypeName": "Catalyst",
+    "displayName": "Off-Hand Catalyst",
+    "isEquippable": 1,
+    "type": 19,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.17,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 22
+  },
+  {
+    "baseTypeID": 20,
+    "baseTypeName": "Amulet",
+    "displayName": "Amulet",
+    "isEquippable": 1,
+    "type": 20,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.17,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 19
+  },
+  {
+    "baseTypeID": 21,
+    "baseTypeName": "Ring",
+    "displayName": "Ring",
+    "isEquippable": 1,
+    "type": 21,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 16
+  },
+  {
+    "baseTypeID": 22,
+    "baseTypeName": "Relic",
+    "displayName": "Relic",
+    "isEquippable": 1,
+    "type": 22,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 73
+  },
+  {
+    "baseTypeID": 23,
+    "baseTypeName": "Bows",
+    "displayName": "Bow",
+    "isEquippable": 1,
+    "type": 23,
+    "isWeapon": 1,
+    "affixEffectModifier": 0.75,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 3
+    },
+    "subItemCount": 17
+  },
+  {
+    "baseTypeID": 25,
+    "baseTypeName": "Small Idol",
+    "displayName": "Small Idol",
+    "isEquippable": 1,
+    "type": 25,
+    "isWeapon": 0,
+    "affixEffectModifier": -0.83,
+    "maximumAffixes": 2,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 3
+  },
+  {
+    "baseTypeID": 26,
+    "baseTypeName": "Small Lagonian Idol",
+    "displayName": "Minor Idol",
+    "isEquippable": 1,
+    "type": 26,
+    "isWeapon": 0,
+    "affixEffectModifier": -0.83,
+    "maximumAffixes": 2,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 2
+  },
+  {
+    "baseTypeID": 27,
+    "baseTypeName": "Humble Idol",
+    "displayName": "Humble Idol",
+    "isEquippable": 1,
+    "type": 27,
+    "isWeapon": 0,
+    "affixEffectModifier": -0.62,
+    "maximumAffixes": 2,
+    "gridSize": {
+      "x": 2,
+      "y": 1
+    },
+    "subItemCount": 2
+  },
+  {
+    "baseTypeID": 28,
+    "baseTypeName": "Stout Idol",
+    "displayName": "Stout Idol",
+    "isEquippable": 1,
+    "type": 28,
+    "isWeapon": 0,
+    "affixEffectModifier": -0.62,
+    "maximumAffixes": 2,
+    "gridSize": {
+      "x": 1,
+      "y": 2
+    },
+    "subItemCount": 2
+  },
+  {
+    "baseTypeID": 29,
+    "baseTypeName": "Grand Idol",
+    "displayName": "Grand Idol",
+    "isEquippable": 1,
+    "type": 29,
+    "isWeapon": 0,
+    "affixEffectModifier": -0.33,
+    "maximumAffixes": 2,
+    "gridSize": {
+      "x": 3,
+      "y": 1
+    },
+    "subItemCount": 16
+  },
+  {
+    "baseTypeID": 30,
+    "baseTypeName": "Large Idol",
+    "displayName": "Large Idol",
+    "isEquippable": 1,
+    "type": 30,
+    "isWeapon": 0,
+    "affixEffectModifier": -0.33,
+    "maximumAffixes": 2,
+    "gridSize": {
+      "x": 1,
+      "y": 3
+    },
+    "subItemCount": 15
+  },
+  {
+    "baseTypeID": 31,
+    "baseTypeName": "Ornate Idol",
+    "displayName": "Ornate Idol",
+    "isEquippable": 1,
+    "type": 31,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 2,
+    "gridSize": {
+      "x": 4,
+      "y": 1
+    },
+    "subItemCount": 10
+  },
+  {
+    "baseTypeID": 32,
+    "baseTypeName": "Huge Idol",
+    "displayName": "Huge Idol",
+    "isEquippable": 1,
+    "type": 32,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 2,
+    "gridSize": {
+      "x": 1,
+      "y": 4
+    },
+    "subItemCount": 10
+  },
+  {
+    "baseTypeID": 33,
+    "baseTypeName": "Adorned Idol",
+    "displayName": "Adorned Idol",
+    "isEquippable": 1,
+    "type": 33,
+    "isWeapon": 0,
+    "affixEffectModifier": -0.05,
+    "maximumAffixes": 2,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 13
+  },
+  {
+    "baseTypeID": 34,
+    "baseTypeName": "Blessing",
+    "displayName": "Blessing",
+    "isEquippable": 1,
+    "type": 34,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 224
+  },
+  {
+    "baseTypeID": 35,
+    "baseTypeName": "Greater Lens",
+    "displayName": "Greater Lens",
+    "isEquippable": 1,
+    "type": 35,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 11
+  },
+  {
+    "baseTypeID": 36,
+    "baseTypeName": "Arctus Lens",
+    "displayName": "Arctus Lens",
+    "isEquippable": 1,
+    "type": 36,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 5
+  },
+  {
+    "baseTypeID": 37,
+    "baseTypeName": "Mesembria Lens",
+    "displayName": "Mesembria Lens",
+    "isEquippable": 1,
+    "type": 37,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 3
+  },
+  {
+    "baseTypeID": 38,
+    "baseTypeName": "Eos Lens",
+    "displayName": "Eos Lens",
+    "isEquippable": 1,
+    "type": 38,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 15
+  },
+  {
+    "baseTypeID": 39,
+    "baseTypeName": "Dysis Lens",
+    "displayName": "Dysis Lens",
+    "isEquippable": 1,
+    "type": 39,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 13
+  },
+  {
+    "baseTypeID": 41,
+    "baseTypeName": "Idol Altar",
+    "displayName": "Idol Altar",
+    "isEquippable": 1,
+    "type": 41,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 4,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 13
+  },
+  {
+    "baseTypeID": 101,
+    "baseTypeName": "Affix Shard",
+    "displayName": "Affix Shard",
+    "isEquippable": 0,
+    "type": null,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 508
+  },
+  {
+    "baseTypeID": 102,
+    "baseTypeName": "Crafting Modifier Item",
+    "displayName": "Rune",
+    "isEquippable": 0,
+    "type": null,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 13
+  },
+  {
+    "baseTypeID": 103,
+    "baseTypeName": "Crafting Support Item",
+    "displayName": "Glyph",
+    "isEquippable": 0,
+    "type": null,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 6
+  },
+  {
+    "baseTypeID": 104,
+    "baseTypeName": "Key Items",
+    "displayName": "Key",
+    "isEquippable": 0,
+    "type": null,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 25
+  },
+  {
+    "baseTypeID": 106,
+    "baseTypeName": "Resonance",
+    "displayName": "Resonance",
+    "isEquippable": 0,
+    "type": null,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 2
+  },
+  {
+    "baseTypeID": 107,
+    "baseTypeName": "Woven Echo",
+    "displayName": "Woven Echo",
+    "isEquippable": 0,
+    "type": null,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 1,
+      "y": 1
+    },
+    "subItemCount": 50
+  },
+  {
+    "baseTypeID": 108,
+    "baseTypeName": "Bags",
+    "displayName": "Bag",
+    "isEquippable": 0,
+    "type": null,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 32
+  },
+  {
+    "baseTypeID": 109,
+    "baseTypeName": "Lens",
+    "displayName": "Lens",
+    "isEquippable": 0,
+    "type": null,
+    "isWeapon": 0,
+    "affixEffectModifier": 0.0,
+    "maximumAffixes": 0,
+    "gridSize": {
+      "x": 2,
+      "y": 2
+    },
+    "subItemCount": 12
+  }
+]

@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/pipeline-state-v1.json",
+  "title": "Pipeline state v1 (le-pipeline-state-v1)",
+  "description": "reports/<case>/<run>/pipeline-state.json：每阶段记录输出/指纹/cache_key/cache_status；恢复时重算输出 sha 与指纹，不信任进度标记。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "run_id",
+    "stages",
+    "pending_input"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "le-pipeline-state-v1"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "stage_id",
+          "execution_status",
+          "readiness",
+          "output_refs"
+        ],
+        "properties": {
+          "stage_id": {
+            "type": "string",
+            "enum": [
+              "freeze_input",
+              "parse_input",
+              "normalize_build",
+              "export_calc_input",
+              "apply_affix_ranges",
+              "resolve_skills",
+              "prepare_snapshot",
+              "min_validate",
+              "simulate",
+              "validate_result",
+              "render_report",
+              "commit"
+            ]
+          },
+          "execution_status": {
+            "enum": [
+              "completed",
+              "waiting",
+              "failed"
+            ]
+          },
+          "readiness": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "ready",
+              "partial",
+              "needs_research",
+              "needs_input",
+              null
+            ]
+          },
+          "input_fingerprint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "implementation_fingerprint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "parameters_fingerprint": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "cache_key": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "output_refs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "artifact_id",
+                "path",
+                "sha256"
+              ],
+              "properties": {
+                "artifact_id": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "asset_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "schema_version": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "elapsed_ms": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cache_status": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "hit",
+              "miss",
+              "disabled",
+              null
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "pending_input": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "last_commit": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  }
+}

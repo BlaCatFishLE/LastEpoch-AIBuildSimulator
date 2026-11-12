@@ -1,0 +1,118 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-ignite-attribute-scaling",
+  "revision": 1,
+  "title": {
+    "zh": "Intelligence 属性缩放传递给 Ignite",
+    "en": "Intelligence attribute scaling passed to Ignite"
+  },
+  "aliases": [
+    "ignite attribute",
+    "Int → Ignite",
+    "属性缩放传给点燃"
+  ],
+  "selectors": [
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "damage"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ignite"
+    ],
+    "tags": [
+      "Fire",
+      "DoT",
+      "Ailment"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Intelligence 的 increased damage 先作用于 Black Hole（技能 attributeScaling），再传递给 BH 造成的 Ignite；在 Ignite inc 池中作为一条 assumed 行（规则包状态）。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-attribute-scaling",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-attribute-scaling]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "intelligence",
+      "source": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/attributes/intelligence",
+      "unit": "points"
+    },
+    {
+      "parameter": "increased_per_point",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/attribute_scaling/increased_per_point",
+      "unit": "fraction/point",
+      "note": "与本体同系数；数值不抄写。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ignite",
+    "symbol": "_ignite_scaling",
+    "note": "attribute_row（source_path=bh2.attributeScaling[2]）以 status=assumed 并入 Ignite inc_total。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-attribute-scaling]",
+      "note": "用户 2026-11-04 第 8 条：Int 的 inc 先传给 BH，再传给 BH 造成的点燃。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling/increased_total",
+      "note": "当前 run 的 Ignite inc total 与属性行（可用于核对是否重复计一次）。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Int 传递的机制索引行。"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_single_stack_core",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-attribute-scaling",
+      "requirement": "同一系数、同一属性值；本体池与 Ignite 池各计一次（组件不同，不是重复）。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_scaling"
+    },
+    {
+      "with": "common-increased-aggregate",
+      "requirement": "属性行并入 Ignite inc 池，不单独再乘。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_scaling"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-attribute-scaling]",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling",
+      "tools/phase3/tests/test_damage.py#IgniteTest"
+    ],
+    "open_questions": [
+      "传递给 Ignite 的 Int 缩放是否与玩家侧 increased damage 严格同池（加法）在代码级未逐 stat 追踪；当前按用户规则与参考模型实现，属 confirmed 口径但非独立验证。"
+    ],
+    "requery_when": [
+      "属性缩放机制出现版本变化时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "case_bound"
+}

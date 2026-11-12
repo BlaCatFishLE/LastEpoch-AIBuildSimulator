@@ -1,0 +1,160 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cond-throne-of-ambition",
+  "revision": 2,
+  "title": {
+    "zh": "Throne of Ambition（Boss/稀有命中叠层：每层 +more 火/冰）",
+    "en": "Throne of Ambition (stacks on boss/rare hits: more fire/cold per stack)"
+  },
+  "aliases": [
+    "Throne of Ambition",
+    "Ambition",
+    "野心王座",
+    "神像",
+    "stacks",
+    "idol.throne_of_ambition"
+  ],
+  "selectors": [
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "letools:uniqueList.uniques:211"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body_fire",
+      "body_cold",
+      "ignite"
+    ],
+    "tags": [
+      "Fire",
+      "Cold"
+    ],
+    "conditions": [
+      "player.ambition_stacks"
+    ],
+    "notes": "命中 Boss/稀有敌人时获得层数（有获取冷却、多个 Throne 只算一层）；每层 +more 火焰/冰霜；有层数上限与清空规则（数值见注册表）；一段时间没有新层则清空。Black Hole 本体 hit=false 不能自己叠层。固定条件模式支持手工声明层数，不模拟获取/维持。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "idol.throne_of_ambition",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=idol.throne_of_ambition]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "item",
+      "source": "current:matched_instances",
+      "note": "idols.4 Throne of Ambition。"
+    },
+    {
+      "parameter": "unique text",
+      "source": "current:matched_instances",
+      "note": "叠层规则文本（获取冷却/上限/清空窗口，数值见物品文本）。"
+    },
+    {
+      "parameter": "effect values",
+      "source": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/12/values"
+    },
+    {
+      "parameter": "state",
+      "source": "current:scenario#/states/player.ambition_stacks",
+      "note": "层数 0..20；0 视为未选择。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional.recompute",
+    "symbol": "recompute_scenario",
+    "note": "按手工层数生成 damage more(target=fire/cold) 贡献（value = stacks × 每层 more）；不模拟叠层获取。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/12",
+      "note": "注册表条目（research=confirmed；点燃继承 open question）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/12",
+      "note": "当前 run 求值：层数为 0 → 未激活。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/idol.throne_of_ambition",
+      "note": "条件重算通道状态。"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs buff:letools:UIBuffs:79",
+      "note": "Ambition buff 资产（max stacks 20）。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "支持级别分类表。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/items/15",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/123",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.ambition_stacks",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeEffectDirectionTests::test_throne_of_ambition_20_stacks",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeChannelSupportTests::test_covers_every_registered_effect",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_ambition_stays_at_zero_stacks"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-target-scenario-conditions",
+      "requirement": "获取资格依赖 Boss/稀有；目标条件默认 true。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/shared_states"
+    },
+    {
+      "with": "bh-ignite-inheritance",
+      "requirement": "每层 more Fire 是否被 BH 点燃继承未确认（当前重算按点燃分支应用）。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/12/research/open_questions"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/12",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/idol.throne_of_ambition",
+      "data/releases/phase1-dataset-003/data.sqlite#buffs buff:letools:UIBuffs:79",
+      "tools/phase3/tests/test_conditional_recompute.py"
+    ],
+    "open_questions": [
+      "Black Hole 的点燃是否继承『每层 more Fire Damage』未确认；当前重算按点燃分支计入（标注为假设）。",
+      "对 Boss/稀有的命中是否包括其它技能/触发的叠层未建模；固定条件模式只声明层数。",
+      "清空窗口/获取冷却的时序不模拟。"
+    ],
+    "requery_when": [
+      "点燃继承实测后",
+      "动作序列模拟接入后"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared"
+}

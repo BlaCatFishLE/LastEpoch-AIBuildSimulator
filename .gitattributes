@@ -1,0 +1,53 @@
+# =============================================================================
+# LastEpoch-BuildSimulator — attribute rules
+#
+# This project fingerprints its own artefacts: dataset manifests,
+# run-manifest.json, rule-ledger.json and source-ledger.json record SHA-256
+# values over repository files. Any end-of-line conversion performed by Git
+# would invalidate those fingerprints on checkout. Therefore **no**
+# checkout/commit conversion is enabled here: every file is stored and
+# restored byte-for-byte.
+#
+# `-text` disables EOL normalisation; `binary` additionally disables diff and
+# merge (used for opaque payloads).
+# =============================================================================
+
+* -text
+
+# Opaque payloads: never diff/merge, never convert.
+*.sqlite  binary
+*.sqlite-* binary
+*.db      binary
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.webp    binary
+*.gif     binary
+*.pdf     binary
+*.zip     binary
+*.woff    binary
+*.woff2   binary
+*.ttf     binary
+*.otf     binary
+*.dll     binary
+*.exe     binary
+*.so      binary
+*.dylib   binary
+
+# Save fixtures are byte-exact inputs (user saves under data/raw/ are local and
+# gitignored; keep the rule anyway so a stray local save is never converted).
+tools/save_import/tests/fixtures/1CHARACTERSLOT_BETA_2 binary
+tools/save_import/tests/fixtures/STASH_0              binary
+data/raw/saves/**                                      binary
+
+# Hash-bound JSON snapshots: store as-is, keep them diffable as text.
+data/releases/**/manifest.json     -text
+data/affix-db/**/manifest.json     -text
+examples/_template/**              -text
+tools/phase3/rules/**              -text
+tools/build_import/schemas/**      -text
+
+# Deliberately NO text/eol rules anywhere: PowerShell, Python, JSON and Markdown
+# are also left byte-exact so that a clone reproduces the fingerprinted bytes.
+# Reviewers still get ordinary textual diffs because `-text` only disables
+# conversion, not diffing.

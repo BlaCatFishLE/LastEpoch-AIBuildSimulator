@@ -1,0 +1,41 @@
+{
+ "date": "2026-11-05",
+ "timezone": "Asia/Shanghai",
+ "source": "user in-game observation (user message), temporary test configuration",
+ "heat_wave_single_cast_validation": {
+  "test_config": {
+   "uncapped_fire_resistance_percent": 949.0,
+   "note": "temporary test configuration (NOT the build's static snapshot value 856%); nodes same as the build; single Black Hole cast on training dummy"
+  },
+  "observed": {
+   "max_ignite_stacks_approx": 710,
+   "observation_precision": "approximate; user notes not particularly precise"
+  },
+  "model_prediction_v2": {
+   "rolls_per_second": 2,
+   "roll_count_per_black_hole": 15,
+   "expected_stacks_per_roll": 47.45,
+   "max_concurrent_stacks": 711.75,
+   "ignite_duration_s": 7.025
+  },
+  "comparison": [
+   "v2 model 711.75 vs observed ~710: ratio 0.9976 (observed/model), i.e. within ~0.3% at this precision.",
+   "v1 1s-roll model would predict 8 x 94.9 = 759.2 (about 7% above observation) - rejected.",
+   "per-star double aura would predict ~1423 - rejected (single aura per Black Hole confirmed).",
+   "shorter ignite duration 6.025s would cap concurrent stacks around 617 - rejected; 7.025s duration is consistent."
+  ],
+  "conclusion": "Single-cast Heat Wave mechanics validated: 0.5s application interval, applyOnStart, 15 rolls per 7.15s Black Hole, one aura per Black Hole (shared by Binary stars), expected-stacks formula, and 7.025s ignite duration. The 949% test is a temporary scenario only; the published build snapshot remains 856%."
+ },
+ "pyromancer_validation": {
+  "test": "Removing Pyromancer points leaves the max ignite stack count unchanged.",
+  "model_standing": "v2 already excludes Pyromancer +40% Ignite Chance from Heat Wave (treated as hit-related); if it applied, stacks would increase ~40% (to ~996 at 949%).",
+  "conclusion": "Pyromancer's ignite chance does not participate in Heat Wave; rule-pyromancer-ignite-chance confirmed."
+ },
+ "cast_speed_formula": {
+  "user_statement": "release speed = base release speed * (1 + increased cast speed)",
+  "note": "formula shape user-confirmed; exact base release speed could not be precisely tested in this round",
+  "model_standing": "v2 cast_time = 1 / (animation_speed * speedMultiplier * (1 + increased cast speed)); with as=1.8333375, speedMultiplier=0.8 -> base 1.46667/s (0.6818s), current build +35.2% -> 0.5043s. This matches the stated linear-in-(1+inc) shape.",
+  "conclusion": "Cast speed formula shape confirmed; base release-speed constant remains from game ability fields and was not independently measured."
+ },
+ "status": "confirmed"
+}

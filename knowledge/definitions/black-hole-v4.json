@@ -1,0 +1,620 @@
+{
+  "schema": "le-skill-template-v3",
+  "template_id": "black-hole-v4",
+  "ability_id": "bh2",
+  "binding_version": "definitions_v3.selector-v1",
+  "title": "Black Hole（bh2）纯 DoT 共享定义 v3",
+  "definition": {
+    "plan_version": "le-calculation-plan-v4",
+    "skill": {
+      "base_damage": {
+        "Cold": 48.0
+      },
+      "added_damage_scaling": 2.4,
+      "crit_chance": 0.0,
+      "crit_multiplier": 0.0,
+      "cooldown_s": 14.0,
+      "action_s": 0.6818166322349267,
+      "animation_speed": 1.8333375,
+      "speed_multiplier": 0.8,
+      "base_cast_rate_per_s": 1.4666700000000001,
+      "skill_name": "Black Hole",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "detail": "bh2 RepeatedlyDamageEnemiesWithinRadius damage[2]=48 Cold, addedDamageScaling=2.4; DestroyAfterDuration 2.75s; as=1.8333375 speedMultiplier=0.8",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill:letools:LEAbilities.abilityList:bh2#component#0"
+        }
+      ]
+    },
+    "controls": [
+      {
+        "key": "target_is_boss_or_rare",
+        "label": "目标是 Boss 或稀有怪",
+        "source": "BH 场景目标条件（legacy target_conditions.target_is_boss_or_rare）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "节点 23 Supermassive 的 +100% more 条件；忽略该条件会低估伤害。"
+      },
+      {
+        "key": "target_within_center_1m",
+        "label": "目标处于中心 1m 内",
+        "source": "BH 场景目标条件（legacy target_conditions.target_within_center_1m）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "节点 27 Weakened Reality 的 +60% more 条件，只作用于黑洞本体、不作用于 Ignite。"
+      },
+      {
+        "key": "mana_ge_300",
+        "label": "法力 ≥ 300",
+        "source": "装备 idoi/词缀条件（legacy stats：mana_ge_300）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "300 法力时部分词缀翻倍；BH 场景默认关闭。"
+      }
+    ],
+    "state_sources": {},
+    "effects": [],
+    "node_bindings": [
+      {
+        "id": "bh:duration:red_giant",
+        "tree": "bh2",
+        "node": "4",
+        "stat_index": 1,
+        "stat": "skill_duration",
+        "operation": "increased"
+      },
+      {
+        "id": "bh:duration:time_dilation",
+        "tree": "bh2",
+        "node": "15",
+        "stat_index": 0,
+        "stat": "skill_duration",
+        "operation": "increased"
+      },
+      {
+        "id": "bh:duration:density",
+        "tree": "bh2",
+        "node": "24",
+        "stat_index": 0,
+        "stat": "skill_duration",
+        "operation": "increased"
+      },
+      {
+        "id": "bh:duration:endless_maw",
+        "tree": "bh2",
+        "node": "25",
+        "stat_index": 0,
+        "stat": "skill_duration",
+        "operation": "increased"
+      },
+      {
+        "id": "bh:cooldown:recurrence",
+        "tree": "bh2",
+        "node": "17",
+        "stat_index": 0,
+        "stat": "cooldown_reduction",
+        "operation": "increased"
+      },
+      {
+        "id": "bh:cooldown:endless_maw_flat",
+        "tree": "bh2",
+        "node": "25",
+        "stat_index": 1,
+        "stat": "cooldown_flat",
+        "operation": "added",
+        "unit": "seconds"
+      },
+      {
+        "id": "bh:charges:pocket_dimension",
+        "tree": "bh2",
+        "node": "30",
+        "stat_index": 0,
+        "stat": "charges",
+        "operation": "added"
+      },
+      {
+        "id": "bh:more:tidal_force",
+        "tree": "bh2",
+        "node": "2",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more"
+      },
+      {
+        "id": "bh:more:flaming",
+        "tree": "bh2",
+        "node": "7",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "tags": [
+          "Fire"
+        ]
+      },
+      {
+        "id": "bh:more:binary_system",
+        "tree": "bh2",
+        "node": "9",
+        "stat_index": 1,
+        "stat": "damage",
+        "operation": "more"
+      },
+      {
+        "id": "bh:more:umbral_core",
+        "tree": "bh2",
+        "node": "10",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more"
+      },
+      {
+        "id": "bh:more:supermassive",
+        "tree": "bh2",
+        "node": "23",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "condition": "target_is_boss_or_rare"
+      },
+      {
+        "id": "bh:more:weakened_reality",
+        "tree": "bh2",
+        "node": "27",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "condition": "target_within_center_1m",
+        "scope": "body"
+      },
+      {
+        "id": "bh:more:singularity",
+        "tree": "bh2",
+        "node": "28",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more"
+      }
+    ],
+    "rules": {
+      "dot_components": {
+        "label": "BH 纯 DoT 本体组件（Binary System 双组件 + Red Giant 转换）",
+        "base_duration_s": 2.75,
+        "duration_stat_key": "skill_duration",
+        "tick_interval_s": 0.3,
+        "damage_at_start": true,
+        "remainder_policy": "ceil_full_ticks",
+        "added_damage_scaling": 2.4,
+        "components": [
+          {
+            "component_id": "bh-binary-fire",
+            "damage_type": "Fire",
+            "tags": [
+              "Spell",
+              "DoT"
+            ],
+            "base_source": {
+              "kind": "binary_converted",
+              "damage_type": "Cold"
+            },
+            "require_nodes": [
+              {
+                "tree": "bh2",
+                "node": "4"
+              },
+              {
+                "tree": "bh2",
+                "node": "9"
+              }
+            ]
+          },
+          {
+            "component_id": "bh-binary-cold",
+            "damage_type": "Cold",
+            "tags": [
+              "Spell",
+              "DoT"
+            ],
+            "base_source": {
+              "kind": "binary_original",
+              "damage_type": "Cold"
+            },
+            "require_nodes": [
+              {
+                "tree": "bh2",
+                "node": "9"
+              }
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "bh2 RepeatedlyDamageEnemiesWithinRadius: damage[2]=48 cold, addedDamageScaling=2.4, damageInterval=0.3, damageAtStart=true, hit=false, DestroyAfterDuration.duration=2.75",
+            "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0].raw_payload.prefab.components[3]"
+          },
+          {
+            "kind": "reverse_engineering",
+            "detail": "1.5.3 OnUpdateTick 在 elapsed > interval 时结算；OnDestroy 不补余量 => tick 数 = ceil(duration/0.3)，末跳满伤害",
+            "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#7"
+          }
+        ]
+      },
+      "ignite_model": {
+        "label": "Ignite：独立施加时钟（Heat Wave 期望层数）",
+        "ailment": "Ignite",
+        "damage_type": "Fire",
+        "base_damage": 40.0,
+        "base_duration_s": 2.5,
+        "scaling_tags": [
+          "Fire",
+          "DoT",
+          "Ailment"
+        ],
+        "duration_stat_key": "ailment_duration",
+        "rolls_per_second": 2.0,
+        "first_roll_at": "spawn",
+        "chance_source": {
+          "tree": "bh2",
+          "node": "6",
+          "stat_index": 0
+        },
+        "scope": "ignite",
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "bh2 aura applicationInterval=0.5, applyOnStart=true；Heat Wave +2%/点/1% uncapped fire res",
+            "locator": "docs/evidence/reverse-engineering/heat-wave-aura-1.5.3.json"
+          },
+          {
+            "kind": "user_measurement",
+            "detail": "单次黑洞约 710 层 vs 模型 711.75 层（0.5s x 15 判定）",
+            "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json"
+          }
+        ]
+      },
+      "charge_schedule": {
+        "label": "BH 充能调度（charges/recharge/CDR/ICR/flat；eager/patient）",
+        "base_max_charges": 1,
+        "base_recharge_s": 13.99972,
+        "max_charges_source": {
+          "tree": "bh2",
+          "node": "30",
+          "stat_index": 0
+        },
+        "flat_source": {
+          "tree": "bh2",
+          "node": "25",
+          "stat_index": 1
+        },
+        "cdr_source": {
+          "tree": "bh2",
+          "node": "17",
+          "stat_index": 0
+        },
+        "horizon_s": 120.0,
+        "windows_s": [
+          5.0,
+          30.0,
+          120.0
+        ],
+        "action_policies": [
+          {
+            "policy_id": "eager",
+            "label": "最积极施放",
+            "cast_condition": "charge_available_and_cast_action_free"
+          },
+          {
+            "policy_id": "patient",
+            "label": "等待旧黑洞消失再施放",
+            "cast_condition": "no_active_black_hole_and_charge_available"
+          }
+        ],
+        "primary_policy": "eager",
+        "evidence": [
+          {
+            "kind": "user_rule",
+            "detail": "用户 2026-11-04 规则 6：充能恢复 + 固定调整 + 冷却恢复速度",
+            "locator": "user message 2026-11-04"
+          },
+          {
+            "kind": "user_measurement",
+            "detail": "充能恢复 3.6s = (14+2)*(1-0.6)/(1+0.7575)",
+            "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+          }
+        ]
+      },
+      "dot_target": {
+        "label": "目标侧：抗性/穿透/怪物 DR（DoT 同样适用）",
+        "monster_damage_reduction_control": "monster_damage_reduction",
+        "monster_damage_reduction_default": 0.87,
+        "evidence": [
+          {
+            "kind": "public_doc",
+            "detail": "Tunklab mob DR level 100 = 87%",
+            "locator": "https://lastepoch.tunklab.com/mobdr"
+          }
+        ]
+      },
+      "attribute_scaling": {
+        "attribute": "intelligence",
+        "increased_per_point": 0.04,
+        "status": "confirmed",
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "bh2 attributeScaling {'2':[{property:0,increasedValue:0.04}]}",
+            "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0].raw_payload.attributeScaling"
+          }
+        ]
+      },
+      "row_reclassifications": [
+        {
+          "id": "bh:ignite-duration",
+          "label": "property 42 + special_tag 1 -> Ignite 持续时间",
+          "match": {
+            "raw_property": 42,
+            "raw_special_tag": 1
+          },
+          "set": {
+            "stat_key": "ailment_duration",
+            "operation": "increased",
+            "target": "ignite",
+            "included": true,
+            "status": "confirmed",
+            "notes": "special_tag=1 表示 Ignite（dataset ailmentList index）"
+          }
+        },
+        {
+          "id": "bh:other-ailment-durations",
+          "label": "其它 ailment/shred 持续时间排除",
+          "match": {
+            "raw_property": 42,
+            "stat_key": "unsupported"
+          },
+          "exclude": true,
+          "reason": "非 Ignite 的持续时间（Chill/Shock/Fire-Cold-Lightning Res Shred/Spreading Flames 等）不在 BH 切片范围"
+        },
+        {
+          "id": "bh:penetration-with-ignite",
+          "label": "property 43 special_tag 1 -> Fire Penetration with Ignite",
+          "match": {
+            "raw_property": 43,
+            "raw_special_tag": 1
+          },
+          "set": {
+            "stat_key": "penetration_with_ignite",
+            "operation": "added",
+            "target": "ignite",
+            "damage_tags": [
+              "Fire"
+            ],
+            "included": true,
+            "status": "confirmed",
+            "notes": "只作用于 Ignite，不作用于 BH 本体"
+          }
+        },
+        {
+          "id": "bh:idol-altar-icr",
+          "label": "idol altar 条件 ICR 排除",
+          "match": {
+            "raw_property": 130
+          },
+          "exclude": true,
+          "reason": "idolAltarPropertyList 条件（无更大的神像位于更小的神像上方）未验证；v1 计算器不计入"
+        },
+        {
+          "id": "bh:passive-ignite-duration",
+          "label": "被动 property 42 specialTag 1 -> Ignite 持续时间",
+          "match": {
+            "source_kind": "passive_node",
+            "raw_stat_property": 42,
+            "raw_stat_special_tag": 1
+          },
+          "set": {
+            "stat_key": "ailment_duration",
+            "operation": "increased",
+            "target": "ignite",
+            "included": true,
+            "status": "confirmed",
+            "notes": "被动 Ignite Duration（如 Chronomancy 每点 5%）"
+          }
+        },
+        {
+          "id": "bh:passive-fire-res",
+          "label": "被动 Fire Resistance -> 抗性池",
+          "match": {
+            "source_kind": "passive_node",
+            "raw_stat_property": 13
+          },
+          "set": {
+            "stat_key": "resistance",
+            "operation": "added",
+            "target": "fire",
+            "damage_tags": [
+              "Fire"
+            ],
+            "included": true,
+            "status": "confirmed"
+          }
+        },
+        {
+          "id": "bh:passive-cold-res",
+          "label": "被动 Cold Resistance -> 抗性池",
+          "match": {
+            "source_kind": "passive_node",
+            "raw_stat_property": 14
+          },
+          "set": {
+            "stat_key": "resistance",
+            "operation": "added",
+            "target": "cold",
+            "damage_tags": [
+              "Cold"
+            ],
+            "included": true,
+            "status": "confirmed"
+          }
+        },
+        {
+          "id": "bh:passive-lightning-res",
+          "label": "被动 Lightning Resistance -> 抗性池",
+          "match": {
+            "source_kind": "passive_node",
+            "raw_stat_property": 15
+          },
+          "set": {
+            "stat_key": "resistance",
+            "operation": "added",
+            "target": "lightning",
+            "damage_tags": [
+              "Lightning"
+            ],
+            "included": true,
+            "status": "confirmed"
+          }
+        },
+        {
+          "id": "bh:passive-elemental-res",
+          "label": "被动 Elemental Resistance -> 抗性池",
+          "match": {
+            "source_kind": "passive_node",
+            "raw_stat_property": 52
+          },
+          "set": {
+            "stat_key": "resistance",
+            "operation": "added",
+            "target": "elemental",
+            "included": true,
+            "status": "confirmed"
+          }
+        },
+        {
+          "id": "bh:minion-scoped",
+          "label": "Minion 词条排除（player-only）",
+          "match": {
+            "raw_tags_contains": [
+              "Minion"
+            ]
+          },
+          "exclude": true,
+          "reason": "minion-scoped stat；BH 切片为玩家自身伤害"
+        },
+        {
+          "id": "bh:fire-penetration-tags",
+          "label": "property 59 玩家火焰穿透 -> damage_tags=[Fire]（minion 行已排除）",
+          "match": {
+            "raw_property": 59
+          },
+          "set": {
+            "target": "fire",
+            "damage_tags": [
+              "Fire"
+            ]
+          }
+        }
+      ],
+      "overcapped_scaling": [
+        {
+          "id": "bh:glove-icr-overcap",
+          "label": "每 8% 溢出的 Cold Resistance +1% ICR（上限 200%）",
+          "match": {
+            "raw_property": 98,
+            "stat_name_contains": "Overcapped Cold Resistance"
+          },
+          "source_resistance": "cold",
+          "threshold_percent": 8.0,
+          "cap_percent": 200.0
+        }
+      ]
+    },
+    "attribute_conversion": null,
+    "ailments": [],
+    "evaluations": [
+      {
+        "evaluation_id": "eager",
+        "label": "eager：有充能且施放动作空闲即施放",
+        "metrics": [
+          "windows",
+          "horizon_dps"
+        ],
+        "primary": true,
+        "action_policy": "eager"
+      },
+      {
+        "evaluation_id": "patient",
+        "label": "patient：等待现有黑洞消失后施放",
+        "metrics": [
+          "windows",
+          "horizon_dps"
+        ],
+        "primary": false,
+        "action_policy": "patient"
+      }
+    ],
+    "coverage": {},
+    "limitations": [
+      "BH 切片只覆盖本体 DoT 与 Ignite 期望层数；chill/shock/blind/无视等非伤害效果未建模。",
+      "Heat Wave 期望层数模型假设每次 roll 独立、无层数上限；报告按期望值而非整数事件计数。",
+      "充能按顺序恢复（同一时间一个恢复计时器），max charges 只提供起手爆发；法力消耗/恢复未建模。",
+      "rotation/移动/拉怪/双星覆盖条件只按场景假设（双星全覆盖、中心 1m 内）。"
+    ],
+    "evidence": [
+      {
+        "kind": "legacy_baseline",
+        "detail": "archive://reports/black-hole/verify-baseline-black-hole-20261110T1245/result.json（旧 BH 计算器基线，仅作语义/数值对照，不作为新 handler）",
+        "locator": "archive://reports/black-hole/verify-baseline-black-hole-20261110T1245/result.json"
+      },
+      {
+        "kind": "ruleset",
+        "detail": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+        "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json"
+      }
+    ],
+    "assembly_plan_version": "le-calculation-plan-v3",
+    "conditional_buff_library": "tools/phase3/rules/shared-conditional-node-buffs-v1.json"
+  },
+  "scenario_schema": {
+    "schema": "le-skill-scenario-v3",
+    "controls": [
+      {
+        "key": "target_is_boss_or_rare",
+        "label": "目标是 Boss 或稀有怪",
+        "source": "BH 场景目标条件（legacy target_conditions.target_is_boss_or_rare）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "节点 23 Supermassive 的 +100% more 条件；忽略该条件会低估伤害。"
+      },
+      {
+        "key": "target_within_center_1m",
+        "label": "目标处于中心 1m 内",
+        "source": "BH 场景目标条件（legacy target_conditions.target_within_center_1m）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "节点 27 Weakened Reality 的 +60% more 条件，只作用于黑洞本体、不作用于 Ignite。"
+      },
+      {
+        "key": "mana_ge_300",
+        "label": "法力 ≥ 300",
+        "source": "装备 idoi/词缀条件（legacy stats：mana_ge_300）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "300 法力时部分词缀翻倍；BH 场景默认关闭。"
+      }
+    ]
+  },
+  "migration": {
+    "from": "black-hole-v3",
+    "note": "S5 BH 迁移：DoT 本体/独立施加时钟/充能调度迁移到 plan-v3/result-v5；旧计算器仅作 D12 对照。",
+    "canonical_case": "archive://examples/black-hole/case.json",
+    "migration_case": "archive://examples/black-hole/case.legacy.json",
+    "canonical_run_id": "dps-step5-v4-bh-10",
+    "entry_policy": "canonical case.json 必须走 definitions_v3；legacy/profile/hit 文件仅作迁移证据，不参与默认入口。"
+  }
+}

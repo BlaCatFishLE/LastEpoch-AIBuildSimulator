@@ -1,0 +1,101 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-target-scenario-conditions",
+  "kind": "mechanism",
+  "title": {
+    "zh": "目标场景与空间条件（Boss/双星/中心 1m）",
+    "en": "Target scenario and spatial conditions (boss/rare, both stars cover, within 1m)"
+  },
+  "source_path": "knowledge/mechanisms/bh-target-scenario-conditions.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-target-scenario",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-target-scenario]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-target-scenario 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "目标场景与空间条件（Boss/双星/中心 1m）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：target_side、body、ignite、loop；条件 code：target.boss_or_rare、target.both_stars_cover、target.within_center_1m",
+      "source": "$.applicability"
+    },
+    {
+      "text": "理论最优目标场景：Boss/稀有标签、双星同时覆盖、目标在中心 1 米内、目标不移动不死亡、t=0 无存续黑洞/无预存 Ignite/无外部增益。双星全覆盖与中心条件同时满足不代表真实轨道物理可达。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "condition_code → scenario.target_conditions 查找；tree_more_groups/compute_body/_ignite_scaling 在收集 more 时逐条过滤。条件重算侧由 conditional.recompute._target_condition_overrides 处理。",
+      "source": "$.handler_ref.note（le_calc.damage.condition_met）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：scenario、scenario states、coverage",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/scenario/target_conditions"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario/coverage"
+    },
+    {
+      "pointer": "$/interaction_requirements/3/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/target_conditions"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/scenario"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "双星全覆盖 + 中心 1m 同时满足是理论最优，不代表真实轨道物理可达；报告和玩家页必须保留该限定。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "中心条件的主体：Binary 两颗星是否各有自己的 center、Weakened Reality 以哪个中心为准，模型用单一布尔条件近似；未在双星几何下逐帧验证。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "目标不移动/不死亡是模型假设；实战 DPS 会因覆盖损失而低于本模型。",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

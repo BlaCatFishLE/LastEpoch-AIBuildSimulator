@@ -1,0 +1,173 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cast-time",
+  "revision": 2,
+  "title": {
+    "zh": "施法时间（释放速度）",
+    "en": "Cast time (release rate)"
+  },
+  "aliases": [
+    "cast time",
+    "施法时间",
+    "cast speed",
+    "release rate",
+    "animation speed",
+    "speedMultiplier"
+  ],
+  "selectors": [
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "cast_speed"
+      ]
+    },
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "cast",
+      "frequency",
+      "loop"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "释放速度 = 基础释放速度 × (1 + Σincreased cast speed)，施法时间 = 1/释放速度；基础释放速度来自能力字段 animation_speed × speedMultiplier（公式形状经用户确认，基础常数未独立精确测量）。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-cast-time",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-cast-time]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "animation_speed",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cast/animation_speed",
+      "note": "能力字段 as；基础释放速度的一部分。"
+    },
+    {
+      "parameter": "speed_multiplier",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cast/speed_multiplier",
+      "note": "能力字段 speedMultiplier。"
+    },
+    {
+      "parameter": "use_duration_s / use_delay_s",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cast/use_duration_s",
+      "note": "能力字段；当前仅 use_duration 作兜底，useDelay 未建模。"
+    },
+    {
+      "parameter": "cast speed rows",
+      "source": "current:matched_instances",
+      "unit": "fraction",
+      "note": "玩家/被动 increased cast speed 池。"
+    },
+    {
+      "parameter": "cast time",
+      "source": "current:matched_instances",
+      "unit": "seconds"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.cooldown",
+    "symbol": "compute_cast_time",
+    "note": "base_rate = animation_speed × speed_multiplier；cast_time = 1/(base_rate × (1+increased))。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/bh2-ability-and-charge-1.5.3.json",
+      "note": "bh2 能力权威字段（useDuration/speedMultiplier/as）。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#8.1",
+      "note": "bh2 Ability 权威字段记录。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json",
+      "note": "用户 2026-11-05：释放速度 = 基础释放速度 × (1 + increased cast speed)；基础值未精确测量。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cast",
+      "note": "当前 run 的 cast 分项（base_rate/increased/cast_time）。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "施法时间 confirmed（形状）的索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_cast_speed_total",
+      "note": "原案例证据，参数改取当前输入"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cast/cast_time_s",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_simulate.py::CastAndCooldownTest::test_cast_time",
+    "tools/phase3/tests/test_simulate.py::SingleCastTest::test_cast_timing",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.observation_end_s]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-loop-action-policies",
+      "requirement": "cast_time 决定 cast_ready：上一次施放开始后 cast_time 内不能开始下一次。",
+      "evidence_locator": "tools/phase3/src/le_calc/simulate.py#run_loop"
+    },
+    {
+      "with": "bh-cond-craterborn",
+      "requirement": "Craterborn 的 +cast speed 行进入本条目 inc 池（条件 Buff）。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects"
+    },
+    {
+      "with": "common-frequency-cooldown",
+      "requirement": "施法时间与充能恢复是两条独立约束，取较晚者。",
+      "evidence_locator": "tools/phase3/src/le_calc/simulate.py#run_loop"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "docs/evidence/reverse-engineering/bh2-ability-and-charge-1.5.3.json",
+      "docs/evidence/reverse-engineering/README.zh-CN.md#8.1",
+      "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cast",
+      "tools/phase3/tests/test_simulate.py"
+    ],
+    "open_questions": [
+      "基础释放速度的精确数值未独立测量（规则包 cast.base_rate_measurement_status=not_precisely_measured）；公式形状 confirmed，绝对 cast_time 依赖能力字段。",
+      "useDelay 未作为额外间隔建模（v1）；对短窗口的首/末次施放边界可能有小影响。"
+    ],
+    "requery_when": [
+      "游戏内精确计时/能力字段版本变化时",
+      "循环窗口边界精度要求提高时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

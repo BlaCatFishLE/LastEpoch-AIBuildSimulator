@@ -1,0 +1,99 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-ignite-penetration",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Ignite 专属火穿与 DoT 穿透",
+    "en": "Ignite-specific fire penetration and DoT penetration"
+  },
+  "source_path": "knowledge/mechanisms/bh-ignite-penetration.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-fire-penetration-with-ignite",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-fire-penetration-with-ignite]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-fire-penetration-with-ignite 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#stats/propertyList:43",
+      "note": "specialTag 显示映射：property 43 + specialTag 1 = Fire Penetration with Ignite。",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Ignite 专属火穿与 DoT 穿透",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ignite、target_side；伤害标签：Fire、DoT、Ailment；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Ignite 的火焰穿透 = 玩家火焰穿透 + 『Fire Penetration with Ignite』（点燃专属，只作用于 Ignite）+ 旧 ailment-effect 折算行；组合后允许把有效抗性压到 0 以下。BH 本体不吃 Ignite 专属那部分。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "pen_total = Σ(penetration rows) + Σ(penetration_with_ignite rows) + Σ(ailment_effect rows)；由 _ignite_target 与通用穿透公式结算。",
+      "source": "$.handler_ref.note（le_calc.ignite._ignite_scaling）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：fire pen rows、pen with ignite rows、ignite penetration total、penetration_applies_to",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/penetration"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/fire_penetration_total"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/penetration_with_ignite_total"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/penetration"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/penetration"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "『increased effect of ailments』折算成穿透的系数在代码层只确认了枚举路径（additionalPenetrationDamageType），精确公式未逐行解出；本案例该行已改为专属词条，effect_rows 为空，不影响数值。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "Ignite 专属火穿与通用火穿在游戏内是同一穿透池还是两个独立因子叠加：当前按相加处理（0 抗性时等价），非 0 抗性下未验证。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

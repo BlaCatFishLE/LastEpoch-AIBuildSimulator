@@ -1,0 +1,1610 @@
+{
+  "schema": "bh-conditional-view-v1",
+  "available": true,
+  "header": {
+    "title": "条件 Buff",
+    "question": "哪些条件效果可能改变 Black Hole？如何设置？",
+    "mode_label": "固定条件估算",
+    "baseline_label": "构筑基础状态",
+    "disclaimer": "当前设置描述计算时采用的条件；人工声明的持续状态不代表已经模拟获取和维持这些状态的完整操作过程。本页不重算 DPS。",
+    "dps_recomputed": false,
+    "dps_note": "本页只生成场景与求值说明，不重算 DPS；DPS 页仍为生成基线。"
+  },
+  "counts": {
+    "checked_objects": 462,
+    "candidates": 26,
+    "configured": 0,
+    "relevant": 6,
+    "scenario_dependent": 2,
+    "unconfirmed": 2,
+    "not_relevant": 8,
+    "auto_active": 0,
+    "auto_inactive": 1,
+    "auto_unknown": 0,
+    "engine_supported": 2,
+    "needs_rules": 4,
+    "needs_time": 1,
+    "mechanism_unresolved": 1,
+    "not_selected": 4,
+    "condition_met": 0,
+    "condition_unmet": 0
+  },
+  "filters": {
+    "categories": [
+      {
+        "id": "all",
+        "label": "全部"
+      },
+      {
+        "id": "other_skill",
+        "label": "其他技能"
+      },
+      {
+        "id": "equipment",
+        "label": "装备"
+      },
+      {
+        "id": "idol",
+        "label": "神像"
+      },
+      {
+        "id": "passive",
+        "label": "职业被动"
+      },
+      {
+        "id": "main_skill",
+        "label": "主技能"
+      },
+      {
+        "id": "target",
+        "label": "目标状态"
+      },
+      {
+        "id": "action",
+        "label": "动作"
+      }
+    ],
+    "relevance": [
+      {
+        "id": "all",
+        "label": "全部"
+      },
+      {
+        "id": "relevant",
+        "label": "相关"
+      },
+      {
+        "id": "scenario_dependent",
+        "label": "场景依赖"
+      },
+      {
+        "id": "unconfirmed",
+        "label": "待确认"
+      },
+      {
+        "id": "not_relevant_current_scenario",
+        "label": "本场景不相关"
+      }
+    ],
+    "support": [
+      {
+        "id": "all",
+        "label": "全部"
+      },
+      {
+        "id": "engine_supported",
+        "label": "已接入"
+      },
+      {
+        "id": "needs_rule_mapping",
+        "label": "需要规则映射"
+      },
+      {
+        "id": "needs_action_or_time_simulation",
+        "label": "需要时间/动作模拟"
+      },
+      {
+        "id": "mechanism_unresolved",
+        "label": "机制待确认"
+      }
+    ],
+    "statuses": [
+      {
+        "id": "all",
+        "label": "全部"
+      },
+      {
+        "id": "not_available",
+        "label": "构筑无此来源"
+      },
+      {
+        "id": "unsupported_action",
+        "label": "动作机制未支持"
+      },
+      {
+        "id": "auto_active",
+        "label": "自动生效"
+      },
+      {
+        "id": "auto_inactive",
+        "label": "自动未生效"
+      },
+      {
+        "id": "auto_unknown",
+        "label": "自动判定待确认"
+      },
+      {
+        "id": "not_selected",
+        "label": "未选择"
+      },
+      {
+        "id": "selected_condition_unmet",
+        "label": "已选择·条件不足"
+      },
+      {
+        "id": "selected_ready_needs_rules",
+        "label": "已选择·条件满足·缺规则映射"
+      },
+      {
+        "id": "selected_ready_needs_time",
+        "label": "已选择·条件满足·需时间/动作模拟"
+      },
+      {
+        "id": "selected_unconfirmed",
+        "label": "已选择·机制待确认"
+      },
+      {
+        "id": "active_supported",
+        "label": "已选择·已接入计算"
+      },
+      {
+        "id": "already_in_baseline",
+        "label": "已计入基础"
+      }
+    ]
+  },
+  "states": [
+    {
+      "id": "target.chilled",
+      "label": "目标处于冰缓",
+      "kind": "bool",
+      "source": "user",
+      "value": false,
+      "description": "只声明目标状态；不模拟冰缓来源、概率与覆盖时间。",
+      "affects_labels": [
+        "Frozen Steel",
+        "Chilled Touch"
+      ],
+      "editable": true
+    },
+    {
+      "id": "player.craterborn_active",
+      "label": "Craterborn 持续有效",
+      "kind": "bool",
+      "source": "user",
+      "value": false,
+      "description": "施放 Meteor 后 6 秒内有效；固定条件模式假设整个观察期维持。",
+      "affects_labels": [
+        "Craterborn"
+      ],
+      "editable": true
+    },
+    {
+      "id": "idol.ambition_stacks",
+      "label": "Throne of Ambition 层数",
+      "kind": "int",
+      "source": "user",
+      "value": 0,
+      "description": "按实际叠层数缩放；固定条件模式假设观察期维持该层数。",
+      "affects_labels": [
+        "Throne of Ambition"
+      ],
+      "editable": true
+    },
+    {
+      "id": "auto.max_mana",
+      "label": "最大法力",
+      "kind": "number",
+      "source": "auto",
+      "value": 219.9,
+      "display": "219.9",
+      "editable": false,
+      "note": "来自当前输入派生；不满足 300 门槛。",
+      "affects_labels": [
+        "神像火伤翻倍"
+      ]
+    },
+    {
+      "id": "baseline.target_boss",
+      "label": "目标为稀有/首领",
+      "kind": "bool",
+      "source": "baseline",
+      "value": true,
+      "editable": false,
+      "note": "生成基线固定为稀有/首领目标；本页不修改这个假设。",
+      "affects_labels": [
+        "主技能节点条件"
+      ]
+    },
+    {
+      "id": "baseline.centered",
+      "label": "目标位于中心 1 米内",
+      "kind": "bool",
+      "source": "baseline",
+      "value": true,
+      "editable": false,
+      "note": "主技能节点固定假设（中心命中）；本页不修改。",
+      "affects_labels": [
+        "Black Hole 本体"
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "id": "build_base",
+      "label": "构筑基础状态（默认）",
+      "description": "只含构筑常驻；无临时 Buff、无目标异常、无预设层数。",
+      "is_default": true
+    },
+    {
+      "id": "buff_test",
+      "label": "Buff 覆盖场景",
+      "description": "假设 Craterborn 与目标冰缓同时有效，用于比较上限；仍不重算 DPS。",
+      "is_default": false
+    }
+  ],
+  "effects": [
+    {
+      "effect_id": "meteor.craterborn",
+      "group_id": "meteor.craterborn",
+      "name": "Craterborn",
+      "name_en": "Craterborn",
+      "category": "other_skill",
+      "category_label": "其他技能",
+      "source_label": "Meteor · Craterborn · 5 点",
+      "source_detail": {
+        "kind": "skill_node",
+        "tree": "Meteor",
+        "node_id": 25,
+        "points": 5,
+        "max_points": 5,
+        "slot": null,
+        "item": null,
+        "locator": "archive://<case>/inputs/calculation-input.affix-db.json#/skills/specializations/1/nodes/6"
+      },
+      "summary": "+75% 火焰穿透 · +15% 施法速度 · 6 秒 Buff",
+      "value_lines": [
+        {
+          "label": "火焰穿透",
+          "value_text": "+75%",
+          "detail": "每点 +15% × 5 点"
+        },
+        {
+          "label": "施法速度",
+          "value_text": "+15%",
+          "detail": "不随点数缩放"
+        },
+        {
+          "label": "持续时间",
+          "value_text": "6 秒",
+          "detail": "重复施放刷新"
+        }
+      ],
+      "condition_text": "需要 Craterborn 有效（施放 Meteor 后 6 秒内）",
+      "impact_path": "施放 Meteor → 获得 6 秒 Craterborn → 玩家火穿 +75% → 火焰本体与点燃的抗性乘区提高；+15% 施法速度 → 施法时间缩短、循环调度变化（单次总伤害不变）",
+      "branches": [
+        "body.fire",
+        "ignite",
+        "cast",
+        "loops"
+      ],
+      "relevance": {
+        "status": "relevant",
+        "label": "相关",
+        "tones": "ok"
+      },
+      "support": {
+        "level": "needs_rule_mapping",
+        "label": "需要规则映射",
+        "tone": "warn",
+        "gap": "现有引擎只消费快照中已解析的贡献，没有跨技能 Buff 输入通道；施法速度按固定属性快照计算。",
+        "next_probe": "把该 Buff 作为场景状态，生成 fire_penetration / cast_speed 修正贡献后重算。",
+        "open_questions": [
+          "点燃是否继承 Craterborn 的火穿（现有规则：点燃读取玩家火穿）"
+        ]
+      },
+      "control": {
+        "kind": "toggle",
+        "state_id": "player.craterborn_active",
+        "label": "假设 Craterborn 持续有效",
+        "help": "固定条件估算：假设整个观察期维持该 Buff。"
+      },
+      "status": {
+        "initial": "not_selected",
+        "label": "未选择",
+        "tone": "muted",
+        "reason": "toggle 关闭；固定条件模式只声明状态，不模拟获取与维持过程。"
+      },
+      "condition_checks": [
+        {
+          "label": "Craterborn 有效",
+          "state_id": "player.craterborn_active",
+          "expected": true,
+          "met": false,
+          "source": "user"
+        }
+      ],
+      "activation_text": "施放 Meteor 后获得；持续 6 秒；不叠层；重复施放刷新",
+      "baseline_note": null,
+      "dedupe_note": "无重复计入；现有来源账未包含此项。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "title": "游戏数据",
+          "detail": "节点描述与 stat 行：15% 火穿、15% 施法速度、6 秒持续时间。",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#node:letools:me27:25",
+          "snippet": "Casting Meteor grants the 'Craterborn' buff ..."
+        },
+        {
+          "kind": "derivation",
+          "title": "推导计算",
+          "detail": "实际点数 5 / 5；每点 +15% → 合计 +75%。",
+          "locator": "archive://<case>/inputs/calculation-input.affix-db.json#/skills/specializations/1/nodes/6",
+          "snippet": "\"points\": 5"
+        }
+      ],
+      "advanced": {
+        "effect_id": "meteor.craterborn",
+        "modifier_ids": [
+          "meteor.craterborn.fire_pen",
+          "meteor.craterborn.cast_speed"
+        ],
+        "engine_sink": [
+          "snapshot.contributions[stat_key=penetration,target=fire]",
+          "snapshot.contributions[stat_key=cast_speed]"
+        ],
+        "research_status": "confirmed",
+        "open_questions": [
+          "点燃是否继承 Craterborn 的火穿"
+        ]
+      }
+    },
+    {
+      "effect_id": "idol.throne_of_ambition",
+      "group_id": "idol.throne_of_ambition",
+      "name": "Throne of Ambition",
+      "name_en": "Throne of Ambition",
+      "category": "equipment",
+      "category_label": "装备",
+      "source_label": "Unsated Rage（戒指 2）· Throne of Ambition",
+      "source_detail": {
+        "kind": "equipment",
+        "tree": null,
+        "node_id": null,
+        "points": null,
+        "max_points": null,
+        "slot": "ring2",
+        "item": "Unsated Rage",
+        "locator": "archive://<case>/inputs/calculation-input.affix-db.json#/items/10/mods/4"
+      },
+      "summary": "按层数提供火焰伤害加成，最多 10 层",
+      "value_lines": [
+        {
+          "label": "层数",
+          "value_text": "0–10 层",
+          "detail": "按实际层数缩放"
+        },
+        {
+          "label": "来源",
+          "value_text": "戒指 2",
+          "detail": "Unsated Rage 独特效果"
+        }
+      ],
+      "condition_text": "需要先叠层；固定条件模式只声明层数，不模拟叠层过程",
+      "impact_path": "叠层 → 火焰本体加成 → 若层数进入 inc 池则改变本体伤害",
+      "branches": [
+        "body.fire"
+      ],
+      "relevance": {
+        "status": "scenario_dependent",
+        "label": "场景依赖",
+        "tones": "info"
+      },
+      "support": {
+        "level": "needs_rule_mapping",
+        "label": "需要规则映射",
+        "tone": "warn",
+        "gap": "引擎没有层数状态通道；快照只记录常驻值。",
+        "next_probe": "把层数作为共享状态，生成按层数缩放的修正贡献。",
+        "open_questions": []
+      },
+      "control": {
+        "kind": "stacks",
+        "stack_state_id": "idol.ambition_stacks",
+        "bounds": {
+          "min": 0,
+          "max": 10
+        },
+        "label": "设置 Throne of Ambition 层数",
+        "help": "层数由叠层来源决定；固定条件模式假设观察期维持该层数。"
+      },
+      "status": {
+        "initial": "not_selected",
+        "label": "未选择",
+        "tone": "muted",
+        "reason": "层数为 0；固定条件模式不模拟叠层过程。"
+      },
+      "condition_checks": [],
+      "activation_text": "按层数生效；上限 10 层",
+      "baseline_note": null,
+      "dedupe_note": "现有来源账未包含按层数缩放部分。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "title": "游戏数据",
+          "detail": "独特词缀行给出按层数缩放。",
+          "locator": "data/affix-db/v1/normalized/affix-db.sqlite#affix:throne-of-ambition",
+          "snippet": "per stack ..."
+        }
+      ],
+      "advanced": {
+        "effect_id": "idol.throne_of_ambition",
+        "modifier_ids": [
+          "idol.throne_of_ambition.fire_damage"
+        ],
+        "engine_sink": [
+          "snapshot.contributions[stat_key=increased_damage,tag=fire]"
+        ],
+        "research_status": "assumed",
+        "open_questions": [
+          "最大层数与叠层上限 10 的交互"
+        ]
+      }
+    },
+    {
+      "effect_id": "frost_wall.chilled_touch",
+      "group_id": "frost_wall.chilled_touch",
+      "name": "Chilled Touch",
+      "name_en": "Chilled Touch",
+      "category": "other_skill",
+      "category_label": "其他技能",
+      "source_label": "Frost Wall · Chilled Touch · 4 点",
+      "source_detail": {
+        "kind": "skill_node",
+        "tree": "Frost Wall",
+        "node_id": 12,
+        "points": 4,
+        "max_points": 4,
+        "slot": null,
+        "item": null,
+        "locator": "archive://<case>/inputs/calculation-input.affix-db.json#/skills/specializations/3/nodes/2"
+      },
+      "summary": "Frost Wall 命中后使目标冰缓",
+      "value_lines": [
+        {
+          "label": "目标状态",
+          "value_text": "冰缓",
+          "detail": "由 Frost Wall 施加"
+        },
+        {
+          "label": "点数",
+          "value_text": "4 / 4",
+          "detail": "已分配"
+        }
+      ],
+      "condition_text": "需要目标处于冰缓",
+      "impact_path": "Frost Wall 命中 → 目标冰缓 → 目标状态进入条件求值；对 Black Hole 的影响需规则映射",
+      "branches": [
+        "target.state"
+      ],
+      "relevance": {
+        "status": "scenario_dependent",
+        "label": "场景依赖",
+        "tones": "info"
+      },
+      "support": {
+        "level": "mechanism_unresolved",
+        "label": "机制待确认",
+        "tone": "warn",
+        "gap": "冰缓对火焰伤害的作用路径尚未从规则账确认。",
+        "next_probe": "核对目标状态规则账，确认冰缓是否进入抗性/易伤乘区。",
+        "open_questions": [
+          "冰缓是否影响火焰抗性乘区"
+        ]
+      },
+      "control": {
+        "kind": "toggle",
+        "state_id": "target.chilled",
+        "label": "假设目标处于冰缓",
+        "help": "只声明目标状态；不模拟冰缓来源、概率与覆盖时间。"
+      },
+      "status": {
+        "initial": "not_selected",
+        "label": "未选择",
+        "tone": "muted",
+        "reason": "目标冰缓状态未声明。"
+      },
+      "condition_checks": [
+        {
+          "label": "目标处于冰缓",
+          "state_id": "target.chilled",
+          "expected": true,
+          "met": false,
+          "source": "user"
+        }
+      ],
+      "activation_text": "Frost Wall 命中后施加冰缓",
+      "baseline_note": null,
+      "dedupe_note": "与 Frozen Steel 共用目标冰缓状态；两者不重复计入。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "title": "游戏数据",
+          "detail": "节点描述：Frost Wall 使目标冰缓。",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#node:letools:fw:12",
+          "snippet": "chills enemies ..."
+        }
+      ],
+      "advanced": {
+        "effect_id": "frost_wall.chilled_touch",
+        "modifier_ids": [],
+        "engine_sink": [],
+        "research_status": "unresolved",
+        "open_questions": [
+          "冰缓对火焰伤害的作用路径"
+        ]
+      }
+    },
+    {
+      "effect_id": "enchant_weapon.conflagrate",
+      "group_id": "enchant_weapon.conflagrate",
+      "name": "Conflagrate",
+      "name_en": "Conflagrate",
+      "category": "other_skill",
+      "category_label": "其他技能",
+      "source_label": "Enchant Weapon · Conflagrate",
+      "source_detail": {
+        "kind": "skill_node",
+        "tree": "Enchant Weapon",
+        "node_id": 7,
+        "points": 3,
+        "max_points": 3,
+        "slot": null,
+        "item": null,
+        "locator": "archive://<case>/inputs/calculation-input.affix-db.json#/skills/specializations/4/nodes/5"
+      },
+      "summary": "本次施法触发一次点燃效果",
+      "value_lines": [
+        {
+          "label": "触发",
+          "value_text": "点燃",
+          "detail": "需本次施法命中"
+        },
+        {
+          "label": "点数",
+          "value_text": "3 / 3",
+          "detail": "已分配"
+        }
+      ],
+      "condition_text": "需要本次施法触发 Conflagrate",
+      "impact_path": "本次施法 → Conflagrate 触发 → 点燃层数提高 → 点燃分支",
+      "branches": [
+        "ignite"
+      ],
+      "relevance": {
+        "status": "relevant",
+        "label": "相关",
+        "tones": "ok"
+      },
+      "support": {
+        "level": "needs_rule_mapping",
+        "label": "需要规则映射",
+        "tone": "warn",
+        "gap": "引擎没有单次施法动作输入通道。",
+        "next_probe": "把单次施法状态作为场景输入，生成额外点燃层数贡献。",
+        "open_questions": []
+      },
+      "control": {
+        "kind": "cast_state",
+        "cast_state_id": "conflagrate_used",
+        "label": "假设本次施法触发 Conflagrate",
+        "help": "单次施法状态：只影响本次释放的说明，不模拟触发概率。"
+      },
+      "status": {
+        "initial": "not_selected",
+        "label": "未选择",
+        "tone": "muted",
+        "reason": "单次施法状态未声明。"
+      },
+      "condition_checks": [
+        {
+          "label": "本次施法触发 Conflagrate",
+          "state_id": "single_cast.conflagrate_used",
+          "expected": true,
+          "met": false,
+          "source": "single_cast"
+        }
+      ],
+      "activation_text": "单次施法动作",
+      "baseline_note": null,
+      "dedupe_note": "与点燃施加来源不重复计入。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "title": "游戏数据",
+          "detail": "节点描述：Conflagrate 在施法时触发点燃。",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#node:letools:ew:7",
+          "snippet": "on cast ... ignite"
+        }
+      ],
+      "advanced": {
+        "effect_id": "enchant_weapon.conflagrate",
+        "modifier_ids": [
+          "enchant_weapon.conflagrate.ignite_stacks"
+        ],
+        "engine_sink": [
+          "single_cast.ignite.application"
+        ],
+        "research_status": "assumed",
+        "open_questions": []
+      }
+    },
+    {
+      "effect_id": "enchant_weapon.eternal_flames",
+      "group_id": "enchant_weapon.eternal_flames",
+      "name": "Eternal Flames",
+      "name_en": "Eternal Flames",
+      "category": "other_skill",
+      "category_label": "其他技能",
+      "source_label": "Enchant Weapon · Eternal Flames · Passive",
+      "source_detail": {
+        "kind": "skill_node",
+        "tree": "Enchant Weapon",
+        "node_id": 4,
+        "points": 2,
+        "max_points": 2,
+        "slot": null,
+        "item": null,
+        "locator": "archive://<case>/inputs/calculation-input.affix-db.json#/skills/specializations/4/nodes/2"
+      },
+      "summary": "被动 +25% 点燃持续时间；激活 Buff 部分未计入",
+      "value_lines": [
+        {
+          "label": "点燃持续时间",
+          "value_text": "+25%",
+          "detail": "被动部分，已计入基础"
+        },
+        {
+          "label": "激活 Buff",
+          "value_text": "未计入",
+          "detail": "需要动作/时间模拟"
+        }
+      ],
+      "condition_text": "被动常驻；激活 Buff 需施放 Enchant Weapon",
+      "impact_path": "被动 +25% 点燃持续时间 → 点燃持续时间乘区（已计入）；激活部分不进入本页控制",
+      "branches": [
+        "ignite",
+        "duration"
+      ],
+      "relevance": {
+        "status": "relevant",
+        "label": "相关",
+        "tones": "ok"
+      },
+      "support": {
+        "level": "engine_supported",
+        "label": "已接入计算",
+        "tone": "ok",
+        "gap": "",
+        "next_probe": "",
+        "open_questions": []
+      },
+      "control": {
+        "kind": "none",
+        "label": "",
+        "help": "被动部分自动计入；页面不提供控制。"
+      },
+      "status": {
+        "initial": "already_in_baseline",
+        "label": "已计入基础",
+        "tone": "muted",
+        "reason": "被动 +25% 点燃持续时间已经进入基础快照；激活 Buff 部分未计入。"
+      },
+      "condition_checks": [],
+      "activation_text": "被动常驻",
+      "baseline_note": "被动 +25% 点燃持续时间已计入基础快照贡献；激活 Buff 部分未计入。",
+      "dedupe_note": "与点燃持续时间来源共用同一乘区，已去重。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "title": "游戏数据",
+          "detail": "被动节点描述：+25% 点燃持续时间。",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#node:letools:ew:4",
+          "snippet": "+25% ignite duration"
+        }
+      ],
+      "advanced": {
+        "effect_id": "enchant_weapon.eternal_flames",
+        "modifier_ids": [
+          "enchant_weapon.eternal_flames.ignite_duration"
+        ],
+        "engine_sink": [
+          "snapshot.contributions[stat_key=ignite_duration]"
+        ],
+        "research_status": "confirmed",
+        "open_questions": []
+      }
+    },
+    {
+      "effect_id": "black_hole.supermassive",
+      "group_id": "black_hole.supermassive",
+      "name": "Supermassive",
+      "name_en": "Supermassive",
+      "category": "main_skill",
+      "category_label": "主技能",
+      "source_label": "Black Hole · Supermassive · 3 点",
+      "source_detail": {
+        "kind": "main_skill_node",
+        "tree": "Black Hole",
+        "node_id": 9,
+        "points": 3,
+        "max_points": 3,
+        "slot": null,
+        "item": null,
+        "locator": "archive://<case>/inputs/calculation-input.affix-db.json#/skills/specializations/0/nodes/3"
+      },
+      "summary": "黑洞范围与本体加成，已计入基础",
+      "value_lines": [
+        {
+          "label": "本体",
+          "value_text": "已计入",
+          "detail": "快照贡献"
+        },
+        {
+          "label": "点数",
+          "value_text": "3 / 3",
+          "detail": "已分配"
+        }
+      ],
+      "condition_text": "常驻；无额外条件",
+      "impact_path": "快照贡献 → 本体乘区（已计入）",
+      "branches": [
+        "body.fire",
+        "body.cold"
+      ],
+      "relevance": {
+        "status": "relevant",
+        "label": "相关",
+        "tones": "ok"
+      },
+      "support": {
+        "level": "engine_supported",
+        "label": "已接入计算",
+        "tone": "ok",
+        "gap": "",
+        "next_probe": "",
+        "open_questions": []
+      },
+      "control": {
+        "kind": "none",
+        "label": "",
+        "help": "自动计入基础。"
+      },
+      "status": {
+        "initial": "already_in_baseline",
+        "label": "已计入基础",
+        "tone": "muted",
+        "reason": "主技能节点已进入基础快照。"
+      },
+      "condition_checks": [],
+      "activation_text": "常驻",
+      "baseline_note": "主技能节点已计入基础快照，不需要条件配置。",
+      "dedupe_note": "无重复计入。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "title": "游戏数据",
+          "detail": "主技能节点描述与 stat 行。",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#node:letools:bh2:9",
+          "snippet": "15% more damage ..."
+        }
+      ],
+      "advanced": {
+        "effect_id": "black_hole.supermassive",
+        "modifier_ids": [
+          "black_hole.supermassive.more"
+        ],
+        "engine_sink": [
+          "snapshot.contributions[stat_key=more_damage]"
+        ],
+        "research_status": "confirmed",
+        "open_questions": []
+      }
+    },
+    {
+      "effect_id": "unsated_rage.crescendoing_rage",
+      "group_id": "unsated_rage.crescendoing_rage",
+      "name": "Crescendoing Rage",
+      "name_en": "Crescendoing Rage",
+      "category": "equipment",
+      "category_label": "装备",
+      "source_label": "Unsated Rage（戒指 2）· Crescendoing Rage",
+      "source_detail": {
+        "kind": "equipment",
+        "tree": null,
+        "node_id": null,
+        "points": null,
+        "max_points": null,
+        "slot": "ring2",
+        "item": "Unsated Rage",
+        "locator": "archive://<case>/inputs/calculation-input.affix-db.json#/items/10/mods/7"
+      },
+      "summary": "连续施放后获得暴怒层数（动作机制）",
+      "value_lines": [
+        {
+          "label": "机制",
+          "value_text": "动作触发",
+          "detail": "需要连续施放"
+        },
+        {
+          "label": "支持",
+          "value_text": "未支持",
+          "detail": "缺少动作/时间模拟"
+        }
+      ],
+      "condition_text": "需要连续施放并维持动作序列",
+      "impact_path": "连续施放 → 叠层 → 本体加成（动作与时间相关）",
+      "branches": [
+        "cast",
+        "loops"
+      ],
+      "relevance": {
+        "status": "relevant",
+        "label": "相关",
+        "tones": "ok"
+      },
+      "support": {
+        "level": "needs_action_or_time_simulation",
+        "label": "需要时间/动作模拟",
+        "tone": "warn",
+        "gap": "固定条件模式不模拟动作序列与叠层维持。",
+        "next_probe": "在时间模拟器里实现动作流与叠层衰减后再评估。",
+        "open_questions": [
+          "叠层衰减时间"
+        ]
+      },
+      "control": {
+        "kind": "none",
+        "label": "",
+        "help": "动作机制，本页不提供控制。"
+      },
+      "status": {
+        "initial": "unsupported_action",
+        "label": "动作机制未支持",
+        "tone": "bad",
+        "reason": "动作机制不在固定条件模式支持范围；即使选择也不会伪造生效。"
+      },
+      "condition_checks": [],
+      "activation_text": "连续施放触发",
+      "baseline_note": null,
+      "dedupe_note": "未计入任何现有来源。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "title": "游戏数据",
+          "detail": "独特词缀行：连续施放后叠层。",
+          "locator": "data/affix-db/v1/normalized/affix-db.sqlite#affix:crescendoing-rage",
+          "snippet": "consecutive casts ..."
+        }
+      ],
+      "advanced": {
+        "effect_id": "unsated_rage.crescendoing_rage",
+        "modifier_ids": [],
+        "engine_sink": [],
+        "research_status": "confirmed",
+        "open_questions": [
+          "叠层衰减时间"
+        ]
+      }
+    },
+    {
+      "effect_id": "idol.mana_threshold",
+      "group_id": "idol.mana_threshold",
+      "name": "神像火伤翻倍",
+      "name_en": "Idol Mana Threshold",
+      "category": "idol",
+      "category_label": "神像",
+      "source_label": "神像 · 最大法力 ≥ 300",
+      "source_detail": {
+        "kind": "idol",
+        "tree": null,
+        "node_id": null,
+        "points": null,
+        "max_points": null,
+        "slot": "idol",
+        "item": "Pyramidal Altar",
+        "locator": "archive://<case>/inputs/calculation-input.affix-db.json#/items/18/mods/1"
+      },
+      "summary": "最大法力 ≥ 300 时神像火焰伤害翻倍",
+      "value_lines": [
+        {
+          "label": "门槛",
+          "value_text": "最大法力 300",
+          "detail": "当前 219.9"
+        },
+        {
+          "label": "效果",
+          "value_text": "火伤翻倍",
+          "detail": "未满足门槛时不生效"
+        }
+      ],
+      "condition_text": "需要最大法力 ≥ 300",
+      "impact_path": "最大法力门槛 → 神像火伤翻倍 → 火焰本体/点燃加算池（当前未满足）",
+      "branches": [
+        "body.fire",
+        "ignite"
+      ],
+      "relevance": {
+        "status": "scenario_dependent",
+        "label": "场景依赖",
+        "tones": "info"
+      },
+      "support": {
+        "level": "needs_rule_mapping",
+        "label": "需要规则映射",
+        "tone": "warn",
+        "gap": "引擎没有法术强度/法力门槛的条件分支。",
+        "next_probe": "把法力门槛作为派生状态，生成翻倍贡献。",
+        "open_questions": []
+      },
+      "control": {
+        "kind": "none",
+        "label": "",
+        "help": "门槛由派生属性自动判定，页面只读。"
+      },
+      "status": {
+        "initial": "auto_inactive",
+        "label": "自动未生效",
+        "tone": "muted",
+        "reason": "当前最大法力 219.9 < 300；基础神像火伤已计入，翻倍部分未计入。"
+      },
+      "condition_checks": [
+        {
+          "label": "最大法力 ≥ 300",
+          "state_id": "auto.max_mana_gte_300",
+          "expected": true,
+          "met": false,
+          "source": "auto"
+        }
+      ],
+      "activation_text": "派生属性门槛",
+      "baseline_note": null,
+      "dedupe_note": "基础神像火伤已计入；翻倍部分不重复计入。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "title": "游戏数据",
+          "detail": "神像词缀：最大法力门槛与翻倍效果。",
+          "locator": "data/affix-db/v1/normalized/affix-db.sqlite#affix:idol-mana",
+          "snippet": "if maximum mana >= 300 ..."
+        }
+      ],
+      "advanced": {
+        "effect_id": "idol.mana_threshold",
+        "modifier_ids": [
+          "idol.mana_threshold.doubling"
+        ],
+        "engine_sink": [
+          "snapshot.contributions[stat_key=increased_damage,tag=fire]"
+        ],
+        "research_status": "confirmed",
+        "open_questions": []
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "meteor.craterborn",
+      "label": "Meteor · Craterborn",
+      "effect_ids": [
+        "meteor.craterborn"
+      ]
+    },
+    {
+      "id": "idol",
+      "label": "神像与装备",
+      "effect_ids": [
+        "idol.throne_of_ambition",
+        "idol.mana_threshold"
+      ]
+    },
+    {
+      "id": "enchant",
+      "label": "Enchant Weapon",
+      "effect_ids": [
+        "enchant_weapon.conflagrate",
+        "enchant_weapon.eternal_flames"
+      ]
+    },
+    {
+      "id": "frost",
+      "label": "Frost Wall",
+      "effect_ids": [
+        "frost_wall.chilled_touch"
+      ]
+    },
+    {
+      "id": "main",
+      "label": "主技能与动作",
+      "effect_ids": [
+        "black_hole.supermassive",
+        "unsated_rage.crescendoing_rage"
+      ]
+    }
+  ],
+  "auto_notes": [
+    {
+      "id": "auto.max_mana_gte_300",
+      "label": "神像火伤翻倍（最大法力 ≥ 300）",
+      "met": false,
+      "explain": "当前最大法力 219.9 < 300；基础神像火伤已计入，翻倍部分未计入。"
+    },
+    {
+      "id": "auto.target_boss",
+      "label": "目标为稀有/首领（基线固定）",
+      "met": true,
+      "baseline_fixed": true,
+      "explain": "生成基线固定为目标为稀有/首领；该假设来自主技能节点，本页不修改。"
+    }
+  ],
+  "checked": {
+    "summary": [
+      {
+        "category": "equipment",
+        "label": "装备",
+        "examined": 11,
+        "candidates": 3,
+        "excluded": 8,
+        "baseline": 0
+      },
+      {
+        "category": "idol",
+        "label": "神像",
+        "examined": 8,
+        "candidates": 2,
+        "excluded": 6,
+        "baseline": 0
+      },
+      {
+        "category": "blessing",
+        "label": "祝福",
+        "examined": 10,
+        "candidates": 1,
+        "excluded": 9,
+        "baseline": 0
+      },
+      {
+        "category": "passive_node",
+        "label": "职业被动",
+        "examined": 19,
+        "candidates": 2,
+        "excluded": 17,
+        "baseline": 0
+      },
+      {
+        "category": "skill_node",
+        "label": "技能节点",
+        "examined": 67,
+        "candidates": 6,
+        "excluded": 61,
+        "baseline": 0
+      }
+    ],
+    "records": [
+      {
+        "record_id": "checked:skill:me27:3",
+        "category": "other_skill",
+        "source_label": "Meteor · Celestial Celerity · 3 点",
+        "effect_summary": "+30% Meteor 施法速度（仅 Meteor）",
+        "disposition": "excluded",
+        "disposition_label": "已检查未纳入",
+        "reason": "作用对象是 Meteor 自身施法速度，不进入 Black Hole 施法路径。",
+        "relevance": "not_relevant_current_scenario"
+      },
+      {
+        "record_id": "checked:equipment:ward",
+        "category": "equipment",
+        "source_label": "胸甲 · +X 护盾",
+        "effect_summary": "提高护盾与护甲",
+        "disposition": "excluded",
+        "disposition_label": "已检查未纳入",
+        "reason": "防御属性不改变伤害。",
+        "relevance": "not_relevant_current_scenario"
+      },
+      {
+        "record_id": "checked:blessing:mana",
+        "category": "blessing",
+        "source_label": "祝福 · 最大法力",
+        "effect_summary": "+X 最大法力",
+        "disposition": "excluded",
+        "disposition_label": "已检查未纳入",
+        "reason": "只提供法力上限，不直接改变伤害；已作为 auto 状态参与门槛判定。",
+        "relevance": "scenario_dependent"
+      },
+      {
+        "record_id": "checked:passive:ignite-duration",
+        "category": "passive_node",
+        "source_label": "法师被动 · 点燃持续时间",
+        "effect_summary": "已计入基础快照",
+        "disposition": "baseline_included",
+        "disposition_label": "已计入基础",
+        "reason": "已计入现有快照贡献。",
+        "relevance": "relevant"
+      },
+      {
+        "record_id": "checked:skill:candidate",
+        "category": "other_skill",
+        "source_label": "Frost Wall · 未建模节点",
+        "effect_summary": "命中后附加冰霜异常",
+        "disposition": "candidate",
+        "disposition_label": "候选待确认",
+        "reason": "可能影响目标状态，但尚未确认进入伤害规则。",
+        "relevance": "unconfirmed"
+      }
+    ],
+    "excluded_sources": [
+      {
+        "id": "excluded:weaver-tree",
+        "label": "编织树（当前构筑未启用）",
+        "reason": "本轮不检查未启用范围；不计入分母。"
+      },
+      {
+        "id": "excluded:potions",
+        "label": "药水栏（当前无来源）",
+        "reason": "当前构筑没有药水类条件来源。"
+      }
+    ],
+    "data_gaps": [
+      {
+        "id": "gap:calc-input-cross-check",
+        "severity": "warning",
+        "area": "计算输入",
+        "message": "calc input 与 snapshot 的 mod 数可以交叉核对，但节点点数只做了抽样验证。",
+        "probe": "用 bd.json 的全量 specializations 点数复核。"
+      },
+      {
+        "id": "gap:target-state",
+        "severity": "info",
+        "area": "目标状态规则",
+        "message": "冰缓/冰冻对火焰伤害的作用路径仍在规则账之外。",
+        "probe": "补充目标状态规则账条目。"
+      }
+    ]
+  },
+  "dependency": {
+    "note": "条件页只声明状态；模块的实际求值仍由引擎规则完成，本页不重算 DPS。",
+    "modules": [
+      {
+        "id": "body.fire",
+        "label": "火焰本体",
+        "question": "哪些输入通过哪些规则影响火焰本体？",
+        "consumes": [
+          "increased_damage",
+          "more_damage",
+          "penetration",
+          "cast_speed",
+          "duration",
+          "target_resistance",
+          "monster_dr"
+        ],
+        "calc_refs": [
+          "le_calc.damage.compute_body",
+          "le_calc.report.build_result"
+        ],
+        "rule_ids": [
+          "rule-bh-component"
+        ],
+        "notes": "基础/点伤 → inc → more → 抗性穿透 → 怪物 DR → 每次结算 × 次数。",
+        "evidence": [
+          {
+            "kind": "derivation",
+            "detail": "规则账中的本体分量规则。",
+            "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+            "snippet": "rule-bh-component"
+          }
+        ]
+      },
+      {
+        "id": "ignite",
+        "label": "点燃",
+        "question": "点燃的层数、单层伤害与持续时间如何形成？",
+        "consumes": [
+          "penetration",
+          "ignite_duration",
+          "increased_damage",
+          "cast_speed"
+        ],
+        "calc_refs": [
+          "le_calc.damage.compute_ignite"
+        ],
+        "rule_ids": [
+          "rule-ignite-per-stack"
+        ],
+        "notes": "点燃读取玩家火穿与点燃持续时间；施法速度只改变施加节奏。",
+        "evidence": []
+      },
+      {
+        "id": "cast",
+        "label": "施法时间",
+        "question": "施法速度如何改变施法时间与循环？",
+        "consumes": [
+          "cast_speed"
+        ],
+        "calc_refs": [
+          "le_calc.report.build_loops"
+        ],
+        "rule_ids": [
+          "rule-cast-time"
+        ],
+        "notes": "施法速度改变施法时间与循环调度，不改变单次总伤害。",
+        "evidence": []
+      },
+      {
+        "id": "cooldown",
+        "label": "冷却与充能",
+        "question": "冷却缩减与充能如何影响循环次数？",
+        "consumes": [
+          "cooldown_recovery",
+          "max_charges"
+        ],
+        "calc_refs": [
+          "le_calc.report.build_loops"
+        ],
+        "rule_ids": [
+          "rule-cooldown"
+        ],
+        "notes": "循环 DPS 只由可用施放次数决定。",
+        "evidence": []
+      },
+      {
+        "id": "target.state",
+        "label": "目标状态",
+        "question": "目标状态（冰缓/异常/门槛）通过哪些规则影响伤害？",
+        "consumes": [
+          "target_resistance",
+          "target_state"
+        ],
+        "calc_refs": [
+          "le_calc.report.build_result"
+        ],
+        "rule_ids": [
+          "rule-target-state"
+        ],
+        "notes": "目标状态只作为声明；未建模的目标状态不伪造生效。",
+        "evidence": []
+      }
+    ]
+  },
+  "export": {
+    "scenario_filename": "bh-conditional-scenario.json",
+    "command_hint": "$env:PYTHONPATH='tools\\phase3\\src'; .\\.venv\\Scripts\\python.exe -m le_calc.cli conditions --snapshot <case>/snapshot/input-snapshot.affix-db.json --scenario <case>/scenario/conditional-scenario.json --out reports/<case>/<run-id>"
+  },
+  "client_rules": {
+    "schema": "bh-conditional-rules-v1",
+    "states": [
+      {
+        "id": "target.chilled",
+        "label": "目标处于冰缓",
+        "kind": "bool",
+        "source": "user",
+        "default": false,
+        "bounds": null
+      },
+      {
+        "id": "player.craterborn_active",
+        "label": "Craterborn 持续有效",
+        "kind": "bool",
+        "source": "user",
+        "default": false,
+        "bounds": null
+      },
+      {
+        "id": "idol.ambition_stacks",
+        "label": "Throne of Ambition 层数",
+        "kind": "int",
+        "source": "user",
+        "default": 0,
+        "bounds": {
+          "min": 0,
+          "max": 10
+        }
+      }
+    ],
+    "auto_states": [
+      {
+        "id": "auto.max_mana",
+        "label": "最大法力",
+        "kind": "number",
+        "value": 219.9,
+        "display": "219.9",
+        "comparisons": [
+          {
+            "state": "auto.max_mana_gte_300",
+            "label": "最大法力 ≥ 300",
+            "op": ">=",
+            "ref": "auto.max_mana",
+            "threshold": 300,
+            "met": false
+          }
+        ]
+      }
+    ],
+    "effects": [
+      {
+        "effect_id": "meteor.craterborn",
+        "name": "Craterborn",
+        "category": "other_skill",
+        "group_id": "meteor.craterborn",
+        "control": {
+          "kind": "toggle",
+          "state_id": "player.craterborn_active"
+        },
+        "condition": {
+          "all": [
+            {
+              "state": "player.craterborn_active",
+              "equals": true
+            }
+          ],
+          "any": []
+        },
+        "support": "needs_rule_mapping",
+        "baseline_relation": "new",
+        "status_when_met": "selected_ready_needs_rules",
+        "already_in_baseline": false,
+        "summary": "+75% 火焰穿透、+15% 施法速度、6 秒 Craterborn Buff"
+      },
+      {
+        "effect_id": "idol.throne_of_ambition",
+        "name": "Throne of Ambition",
+        "category": "equipment",
+        "group_id": "idol.throne_of_ambition",
+        "control": {
+          "kind": "stacks",
+          "stack_state_id": "idol.ambition_stacks",
+          "bounds": {
+            "min": 0,
+            "max": 10
+          }
+        },
+        "condition": {
+          "all": [],
+          "any": []
+        },
+        "support": "needs_rule_mapping",
+        "baseline_relation": "new",
+        "status_when_met": "selected_ready_needs_rules",
+        "already_in_baseline": false,
+        "summary": "按层数提供火焰伤害加成，最多 10 层"
+      },
+      {
+        "effect_id": "frost_wall.chilled_touch",
+        "name": "Chilled Touch",
+        "category": "other_skill",
+        "group_id": "frost_wall.chilled_touch",
+        "control": {
+          "kind": "toggle",
+          "state_id": "target.chilled"
+        },
+        "condition": {
+          "all": [
+            {
+              "state": "target.chilled",
+              "equals": true
+            }
+          ],
+          "any": []
+        },
+        "support": "mechanism_unresolved",
+        "baseline_relation": "new",
+        "status_when_met": "selected_unconfirmed",
+        "already_in_baseline": false,
+        "summary": "Frost Wall 命中后使目标冰缓"
+      },
+      {
+        "effect_id": "enchant_weapon.conflagrate",
+        "name": "Conflagrate",
+        "category": "other_skill",
+        "group_id": "enchant_weapon.conflagrate",
+        "control": {
+          "kind": "cast_state",
+          "cast_state_id": "conflagrate_used"
+        },
+        "condition": {
+          "all": [
+            {
+              "state": "single_cast.conflagrate_used",
+              "equals": true
+            }
+          ],
+          "any": []
+        },
+        "support": "needs_rule_mapping",
+        "baseline_relation": "new",
+        "status_when_met": "selected_ready_needs_rules",
+        "already_in_baseline": false,
+        "summary": "本次施法触发一次点燃效果"
+      },
+      {
+        "effect_id": "enchant_weapon.eternal_flames",
+        "name": "Eternal Flames",
+        "category": "other_skill",
+        "group_id": "enchant_weapon.eternal_flames",
+        "control": {
+          "kind": "none"
+        },
+        "condition": {
+          "all": [],
+          "any": []
+        },
+        "support": "engine_supported",
+        "baseline_relation": "already_in_baseline",
+        "status_when_met": "already_in_baseline",
+        "already_in_baseline": true,
+        "summary": "被动 +25% 点燃持续时间；激活 Buff 部分未计入"
+      },
+      {
+        "effect_id": "black_hole.supermassive",
+        "name": "Supermassive",
+        "category": "main_skill",
+        "group_id": "black_hole.supermassive",
+        "control": {
+          "kind": "none"
+        },
+        "condition": {
+          "all": [],
+          "any": []
+        },
+        "support": "engine_supported",
+        "baseline_relation": "already_in_baseline",
+        "status_when_met": "already_in_baseline",
+        "already_in_baseline": true,
+        "summary": "黑洞范围与本体加成，已计入基础"
+      },
+      {
+        "effect_id": "unsated_rage.crescendoing_rage",
+        "name": "Crescendoing Rage",
+        "category": "equipment",
+        "group_id": "unsated_rage.crescendoing_rage",
+        "control": {
+          "kind": "none"
+        },
+        "condition": {
+          "all": [],
+          "any": []
+        },
+        "support": "needs_action_or_time_simulation",
+        "activation_kind": "action",
+        "baseline_relation": "action_not_supported",
+        "status_when_met": "selected_ready_needs_time",
+        "already_in_baseline": false,
+        "summary": "连续施放后获得暴怒层数（动作机制）"
+      },
+      {
+        "effect_id": "idol.mana_threshold",
+        "name": "神像火伤翻倍",
+        "category": "idol",
+        "group_id": "idol.mana_threshold",
+        "control": {
+          "kind": "none"
+        },
+        "condition": {
+          "all": [
+            {
+              "state": "auto.max_mana_gte_300",
+              "equals": true
+            }
+          ],
+          "any": []
+        },
+        "support": "needs_rule_mapping",
+        "baseline_relation": "new",
+        "status_when_met": "selected_ready_needs_rules",
+        "already_in_baseline": false,
+        "summary": "最大法力 ≥ 300 时神像火焰伤害翻倍"
+      }
+    ],
+    "status_labels": {
+      "not_available": "构筑无此来源",
+      "unsupported_action": "动作机制未支持",
+      "auto_active": "自动生效",
+      "auto_inactive": "自动未生效",
+      "auto_unknown": "自动判定待确认",
+      "not_selected": "未选择",
+      "selected_condition_unmet": "已选择·条件不足",
+      "selected_ready_needs_rules": "已选择·条件满足·缺规则映射",
+      "selected_ready_needs_time": "已选择·条件满足·需时间/动作模拟",
+      "selected_unconfirmed": "已选择·机制待确认",
+      "active_supported": "已选择·已接入计算",
+      "already_in_baseline": "已计入基础"
+    },
+    "presets": [
+      {
+        "preset_id": "build_base",
+        "label": "构筑基础状态（默认）",
+        "description": "只含构筑常驻；无临时 Buff、无目标异常、无预设层数。",
+        "states": {
+          "target.chilled": false,
+          "player.craterborn_active": false,
+          "idol.ambition_stacks": 0
+        },
+        "effects": {},
+        "single_cast": {
+          "conflagrate_used": false
+        },
+        "loop": {
+          "crescendoing_rage_enabled": false,
+          "initial_eligible_cast_count": 0,
+          "action_stream": "black_hole_only"
+        }
+      },
+      {
+        "preset_id": "buff_test",
+        "label": "Buff 覆盖场景",
+        "description": "假设 Craterborn 与目标冰缓同时有效，用于比较上限；仍不重算 DPS。",
+        "states": {
+          "target.chilled": true,
+          "player.craterborn_active": true,
+          "idol.ambition_stacks": 0
+        },
+        "effects": {
+          "meteor.craterborn": {
+            "enabled": true
+          },
+          "frost_wall.chilled_touch": {
+            "enabled": true
+          }
+        },
+        "single_cast": {
+          "conflagrate_used": false
+        },
+        "loop": {
+          "crescendoing_rage_enabled": false,
+          "initial_eligible_cast_count": 0,
+          "action_stream": "black_hole_only"
+        }
+      }
+    ],
+    "baseline_scenario": {
+      "schema": "bh-conditional-scenario-v1",
+      "mode": "fixed_conditions",
+      "baseline_profile": "build_base",
+      "preset_id": "build_base",
+      "binding": {
+        "build_id": "letools:toolnative-save",
+        "revision_id": "rev-dbba378f6fe3d829",
+        "build_content_sha256": "9f1c0f4c2d0b4b7a9a2f8d1e6c3b5a7d9e1f2a3b4c5d6e7f8091a2b3c4d5e6f7",
+        "calc_input_sha256": "1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f809",
+        "dataset_id": "phase1-dataset-003",
+        "registry_id": "bh-conditional-effects-v1",
+        "registry_sha256": "0f1e2d3c4b5a69788796a5b4c3d2e1f00f1e2d3c4b5a69788796a5b4c3d2e1f0",
+        "ruleset_id": "bh-stage1-v4",
+        "ruleset_sha256": "7a8b9c0d1e2f3041526374859687a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6"
+      },
+      "states": {
+        "target.chilled": false,
+        "player.craterborn_active": false,
+        "idol.ambition_stacks": 0
+      },
+      "effects": {},
+      "single_cast": {
+        "conflagrate_used": false
+      },
+      "loop": {
+        "crescendoing_rage_enabled": false,
+        "initial_eligible_cast_count": 0,
+        "action_stream": "black_hole_only"
+      }
+    }
+  }
+}

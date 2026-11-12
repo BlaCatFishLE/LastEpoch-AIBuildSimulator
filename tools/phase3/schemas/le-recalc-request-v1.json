@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-calc/le-recalc-request-v1.json",
+  "title": "Local recompute request v1 (le-recalc-request-v1)",
+  "description": "LIVE request contract (workflow-interface §10.3 / player-report-ui LIVE-04/07): the client submits the complete editable scenario with case/model/capabilities/input/report bindings. Fields or scenario keys not declared by the model capabilities are rejected by the service, never silently ignored or coerced to 0. request_id/client_edit_revision/client_session_id are echoed back; client_edit_revision must be strictly newer than the last accepted revision **within the same client_session_id** (page-load scoped, so tabs and refreshes never reject each other). Old clients without client_session_id are accepted in an isolated per-request scope and marked client_session_legacy=true in the response; they must upgrade for LIVE-07 old-response protection.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "request_id",
+    "client_edit_revision",
+    "case_id",
+    "model_id",
+    "capabilities_version",
+    "report_ref",
+    "input_fingerprints",
+    "scenario",
+    "command"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "le-recalc-request-v1"
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "客户端生成的请求 ID；仅用于回显/关联，不作为防旧响应覆盖的唯一依据"
+    },
+    "client_edit_revision": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "客户端编辑版本；服务端要求严格大于上次已接受版本，用于丢弃旧响应"
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_id": {
+      "type": "string",
+      "enum": [
+        "black-hole",
+        "hit"
+      ],
+      "description": "模型 ID；与服务报告不一致时明确拒绝（不得回落默认 BH 适配器）"
+    },
+    "capabilities_version": {
+      "type": "string",
+      "minLength": 1,
+      "description": "所依据的模型能力描述版本（见 report-capabilities.json）；不一致拒绝"
+    },
+    "report_ref": {
+      "$ref": "#/$defs/report_ref",
+      "description": "本次计算所基于的报告绑定（run/case/model/输入指纹/页面端点）"
+    },
+    "input_fingerprints": {
+      "type": "object",
+      "required": [
+        "calc_input",
+        "ruleset",
+        "snapshot",
+        "dataset"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "calc_input": {
+          "$ref": "#/$defs/sha256"
+        },
+        "ruleset": {
+          "$ref": "#/$defs/sha256"
+        },
+        "snapshot": {
+          "$ref": "#/$defs/sha256"
+        },
+        "dataset": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "完整可编辑场景：baseline_profile/target/states/mode_policy/model_parameters（字段集合由 capabilities 声明；旧报告 JS 的 effects/hit_override 等兼容字段仍受严格类型/范围校验）"
+    },
+    "command": {
+      "type": "string",
+      "enum": [
+        "prepare",
+        "compute",
+        "recompute"
+      ],
+      "description": "prepare 只校验并回显规范化场景；compute/recompute 计算并返回整份 HTML"
+    },
+    "client_session_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$",
+      "description": "页面会话 id（每次页面加载生成，如 crypto.randomUUID() 或等价随机串）；同一会话内 client_edit_revision 严格递增。缺省=旧客户端兼容：服务端用隔离的 request_id 作用域，不共享全局编辑历史，响应 client_session_legacy=true。"
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact_path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "仓库根相对路径（禁止机器绝对路径）"
+    },
+    "report_ref": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "case_id",
+        "model_id",
+        "run_id",
+        "run_dir",
+        "report_path",
+        "input_fingerprints",
+        "recompute_endpoint",
+        "ui_contract_version",
+        "renderer_fingerprint"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "schema_version": {
+          "const": "le-report-ref-v1"
+        },
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_id": {
+          "type": "string",
+          "enum": [
+            "black-hole",
+            "hit"
+          ]
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_dir": {
+          "$ref": "#/$defs/artifact_path"
+        },
+        "report_path": {
+          "$ref": "#/$defs/artifact_path"
+        },
+        "input_fingerprints": {
+          "type": "object",
+          "required": [
+            "calc_input",
+            "ruleset",
+            "snapshot",
+            "dataset"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "calc_input": {
+              "$ref": "#/$defs/sha256"
+            },
+            "ruleset": {
+              "$ref": "#/$defs/sha256"
+            },
+            "snapshot": {
+              "$ref": "#/$defs/sha256"
+            },
+            "dataset": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        },
+        "recompute_endpoint": {
+          "type": "string",
+          "pattern": "^http://(127\\.0\\.0\\.1|localhost|\\[::1\\]):[0-9]{1,5}/recompute$"
+        },
+        "ui_contract_version": {
+          "const": "le-player-report-ui-v1"
+        },
+        "renderer_fingerprint": {
+          "$ref": "#/$defs/sha256"
+        },
+        "capabilities_path": {
+          "$ref": "#/$defs/artifact_path"
+        },
+        "canonical": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

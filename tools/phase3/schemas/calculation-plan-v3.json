@@ -1,0 +1,898 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lastepoch-buildsim.local/schemas/calculation-plan-v3.json",
+  "title": "le-calculation-plan-v3",
+  "description": "plan-v3：纯 DoT 组件、独立施加时钟（cast/spawn/ignite expiry）、多实例并发与 eager/patient 充能调度；未实现语义在结构校验入口拒绝。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "plan_id",
+    "plan_sha256",
+    "subject",
+    "compiler",
+    "executor_requirements",
+    "input_refs",
+    "sources",
+    "facts",
+    "parameters",
+    "controls",
+    "conditions",
+    "components",
+    "effects",
+    "evaluation",
+    "schedule",
+    "evaluations",
+    "diagnostics",
+    "assumptions",
+    "scope",
+    "presentation"
+  ],
+  "properties": {
+    "schema": {
+      "const": "le-calculation-plan-v3"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^cp-[0-9a-f]{64}$"
+    },
+    "plan_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "build_id",
+        "revision_id",
+        "main_ability_id"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string"
+        },
+        "build_id": {
+          "type": "string"
+        },
+        "revision_id": {
+          "type": "string"
+        },
+        "main_ability_id": {
+          "type": "string"
+        }
+      }
+    },
+    "compiler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "origin",
+        "implementation_fingerprint",
+        "fingerprint"
+      ],
+      "properties": {
+        "version": {
+          "type": "string"
+        },
+        "origin": {
+          "enum": [
+            "profile_v2",
+            "native_template",
+            "definitions_v3"
+          ]
+        },
+        "implementation_fingerprint": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "executor_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "handlers",
+        "executor_fingerprint"
+      ],
+      "properties": {
+        "handlers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "handler_id",
+              "version"
+            ],
+            "properties": {
+              "handler_id": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "executor_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "input_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role",
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "role": {
+            "enum": [
+              "case",
+              "profile",
+              "profile_content",
+              "calculation_input",
+              "build_spec",
+              "dataset_pointer",
+              "dataset_content",
+              "attribute_conversion_rules",
+              "compiler_source",
+              "template",
+              "scenario",
+              "mechanism_library",
+              "rule_file"
+            ]
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "facts": {
+      "type": "object"
+    },
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "skill",
+        "crit",
+        "ailments",
+        "additional_chance",
+        "damage_to_penetration",
+        "cooldown_reduction"
+      ],
+      "properties": {
+        "skill": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_damage",
+            "added_damage_scaling",
+            "crit_chance",
+            "crit_multiplier",
+            "cooldown_s",
+            "action_s",
+            "skill_name"
+          ],
+          "properties": {
+            "base_damage": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "added_damage_scaling": {
+              "type": "number",
+              "minimum": 0
+            },
+            "crit_chance": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "crit_multiplier": {
+              "type": "number",
+              "minimum": 0
+            },
+            "cooldown_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "action_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "base_attack_rate": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "skill_name": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "crit": {
+          "type": "object"
+        },
+        "ailments": {
+          "type": "array",
+          "maxItems": 0
+        },
+        "additional_chance": {
+          "type": "object"
+        },
+        "damage_to_penetration": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "cooldown_reduction": {
+          "type": "number"
+        },
+        "attribute_ratios": {
+          "type": "object"
+        },
+        "attribute_conversion": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "control_id",
+          "namespace",
+          "key",
+          "type",
+          "default"
+        ],
+        "properties": {
+          "control_id": {
+            "type": "string"
+          },
+          "namespace": {
+            "enum": [
+              "state",
+              "target"
+            ]
+          },
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "enum": [
+              "boolean",
+              "integer",
+              "number"
+            ]
+          },
+          "default": {
+            "type": [
+              "boolean",
+              "integer",
+              "number",
+              "null"
+            ]
+          },
+          "min": {
+            "type": [
+              "integer",
+              "number",
+              "null"
+            ]
+          },
+          "max": {
+            "type": [
+              "integer",
+              "number",
+              "null"
+            ]
+          },
+          "readonly": {
+            "type": "boolean"
+          },
+          "effect": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "requires_target": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "condition_id",
+          "op",
+          "terms"
+        ],
+        "properties": {
+          "condition_id": {
+            "type": "string"
+          },
+          "op": {
+            "enum": [
+              "always",
+              "all",
+              "any"
+            ]
+          },
+          "terms": {
+            "type": "array"
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "description": "plan-v3 当前只实现纯 dot 组件（BH 本体）；不得伪造 Hit。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "component_id",
+          "kind",
+          "damage_type",
+          "tags",
+          "scope",
+          "crit_capable",
+          "base_damage",
+          "added_damage_scaling",
+          "duration_s",
+          "tick_interval_s",
+          "damage_at_start",
+          "remainder_policy"
+        ],
+        "properties": {
+          "component_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "const": "dot"
+          },
+          "damage_type": {
+            "enum": [
+              "Fire",
+              "Cold",
+              "Lightning",
+              "Physical",
+              "Void",
+              "Necrotic",
+              "Poison"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "scope": {
+            "const": "body"
+          },
+          "crit_capable": {
+            "const": false
+          },
+          "base_damage": {
+            "type": "number",
+            "minimum": 0
+          },
+          "added_damage_scaling": {
+            "type": "number",
+            "minimum": 0
+          },
+          "duration_s": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "tick_interval_s": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "damage_at_start": {
+            "const": true,
+            "description": "当前执行器只支持 spawn 首跳；false 在结构/绑定入口拒绝"
+          },
+          "remainder_policy": {
+            "const": "ceil_full_ticks"
+          }
+        }
+      }
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "effect_id",
+          "category",
+          "stage",
+          "handler_id",
+          "handler_version",
+          "stat_key",
+          "operation",
+          "unit",
+          "included_static",
+          "required",
+          "emits_contribution",
+          "value_mode",
+          "value_params",
+          "source_refs",
+          "ownership_key",
+          "support_status"
+        ],
+        "properties": {
+          "effect_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "base",
+              "mod",
+              "passive",
+              "node_binding",
+              "attribute_conversion",
+              "attribute_scaling",
+              "effect",
+              "state_scaling",
+              "movement_conversion",
+              "cooldown_reduction"
+            ]
+          },
+          "stage": {
+            "enum": [
+              "baseline",
+              "pre_attribute",
+              "pre_attribute_effects",
+              "attribute_conversion",
+              "attribute_scaling",
+              "derived_pools",
+              "damage_components",
+              "frequency",
+              "projection"
+            ]
+          },
+          "handler_id": {
+            "type": "string"
+          },
+          "handler_version": {
+            "type": "string"
+          },
+          "stat_key": {
+            "type": "string"
+          },
+          "operation": {
+            "enum": [
+              "added",
+              "increased",
+              "more",
+              "base",
+              "flag"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "flat",
+              "percent",
+              "seconds",
+              "flag"
+            ]
+          },
+          "included_static": {
+            "type": "boolean"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "emits_contribution": {
+            "type": "boolean"
+          },
+          "value_mode": {
+            "enum": [
+              "static",
+              "condition",
+              "condition_code",
+              "state_count",
+              "stack_scale",
+              "movement_conversion"
+            ]
+          },
+          "value_params": {
+            "type": "object"
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ownership_key": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "support_status": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stage_order",
+        "effect_stage",
+        "dependencies",
+        "ownership"
+      ],
+      "properties": {
+        "stage_order": {
+          "const": [
+            "baseline",
+            "pre_attribute",
+            "pre_attribute_effects",
+            "attribute_conversion",
+            "attribute_scaling",
+            "derived_pools",
+            "damage_components",
+            "frequency",
+            "projection"
+          ]
+        },
+        "effect_stage": {
+          "type": "object"
+        },
+        "dependencies": {
+          "type": "array"
+        },
+        "ownership": {
+          "const": "unique_by_ownership_key"
+        }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "driver",
+        "horizon_s",
+        "windows_s",
+        "cast",
+        "charges",
+        "action_policies",
+        "primary_policy",
+        "ignite",
+        "target"
+      ],
+      "properties": {
+        "schema": {
+          "const": "le-schedule-v3"
+        },
+        "driver": {
+          "const": "charge_dot_cycle"
+        },
+        "horizon_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "windows_s": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "cast": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_rate_per_s"
+          ],
+          "properties": {
+            "base_rate_per_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "animation_speed": {
+              "type": "number",
+              "minimum": 0
+            },
+            "speed_multiplier": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "charges": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_max_charges",
+            "base_recharge_s"
+          ],
+          "properties": {
+            "base_max_charges": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "extra_max_charges": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "base_recharge_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "flat_adjustment_s": {
+              "type": "number",
+              "minimum": 0
+            },
+            "cooldown_reduction": {
+              "type": "number",
+              "minimum": 0,
+              "exclusiveMaximum": 1
+            }
+          }
+        },
+        "action_policies": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "required": [
+              "policy_id"
+            ],
+            "properties": {
+              "policy_id": {
+                "enum": [
+                  "eager",
+                  "patient"
+                ]
+              },
+              "label": {
+                "type": "string"
+              },
+              "cast_condition": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "primary_policy": {
+          "enum": [
+            "eager",
+            "patient"
+          ]
+        },
+        "ignite": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_damage",
+            "base_duration_s",
+            "scaling_tags",
+            "rolls_per_second",
+            "first_roll_at",
+            "chance_total"
+          ],
+          "properties": {
+            "ailment": {
+              "type": "string"
+            },
+            "damage_type": {
+              "type": "string"
+            },
+            "base_damage": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "base_duration_s": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "scaling_tags": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "duration_stat_key": {
+              "type": "string"
+            },
+            "rolls_per_second": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "first_roll_at": {
+              "const": "spawn"
+            },
+            "chance_total": {
+              "type": "number",
+              "minimum": 0
+            },
+            "chance_points": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "chance_per_point": {
+              "type": "number",
+              "minimum": 0
+            }
+          }
+        },
+        "target": {
+          "type": "object",
+          "required": [
+            "monster_damage_reduction_control"
+          ],
+          "properties": {
+            "monster_damage_reduction_control": {
+              "type": "string"
+            },
+            "monster_damage_reduction_default": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        }
+      }
+    },
+    "evaluations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "evaluation_id",
+          "metrics",
+          "primary",
+          "action_policy",
+          "scenario_path",
+          "scenario_sha256"
+        ],
+        "properties": {
+          "evaluation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "metrics": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "primary": {
+            "type": "boolean"
+          },
+          "scenario_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scenario_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "action_policy": {
+            "enum": [
+              "eager",
+              "patient"
+            ]
+          }
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "array"
+    },
+    "assumptions": {
+      "type": "array"
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "skill",
+        "ailment_labels",
+        "limitations"
+      ],
+      "properties": {
+        "skill": {
+          "type": "string"
+        },
+        "ailment_labels": {
+          "type": "array"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "presentation": {
+      "type": "object"
+    }
+  }
+}

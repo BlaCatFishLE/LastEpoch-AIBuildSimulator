@@ -1,0 +1,40 @@
+{
+  "schema": "monster-dr-v1",
+  "description": "Last Epoch monster damage reduction by monster level (enemy DR). Multiplier applied to all damage dealt to monsters: damage_taken = damage_model * (1 - dr).",
+  "source": {
+    "url": "https://lastepoch.tunklab.com/mobdr",
+    "title": "Tunklab: Monster Damage Reduction",
+    "retrieved": "2026-11-05",
+    "page_js_chunk": "https://lastepoch.tunklab.com/_next/static/chunks/1ujt3xs36b3ws.js",
+    "page_js_chunk_sha256": "ac18ea758ef49a70e42bc672ec50b3b09a716073a8395aaa8561d60cf08ad5c8",
+    "extraction": "page module 713995 maps level e=1..100 to n.k[e], where module 673465 exports k=[...] (101 values, index 0..100). The page renders mitigation = k[e]*100 percent.",
+    "table_sha256": "8c2fd425a0dcdfc137f27dd46d22840828e19904ca15dc23fad78636f597963a",
+    "source_game_version": "1.5.2 (tunklab page metadata)"
+  },
+  "level_range": [1, 100],
+  "levels": {
+    "1": 0.0, "2": 0.0, "3": 0.0, "4": 0.0, "5": 0.0, "6": 0.0,
+    "7": 0.015, "8": 0.03, "9": 0.045, "10": 0.06, "11": 0.075, "12": 0.09,
+    "13": 0.105, "14": 0.12, "15": 0.135, "16": 0.15, "17": 0.165, "18": 0.18,
+    "19": 0.195, "20": 0.21, "21": 0.225, "22": 0.24, "23": 0.255, "24": 0.27,
+    "25": 0.285, "26": 0.3, "27": 0.31, "28": 0.32, "29": 0.33, "30": 0.34,
+    "31": 0.35, "32": 0.36, "33": 0.37, "34": 0.38, "35": 0.39, "36": 0.4,
+    "37": 0.41, "38": 0.42, "39": 0.43, "40": 0.44, "41": 0.45, "42": 0.46,
+    "43": 0.47, "44": 0.48, "45": 0.49, "46": 0.5, "47": 0.51, "48": 0.52,
+    "49": 0.53, "50": 0.54, "51": 0.55, "52": 0.56, "53": 0.57, "54": 0.58,
+    "55": 0.59, "56": 0.6, "57": 0.608, "58": 0.616, "59": 0.624, "60": 0.632,
+    "61": 0.64, "62": 0.648, "63": 0.656, "64": 0.664, "65": 0.672, "66": 0.68,
+    "67": 0.688, "68": 0.696, "69": 0.704, "70": 0.712, "71": 0.72, "72": 0.728,
+    "73": 0.736, "74": 0.743, "75": 0.75, "76": 0.756, "77": 0.762, "78": 0.768,
+    "79": 0.774, "80": 0.78, "81": 0.786, "82": 0.792, "83": 0.798, "84": 0.804,
+    "85": 0.81, "86": 0.814, "87": 0.818, "88": 0.822, "89": 0.826, "90": 0.83,
+    "91": 0.834, "92": 0.838, "93": 0.842, "94": 0.846, "95": 0.85, "96": 0.854,
+    "97": 0.858, "98": 0.862, "99": 0.866, "100": 0.87
+  },
+  "notes": [
+    "Levels 1-6 have 0% enemy damage reduction; level 7+ ramps up to 87% at level 100.",
+    "The source table covers monster levels 1-100 only.",
+    "Integration treats monster DR as a separate multiplicative target-side factor applied after resistance/penetration: final = model_damage * (1 - effective_resistance) * (1 - monster_dr).",
+    "Level 0 in the calculator means 'disabled / no monster DR' for comparing to the previous no-DR runs."
+  ]
+}

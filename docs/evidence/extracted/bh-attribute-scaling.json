@@ -1,0 +1,89 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-attribute-scaling",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Intelligence 属性缩放（本体）",
+    "en": "Intelligence attribute scaling (body)"
+  },
+  "source_path": "knowledge/mechanisms/bh-attribute-scaling.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-attribute-scaling",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-attribute-scaling]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-bh-attribute-scaling 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Intelligence 属性缩放（本体）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body；条件 code：none；必要节点：node:bh2:0",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Black Hole 每点 Intelligence 提供固定 increased damage，进入本体 inc 加算池（不是独立乘区）。系数来自 bh2 attributeScaling；属性总额来自快照。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "attribute_increase = per_point × snapshot.attribute('intelligence')；作为一条 inc 行并入本体池（source_path=bh2.attributeScaling[2]）。",
+      "source": "$.handler_ref.note（le_calc.damage._collect_increased）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：attribute、increased_per_point、intelligence",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/0/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0].raw_payload.attributeScaling"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/increased/attribute_row"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/attributes/intelligence"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/0",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/increased"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "属性缩放在游戏内是「技能 attributeScaling」而非玩家全局词条；其与玩家 increased damage 是否严格同池在参考模型 q1 里是线索级证据，当前按规则包 confirmed 口径实现。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,215 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-blade-weaving-consume",
+  "revision": 2,
+  "title": {
+    "zh": "Blade Weaver / Blade Weaving：消耗层数获得 more elemental",
+    "en": "Blade Weaver / Blade Weaving consume effect (more elemental per stack)"
+  },
+  "aliases": [
+    "Blade Weaver",
+    "Blade Weaving",
+    "mg-1:50",
+    "more elemental",
+    "消耗层数"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "mg-1:50"
+      ]
+    },
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "letools:UIBuffs:29"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "damage"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "consume_blade_weaving"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Elemental"
+    ],
+    "conditions": [
+      "consume_blade_weaving"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effect definition",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=blade_weaving_consume",
+      "note": "condition: consume_blade_weaving==true；stacks_state: blade_weaving_stacks"
+    },
+    {
+      "parameter": "passive node",
+      "source": "data/releases/phase1-dataset-003/data.sqlite#nodes entity_id=node:letools:mg-1:50",
+      "note": "gain when melee attack cost<10；consume when cost>=10；15% more elemental per stack"
+    },
+    {
+      "parameter": "buff / max stacks",
+      "source": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:29",
+      "note": "UI max 10；本 BD 节点 8 点 → max 8（passive_bonus 每点 +1）"
+    },
+    {
+      "parameter": "stacks state",
+      "source": "current:matched_instances",
+      "unit": "stacks"
+    },
+    {
+      "parameter": "mana threshold",
+      "source": "current:matched_instances",
+      "note": "FR 估算耗蓝 ≥10 → 触发消耗（R6/R14）"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "blade_weaving_consume",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=blade_weaving_consume；#/rules id=R15"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "_effect_rows",
+    "note": "条件满足时按层数加 more 行（group=effect:blade_weaving，value=15%×stacks）"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=blade_weaving_consume",
+      "note": "ruleset 条件效果声明（status confirmed）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes entity_id=node:letools:mg-1:50",
+      "note": "Blade Weaver 节点描述"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:29",
+      "note": "Blade Weaving buff：UIBuffs:29 maxInstances 10"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=passive_bonus source_id=mg-1",
+      "note": "buffs['50'] 每点 +1 max stack；本 BD 8 点 → 8"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#R4.blade_weaving",
+      "note": "facts 的消耗规则与 more 值"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#4.3 Blade Weaver / Blade Weaving",
+      "note": "研究阶段推导"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/blade_weaving_stacks；#/consume_blade_weaving",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/mana/skill_mana_cost_estimate",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "消耗状态/层数来自 scenario；mana≥10 条件由快照估算提供",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/states"
+    },
+    {
+      "with": "fr-effect-frenzy-active",
+      "requirement": "Frenzy/EW 等攻速来源不改变层数获取（mana 阈值由技能决定）",
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/mana"
+    },
+    {
+      "with": "common-more-groups",
+      "requirement": "该 more 组独立于其它组",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/more_per_group"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "消耗后清零/持续时间无数据；模型按『消耗即清零、仅该次攻击生效』（assumed）",
+      "max stacks 8 来自本 BD 节点点数 8；UI 上限 10 不是本 BD 值",
+      "mana 精确值 unresolved（OQ5），但两种候选都 ≥10，不影响消耗判定"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "more",
+    "stacking_policy": "linear_per_stack",
+    "order_policy": "消耗全部层数，该次攻击按每层 15% 汇总进同一 more 组（不是每层独立相乘）",
+    "more_group_source": "dataset 节点描述（multiplicative with other modifiers）+ 参考 runtime 硬编码 .15×stacks；R15 derived"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "common-conditional-state-eval",
+  "kind": "mechanism",
+  "title": {
+    "zh": "条件状态求值（条件效果通道）",
+    "en": "Conditional state evaluation (conditional-effect channel)"
+  },
+  "source_path": "knowledge/mechanisms/common-conditional-state-eval.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "条件求值语义由注册表 effects[].conditions/control 与场景契约定义，没有单条规则 ID；注册表 tools/phase3/rules/conditional-effects-bh-stage1-v1.json 是权威源。",
+    "verification": {
+      "status": "declared_none",
+      "checked_against": null,
+      "note": "条目声明该机制没有可引用的游戏规则 ID（ref 内写明原因）"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "条件状态求值（条件效果通道）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：conditional、condition_state；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "把场景 states/effects（固定条件估算）求值成「已满足/未满足/未知」，并只对已映射的效果生成重算提案；不模拟获得/维持状态的操作成本。当前仅 BH 案例接入（FR 仍是 hit_buffs 独立筛查）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "求值主入口：evaluate_effect/condition_results/_modifier_results；场景规范化在 le_calc.conditional.scenario.normalize_scenario/validate_scenario；重算在 le_calc.conditional.recompute.recompute_scenario。",
+      "source": "$.handler_ref.note（le_calc.conditional.evaluate.evaluate_scenario）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：scenario states、scenario effects、baseline_profile",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/conditional/evaluation_summary"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/effects"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/baseline_profile"
+    },
+    {
+      "pointer": "$/validation_refs/5",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[conditional.context_status]"
+    },
+    {
+      "pointer": "$/interaction_requirements/0/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states"
+    },
+    {
+      "pointer": "$/interaction_requirements/1/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline_profile"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/conditional"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "FR 尚未接入该通道（handover §3：FR 无 conditional 重算通道，仍用 hit_buffs 筛查）；作为共享算子当前只有 BH 一个消费者。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "条件求值只做固定条件估算，不模拟获取/维持成本；状态组合的理论可达性由各条目自行说明。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,113 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "ballista-summon-limit-lifetime",
+  "revision": 2,
+  "title": {
+    "zh": "Ballista 召唤上限、存续与替换事件"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "Ballista 召唤上限、存续与替换事件"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "ba1574:2",
+        "ba1574:14",
+        "ba1574:15"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "summon",
+      "lifecycle"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "ba1574 召唤 entity:100053，目录配置 duration=10、limit=2、numberToSummon=1。节点会改变存续与放置速度；放置、存活数量、单位攻击频率须分开。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.frequency#derivation.lifecycle",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.frequency#derivation.lifecycle"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "parameter_bindings": [
+    {
+      "parameter": "current_points_and_mods",
+      "source": "current:calculation_input.skills.specializations/ba1574 + current:mods",
+      "unit": "current",
+      "note": "只从本次输入绑定；不保存当前31点合计倍率。"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "IL 级逆向证据（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "IL 级中文结论（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json",
+      "note": "冻结 dataset 1.5.2 原值；节点含义对照官方资料，不用新版本文案替换旧数据。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/ballista/ballista-mechanism-review-20261112.zh-CN.md"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前构筑数值包（本轮）"
+    },
+    {
+      "kind": "reverse_engineering",
+      "detail": "SummonEntityOnDeath：duration=(10+addedDuration)×(1+increasedDuration)=(10)×(1+0.30-0.40-0.25)=6.5s；limit=2；超限时 getLowestPriority→unsummon+SelfDestroyer.die；到期 UnsummonAfterDelay→unsummon→Dying.die。",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#3-爆炸触发与-ability_gen327"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "duration 修正的节点 op 已按 additive increased 核；其它 duration 来源未纳入。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "knowledge/definitions/ballista-armed-construction-v4.json"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": [],
+  "limitations": [
+    {
+      "item": "启动瞬态",
+      "reason": "前两个召唤的死亡要等到期/替换，只影响启动窗口，不影响长期平均事件率。",
+      "blocks_full_dps": false
+    }
+  ]
+}

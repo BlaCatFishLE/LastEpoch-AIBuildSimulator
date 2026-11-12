@@ -1,0 +1,164 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cond-idol-fire-doubling",
+  "revision": 1,
+  "title": {
+    "zh": "Grand Arcane Omen Idol · 最大法力门槛火伤翻倍（idols.2 + idols.3，合并登记）",
+    "en": "Grand Arcane Omen Idol fire damage doubling (idols.2 + idols.3, merged entry)"
+  },
+  "aliases": [
+    "Grand Arcane Omen Idol",
+    "火伤翻倍",
+    "最大法力",
+    "300 mana",
+    "idols.2",
+    "idols.3",
+    "idol.fire_damage_mana_threshold",
+    "idol.fire_damage_mana_threshold.idols_3"
+  ],
+  "selectors": [
+    {
+      "kind": "idol",
+      "namespace": "idol",
+      "ids": [
+        "equipment:idols.2",
+        "equipment:idols.3"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "auto.max_mana_gte_300"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body_fire",
+      "ignite"
+    ],
+    "tags": [
+      "Fire"
+    ],
+    "conditions": [
+      "auto.max_mana_gte_300"
+    ],
+    "notes": "两枚神像词条机制相同（基础 increased fire damage + 最大法力 ≥ 300 时翻倍），仅实例不同，故合并为一条机制登记；两个 effect_id 均映射到本条目（merge 说明见 research_notes）。门槛由 snapshot.derived.mana_max 自动判定；当前 230.28 < 300，翻倍不生效，只有基础行计入。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "idol.fire_damage_mana_threshold",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=idol.fire_damage_mana_threshold]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "idols.2 mod",
+      "source": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/114",
+      "note": "基础 increased 火伤 + 最大法力达门槛时翻倍（数值见词条）。"
+    },
+    {
+      "parameter": "idols.3 mod",
+      "source": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/118",
+      "note": "基础 increased 火伤 + 最大法力达门槛时翻倍（数值见词条）。"
+    },
+    {
+      "parameter": "effect values",
+      "source": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/10/values",
+      "note": "idols.2 的 base/doubling/threshold。"
+    },
+    {
+      "parameter": "idols.3 values",
+      "source": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/11/values"
+    },
+    {
+      "parameter": "mana threshold",
+      "source": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/mana_max",
+      "unit": "flat",
+      "note": "auto.max_mana_gte_300 的派生来源。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.stats",
+    "symbol": "build_snapshot",
+    "note": "_SnapshotBuilder.resolve_doubled_fire 在快照阶段判定门槛并拆分基础行/翻倍行（condition_status=not_satisfied）；条件求值侧 control.kind=none（只读自动判定）。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/10",
+      "note": "注册表条目 idols.2（support=engine_supported）。"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/11",
+      "note": "注册表条目 idols.3（support=engine_supported）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/10",
+      "note": "idols.2 求值：门槛不满足（auto_inactive）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/11",
+      "note": "idols.3 求值：门槛不满足（auto_inactive）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/idol.fire_damage_mana_threshold",
+      "note": "条件重算通道状态（自动判定，不可手动绕过）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/mana_max",
+      "note": "当前最大法力值（<300，门槛不满足）。"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_double_fire_affixes_are_split",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_300_mana_condition_is_not_satisfied",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeEffectDirectionTests::test_auto_effects_default_on",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeChannelSupportTests::test_covers_every_registered_effect"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-increased-aggregate",
+      "requirement": "翻倍增量与基础值都要进 fire inc 池；不能重复计基础值。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/10/modifiers"
+    },
+    {
+      "with": "bh-ignite-scaling-pool",
+      "requirement": "火伤 increased 进入 Ignite inc 池（Fire 标签匹配）。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_scaling"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/10",
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/11",
+      "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/mana_max",
+      "tools/phase3/tests/test_stats.py",
+      "tools/phase3/tests/test_conditional_recompute.py"
+    ],
+    "open_questions": [
+      "门槛严格性（over 300 vs ≥300）：当前 230.28 远低于门槛，不影响本案例；换装跨 300 时需确认。"
+    ],
+    "requery_when": [
+      "换装使最大法力接近/超过 300 时"
+    ],
+    "merge_rationale": "合并登记：idol.fire_damage_mana_threshold（idols.2）与 idol.fire_damage_mana_threshold.idols_3 （idols.3）是同一词条机制的两个实例（同来源、同条件、同 operation，仅实例/数值不同），按『一条机制一个文件』合并为 bh-cond-idol-fire-doubling；两个 effect_id 均在本条目 aliases 与 rule_ref/selectors 中可检索。"
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "case_bound"
+}

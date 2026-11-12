@@ -1,0 +1,243 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-enchant-weapon",
+  "revision": 2,
+  "title": {
+    "zh": "Enchant Weapon（sb44eQ）active/passive：more melee elemental、攻速、added fire 与 increased",
+    "en": "Enchant Weapon (sb44eQ) active/passive buff: more melee elemental, attack speed, added fire, increased damage"
+  },
+  "aliases": [
+    "Enchant Weapon",
+    "EW",
+    "Kindling Blade",
+    "sb44eQ",
+    "more elemental",
+    "Molten Steel",
+    "Celerity"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "sb44eQ"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "sb44eQ:1",
+        "sb44eQ:7",
+        "sb44eQ:14",
+        "sb44eQ:16",
+        "sb44eQ:17",
+        "sb44eQ:18",
+        "sb44eQ:20",
+        "sb44eQ:25"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "attack_speed",
+        "damage",
+        "added_damage"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "enchant_weapon_active"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Elemental"
+    ],
+    "conditions": [
+      "enchant_weapon_active"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effect definitions",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=enchant_weapon_active；#/effects id=enchant_weapon_passive_more",
+      "note": "active 与 passive 是两个独立 more 组；两者都是 Elemental|Melee"
+    },
+    {
+      "parameter": "active 参数",
+      "source": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_bonus source_id=sb44eQ（mods 1/7/14/16/17/18/20/25）",
+      "note": "Celerity 攻速、Molten Steel added/increased fire、Efficacy increased elemental、Concentration 时长、Kindling Blade autoRecast"
+    },
+    {
+      "parameter": "state",
+      "source": "current:scenario#/states/enchant_weapon_active",
+      "unit": "bool"
+    },
+    {
+      "parameter": "applied effect rows",
+      "source": "current:matched_instances",
+      "unit": "mixed"
+    },
+    {
+      "parameter": "EW cooldown ICR",
+      "source": "current:matched_instances",
+      "unit": "percent",
+      "note": "active duration/cooldown 见 facts R4.enchanted_weapon"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "enchant_weapon_active",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=enchant_weapon_active；#/effects id=enchant_weapon_passive_more；#/rules id=R19"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "_effect_rows",
+    "note": "active modifiers 通过 ruleset effect 进入各池；passive more 常驻（专精后）同样由 ruleset effect 提供；EW 的 active duration/cooldown 由 facts 记录但未在伤害引擎内模拟覆盖率"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "user_conversation#2026-11-07",
+      "note": "Enchant Weapon 只要有近战命中就激活（常驻）"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=enchant_weapon_active",
+      "note": "ruleset 的 EW active 效果与 modifiers"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=enchant_weapon_passive_more",
+      "note": "ruleset 的 EW passive more"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_bonus source_id=sb44eQ",
+      "note": "每点 mods：activeMeleeAttackSpeed/activeAddedMeleeFireDamage/activeIncreasedMeleeFireDamage/activeIncreasedMeleeElementalDamage/autoRecast"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=sb44eQ",
+      "note": "EW 技能树与已选节点（1/7/14/16/17/18/20/25）"
+    },
+    {
+      "kind": "planner_runtime",
+      "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 676800-682200",
+      "note": "第三方 class rrljt 硬编码 passive .15 / active .5 more melee elemental（参考）"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#R4.enchanted_weapon",
+      "note": "facts 的 EW 参数聚合（时长、冷却、more/increased/added）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/enchant_weapon_active；archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/applied_states",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=cooldown_recovery_speed]",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/applied_effects[id in (enchant_weapon_active, enchant_weapon_passive_more)]",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "fr-hit-more-groups",
+      "requirement": "active/passive 两个独立 more 组；不能合并成一个组",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=enchant_weapon_active / enchant_weapon_passive_more"
+    },
+    {
+      "with": "fr-hit-attack-speed",
+      "requirement": "EW active 的 +50% increased melee AS 进入攻速加算池",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=enchant_weapon_active"
+    },
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "enchant_weapon_active 为 scenario 状态；Kindling Blade 自动触发只作为常驻假设",
+      "evidence_locator": "tools/phase3/rules/fr-hit-facts-v1.json#R7.enchant_weapon_auto"
+    },
+    {
+      "with": "common-more-groups",
+      "requirement": "两个 more 组按 group 身份各自相乘",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/more_per_group"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "R4：EW active 参数映射（攻速/fire flat/fire increased/elemental increased）与 autoRecast 实际触发频率未在游戏内验证",
+      "EW 的 duration/cooldown 用 ICR 公式推导（8.33s < 9s → 理论全覆盖），游戏真值未验证",
+      "legacy_single_skill 的 scenario 注释说关闭 EW active，但 states 里 enchant_weapon_active=true；两基线实际差异只有 Army of Skin（需 Lead 复核注释）"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "more",
+    "stacking_policy": "none",
+    "order_policy": "两个独立 more 组（active/passive）；另提供 increased melee AS、added melee fire、increased melee fire、increased melee elemental 行进入各自池",
+    "more_group_source": "ruleset effects 明确 group=effect:enchant_weapon:active_more / effect:enchant_weapon:passive_more（R19 derived；第三方 runtime 硬编码值）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "sb44eQ"
+  ]
+}

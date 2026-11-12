@@ -1,0 +1,135 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-flame-reave-v3",
+  "kind": "definition",
+  "title": {
+    "zh": "Flame Reave · 原生多命中定义",
+    "en": "Flame Reave native multi-hit definition"
+  },
+  "source_path": "knowledge/definitions/fr-flame-reave-v3.json",
+  "evidence_state": null,
+  "implementation_state": null,
+  "state_note": "共享定义模板没有 evidence_state/implementation_state 字段；证据状态见定义内 limitations/coverage 与 evidence 定位，登记状态见对应机制条目",
+  "rule_ref": {
+    "kind": "definition_template",
+    "ref": "fr-flame-reave-v3",
+    "path": "knowledge/definitions/fr-flame-reave-v3.json",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/fr-flame-reave-v3.json",
+      "note": "共享定义模板本身是计算权威（自包含规则段），不引用外部规则 ID；规则 ID 在对应规则包/机制条目中单独登记"
+    }
+  },
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave · 原生多命中定义",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "ability_id=fr11mv；binding_version=definitions_v3.selector-v1",
+      "source": "$.ability_id/binding_version/capabilities"
+    },
+    {
+      "text": "定义规则段（共享计算语义的权威位置）：attribute_scaling、hit_events、rotation、item_effectiveness、added_damage_conversion、row_normalizations、crit",
+      "source": "$.definition.rules"
+    },
+    {
+      "text": "迁移口径：共享语义/节点/装备规则/证据在此；当前实例经 selector 与真实 FrozenContext 绑定；场景默认值在独立 scenario 文件，不进入共享定义；多命中/频率/周期平均使用 plan-v2/result-v4 显式契约",
+      "source": "$.migration.policy"
+    },
+    {
+      "text": "迁移口径：canonical case.json 必须走 definitions_v3；legacy/profile/hit 文件仅作迁移证据，不参与默认入口。",
+      "source": "$.migration.entry_policy"
+    },
+    {
+      "text": "定义声明了技能结构（组件/标签/暴击能力）；具体数值见 knowledge JSON 与 dataset",
+      "source": "$.definition.skill（仅结构字段，不复制数值）"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/definition/effects/0/evidence/0/locator",
+      "original": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 676800-682200"
+    },
+    {
+      "pointer": "$/definition/effects/1/evidence/0/locator",
+      "original": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 676800-682200"
+    },
+    {
+      "pointer": "$/definition/effects/2/evidence/1/locator",
+      "original": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 444900-447300"
+    },
+    {
+      "pointer": "$/definition/rules/rotation/evidence/1/locator",
+      "original": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 667435"
+    },
+    {
+      "pointer": "$/definition/rules/item_effectiveness/evidence/1/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods equipment.weapon1#unique_mod#2"
+    },
+    {
+      "pointer": "$/definition/limitations/9",
+      "original": "旧单次命中/持续输出的表头与指标不逐字沿用，差异见迁移记录（archive://docs/reviews/unified-dps-step4-fr-implementation.zh-CN.md）。"
+    },
+    {
+      "pointer": "$/migration/from",
+      "original": "archive://examples/flame-reave/case.legacy-hit.json（model=hit；hit_inputs/hit_damage/hit_simulate legacy 路径）"
+    },
+    {
+      "pointer": "$/migration/baseline",
+      "original": "archive://reports/flame-reave/verify-baseline-flame-reave-20261110T1245/"
+    },
+    {
+      "pointer": "$/migration/canonical_case",
+      "original": "archive://examples/flame-reave/case.json"
+    },
+    {
+      "pointer": "$/migration/migration_case",
+      "original": "archive://examples/flame-reave/case.legacy-hit.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "只覆盖 Flame Reave 本体直接命中：不包含 Ignite/DoT 本体伤害、其它技能伤害、召唤物与队伍 Buff。",
+      "source": "$.definition.limitations[0]"
+    },
+    {
+      "text": "单次命中评估与持续输出评估共享当前 states 取值，但使用独立场景文件与独立场景哈希；周期平均因子只作用于持续输出。",
+      "source": "$.definition.limitations[1]"
+    },
+    {
+      "text": "fire_only：只计算 Fire 组件，显式非 Fire typed added damage（Physical/Cold/Bow/Spell 等）不进入本组件；无转伤机制。",
+      "source": "$.definition.limitations[2]"
+    },
+    {
+      "text": "无类型 added damage 按自适应 Fire 结算；非 Fire typed added damage 保持排除。",
+      "source": "$.definition.limitations[3]"
+    },
+    {
+      "text": "多命中按每次施放 4 击、权重 [1.0,0.5,0.5,0.5]（额外命中 50% less）；距离衰减未建模，默认贴脸。",
+      "source": "$.definition.limitations[4]"
+    },
+    {
+      "text": "Rhythm of Fire 按纯 FR 每 4 次施放消耗一次的固定条件估算（×1.325），不模拟叠层获取/消耗过程与其它技能补层。",
+      "source": "$.definition.limitations[5]"
+    },
+    {
+      "text": "mana 相关不建模（无限法力口径）；只保留当前状态条件。",
+      "source": "$.definition.limitations[6]"
+    },
+    {
+      "text": "Enchant Weapon 视为近战命中期间常驻（Kindling Blade 自动施放，assumed）；Army of Skin 高血量条件默认成立。",
+      "source": "$.definition.limitations[7]"
+    },
+    {
+      "text": "目标火抗 0、怪物等级减伤按迁移基线口径；负抗下限与区域抗性不建模。",
+      "source": "$.definition.limitations[8]"
+    },
+    {
+      "text": "旧单次命中/持续输出的表头与指标不逐字沿用，差异见迁移记录（archive://docs/reviews/unified-dps-step4-fr-implementation.zh-CN.md）。",
+      "source": "$.definition.limitations[9]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,133 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cond-flame-ward-fire-aura",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Ward · Fire Aura（自身伤害，不进入 BH 计算）",
+    "en": "Flame Ward Fire Aura (own damage, outside Black Hole model)"
+  },
+  "aliases": [
+    "Fire Aura",
+    "Flame Ward",
+    "火焰光环",
+    "自身伤害",
+    "current scenario not relevant"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fw3d:12"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "target_side"
+    ],
+    "tags": [
+      "Fire"
+    ],
+    "conditions": [
+      "player.flame_ward_active"
+    ],
+    "notes": "Flame Ward 生效期间获得 Fire Aura（独立火焰 DoT）；伤害属于 Flame Ward/Fire Aura 自身，不进入 Black Hole 本体/Ignite/施法/CD 路径。保留为『当前场景不相关』诊断记录。",
+    "required_nodes": [
+      "node:fw3d:12"
+    ]
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "flame_ward.fire_aura",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=flame_ward.fire_aura]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "current:matched_instances",
+      "unit": "points",
+      "note": "Flame Ward node 12。"
+    },
+    {
+      "parameter": "effect values",
+      "source": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/4/values"
+    },
+    {
+      "parameter": "state",
+      "source": "current:scenario#/states/player.flame_ward_active"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional.evaluate",
+    "symbol": "evaluate_scenario",
+    "note": "注册与求值识别为 not_relevant；无伤害 modifier（重算通道跳过，reason=no_damage_modifiers）。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "not_implemented",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/4",
+      "note": "注册表条目（relevance=not_relevant_current_scenario）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/4",
+      "note": "当前 run 求值：当前场景不相关。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/flame_ward.fire_aura",
+      "note": "条件重算通道：skipped，reason=no_damage_modifiers。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "support 分类表里的 not_relevant 项。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/2/nodes/3/points",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.flame_ward_active",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeSkippedTests::test_unsupported_effects_skipped_and_dps_unchanged",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeChannelSupportTests::test_expected_state_split"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-cond-infusion",
+      "requirement": "同一 Flame Ward 树的另一节点（Infusion 才是增伤）；Fire Aura 是自身伤害。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/4/relevance/path"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/4",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/flame_ward.fire_aura"
+    ],
+    "open_questions": [
+      "若未来把其他技能自身伤害并入 DPS，需要独立技能伤害通道；本轮不做（范围外）。"
+    ],
+    "requery_when": [
+      "模型范围扩展时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared"
+}

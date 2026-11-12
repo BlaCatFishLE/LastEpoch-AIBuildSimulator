@@ -1,0 +1,148 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-hit-rhythm-rotation",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Rhythm of Fire 循环平均（每 4 次施放 1 次消耗，周期平均 more）",
+    "en": "Rhythm of Fire steady-rotation cycle average"
+  },
+  "source_path": "knowledge/mechanisms/fr-hit-rhythm-rotation.json",
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "reuse_mode": "case_bound",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R18",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/rotation/rhythm_of_fire；#/rules id=R18/R22",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R18 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects+effect_values owner_entity_id=node:letools:fr11mv:3",
+      "note": "Rhythm of Fire：使用叠层、12 层消耗、+130% more / range / width",
+      "source": "$.evidence_refs[1]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:4",
+      "note": "Versatility：其它技能叠层来源",
+      "source": "$.evidence_refs[2]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Rhythm of Fire 循环平均（每 4 次施放 1 次消耗，周期平均 more）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency、hit；伤害标签：Fire、Melee；条件 code：consume_rhythm_of_fire",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=more；叠层策略=none；顺序/汇总=纯 FR 稳态：每 cycle_casts 次施放中有一次消耗并吃 consume_more；窗口平均 = (其余次数×1 + 消耗次数×consume_more)/cycle_casts；more 分组依据=ruleset.rotation.rhythm_of_fire.average_more（R18/R22 assumed）；不把该因子塞进单个 more 组",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "_rotation_config 读取 ruleset.rotation.rhythm_of_fire.average_more；damage_per_cast = single_hit × Σweights × rotation_more",
+      "source": "$.handler_ref.note（le_calc.hit_simulate.simulate）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：rhythm_of_fire config、node 3 stacks、rotation_more_factor、consume state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/parameter_bindings/1/source",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=3)/effects"
+    },
+    {
+      "pointer": "$/parameter_bindings/2/source",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/rotation_more_factor"
+    },
+    {
+      "pointer": "$/parameter_bindings/3/source",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/dps/states；#/profiles/*/states"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/interaction_requirements/2/evidence_locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "OQ8：其它技能（Versatility）补层会改变消耗节律；当前只模拟纯 FR 循环",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "固定平均 ×1.325 与逐次离散的差异：P0 handover §4.2 #8 指出取消该因子会改数",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "若 Lead 决定把 consume 作为单次口径而非循环平均，expected 需重锁",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

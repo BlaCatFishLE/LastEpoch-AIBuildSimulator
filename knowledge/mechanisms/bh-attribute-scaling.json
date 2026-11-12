@@ -1,0 +1,145 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-attribute-scaling",
+  "revision": 2,
+  "title": {
+    "zh": "Intelligence 属性缩放（本体）",
+    "en": "Intelligence attribute scaling (body)"
+  },
+  "aliases": [
+    "attribute scaling",
+    "Intelligence",
+    "Int 缩放",
+    "attributeScaling",
+    "属性缩放"
+  ],
+  "selectors": [
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "damage"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:0"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:bh2:0"
+    ],
+    "notes": "Black Hole 每点 Intelligence 提供固定 increased damage，进入本体 inc 加算池（不是独立乘区）。系数来自 bh2 attributeScaling；属性总额来自快照。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-attribute-scaling",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-attribute-scaling]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "attribute",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/attribute_scaling/attribute",
+      "note": "intelligence；属性索引 2（属性顺序见 model.ATTRIBUTE_ORDER）。"
+    },
+    {
+      "parameter": "increased_per_point",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/attribute_scaling/increased_per_point",
+      "unit": "fraction/point",
+      "note": "每点系数（规则包冻结，数值不抄写）。"
+    },
+    {
+      "parameter": "intelligence",
+      "source": "current:matched_instances",
+      "unit": "points",
+      "note": "当前案例总属性（含装备/被动/任务奖励补值）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "_collect_increased",
+    "note": "attribute_increase = per_point × snapshot.attribute('intelligence')；作为一条 inc 行并入本体池（source_path=bh2.attributeScaling[2]）。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0].raw_payload.attributeScaling",
+      "note": "bh2 attributeScaling {'2': [{property:0, increasedValue:0.04}]}。"
+    },
+    {
+      "kind": "document",
+      "locator": "https://support.lastepoch.com/hc/en-us/articles/46361892354843-Attributes",
+      "note": "属性索引与每点基础收益（0 Strength / 2 Intelligence…）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/increased/attribute_row",
+      "note": "当前 run 的属性行与并入后的 inc total。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Int 先作用于本体再传给 Ignite 的索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/attributes/intelligence",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_attributes",
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_fire_component_golden_numbers",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-ignite-attribute-scaling",
+      "requirement": "本体 inc 池里的 Int 缩放是否同样计入 Ignite 由该条目规定；当前确认传给 Ignite。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_scaling"
+    },
+    {
+      "with": "common-increased-aggregate",
+      "requirement": "属性行必须并入 inc 池（1+Σinc），不得单独再乘一次。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#_collect_increased"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/increased",
+      "tools/phase3/tests/test_stats.py::SnapshotTests::test_attributes"
+    ],
+    "open_questions": [
+      "属性缩放在游戏内是「技能 attributeScaling」而非玩家全局词条；其与玩家 increased damage 是否严格同池在参考模型 q1 里是线索级证据，当前按规则包 confirmed 口径实现。"
+    ],
+    "requery_when": [
+      "属性系数/索引随版本变化时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

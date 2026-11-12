@@ -1,0 +1,116 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "ballista-dexterity-frequency-and-increased",
+  "revision": 2,
+  "title": {
+    "zh": "Ballista 敏捷伤害与放置/攻击速度"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "Ballista 敏捷伤害与放置/攻击速度"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "ba1574:18"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "attribute_scaling",
+      "frequency"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "召唤技能 attributeScaling Dex→Minion increased Damage 每点4%；Agile Engineering 描述放置速度每Dex 1%、攻击速度每5Dex 1%。actor攻击和玩家放置需要不同频率池。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.node_attribute_scaled",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.rules.node_attribute_scaled"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "parameter_bindings": [
+    {
+      "parameter": "current_points_and_mods",
+      "source": "current:calculation_input.skills.specializations/ba1574 + current:mods",
+      "unit": "current",
+      "note": "只从本次输入绑定；不保存当前31点合计倍率。"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "IL 级逆向证据（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "IL 级中文结论（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json",
+      "note": "冻结 dataset 1.5.2 原值；节点含义对照官方资料，不用新版本文案替换旧数据。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/ballista/ballista-mechanism-review-20261112.zh-CN.md"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前构筑数值包（本轮）"
+    },
+    {
+      "kind": "reverse_engineering",
+      "detail": "节点5写入 ballistaExplosionMoreDamagePerDexterity=0.01/点，Mutate 乘玩家 Dex（4/4→0.04×228=9.12）作为 more；节点18 attackSpeedPer5Dex 与 ba1574 attributeScaling 的攻速部分不在爆炸 DPS 口径内。",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#5-爆炸伤害构成"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "minion 攻击间隔 getSpeedMultiplierStat 精确组合未完全解码。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "knowledge/definitions/ballista-armed-construction-v4.json"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": [],
+  "limitations": [
+    {
+      "item": "attributeScaling 应用点",
+      "reason": "Summoned.attributeScaling 收集路径已确认，真正应用 dex→minion increased damage 的执行点仍属推导（derived）。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "攻击速度链",
+      "reason": "只影响 minion 攻击/爆炸事件频率，不进入爆炸伤害乘区；本轮事件率由场景控件给出。",
+      "blocks_full_dps": false
+    }
+  ]
+}

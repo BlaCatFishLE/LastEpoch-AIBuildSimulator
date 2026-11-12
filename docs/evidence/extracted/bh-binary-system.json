@@ -1,0 +1,81 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-binary-system",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Binary System 双星结构 + 独立 more",
+    "en": "Binary System: structural two-component split plus independent more"
+  },
+  "source_path": "knowledge/mechanisms/bh-binary-system.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-binary-system",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-binary-system]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-bh-binary-system 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Binary System 双星结构 + 独立 more",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body、body_fire、body_cold、ignite；伤害标签：Fire、Cold；条件 code：none；必要节点：node:bh2:9",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Binary System 同时有两层效果：①结构上保留「转火后的火焰分量 + 原始冷伤分量」两个完整分量；②额外一个独立 more 乘区（Stats.Stat Damage more，数值见 ruleset/逆向证据），作用于本体两个分量，并被 Ignite 继承。双星座作 1 个黑洞，满足 Singularity 的单次数量上限。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "ruleset.has_binary_system 时生成 bh-binary-fire + bh-binary-cold 两分量；node 9 的 more 由 ruleset.tree_more_effects 进入分组；Ignite 侧由 ignite._ignite_scaling 按 inheritance 继承。",
+      "source": "$.handler_ref.note（le_calc.damage.compute_body）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：structural components、extra_more group、ignite inheritance",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[15]"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "结构双分量（基础值相加）与独立 more 叠加后的本体总伤害倍率是代码读数的组合结论，尚未用「关闭 Binary 的同一 Build 面板」逐项拆解（实测只给了总 DPS 翻倍）。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "双星两颗星是否各自独立施加异常：Heat Wave 光环代码显示每黑洞一个光环（双星共用），但 1.5.3 之外的其他施加路径（如直接 hit）不涉及 BH（hit=false），当前无影响。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,104 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "common-frequency-cooldown",
+  "kind": "mechanism",
+  "title": {
+    "zh": "频率/冷却/施法时间共享算子",
+    "en": "Frequency, cooldown and cast-time shared block"
+  },
+  "source_path": "knowledge/mechanisms/common-frequency-cooldown.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "共享算子没有单一规则 ID：BH 频率口径见 ruleset rule-cooldown-base / rule-cooldown-icr / rule-cast-time；FR 频率口径见 ruleset-fr-hit-stage1-v2 与 hit-simulate 政策。",
+    "verification": {
+      "status": "declared_none",
+      "checked_against": null,
+      "note": "条目声明该机制没有可引用的游戏规则 ID（ref 内写明原因）"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "频率/冷却/施法时间共享算子",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency、cooldown、cast、loop；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "把「单次伤害」与「单位时间能施放多少次」分开：BH 是 charge-based（基础充能 + 固定秒数 + 乘算 CDR + ICR 分母 + 额外充能），FR 是 cooldown-limited（Reflash 冷却 + ICR）并有 attack-speed 备选口径。共享的是计算块边界与字段约定，不是单一公式。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "BH 充能/CDR/ICR 主入口；配套 compute_cast_time（施法时间）、compute_fixed_charges；调度在 le_calc.simulate.run_loop/_replay_charges。FR 侧独立实现 hit_simulate（未合并）。",
+      "source": "$.handler_ref.note（le_calc.cooldown.compute_cooldown）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：base_recharge_s、cdr/icr/flat rows、cast speed rows、cooldown / hit cadence",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops/0/windows"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/windows"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_cast_speed_total"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps"
+    },
+    {
+      "pointer": "$/validation_refs/4",
+      "original": "archive://reports/flame-reave/p0-baseline-fr/reproduce-report.json#/checks"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/0",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "共享块的字段约定已存在，但实现是两套（BH cooldown.py / FR hit_simulate）；合并前必须在回归一致的前提下抽适配器（实施方案 §6.2），不能直接替换公式。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "BH 充能恢复按「同一时间只有一个恢复计时器」顺序恢复（v1 假设）；max charges 只提供起手爆发。该时序未单独游戏内验证。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

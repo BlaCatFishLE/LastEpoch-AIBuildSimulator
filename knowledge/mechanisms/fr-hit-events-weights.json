@@ -1,0 +1,197 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-events-weights",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave 每次施放命中次数与伤害权重（4 击）",
+    "en": "Flame Reave hits per cast and damage weights (4 hits)"
+  },
+  "aliases": [
+    "hits per cast",
+    "damage weights",
+    "4 hits",
+    "命中权重",
+    "Reflash return",
+    "Flame Caller"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:16",
+        "fr11mv:18"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Hit"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "hits_per_cast",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/hit_events/hits_per_cast",
+      "unit": "hits"
+    },
+    {
+      "parameter": "damage_weights",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/hit_events/damage_weights",
+      "unit": "fraction_of_first_hit"
+    },
+    {
+      "parameter": "derived hit count",
+      "source": "current:matched_instances",
+      "note": "sources=[16,18]；scenario.hit_override 可覆盖"
+    },
+    {
+      "parameter": "hit_override",
+      "source": "current:matched_instances",
+      "unit": "mixed"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R1",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/hit_events；#/rules id=R1/R11/R21/R24"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_simulate",
+    "symbol": "simulate",
+    "note": "读取 ruleset.hit_events / derived.hit_count；scenario.hit_override 优先；hit_report 汇总"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "user_conversation#2026-11-07",
+      "note": "每次施放对同一目标 4 击（1 基础 + Reflash 2 返回 + Flame Caller 1 返回）；第 4 击同样 50% less"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=fr11mv source_id=16",
+      "note": "Reflash：额外命中 always 50% less damage；two additional times"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=fr11mv source_id=18",
+      "note": "Flame Caller：returning hit always 50% less damage"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=fr11mv source_id=16",
+      "note": "Reflash requirements=[{nodeId:18}]：Flame Caller 是前置"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill_entity_id=skill:letools:LEAbilities.abilityList:fr11mv",
+      "note": "本体 canDamageSameEnemyAgain=false；多命中只能来自树节点"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#R1.damage_weights",
+      "note": "facts 记录的距离衰减与额外命中权重"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#1 R1 命中次数",
+      "note": "研究阶段默认 3 击；第二批用户裁决改为 4 击（以 ruleset/current-status 为准）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/hit_count",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/hit_override（可选）",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-frequency-cooldown",
+      "requirement": "命中数是频率/窗口聚合的输入；窗口按每次施放伤害 × 施放次数聚合",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/hit_events"
+    },
+    {
+      "with": "fr-hit-cooldown-icr",
+      "requirement": "DPS 窗口由施放速率（冷却）与命中数共同决定",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "OQ2：本体第 1 击的距离衰减曲线未建模（当前贴脸=1.0；远程最多 50% less 未作为 ruleset.effect 注册，只在 snapshot 注释中提及）",
+      "dataset 的 partialSkillBonuses 无 node 16/18 命中 flag，4 击结论基于文本 + 用户裁决"
+    ],
+    "requery_when": [
+      "用户改判命中次数/权重",
+      "Reflash/Flame Caller 节点数值在 dataset 变化"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "multiplier",
+    "stacking_policy": "additive",
+    "order_policy": "per-cast damage = single-hit damage × sum(damage_weights)；窗口伤害 = per-cast × 施放次数",
+    "more_group_source": "n/a（权重来自 ruleset.hit_events，不是 more 组）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

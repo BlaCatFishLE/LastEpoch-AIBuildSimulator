@@ -1,0 +1,11 @@
+{
+  "schema": "le-skill-scenario-v3",
+  "scenario_id": "syn-charge-default",
+  "template_id": "syn-charge",
+  "states": {},
+  "target": {
+    "monster_level": 100,
+    "resistance": 0.0,
+    "monster_damage_reduction": 0.0
+  }
+}

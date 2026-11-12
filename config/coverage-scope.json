@@ -1,0 +1,321 @@
+{
+  "schema_version": 2,
+  "updated_at": "2026-11-01",
+  "notes": [
+    "This file is the coverage denominator (workguide section 5.1). Entries are never removed to make validation pass; if coverage falls short the dataset is PARTIAL and the gap is reported.",
+    "minimum_entities / quality_thresholds are based on the site-claimed index counts recorded during phase-1 recon; they are leads, not hard invariants of the game. The author-local recon notes are archived and not shipped with the public release.",
+    "Priority A and B domains are both in scope for phase 1; C domains are collected when available and never block A/B.",
+    "schema_version 2 replaces the prose field_requirements with executable SQL (see validation/checks.py), splits idols/blessings/season into separate required domains, and adds source_index, semantic_requirements and version_gate. A missing rule means the check is not configured (warn), never an automatic pass for the corresponding review item.",
+    "field_requirements.sql returns the number of rows of the entity kind that satisfy the requirement; denominator_sql returns the applicable population. A requirement fails when satisfied/applicable is below minimum_ratio.",
+    "source_index.*['raw_entity_kinds'] names source_records.entity_kind values that must be mapped through source_id_map (or explicitly tracked by an issue). This is what catches silently dropped structured source families (e.g. weaver season records) even when the normalized domain still has rows from another source family.",
+    "semantic_requirements are executed with sql and must return a single integer. The validator also merges the built-in defaults (effect_values.stat_link_status='linked' > 0 and buff relationships > 0) so a scope file cannot switch those gates off.",
+    "version_gate checks dataset_meta.target_game_version, dataset_meta.compatibility_conclusion, every source_snapshots.claimed_version and the page/module versions inside source_snapshots.version_evidence. Unknown or conflicting versions fail unless data/mappings/version-compat.json contains an explicit approval (version pair + evidence)."
+  ],
+  "target": {
+    "game_version": "1.5.2",
+    "season": "Season 5",
+    "target_scope": "all five classes and their masteries"
+  },
+  "required_domains": [
+    {
+      "id": "classes_masteries",
+      "label": "Classes and masteries",
+      "priority": "A",
+      "entity_kinds": ["class", "mastery"],
+      "minimum_entities": 20,
+      "sources": ["letools", "tunklab"]
+    },
+    {
+      "id": "skills",
+      "label": "Skills and sub-skill components",
+      "priority": "A",
+      "entity_kinds": ["skill", "skill_component"],
+      "minimum_entities": 136,
+      "sources": ["letools", "tunklab"]
+    },
+    {
+      "id": "trees_nodes",
+      "label": "Skill trees and nodes",
+      "priority": "A",
+      "entity_kinds": ["tree", "node"],
+      "minimum_entities": 3956,
+      "sources": ["letools", "tunklab"]
+    },
+    {
+      "id": "buffs",
+      "label": "Buffs and debuffs",
+      "priority": "A",
+      "entity_kinds": ["buff"],
+      "minimum_entities": 90,
+      "sources": ["tunklab", "letools"]
+    },
+    {
+      "id": "ailments",
+      "label": "Ailments",
+      "priority": "A",
+      "entity_kinds": ["ailment"],
+      "minimum_entities": 10,
+      "sources": ["letools", "tunklab"]
+    },
+    {
+      "id": "relationships",
+      "label": "Confirmed effects and relationships",
+      "priority": "A",
+      "entity_kinds": [],
+      "minimum_entities": 1,
+      "sources": ["letools", "tunklab"]
+    },
+    {
+      "id": "items",
+      "label": "Items, bases, uniques and sets",
+      "priority": "B",
+      "entity_kinds": ["item", "item_base", "unique"],
+      "minimum_entities": 300,
+      "sources": ["letools", "tunklab"]
+    },
+    {
+      "id": "affixes",
+      "label": "Affixes and tiers",
+      "priority": "B",
+      "entity_kinds": ["affix"],
+      "minimum_entities": 300,
+      "sources": ["letools", "tunklab"]
+    },
+    {
+      "id": "idols",
+      "label": "Idols",
+      "priority": "B",
+      "entity_kinds": ["idol"],
+      "minimum_entities": 10,
+      "sources": ["letools"]
+    },
+    {
+      "id": "blessings",
+      "label": "Blessings",
+      "priority": "B",
+      "entity_kinds": ["blessing"],
+      "minimum_entities": 10,
+      "sources": ["letools"]
+    },
+    {
+      "id": "season",
+      "label": "Season / weaver systems",
+      "priority": "B",
+      "entity_kinds": ["season_entity"],
+      "count_sql": "SELECT (SELECT COUNT(*) FROM trees WHERE tree_kind = 'weaver') + (SELECT COUNT(*) FROM nodes WHERE tree_entity_id IN (SELECT entity_id FROM trees WHERE tree_kind = 'weaver')) + (SELECT COUNT(*) FROM season_entities)",
+      "count_note": "Functional season coverage: a normalized weaver tree/nodes counts as season-system coverage even when season_entities is empty (P1-3 review: entity-kind names alone must not define business coverage). source_index.season_weaver_records still requires the raw weaver records to be mapped or issue-tracked.",
+      "minimum_entities": 1,
+      "sources": ["letools", "tunklab"],
+      "absence_issue_types": ["season_source_absent", "season_entity_unmapped"],
+      "absence_note": "season coverage may legitimately be empty only when the dataset records an explicit data_issues row with one of absence_issue_types for this dataset; raw weaver records are still required to be mapped or issue-tracked by source_index.season_weaver_records."
+    },
+    {
+      "id": "minions",
+      "label": "Minions and summons",
+      "priority": "B",
+      "entity_kinds": ["minion"],
+      "minimum_entities": 10,
+      "sources": ["letools", "tunklab"]
+    }
+  ],
+  "field_requirements": [
+    {
+      "id": "skill_canonical_name",
+      "label": "Skills have a canonical name",
+      "entity_kind": "skill",
+      "sql": "SELECT COUNT(*) FROM skills s JOIN entities e ON e.entity_id = s.entity_id WHERE e.canonical_name IS NOT NULL AND TRIM(e.canonical_name) <> ''",
+      "denominator_sql": "SELECT COUNT(*) FROM skills",
+      "minimum_ratio": 0.99,
+      "severity": "fail"
+    },
+    {
+      "id": "skill_cast_or_tags",
+      "label": "Skills carry a cast type or tag data",
+      "entity_kind": "skill",
+      "sql": "SELECT COUNT(*) FROM skills s WHERE s.skill_type IS NOT NULL OR (s.tags_raw IS NOT NULL AND TRIM(s.tags_raw) <> '')",
+      "denominator_sql": "SELECT COUNT(*) FROM skills",
+      "minimum_ratio": 0.95,
+      "severity": "fail"
+    },
+    {
+      "id": "node_canonical_name",
+      "label": "Skill/weaver nodes have a canonical name",
+      "entity_kind": "node",
+      "sql": "SELECT COUNT(*) FROM nodes n JOIN entities e ON e.entity_id = n.entity_id WHERE e.canonical_name IS NOT NULL AND TRIM(e.canonical_name) <> ''",
+      "denominator_sql": "SELECT COUNT(*) FROM nodes",
+      "minimum_ratio": 0.99,
+      "severity": "fail"
+    },
+    {
+      "id": "node_tree_scope",
+      "label": "Nodes have a tree scope",
+      "entity_kind": "node",
+      "sql": "SELECT COUNT(*) FROM nodes WHERE tree_entity_id IS NOT NULL",
+      "denominator_sql": "SELECT COUNT(*) FROM nodes",
+      "minimum_ratio": 1.0,
+      "severity": "fail"
+    },
+    {
+      "id": "node_max_points",
+      "label": "Nodes record max_points",
+      "entity_kind": "node",
+      "sql": "SELECT COUNT(*) FROM nodes WHERE max_points IS NOT NULL",
+      "denominator_sql": "SELECT COUNT(*) FROM nodes",
+      "minimum_ratio": 0.99,
+      "severity": "fail"
+    },
+    {
+      "id": "node_description",
+      "label": "Nodes retain a description when the source publishes one",
+      "entity_kind": "node",
+      "sql": "SELECT COUNT(*) FROM nodes WHERE description IS NOT NULL AND TRIM(description) <> ''",
+      "denominator_sql": "SELECT COUNT(*) FROM nodes",
+      "minimum_ratio": 0.9,
+      "severity": "fail"
+    },
+    {
+      "id": "buff_canonical_name",
+      "label": "Buffs have a canonical name",
+      "entity_kind": "buff",
+      "sql": "SELECT COUNT(*) FROM buffs b JOIN entities e ON e.entity_id = b.entity_id WHERE e.canonical_name IS NOT NULL AND TRIM(e.canonical_name) <> ''",
+      "denominator_sql": "SELECT COUNT(*) FROM buffs",
+      "minimum_ratio": 0.99,
+      "severity": "fail"
+    },
+    {
+      "id": "buff_source_relationship",
+      "label": "Buffs are reachable from at least one source relationship (granted/modified by a skill, node, ailment or item) or have an explicit open issue",
+      "entity_kind": "buff",
+      "sql": "SELECT COUNT(*) FROM buffs b WHERE EXISTS (SELECT 1 FROM entity_relationships r WHERE r.to_entity_id = b.entity_id AND r.relationship_type LIKE '%buff%') OR EXISTS (SELECT 1 FROM data_issues i WHERE i.entity_id = b.entity_id AND i.status IN ('open', 'wontfix'))",
+      "denominator_sql": "SELECT COUNT(*) FROM buffs",
+      "minimum_ratio": 0.5,
+      "severity": "warn"
+    },
+    {
+      "id": "buff_duration_accounted",
+      "label": "Buff duration is a known value or an explicit evidence status (absent/unparsed/inferred)",
+      "entity_kind": "buff",
+      "sql": "SELECT COUNT(*) FROM buffs b WHERE b.duration_ms IS NOT NULL OR EXISTS (SELECT 1 FROM field_evidence fe WHERE fe.entity_id = b.entity_id AND fe.field_path LIKE 'duration%' AND fe.evidence_status IN ('known', 'absent', 'not_applicable', 'inferred', 'unparsed'))",
+      "denominator_sql": "SELECT COUNT(*) FROM buffs",
+      "minimum_ratio": 0.95,
+      "severity": "fail"
+    },
+    {
+      "id": "buff_stack_limit_accounted",
+      "label": "Buff stack limit is known or explicitly classified (UI value separated from confirmed max_stacks by P1-6)",
+      "entity_kind": "buff",
+      "sql": "SELECT COUNT(*) FROM buffs b WHERE b.max_stacks IS NOT NULL OR EXISTS (SELECT 1 FROM field_evidence fe WHERE fe.entity_id = b.entity_id AND fe.field_path LIKE 'max_stacks%' AND fe.evidence_status IN ('known', 'absent', 'not_applicable', 'inferred', 'unparsed'))",
+      "denominator_sql": "SELECT COUNT(*) FROM buffs",
+      "minimum_ratio": 0.95,
+      "severity": "fail"
+    },
+    {
+      "id": "affix_canonical_name",
+      "label": "Affixes have a canonical name",
+      "entity_kind": "affix",
+      "sql": "SELECT COUNT(*) FROM affixes a JOIN entities e ON e.entity_id = a.entity_id WHERE e.canonical_name IS NOT NULL AND TRIM(e.canonical_name) <> ''",
+      "denominator_sql": "SELECT COUNT(*) FROM affixes",
+      "minimum_ratio": 0.99,
+      "severity": "fail"
+    },
+    {
+      "id": "affix_tier_ranges",
+      "label": "Affixes have at least one tier range row",
+      "entity_kind": "affix",
+      "sql": "SELECT COUNT(DISTINCT affix_entity_id) FROM affix_tiers",
+      "denominator_sql": "SELECT COUNT(*) FROM affixes",
+      "minimum_ratio": 0.99,
+      "severity": "fail"
+    },
+    {
+      "id": "affix_applicable_categories",
+      "label": "Affixes record applicable item categories",
+      "entity_kind": "affix",
+      "sql": "SELECT COUNT(*) FROM affixes WHERE can_roll_on IS NOT NULL AND TRIM(can_roll_on) NOT IN ('', '[]', 'null')",
+      "denominator_sql": "SELECT COUNT(*) FROM affixes",
+      "minimum_ratio": 0.9,
+      "severity": "fail"
+    },
+    {
+      "id": "item_canonical_name",
+      "label": "Items have a canonical name",
+      "entity_kind": "item",
+      "sql": "SELECT COUNT(*) FROM items i JOIN entities e ON e.entity_id = i.entity_id WHERE e.canonical_name IS NOT NULL AND TRIM(e.canonical_name) <> ''",
+      "denominator_sql": "SELECT COUNT(*) FROM items",
+      "minimum_ratio": 0.99,
+      "severity": "fail"
+    },
+    {
+      "id": "item_base_or_category",
+      "label": "Items record an item base or category",
+      "entity_kind": "item",
+      "sql": "SELECT COUNT(*) FROM items WHERE (base_type IS NOT NULL AND TRIM(base_type) <> '') OR (item_category IS NOT NULL AND TRIM(item_category) <> '')",
+      "denominator_sql": "SELECT COUNT(*) FROM items",
+      "minimum_ratio": 0.95,
+      "severity": "fail"
+    }
+  ],
+  "source_index": [
+    {
+      "id": "buff_records_mapped",
+      "label": "Every parsed source buff record is mapped to a normalized entity",
+      "domain": "buffs",
+      "raw_entity_kinds": ["buff"],
+      "parse_statuses": ["parsed"],
+      "minimum_raw_records": 1,
+      "minimum_mapped_ratio": 1.0,
+      "absence_issue_types": ["buff_source_absent"],
+      "unmapped_issue_types": ["buff_record_unmapped"]
+    },
+    {
+      "id": "season_weaver_records",
+      "label": "Parsed weaver/season source records are mapped or explicitly issue-tracked; they must not prove season_entity coverage only by their absence",
+      "domain": "season",
+      "raw_entity_kinds": ["weaver_node", "weaver_tree"],
+      "parse_statuses": ["parsed"],
+      "minimum_raw_records": 1,
+      "minimum_mapped_ratio": 0.99,
+      "absence_issue_types": ["season_source_absent"],
+      "unmapped_issue_types": ["weaver_record_unmapped"]
+    }
+  ],
+  "semantic_requirements": [
+    {
+      "id": "stat_links_present",
+      "label": "effect_values are linked to stat definitions (P1-2 result)",
+      "sql": "SELECT COUNT(*) FROM effect_values WHERE stat_link_status = 'linked'",
+      "minimum": 1,
+      "severity": "fail"
+    },
+    {
+      "id": "buff_relationships_present",
+      "label": "Buff-granting/modifying relationships are normalized (P1-1 result)",
+      "sql": "SELECT COUNT(*) FROM entity_relationships WHERE relationship_type LIKE '%buff%'",
+      "minimum": 1,
+      "severity": "fail"
+    }
+  ],
+  "buff_source_configs": {
+    "source_record_patterns": ["%\"buffs\"%", "%\"buffAbilities\"%", "%\"masteryBuffs\"%"],
+    "config_keys": ["buffs", "buffAbilities", "masteryBuffs"],
+    "relationship_patterns": ["%buff%"],
+    "issue_type_patterns": ["%buff%"],
+    "severity": "fail"
+  },
+  "version_gate": {
+    "compat_file": "data/mappings/version-compat.json",
+    "require_compatibility_conclusion": true,
+    "require_snapshot_claimed_versions": true,
+    "require_version_evidence": true,
+    "require_module_versions": false
+  },
+  "quality_thresholds": {
+    "source_records": 2000,
+    "entities": 2000,
+    "skills": 100,
+    "nodes": 3000,
+    "affixes": 200,
+    "affix_tiers": 800,
+    "items": 200
+  }
+}

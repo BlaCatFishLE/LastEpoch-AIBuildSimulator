@@ -1,0 +1,383 @@
+{
+  "schema": "le-shared-conditional-recipes-v1",
+  "description": "跨案例规则配方。解析稳定定义和效果语义后，由调用方将 current:matched_instances 物化为当前 profile；不是独立执行器，不自动注入第二份贡献。",
+  "binding_policy": {
+    "instance_values": "current:matched_instances",
+    "node_points": "current:skills.specializations[].nodes",
+    "states": "current:scenario",
+    "missing_source": "not_applicable",
+    "unverified_semantics": "unverified; do not apply"
+  },
+  "mechanisms": {
+    "buff-frenzy-speed": {
+      "effects": [
+        {
+          "id": "frenzy",
+          "label": "Frenzy",
+          "source": {
+            "kind": "state_source",
+            "control": "frenzy",
+            "instance_binding": "current:matched_instances"
+          },
+          "stat": "attack_speed",
+          "operation": "increased",
+          "value": 0.2,
+          "scaling": {
+            "stat": "effect_of",
+            "target": "34"
+          },
+          "states": [
+            "frenzy"
+          ],
+          "status": "assumed",
+          "required": true
+        }
+      ],
+      "source_requirement": "当前任一有效 Frenzy 获取来源；效果增强从当前 property120 / special_tag34 汇总。",
+      "evidence_locator": "dataset ailmentList:34; node:st31io:28"
+    },
+    "item-sword-catcher-frenzy-added-melee": {
+      "effects": [
+        {
+          "id": "sword_catcher:frenzy",
+          "label": "Sword Catcher · Frenzy",
+          "source": {
+            "kind": "equipment_mod",
+            "expected_property": 98,
+            "expected_readable_text_contains": "Melee Damage while you have Frenzy",
+            "expected_definition_entity_id": "item:letools:uniqueList.uniques:338",
+            "definition_entity_id": "item:letools:uniqueList.uniques:338",
+            "instance_binding": "current:matched_instances"
+          },
+          "stat": "added_damage",
+          "operation": "added",
+          "value_source": "source_value",
+          "states": [
+            "frenzy"
+          ],
+          "tags": [
+            "Melee"
+          ],
+          "status": "derived",
+          "required": true
+        }
+      ],
+      "evidence_locator": "dataset uniqueList.uniques:338; 当前 property98 的 Frenzy 近战点伤词条"
+    },
+    "fr-effect-ambition-stacks": {
+      "effects": [
+        {
+          "id": "ambition",
+          "label": "Throne of Ambition",
+          "source": {
+            "kind": "unique_description",
+            "expected_text_contains": "2% more Fire Damage per stack of Ambition",
+            "expected_definition_entity_id": "item:letools:uniqueList.uniques:211",
+            "definition_entity_id": "item:letools:uniqueList.uniques:211",
+            "instance_binding": "current:matched_instances"
+          },
+          "stat": "damage",
+          "operation": "more",
+          "value": 0.02,
+          "stack_control": "ambition",
+          "requires_target": "boss",
+          "tags": [
+            "Fire"
+          ],
+          "status": "assumed",
+          "required": true
+        }
+      ],
+      "state_limits": {
+        "min": 0,
+        "max_source": "current:unique_description maximum stacks"
+      },
+      "evidence_locator": "dataset uniqueList.uniques:211 / UIBuffs:79"
+    },
+    "fr-effect-haste": {
+      "state_scalings": [
+        {
+          "id": "haste_movement",
+          "label": "Haste",
+          "states": [
+            "haste"
+          ],
+          "per_state": 0.3,
+          "scaling": {
+            "stat": "effect_of",
+            "target": "33"
+          },
+          "output": {
+            "stat": "movement_speed",
+            "operation": "increased"
+          }
+        }
+      ],
+      "source_requirement": "当前输入中已绑定的 Haste 获取来源",
+      "evidence_locator": "dataset ailmentList:33; uniqueList.uniques:413"
+    },
+    "buff-incisive-rage": {
+      "effects": [
+        {
+          "id": "incisive:crit",
+          "label": "Incisive Rage",
+          "source": {
+            "kind": "state_source",
+            "control": "incisive",
+            "instance_binding": "current:matched_instances",
+            "grant_selector": {
+              "kind": "item",
+              "namespace": "item",
+              "ids": [
+                "affix:affix:letools:affixList.singleAffixes:1117"
+              ]
+            }
+          },
+          "stat": "crit_chance",
+          "operation": "added",
+          "value": 0.1,
+          "states": [
+            "incisive"
+          ],
+          "status": "assumed",
+          "required": true
+        }
+      ],
+      "crit_deadly": {
+        "control": "incisive",
+        "chance": 0.2,
+        "added_multiplier": 3
+      },
+      "evidence_locator": "dataset translation:Properties.Property_Ability_bloodRageFrenzy_6_AltText; Deadly Strike tooltip"
+    },
+    "buff-crescendoing-rage-main-hit-cycle": {
+      "source": {
+        "kind": "equipment_mod",
+        "expected_property": 58,
+        "expected_special_tag": 12,
+        "expected_readable_text_contains": "You have Crescendoing Rage",
+        "expected_definition_entity_id": "item:letools:uniqueList.uniques:477",
+        "definition_entity_id": "item:letools:uniqueList.uniques:477",
+        "affix_entity_id": "affix:letools:affixList.singleAffixes:1124",
+        "instance_binding": "current:matched_instances"
+      },
+      "every_nth_hit": {
+        "n": 3,
+        "extra_more": 0.5,
+        "counting": "hit"
+      },
+      "evidence_locator": "dataset UIBuffs:248 / Crescendoing Rage description"
+    },
+    "buff-blood-rage-common-speed": {
+      "state_scalings": [
+        {
+          "id": "rage_movement",
+          "label": "Rage 移速",
+          "states": [
+            "incisive",
+            "crescendo"
+          ],
+          "per_state": 0.03,
+          "output": {
+            "stat": "movement_speed",
+            "operation": "increased"
+          }
+        },
+        {
+          "id": "blood_rage",
+          "label": "Blood Rage",
+          "states": [
+            "incisive",
+            "crescendo"
+          ],
+          "per_state": 0.05,
+          "output": {
+            "stat": "attack_speed",
+            "operation": "increased"
+          }
+        }
+      ],
+      "deduplication": "同名状态最多一次，多个不同 Blood Rage 状态分别计入。",
+      "evidence_locator": "dataset translation:Properties.Property_Ability_bloodRageFrenzy_6_AltText"
+    },
+    "item-vaions-chariot-movement-to-damage": {
+      "movement_conversion": {
+        "label": "Vaion's Chariot",
+        "source": {
+          "kind": "equipment_mod",
+          "expected_property": 98,
+          "expected_stat_name_contains": "Increased Damage per 100% Increased Movement Speed",
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:264",
+          "definition_entity_id": "item:letools:uniqueList.uniques:264",
+          "instance_binding": "current:matched_instances"
+        },
+        "input_stat": "movement_speed",
+        "ratio": 1.0,
+        "output": {
+          "stat": "damage",
+          "operation": "increased",
+          "tags": []
+        },
+        "required": true
+      },
+      "evidence_locator": "dataset uniqueList.uniques:264; 当前移速转伤词条"
+    },
+    "skill-hellish-chasm-next-fire": {
+      "node_bindings": [],
+      "evidence_locator": "dataset LESkillTrees:v01cv node:3",
+      "effects": [
+        {
+          "id": "hellish",
+          "label": "Hellish Chasm",
+          "source": {
+            "kind": "skill_node",
+            "tree": "v01cv",
+            "node": "3",
+            "stat_index": 2,
+            "instance_binding": "current:matched_instances"
+          },
+          "stat": "damage",
+          "operation": "more",
+          "value_source": "source_value",
+          "states": [
+            "hellish"
+          ],
+          "tags": [
+            "Fire"
+          ],
+          "source_kind": "skill_node",
+          "status": "derived",
+          "required": true
+        }
+      ]
+    },
+    "skill-nether-coating": {
+      "node_bindings": [
+        {
+          "tree": "ab0lh",
+          "node": "14",
+          "stat_index": 1,
+          "stat": "attack_speed",
+          "operation": "increased",
+          "condition": "nether_coating",
+          "requires_states": [],
+          "tags": [
+            "Melee"
+          ]
+        },
+        {
+          "tree": "ab0lh",
+          "node": "14",
+          "stat_index": 0,
+          "stat": "damage",
+          "operation": "more",
+          "condition": "nether_coating",
+          "requires_states": [
+            "blinded"
+          ],
+          "tags": []
+        }
+      ],
+      "evidence_locator": "dataset LESkillTrees:ab0lh node:14"
+    },
+    "skill-void-supremacy": {
+      "node_bindings": [
+        {
+          "tree": "ab0lh",
+          "node": "19",
+          "stat_index": 1,
+          "stat": "damage",
+          "operation": "more",
+          "condition": "void_supremacy",
+          "requires_states": [
+            "slowed"
+          ],
+          "tags": []
+        }
+      ],
+      "evidence_locator": "dataset LESkillTrees:ab0lh node:19",
+      "eligible_main_abilities": [
+        "v01cv"
+      ],
+      "target_scope_note": "本次已支持的后续主技能为 Void Cleave；其它技能须另核对目录身份与语义，不从辅助技能存在就推定适用。"
+    },
+    "skill-dark-duellist": {
+      "node_bindings": [
+        {
+          "tree": "gs15de",
+          "node": "3",
+          "stat_index": 0,
+          "stat": "damage",
+          "operation": "more",
+          "condition": "dark_duellist",
+          "requires_states": [],
+          "tags": []
+        }
+      ],
+      "evidence_locator": "dataset LESkillTrees:gs15de node:3"
+    },
+    "skill-abyssal-retribution": {
+      "node_bindings": [
+        {
+          "tree": "gs15de",
+          "node": "21",
+          "stat_index": 1,
+          "stat": "damage",
+          "operation": "more",
+          "condition": "abyssal_retribution",
+          "requires_states": [],
+          "tags": []
+        }
+      ],
+      "evidence_locator": "dataset LESkillTrees:gs15de node:21",
+      "eligible_main_abilities": [
+        "v01cv"
+      ],
+      "target_scope_note": "本次已支持的后续主技能为 Void Cleave；其它技能须另核对目录身份与语义，不从辅助技能存在就推定适用。"
+    },
+    "skill-entropic-blows": {
+      "node_bindings": [
+        {
+          "node": "25",
+          "stat_index": 0,
+          "stat": "damage",
+          "operation": "more",
+          "per_stack": "time_rot",
+          "tags": [
+            "Melee"
+          ],
+          "tree": "v01cv"
+        }
+      ],
+      "evidence_locator": "dataset LESkillTrees:v01cv node:25"
+    },
+    "skill-vorpal-force": {
+      "node_bindings": [
+        {
+          "node": "29",
+          "stat_index": 0,
+          "stat": "damage",
+          "operation": "more",
+          "per_stack": "bleed",
+          "cap_per_point": 0.3,
+          "tags": [
+            "Melee"
+          ],
+          "tree": "v01cv"
+        }
+      ],
+      "evidence_locator": "dataset LESkillTrees:v01cv node:29"
+    },
+    "target-critical-vulnerability": {
+      "target_stack_chance": {
+        "control": "vulnerability",
+        "per_stack": 0.02
+      },
+      "state_limits": {
+        "min": 0,
+        "max_source": "dataset ailmentList:85.maxInstances"
+      },
+      "evidence_locator": "dataset ailmentList:85"
+    }
+  }
+}

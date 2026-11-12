@@ -1,0 +1,82 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "minion-level-damage-scaling",
+  "revision": 1,
+  "title": {
+    "zh": "Minion 等级伤害缩放（公式已核、应用未确认）"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "Minion 等级伤害缩放（公式已核、应用未确认）"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "CharacterClass.firstLevelForMinionScaling=26、moreMinionDamagePerLevel=0.008，getMoreMinionDamageFromCharacterLevel 公式 (level-first+1)×0.008；100 级=+60% more。但全工程唯一调用方是 CharacterSheet（面板显示），伤害/召唤路径无调用点 → 不纳入当前 DPS。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "level",
+      "source": "docs/evidence/ballista/ballista-build-values-20261113.json#case.character",
+      "unit": "100"
+    }
+  ],
+  "rule_ref": {
+    "kind": "dataset_entity",
+    "ref": "skill:letools:classInfoForSources:4 extensions.minion level scaling",
+    "path": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+    "locator": "unknown"
+  },
+  "evidence_state": "unresolved",
+  "implementation_state": "not_implemented",
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "unknown 条目 U 级记录"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "§12 unknown 表"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "需确认 minion 等级 more 伤害的实际应用点（可能在服务端结算或数据驱动 stat）。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json"
+    ]
+  },
+  "limitations": [
+    {
+      "item": "实际应用点",
+      "reason": "伤害路径无调用点；若实际生效，爆炸 DPS 需 ×1.60。",
+      "blocks_full_dps": true
+    }
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": []
+}

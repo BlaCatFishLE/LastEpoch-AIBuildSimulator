@@ -1,0 +1,179 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-rhythm-rotation",
+  "revision": 1,
+  "title": {
+    "zh": "Rhythm of Fire 循环平均（每 4 次施放 1 次消耗，周期平均 more）",
+    "en": "Rhythm of Fire steady-rotation cycle average"
+  },
+  "aliases": [
+    "Rhythm of Fire",
+    "rotation average",
+    "循环平均",
+    "cycle casts",
+    "x1.325",
+    "消耗节律"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:3",
+        "fr11mv:4"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "frequency",
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "consume_rhythm_of_fire"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "rhythm_of_fire config",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/rhythm_of_fire",
+      "note": "cycle_casts / consume_more / average_more；status assumed"
+    },
+    {
+      "parameter": "node 3 stacks",
+      "source": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=3)/effects",
+      "note": "Stacks on use / consume 阈值/加成"
+    },
+    {
+      "parameter": "rotation_more_factor",
+      "source": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/rotation_more_factor",
+      "unit": "multiplier"
+    },
+    {
+      "parameter": "consume state",
+      "source": "archive://examples/flame-reave/scenario/conditional-scenario.json#/dps/states；#/profiles/*/states",
+      "note": "consume_rhythm_of_fire 作为单次口径开关"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R18",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/rotation/rhythm_of_fire；#/rules id=R18/R22"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_simulate",
+    "symbol": "simulate",
+    "note": "_rotation_config 读取 ruleset.rotation.rhythm_of_fire.average_more；damage_per_cast = single_hit × Σweights × rotation_more"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/rhythm_of_fire",
+      "note": "ruleset 循环平均声明（status assumed；rule_id R18）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects+effect_values owner_entity_id=node:letools:fr11mv:3",
+      "note": "Rhythm of Fire：使用叠层、12 层消耗、+130% more / range / width"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:4",
+      "note": "Versatility：其它技能叠层来源"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#R4.rhythm_of_fire",
+      "note": "facts 记录的层数/消耗/循环参数"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#4.5 Rhythm of Fire",
+      "note": "研究阶段循环推导"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-frequency-cooldown",
+      "requirement": "循环平均按施放次数折成乘数；若与真实时间序列/其它技能补层交互，需要事件模拟而非固定平均",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/rhythm_of_fire"
+    },
+    {
+      "with": "fr-effect-rhythm-of-fire-consume",
+      "requirement": "单次消耗命中 +130% more 与循环平均是两个口径，不能重复计入",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=rhythm_of_fire_consume"
+    },
+    {
+      "with": "fr-hit-cooldown-icr",
+      "requirement": "rotation 因子只乘伤害，不改变施放速率",
+      "evidence_locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "OQ8：其它技能（Versatility）补层会改变消耗节律；当前只模拟纯 FR 循环",
+      "固定平均 ×1.325 与逐次离散的差异：P0 handover §4.2 #8 指出取消该因子会改数",
+      "若 Lead 决定把 consume 作为单次口径而非循环平均，expected 需重锁"
+    ],
+    "requery_when": [
+      "rotation 策略/其它技能循环变化",
+      "用户裁决改为逐次离散"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "more",
+    "stacking_policy": "none",
+    "order_policy": "纯 FR 稳态：每 cycle_casts 次施放中有一次消耗并吃 consume_more；窗口平均 = (其余次数×1 + 消耗次数×consume_more)/cycle_casts",
+    "more_group_source": "ruleset.rotation.rhythm_of_fire.average_more（R18/R22 assumed）；不把该因子塞进单个 more 组"
+  },
+  "reuse_mode": "case_bound"
+}

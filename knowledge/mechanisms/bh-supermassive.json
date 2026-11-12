@@ -1,0 +1,153 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-supermassive",
+  "revision": 2,
+  "title": {
+    "zh": "Supermassive（Boss/稀有 more）",
+    "en": "Supermassive (more damage to bosses/rares)"
+  },
+  "aliases": [
+    "Supermassive",
+    "Boss more",
+    "稀有增伤",
+    "node 23",
+    "main_skill.supermassive"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:23"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "target.boss_or_rare"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body",
+      "body_fire",
+      "body_cold",
+      "ignite"
+    ],
+    "conditions": [
+      "target.boss_or_rare"
+    ],
+    "required_nodes": [
+      "node:bh2:23"
+    ],
+    "notes": "目标是 Boss/稀有敌人时，node 23 的独立 more 生效；该 more 进入本体两个分量与 Ignite 的 more 池。条件在当前基线固定为真（用户规则 7），属已计入基线（eligible/engine_supported）。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "main_skill.supermassive",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=main_skill.supermassive]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "node points",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/skill_tree_nodes",
+      "note": "node 23 已分配点数与 value_total（冻结）。"
+    },
+    {
+      "parameter": "condition",
+      "source": "current:matched_instances",
+      "note": "场景状态；默认 true。"
+    },
+    {
+      "parameter": "more group",
+      "source": "current:matched_instances",
+      "note": "运行产物中 group=node:bh2:23。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "tree_more_groups",
+    "note": "ruleset node 23 的 damage more 经 condition_met 过滤后进入分组；Ignite 通过 ruleset.ignite.inheritance（node 23 在继承列表）继承。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[9]",
+      "note": "Supermassive 节点文本与每点数值。"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects",
+      "note": "registry effect main_skill.supermassive（engine_supported）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups",
+      "note": "当前 run 的 more 组含 node:bh2:23；Ignite more 组同。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states",
+      "note": "条件重算的 application_states 中该效果为 engine_supported/auto_active。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/target.boss_or_rare",
+      "note": "原案例证据，参数改取当前输入"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeTargetConditionTests::test_boss_unchecked_drops_supermassive",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_skill_node_damage_multipliers",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-target-scenario-conditions",
+      "requirement": "target_is_boss_or_rare 未满足时该 more 不生效。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#condition_met"
+    },
+    {
+      "with": "bh-ignite-inheritance",
+      "requirement": "node 23 在 Ignite 继承列表中；Ignite 也吃该 more。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/inheritance/inherit_from_tree_nodes"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[9]",
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups",
+      "tools/phase3/tests/test_conditional_recompute.py"
+    ],
+    "open_questions": [
+      "数据缺口：ruleset node 23 的 rule_id=rule-bh-supermassive 未注册在 ruleset.rules[] 中（rules[] 无同名条目）；本条目的 rule_ref 因此指向 conditional_effect 注册，但规则账里不会出现该规则的独立行。需 Lead 决定补规则条目还是删除悬空 rule_id。",
+      "registry 的 research 将节点数值与条件视为 confirmed；本条目沿用同一证据，不新增独立证据。"
+    ],
+    "requery_when": [
+      "补/删悬空 rule_id 后"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

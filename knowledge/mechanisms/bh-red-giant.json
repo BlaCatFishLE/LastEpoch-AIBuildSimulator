@@ -1,0 +1,134 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-red-giant",
+  "revision": 2,
+  "title": {
+    "zh": "Red Giant 冷转火",
+    "en": "Red Giant: cold-to-fire conversion"
+  },
+  "aliases": [
+    "Red Giant",
+    "冷转火",
+    "convert to fire",
+    "红巨星",
+    "转换"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:4"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body",
+      "body_fire",
+      "body_cold"
+    ],
+    "tags": [
+      "Fire",
+      "Cold"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:bh2:4"
+    ],
+    "notes": "Red Giant：本体 base cold 转换为 fire（加火、抵消冷；Binary 未启用时净转换为纯火），同时 duration 增加、不再拉怪。added 伤害是否随转换一并改类型在规则包里是显式 v1 假设（apply conversion to added damage too），见 open_questions。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-red-giant",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-red-giant]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "convert.from/to",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/structural/red_giant",
+      "note": "cold→fire；转换作用于 base_damage 与 added_damage（规则包声明）。"
+    },
+    {
+      "parameter": "node points",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/skill_tree_nodes",
+      "note": "node 4 已分配 1 点；点数来自当前案例构筑，不是可配参数。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "compute_body",
+    "note": "compute_body：ruleset.has_red_giant 为真时把单分量改造成 Fire；Binary 开启时保留冷分量（见 bh-binary-system）。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[14]",
+      "note": "Red Giant 节点文本（cold→fire、duration 增加；数值见 ruleset）。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json#/effects/red_giant",
+      "note": "BlackHoleTree.updateMutator：conversion flags + duration += 0.8 + no pull。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json#/findings/binary_system_red_giant",
+      "note": "BlackHoleMutator.Mutate 的转换分支（加火、非 Binary 时减冷）。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Red Giant 的机制索引行（confirmed）。"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_two_components_from_binary_and_red_giant",
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_no_binary_structural_single_cold_component",
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[legacy_single_skill.body_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-binary-system",
+      "requirement": "顺序：先判定转换，再判定 Binary 是否保留原始冷分量；两节点组合得到「转火分量 + 原始冷分量」。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#compute_body"
+    },
+    {
+      "with": "common-tag-match",
+      "requirement": "转火后该分量只吃 Fire/Spell/DoT 增伤，不再吃 Cold 专属增伤（除 Binary 冷分量外）。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#BODY_FIRE_TAGS"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[14]",
+      "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json",
+      "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json",
+      "tools/phase3/tests/test_damage.py"
+    ],
+    "open_questions": [
+      "节点文本说 'base' cold damage 转换；added spell damage 是否也随转换改类型是规则包显式 v1 假设（structural.red_giant.note）。当前实现把 added 一并按转换后类型结算；需游戏内对照（带 cold/火 added 的 Build 观察伤害类型）。",
+      "不再拉怪只影响命中覆盖/生存，不进入单目标 DPS 模型。"
+    ],
+    "requery_when": [
+      "有 added damage 类型可区分的对照测试后"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

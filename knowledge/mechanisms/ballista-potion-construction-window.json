@@ -1,0 +1,117 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "ballista-potion-construction-window",
+  "revision": 2,
+  "title": {
+    "zh": "药剂条件与 Ballista 召唤时状态"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "药剂条件与 Ballista 召唤时状态"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "ba1574:25",
+        "ba1574:31"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "condition",
+      "snapshot"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Elixir of Construction 在用药后4秒内放置提供每点15% more；Care Package 的药剂掉落及玩家每秒自动用药是条件来源，不能无条件声明持续满增益。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.effects#elixir_more",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.effects#elixir_more"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "parameter_bindings": [
+    {
+      "parameter": "current_points_and_mods",
+      "source": "current:calculation_input.skills.specializations/ba1574 + current:mods",
+      "unit": "current",
+      "note": "只从本次输入绑定；不保存当前31点合计倍率。"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "IL 级逆向证据（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "IL 级中文结论（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json",
+      "note": "冻结 dataset 1.5.2 原值；节点含义对照官方资料，不用新版本文案替换旧数据。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/ballista/ballista-mechanism-review-20261112.zh-CN.md"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前构筑数值包（本轮）"
+    },
+    {
+      "kind": "reverse_engineering",
+      "detail": "节点25 moreDamageAfterPotion += 0.15/点（3/3=0.45）；召唤瞬间若 potionUsedRecently 则挂 20s Buff（>6.5s lifetime），快照语义；potionUsedRecentlyTime 序列化配置、按文案取 4s。Care Package +1 potion drop。",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#9-elixir-of-construction-药剂窗口问题-12-q12"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "potionUsedRecentlyTime 序列化值需资产确认。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "knowledge/definitions/ballista-armed-construction-v4.json"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": [],
+  "limitations": [
+    {
+      "item": "药剂窗口配置值",
+      "reason": "potionUsedRecentlyTime 来自序列化资产（文案 4s），IL 无常量。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "覆盖率",
+      "reason": "本轮按用户指定 100% 覆盖出理论 DPS，不模拟实际喝药节奏。",
+      "blocks_full_dps": false
+    }
+  ]
+}

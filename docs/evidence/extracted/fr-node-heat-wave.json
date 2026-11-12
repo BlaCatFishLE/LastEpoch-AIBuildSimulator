@@ -1,0 +1,148 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-node-heat-wave",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 树节点 9 Heat Wave（more fire damage）",
+    "en": "Heat Wave (Flame Reave tree node 9)"
+  },
+  "source_path": "knowledge/mechanisms/fr-node-heat-wave.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "heat_wave_fire_more",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=heat_wave_fire_more",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_effect:heat_wave_fire_more 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes entity_id=node:letools:fr11mv:9",
+      "note": "Heat Wave 节点描述/类型/上限",
+      "source": "$.evidence_refs[0]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:9",
+      "note": "Fire Damage +10%/点，more；5 点 → 单 more 组",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 树节点 9 Heat Wave（more fire damage）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire；条件 code：none；必要节点：node:fr11mv:9",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=more；叠层策略=linear_per_stack；顺序/汇总=每点 +10% 汇总进同一 more 组 node:fr11mv:9；组间独立相乘；more 分组依据=节点描述 multiplicative with other modifiers + dataset effect property（group=node:fr11mv:9，见快照 semantics）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "key '9'；role=stat 的 more fire 行（group=node:fr11mv:9）",
+      "source": "$.handler_ref.note（le_calc.hit_inputs.FR_SKILL_NODE_SEMANTICS）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、value_per_point、value_total、contribution rows",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=9)"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/nodes(node_id=9)/points"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=9)/effects[*]/value_per_point"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=9)/effects[*]/value_total"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[contribution_id prefix=skill:fr11mv:9:]"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "R19/节点描述都写 multiplicative，但 exact value 来自 dataset 1.5.2，未做游戏内实测",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "more 分组依据是节点定义（dataset 文本 + semantics 声明），不是词条里的 more 一词",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

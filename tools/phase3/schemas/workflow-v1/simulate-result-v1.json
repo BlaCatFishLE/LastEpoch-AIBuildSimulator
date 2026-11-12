@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/simulate-result-v1.json",
+  "title": "SimulateResult v1",
+  "description": "simulate 输出：产物引用、摘要数值、一致性、readiness、issues、实现指纹；不内联完整 result（大对象以 artifact_ref 引用）。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "model_id",
+    "output_dir",
+    "output_refs",
+    "summary",
+    "consistency",
+    "readiness",
+    "issues",
+    "warnings",
+    "metrics",
+    "implementation_fingerprints"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "le-simulate-result-v1"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model_id": {
+      "type": "string"
+    },
+    "output_dir": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "output_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string",
+            "description": "repository-relative POSIX path"
+          },
+          "asset_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "schema_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object"
+    },
+    "summary": {
+      "type": "object"
+    },
+    "consistency": {
+      "type": "object"
+    },
+    "readiness": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "partial",
+        "needs_research",
+        "needs_input"
+      ]
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning",
+              "info"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "related_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "required_input": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "details": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "input_fingerprint": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "implementation_fingerprints": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-definition-catalog-v1",
+  "title": "Last Epoch shared definition candidate catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "entries"],
+  "properties": {
+    "schema": {"const": "le-definition-catalog-v1"},
+    "generated_at": {"type": "string"},
+    "note": {"type": "string"},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "template_id",
+          "path",
+          "schema",
+          "binding_version",
+          "ability_id",
+          "plan_version",
+          "revision",
+          "sha256",
+          "capabilities",
+          "applicability"
+        ],
+        "properties": {
+          "template_id": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "minLength": 1},
+          "schema": {"const": "le-skill-template-v3"},
+          "binding_version": {"type": "string", "minLength": 1},
+          "ability_id": {"type": "string", "minLength": 1},
+          "plan_version": {
+            "enum": [
+              "le-calculation-plan-v1",
+              "le-calculation-plan-v2",
+              "le-calculation-plan-v3"
+            ]
+          },
+          "revision": {"type": "string", "pattern": "^sha256:[a-f0-9]{16,64}$"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "hit_components",
+                "hit_events",
+                "multi_hit_events",
+                "item_effectiveness",
+                "added_damage_conversion",
+                "dot_components",
+                "ignite_clock",
+                "charge_schedule",
+                "attribute_scaling",
+                "target_side_explicit"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "applicability": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "ability_id": {"type": "string"},
+              "required_class": {"type": "string"},
+              "required_skill_tags": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "forbidden_skill_tags": {
+                "type": "array",
+                "items": {"type": "string"}
+              },
+              "required_facts": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "main_skill.ability_id",
+                    "main_skill.class",
+                    "main_skill.mastery",
+                    "main_skill.damage_tags",
+                    "build.revision_id",
+                    "dataset.dataset_id"
+                  ]
+                },
+                "uniqueItems": true
+              },
+              "notes": {"type": "array", "items": {"type": "string"}},
+              "evidence": {"type": "array"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

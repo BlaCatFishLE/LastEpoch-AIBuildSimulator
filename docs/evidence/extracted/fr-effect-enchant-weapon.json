@@ -1,0 +1,148 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-effect-enchant-weapon",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Enchant Weapon（sb44eQ）active/passive：more melee elemental、攻速、added fire 与 increased",
+    "en": "Enchant Weapon (sb44eQ) active/passive buff: more melee elemental, attack speed, added fire, increased damage"
+  },
+  "source_path": "knowledge/mechanisms/fr-effect-enchant-weapon.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "enchant_weapon_active",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=enchant_weapon_active；#/effects id=enchant_weapon_passive_more；#/rules id=R19",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_effect:enchant_weapon_active 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_bonus source_id=sb44eQ",
+      "note": "每点 mods：activeMeleeAttackSpeed/activeAddedMeleeFireDamage/activeIncreasedMeleeFireDamage/activeIncreasedMeleeElementalDamage/autoRecast",
+      "source": "$.evidence_refs[3]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=sb44eQ",
+      "note": "EW 技能树与已选节点（1/7/14/16/17/18/20/25）",
+      "source": "$.evidence_refs[4]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Enchant Weapon（sb44eQ）active/passive：more melee elemental、攻速、added fire 与 increased",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、frequency；伤害标签：Fire、Melee、Elemental；条件 code：enchant_weapon_active",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=more；叠层策略=none；顺序/汇总=两个独立 more 组（active/passive）；另提供 increased melee AS、added melee fire、increased melee fire、increased melee elemental 行进入各自池；more 分组依据=ruleset effects 明确 group=effect:enchant_weapon:active_more / effect:enchant_weapon:passive_more（R19 derived；第三方 runtime 硬编码值）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "active modifiers 通过 ruleset effect 进入各池；passive more 常驻（专精后）同样由 ruleset effect 提供；EW 的 active duration/cooldown 由 facts 记录但未在伤害引擎内模拟覆盖率",
+      "source": "$.handler_ref.note（le_calc.hit_damage._effect_rows）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：effect definitions、active 参数、state、applied effect rows、EW cooldown ICR",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 676800-682200"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/enchant_weapon_active；archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/applied_states"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=cooldown_recovery_speed]"
+    },
+    {
+      "pointer": "$/evidence_refs/9/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/applied_effects[id in (enchant_weapon_active, enchant_weapon_passive_more)]"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "R4：EW active 参数映射（攻速/fire flat/fire increased/elemental increased）与 autoRecast 实际触发频率未在游戏内验证",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "EW 的 duration/cooldown 用 ICR 公式推导（8.33s < 9s → 理论全覆盖），游戏真值未验证",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "legacy_single_skill 的 scenario 注释说关闭 EW active，但 states 里 enchant_weapon_active=true；两基线实际差异只有 Army of Skin（需 Lead 复核注释）",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

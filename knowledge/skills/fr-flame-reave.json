@@ -1,0 +1,706 @@
+{
+  "schema": "le-knowledge-skill-template-v1",
+  "skill_id": "fr-flame-reave",
+  "revision": 2,
+  "ability_id": "fr11mv",
+  "title": {
+    "zh": "Flame Reave 命中模型技能模板（Mage / Spellblade，case flame-reave）",
+    "en": "Flame Reave hit-model skill template (Mage / Spellblade)"
+  },
+  "class": "Mage",
+  "mastery": "Spellblade",
+  "damage_tags": [
+    "Fire",
+    "Melee"
+  ],
+  "model_id": "hit",
+  "components": [
+    {
+      "component_id": "fr11mv:fire",
+      "damage_type": "Fire",
+      "kind": "hit",
+      "tags": [
+        "Fire",
+        "Melee",
+        "Hit"
+      ],
+      "added_sources": [
+        "snapshot contributions stat_key=added_damage（武器 implicit/affix、idols、被动、EW active）",
+        "derived:fr11mv:arcane_severance_added_melee（added spell → added melee 换算）",
+        "机制 fr-hit-added-scaling / fr-hit-dual-wield-added / fr-hit-offhand-exalted"
+      ],
+      "crit": {
+        "supported": true,
+        "chance_source": "snapshot derived.skill.crit_chance + contributions[stat_key=crit_chance]（机制 fr-hit-critical-expected）",
+        "multiplier_source": "snapshot derived.skill.crit_multiplier + contributions[stat_key=crit_multiplier]（机制 fr-hit-critical-expected）"
+      },
+      "notes": "base 值与 added_damage_scaling 不在模板抄写，运行时从 dataset/snapshot 读取；非 Fire typed added 不进入本组件（fire_only，见 unsupported）"
+    }
+  ],
+  "calculation_blocks": [
+    {
+      "block": "tag_match",
+      "module": "le_calc.hit_damage",
+      "symbol": "tags_apply",
+      "note": "组件标签闭包 {Fire,Melee,Hit}；Elemental 展开；Spell/DoT-only 排除（机制 fr-hit-tag-matching；共享算子 common-tag-match）"
+    },
+    {
+      "block": "added_scaling",
+      "module": "le_calc.hit_damage",
+      "symbol": "_component_added_pool",
+      "note": "added 分池 + fire_only 策略 + added_damage_scaling（机制 fr-hit-added-scaling）"
+    },
+    {
+      "block": "increased_aggregate",
+      "module": "le_calc.hit_damage",
+      "symbol": "compute_single_hit",
+      "note": "increased 加算池（机制 fr-hit-increased-pools；共享算子 common-increased-aggregate）"
+    },
+    {
+      "block": "more_groups",
+      "module": "le_calc.hit_damage",
+      "symbol": "_more_groups",
+      "note": "按 group 汇总后组间相乘（机制 fr-hit-more-groups；共享算子 common-more-groups）"
+    },
+    {
+      "block": "crit",
+      "module": "le_calc.hit_damage",
+      "symbol": "_crit_section",
+      "note": "crit chance/multi 池、cap 与 avg crit（机制 fr-hit-critical-expected；共享算子条目未含 crit 块，见 docs/mechanisms.md 的已知缺口）"
+    },
+    {
+      "block": "target_side",
+      "module": "le_calc.hit_damage",
+      "symbol": "resolve_target",
+      "note": "穿透 ×(1+sum pen)、火抗、怪物 DR（机制 fr-hit-target-side；共享算子 common-target-resistance-penetration / common-monster-dr）"
+    },
+    {
+      "block": "frequency",
+      "module": "le_calc.hit_simulate",
+      "symbol": "simulate",
+      "note": "攻速/冷却/hit weights/窗口/rotation（机制 fr-hit-attack-speed、fr-hit-cooldown-icr、fr-hit-events-weights、fr-hit-rhythm-rotation；共享算子 common-frequency-cooldown）"
+    },
+    {
+      "block": "ledger",
+      "module": "le_calc.hit_report",
+      "symbol": "build_source_ledger_rows",
+      "note": "来源/规则账投影（机制 fr-hit-single-hit-chain；共享算子 common-ledger）；rule ledger 见 build_rule_ledger_rows"
+    }
+  ],
+  "mappings": [
+    {
+      "selector": "ability:fr11mv",
+      "mechanism_id": "fr-hit-single-hit-chain",
+      "note": "主技能与单次命中链"
+    },
+    {
+      "selector": "ability:fr11mv",
+      "mechanism_id": "fr-hit-events-weights",
+      "note": "4 击/伤害权重"
+    },
+    {
+      "selector": "ability:fr11mv",
+      "mechanism_id": "fr-hit-attack-speed",
+      "note": "攻速基率与池"
+    },
+    {
+      "selector": "ability:fr11mv",
+      "mechanism_id": "fr-hit-cooldown-icr",
+      "note": "Reflash 冷却 + ICR"
+    },
+    {
+      "selector": "ability:fr11mv",
+      "mechanism_id": "fr-hit-rhythm-rotation",
+      "note": "Rhythm 循环平均"
+    },
+    {
+      "selector": "ability:fr11mv",
+      "mechanism_id": "fr-skill-level-scaling",
+      "note": "等级只影响节点数量"
+    },
+    {
+      "selector": "node:fr11mv:2",
+      "mechanism_id": "fr-node-dancing-flames",
+      "note": "攻速/法力/射程"
+    },
+    {
+      "selector": "node:fr11mv:3",
+      "mechanism_id": "fr-effect-rhythm-of-fire-consume",
+      "note": "消耗层数 +130% more"
+    },
+    {
+      "selector": "node:fr11mv:4",
+      "mechanism_id": "fr-node-versatility",
+      "note": "其它技能叠层（未建模）"
+    },
+    {
+      "selector": "node:fr11mv:6",
+      "mechanism_id": "fr-node-frenzied-flame",
+      "note": "Frenzy 触发/时长/added fire"
+    },
+    {
+      "selector": "node:fr11mv:6",
+      "mechanism_id": "fr-effect-frenzy-active",
+      "note": "Frenzy 攻速与效果缩放"
+    },
+    {
+      "selector": "node:fr11mv:9",
+      "mechanism_id": "fr-node-heat-wave",
+      "note": "more fire"
+    },
+    {
+      "selector": "node:fr11mv:12",
+      "mechanism_id": "fr-node-arcane-severance",
+      "note": "more melee + added spell 转换"
+    },
+    {
+      "selector": "node:fr11mv:13",
+      "mechanism_id": "fr-node-ember-infusion",
+      "note": "more melee"
+    },
+    {
+      "selector": "node:fr11mv:16",
+      "mechanism_id": "fr-node-reflash",
+      "note": "额外命中 flag + 冷却"
+    },
+    {
+      "selector": "node:fr11mv:18",
+      "mechanism_id": "fr-node-flame-caller",
+      "note": "返回命中 + mana cost"
+    },
+    {
+      "selector": "node:fr11mv:20",
+      "mechanism_id": "fr-node-precise-destruction",
+      "note": "added crit chance"
+    },
+    {
+      "selector": "node:fr11mv:23",
+      "mechanism_id": "fr-effect-scorching-tide-ignited",
+      "note": "ignited 条件 more melee"
+    },
+    {
+      "selector": "node:fr11mv:24",
+      "mechanism_id": "fr-effect-chaos-flare-ignited-crit",
+      "note": "ignited 条件 more crit chance"
+    },
+    {
+      "selector": "node:fr11mv:25",
+      "mechanism_id": "fr-node-rolling-flames",
+      "note": "射程 only（ignored）"
+    },
+    {
+      "selector": "ability:sb44eQ",
+      "mechanism_id": "fr-effect-enchant-weapon",
+      "note": "Enchant Weapon active/passive"
+    },
+    {
+      "selector": "item:letools:uniqueList.uniques:443",
+      "mechanism_id": "fr-effect-army-of-skin-high-health",
+      "note": "Army of Skin 49% more melee（high health）"
+    },
+    {
+      "selector": "item:equipment:feet",
+      "mechanism_id": "fr-effect-army-of-skin-high-health",
+      "note": "feet unique 来源实例"
+    },
+    {
+      "selector": "item:letools:uniqueList.uniques:438",
+      "mechanism_id": "fr-hit-offhand-exalted",
+      "note": "Whetstone Gavel 副手 Exalted ×1.97"
+    },
+    {
+      "selector": "item:equipment:weapon1",
+      "mechanism_id": "fr-hit-dual-wield-added",
+      "note": "双持求和 + 武器 attackRate 不参与"
+    },
+    {
+      "selector": "item:equipment:weapon2",
+      "mechanism_id": "fr-hit-dual-wield-added",
+      "note": "副手 added/词条进池"
+    },
+    {
+      "selector": "idol:equipment:idols.2",
+      "mechanism_id": "fr-effect-ambition-stacks",
+      "note": "每层 2% more Fire（上限 20）"
+    },
+    {
+      "selector": "idol:equipment:idols.2",
+      "mechanism_id": "fr-effect-ambition-gain-source",
+      "note": "层数获取（unresolved）"
+    },
+    {
+      "selector": "idol:equipment:idols.0",
+      "mechanism_id": "fr-effect-mana-300-idols",
+      "note": "300 mana doubled（当前不满足）"
+    },
+    {
+      "selector": "idol:equipment:idols.1",
+      "mechanism_id": "fr-effect-mana-300-idols",
+      "note": "300 mana doubled（当前不满足）"
+    },
+    {
+      "selector": "idol:equipment:idols.3",
+      "mechanism_id": "fr-effect-mana-300-idols",
+      "note": "300 mana doubled（当前不满足）"
+    },
+    {
+      "selector": "idol:equipment:idols.4",
+      "mechanism_id": "fr-effect-mana-300-idols",
+      "note": "300 mana doubled（当前不满足）"
+    },
+    {
+      "selector": "condition:ignited",
+      "mechanism_id": "fr-effect-ignite-sources",
+      "note": "ignited 可达性来源"
+    },
+    {
+      "selector": "condition:enemy_high_health",
+      "mechanism_id": "fr-effect-army-of-skin-high-health",
+      "note": "高血量条件"
+    },
+    {
+      "selector": "condition:consume_rhythm_of_fire",
+      "mechanism_id": "fr-effect-rhythm-of-fire-consume",
+      "note": "消耗状态"
+    },
+    {
+      "selector": "item:letools:uniqueList.uniques:150",
+      "mechanism_id": "fr-effect-ignite-sources",
+      "note": "Sunwreath +43% ignite"
+    },
+    {
+      "selector": "item:equipment:relic",
+      "mechanism_id": "fr-effect-haste",
+      "note": "You have Haste（不建模）"
+    },
+    {
+      "selector": "node:mg-1:50",
+      "mechanism_id": "fr-effect-blade-weaving-consume",
+      "note": "Blade Weaving 消耗 more"
+    },
+    {
+      "selector": "node:mg-1:7",
+      "mechanism_id": "fr-effect-ignite-sources",
+      "note": "Arcane Flames 点燃来源"
+    },
+    {
+      "selector": "ability:su5g3",
+      "mechanism_id": "fr-effect-surge-pyroclasm",
+      "note": "Surge 额外施放（未建模）"
+    },
+    {
+      "selector": "ability:f1b4d",
+      "mechanism_id": "fr-effect-firebrand-scope",
+      "note": "Firebrand 层数只作用于 Firebrand"
+    }
+  ],
+  "parameter_paths": [
+    {
+      "parameter": "case_id",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/case.legacy-hit.json#/case_id"
+    },
+    {
+      "parameter": "case_model",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/case.legacy-hit.json#/model"
+    },
+    {
+      "parameter": "ability_id",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/case.legacy-hit.json#/main_skill/ability_id"
+    },
+    {
+      "parameter": "dataset_pointer",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/case.legacy-hit.json#/dataset"
+    },
+    {
+      "parameter": "ruleset",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/case.legacy-hit.json#/ruleset/path（sha256 同对象）"
+    },
+    {
+      "parameter": "snapshot",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/case.legacy-hit.json#/inputs/snapshot"
+    },
+    {
+      "parameter": "scenario",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/case.legacy-hit.json#/inputs/scenario"
+    },
+    {
+      "parameter": "expected_summary",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/case.legacy-hit.json#/expected"
+    },
+    {
+      "parameter": "skill_facts",
+      "from": "current:calculation_input",
+      "unit": "mixed",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill"
+    },
+    {
+      "parameter": "added_rows",
+      "from": "current:calculation_input",
+      "unit": "flat",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=added_damage]"
+    },
+    {
+      "parameter": "increased_more_crit_rows",
+      "from": "current:calculation_input",
+      "unit": "percent",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key in (damage, crit_chance, crit_multiplier, penetration)]"
+    },
+    {
+      "parameter": "attack_speed_icr_rows",
+      "from": "current:calculation_input",
+      "unit": "percent",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key in (attack_speed, cooldown_recovery_speed)]"
+    },
+    {
+      "parameter": "node_points",
+      "from": "current:calculation_input",
+      "unit": "points",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/nodes[*]/points"
+    },
+    {
+      "parameter": "node_effects",
+      "from": "current:calculation_input",
+      "unit": "mixed",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects"
+    },
+    {
+      "parameter": "weapon_offhand",
+      "from": "current:calculation_input",
+      "unit": "mixed",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon"
+    },
+    {
+      "parameter": "hit_count",
+      "from": "current:calculation_input",
+      "unit": "mixed",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/hit_count"
+    },
+    {
+      "parameter": "rotation_cooldown",
+      "from": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation",
+      "unit": "mixed",
+      "required": true
+    },
+    {
+      "parameter": "hit_events",
+      "from": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/hit_events",
+      "unit": "mixed",
+      "required": true
+    },
+    {
+      "parameter": "mana_estimate",
+      "from": "current:calculation_input",
+      "unit": "mana",
+      "required": false,
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/mana"
+    },
+    {
+      "parameter": "states",
+      "from": "current:calculation_input",
+      "unit": "mixed",
+      "required": true,
+      "evidence_locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles[baseline_profile]/states；#/single_hit/states；#/dps/states"
+    },
+    {
+      "parameter": "target",
+      "from": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/target；archive://examples/flame-reave/scenario/conditional-scenario.json#/target",
+      "unit": "mixed",
+      "required": true
+    },
+    {
+      "parameter": "hit_override",
+      "from": "current:calculation_input",
+      "unit": "mixed",
+      "required": false,
+      "evidence_locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/hit_override（可选）"
+    }
+  ],
+  "schedule": {
+    "driver": "cooldown_limited",
+    "cooldown_s": 3.0,
+    "cooldown_source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/cooldown_s（Reflash node 16；status assumed，rule R13）；snapshot derived.skill.cooldown_s 同值",
+    "recovery_stat": "cooldown_recovery_speed",
+    "hit_weights": [
+      1.0,
+      0.5,
+      0.5,
+      0.5
+    ],
+    "hits_per_cast": 4,
+    "windows_s": [
+      5,
+      30,
+      120
+    ],
+    "rotation_policy": {
+      "policy_id": "fr-rhythm-of-fire-cycle-average",
+      "more_factor": 1.325,
+      "basis": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/rhythm_of_fire（cycle_casts=4、consume_more=1.3、average_more=1.325；assumed R18/R22；纯 FR 循环，其它技能补层不模拟）"
+    },
+    "fractional_casts": "allowed",
+    "notes": "主策略 cooldown_limited（有效冷却 3/(1+ICR) 门控施放速率）；备选策略 attack_speed_limited 同时输出（result.dps.alternate_policy）。窗口按期望（可小数）施放次数聚合，complete_casts 仅作透明度字段，不用于重算总伤害。数值以 ruleset/scenario 为权威，模板中的 cooldown_s/hit_weights/hits_per_cast/windows_s/more_factor 是调度结构声明（换 BD 或改 policy 必须重锁 expected）。"
+  },
+  "supported_interactions": [
+    "Enchant Weapon active/passive（Kindling Blade 近战自动激活；assumed 常驻；两个独立 more 组）",
+    "Army of Skin high-health 49% more melee（条件：目标 high/full health；build_base 默认 true，legacy 关闭）",
+    "Rhythm of Fire 消耗（单次 +130% more；DPS 用周期平均 ×1.325）",
+    "Scorching Tide / Chaos Flare（目标 ignited 条件；ignited 为 scenario 开关）",
+    "Frenzy（ailment：increased attack speed + Frenzied Flame added fire；固定状态）",
+    "Blade Weaving 消耗（每层 15% more elemental；固定层数/scenario）",
+    "Ambition 层数（每层 2% more Fire，上限 20；固定层数/scenario）",
+    "mana_ge_300 神像 doubled 条件（当前 max mana 估算 <300 → 不满足）",
+    "Whetstone Gavel 副手 Exalted（weapon2 全部 stats ×1.97）",
+    "双持两把武器 added 求和（用户裁决）",
+    "Int/Dex 属性缩放 increased damage（含任务 +2 假设）",
+    "cooldown_limited / attack_speed_limited 双策略（主/备选同时输出）",
+    "scenario.hit_override 覆盖命中数与权重",
+    "固定条件估算与 buff-screening（modeled/not_modeled/unresolved 三态）"
+  ],
+  "unsupported": [
+    {
+      "item": "技能等级缩放（R16）",
+      "reason": "实际 27 级只决定可分配节点数量；dataset levelScaling=[]，+Level of Skills 词条无伤害路径（用户裁决 2026-11-07）。结论：不需要 level scaling 伤害建模。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "typed Physical/Cold added damage（weapon2 sealed +5 Physical、Frozen Steel +4 Cold）",
+      "reason": "fire_only 组件策略排除非 Fire typed added，未建独立 Cold/Physical 组件；会少算非 Fire 伤害（R17 assumed，OQ9）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "Haste（relic unique 'You have Haste'）",
+      "reason": "dataset 1.5.2 Haste 只提供 +30% movement speed（property 9），无伤害/攻速路径；不建模（不是漏算）。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "Ignite 来源与 uptime（Sunwreath +43% on melee hit、Arcane Flames、Firebrand Flare）",
+      "reason": "只提供 scenario ignited 开关；点燃施加/覆盖率/ignite DoT 伤害未建模（R5/OQ，ruleset.open_questions R15）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "Surge Pyroclasm 额外施放 Flame Reave",
+      "reason": "单技能模型不含 Surge 施放/触发率；额外 FR 施放会改变循环与 Rhythm 层数（R4 unresolved）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "Firebrand 层数对 FR 的潜在影响（OQ7：每层 +5 melee fire / Incineration）",
+      "reason": "按用户裁决 2026-11-07：Firebrand 层数只对 Firebrand 自身生效，FR 不消耗；若改判需新 run 与 expected。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "距离衰减（本体 up to 50% less at max distance）",
+      "reason": "默认贴脸（target_in_melee_range=true，权重首击=1.0）；远程条件与衰减曲线未建模，且 ruleset.effects 未注册对应 effect（仅 snapshot 注释提及）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "资源循环（法力消耗/恢复、无限 mana 口径）",
+      "reason": "mana 公式为 assumed，仅用于 300 mana 与 ≥10 阈值判定；mana 恢复与其它资源未模拟（R6/R14）。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "完整 rotation / 操作序列 / 其它技能主动伤害（EW/Firebrand/Surge/Flame Ward 等）",
+      "reason": "固定条件估算，只模拟 Flame Reave 本体命中；其它技能只作为条件来源筛查（current-status §3.2）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "召唤物 / 队伍 Buff / 非伤害状态（Chill/Blind 等）",
+      "reason": "未建模；本契约限定单人、限定来源与目标场景。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "crit 缩放类被动 per-attribute 公式（Prodigy per-Int、Defender of Welryn per-Dex，OQ6）",
+      "reason": "当前把两节点归一为快照值计入（R25 assumed）；精确公式未验证，可能影响 crit chance/满暴判定。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "目标火抗非 0 / 负抗下限 / 区域抗性惩罚",
+      "reason": "R12 assumed：火抗默认 0、穿透 ×(1+Σpen)、负抗钳制未建模；对非 0 抗或负抗目标会偏。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "范围/几何类效果（Dancing Flames/Rolling Flames 射程、Precise Destruction 宽度、Sunwreath circle −35% 半径）",
+      "reason": "只影响命中几何，不改变单目标贴脸命中伤害与频率；不建空间模型。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "编织者天赋树与容器、神像祭坛网格条件 CDR",
+      "reason": "输入范围未覆盖编织者树（原始响应归档）；祭坛网格条件 CDR grid_validation=not_verified，不计 10% CDR（current-status §3.2）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "Ignite DoT 作为独立组件",
+      "reason": "当前只建模 ignited 条件，不建模点燃持续伤害（ruleset.open_questions R15）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "玩家 HTML / 本地重算的验收状态",
+      "reason": "FR 页面与 serve 重算通道代码存在，但 P0 盘点未通过 player-report-ui 契约验收（HTML/LIVE 分开记录）；本模板只做能力声明草案，不声称页面通过。",
+      "blocks_full_dps": false
+    }
+  ],
+  "assumptions": [
+    {
+      "assumption_id": "fr-legacy-vs-build-base-ratio",
+      "status": "derived",
+      "note": "本案例/场景校验关系：legacy_single_skill 单次/DPS = build_base ÷ 1.49，差异机制为 Army of Skin 的 49% more melee 与 enemy_high_health 条件（legacy 关闭该状态）。这是本案例冻结政策下的校验关系，不是通用 legacy 换算规则；换 BD/场景必须重新推导。",
+      "evidence_locator": "archive://docs/reviews/p0-independent-review-2026-11-07.zh-CN.md#4 裁定二（1.49 仅本案例校验关系）；archive://examples/flame-reave/expected/expected-summary.json#/run_expectations；archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles"
+    },
+    {
+      "assumption_id": "fr-cooldown-icr-formula",
+      "status": "assumed",
+      "note": "Reflash 3s 冷却与 ICR 公式 (base+flat)/(1+ΣICR)；冷却从何时起算与 ICR 对充能的效果无 1.5.2 游戏真值（R13）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation；tools/phase3/rules/fr-hit-facts-v1.json#R1.reflash_cooldown"
+    },
+    {
+      "assumption_id": "fr-cooldown-limited-primary",
+      "status": "assumed",
+      "note": "基线 DPS 以 cooldown_limited 为主口径；attack_speed_limited 作为备选同时输出，政策变更须重锁 expected（policy_locked 语义）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/policy；archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/policy"
+    },
+    {
+      "assumption_id": "fr-enemy-high-health-default",
+      "status": "assumed",
+      "note": "Army of Skin 的 high/full health 默认成立（boss/rare 起手满血）；低于阈值时 49% more 失效，实战平均覆盖率未验证（R20）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=global_conditional_damage_feet；archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/build_base/states/enemy_high_health"
+    },
+    {
+      "assumption_id": "fr-ew-always-active",
+      "status": "confirmed",
+      "note": "Enchant Weapon 只要有近战命中就激活（Kindling Blade autoRecast）；legacy_single_skill 与 build_base 的 states 都把 EW active 设为 true，两基线实际差异只有 Army of Skin（scenario 注释存在漂移，需 Lead 复核）。",
+      "evidence_locator": "user_conversation#2026-11-07；tools/phase3/rules/fr-hit-facts-v1.json#R7.enchant_weapon_auto；archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles"
+    },
+    {
+      "assumption_id": "fr-rhythm-cycle-average",
+      "status": "assumed",
+      "note": "纯 FR 稳态循环每 4 次施放 1 次消耗 12 层（+130% more），DPS 用周期平均 ×1.325；其它技能补层与逐次离散不模拟（R18/R22/OQ8）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/rhythm_of_fire；tools/phase3/rules/fr-hit-facts-v1.json#R4.rhythm_of_fire"
+    },
+    {
+      "assumption_id": "fr-adaptive-added-as-fire",
+      "status": "confirmed",
+      "note": "无类型 added damage 是自适应伤害，本案例单 Fire 组件下按 Fire 结算（用户裁决）；每条 untyped added 行在 result assumptions 中留痕。",
+      "evidence_locator": "user_conversation#2026-11-07；archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/assumptions"
+    },
+    {
+      "assumption_id": "fr-typed-added-fire-only",
+      "status": "assumed",
+      "note": "fire_only 组件策略：非 Fire typed added 不转成 Fire、不建独立组件（R17）；会使非 Fire 伤害缺算（unsupported 已列）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/extra_damage_type_policy；docs/fr-bh-convergence-handover.zh-CN.md#5.3"
+    },
+    {
+      "assumption_id": "fr-crit-scaling-passives-normalized",
+      "status": "assumed",
+      "note": "Prodigy / Defender of Welryn 的 crit 贡献按快照归一值（added +0.01 / increased +0.08）计入；per-attribute 公式未验证（R25/OQ6）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rules id=R25；tools/phase3/rules/fr-hit-facts-v1.json#B.crit_model"
+    },
+    {
+      "assumption_id": "fr-target-resistance-zero",
+      "status": "assumed",
+      "note": "目标火抗默认 0；穿透为独立乘区 ×(1+Σpen)；负抗下限/区域惩罚不建模（R12）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/target；tools/phase3/rules/fr-hit-facts-v1.json#R12"
+    },
+    {
+      "assumption_id": "fr-mana-cost-estimate",
+      "status": "assumed",
+      "note": "Flame Reave mana 消耗为估算（base+flat 与 increased 顺序/符号 unresolved，OQ5）；只用于 mana_ge_300 与 ≥10 条件，不进入伤害数值。",
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/mana；tools/phase3/rules/fr-hit-facts-v1.json#R6.mana_cost"
+    },
+    {
+      "assumption_id": "fr-fractional-casts",
+      "status": "derived",
+      "note": "窗口按期望（可小数）施放次数聚合；complete_casts 只作透明度字段，不用于重算总伤害（policy_locked）。",
+      "evidence_locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/windows；archive://docs/reviews/p0-independent-review-2026-11-07.zh-CN.md#4"
+    },
+    {
+      "assumption_id": "fr-melee-range-only",
+      "status": "derived",
+      "note": "目标固定贴脸（target_in_melee_range=true）：第 1 击距离衰减=1.0；远程衰减未建模（OQ2）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/hit_events；archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/hit_count/distance_assumption"
+    },
+    {
+      "assumption_id": "fr-offhand-exalted-rarity",
+      "status": "confirmed",
+      "note": "副手 Katana 有两个 T7 词缀，按显示稀有度规则视为 Exalted；离线存档 raw byte 4 为 bug，不改存档（用户裁决）。",
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/offhand_exalted_effect；user_conversation#2026-11-07"
+    },
+    {
+      "assumption_id": "fr-single-fire-component",
+      "status": "assumed",
+      "note": "只计算 Fire 单组件；未建模其它伤害类型组件（见 unsupported）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/components；tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/extra_damage_type_policy"
+    },
+    {
+      "assumption_id": "fr-windows-steady-state",
+      "status": "assumed",
+      "note": "5/30/120s 窗口为稳态固定条件估算：无 ramp-up、移动、中断或其它技能填充（引擎显式假设）。",
+      "evidence_locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/assumptions"
+    }
+  ],
+  "capability_ref": {
+    "model_id": "hit",
+    "pages": [
+      "总览",
+      "伤害构成",
+      "命中与 DPS",
+      "增伤来源",
+      "Buff 设置"
+    ],
+    "target_fields": [
+      "boss_or_rare",
+      "monster_level",
+      "fire_resistance"
+    ],
+    "buff_controls": [
+      "ignited",
+      "enemy_high_health",
+      "enchant_weapon_active",
+      "frenzy_active",
+      "consume_rhythm_of_fire",
+      "rhythm_of_fire_stacks",
+      "consume_blade_weaving",
+      "blade_weaving_stacks",
+      "ambition_stacks",
+      "mana_ge_300",
+      "target_in_melee_range",
+      "hit_override"
+    ],
+    "recalculation": "unknown"
+  },
+  "validation_refs": [
+    "archive://examples/flame-reave/expected/expected-summary.json#/checks（单次命中总伤害/added/added×scaling/increased/more/crit/穿透/目标 DR/有效冷却/cast 速率/DPS 5s/30s/120s/buff 候选数）",
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json → PASS 25/25（P0 本轮实测；2-A expected 补锁后检查项应增至 40：33 checks + 7 run_expectations）",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json → PASS（结构与指纹一致，P0 实测）",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests（result 契约/一致性/账本/HTML 离线）",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests（hit-snapshot/hit-run/le.ps1 分派）",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests（FR serve 重算通道；页面/重算未按 player-report-ui 验收）",
+    "archive://reports/flame-reave/save-build-fr-hit-stage16/run-manifest.json#/consistency/all_pass=true"
+  ],
+  "case_scope": [
+    "flame-reave"
+  ],
+  "reuse_mode": "shared"
+}

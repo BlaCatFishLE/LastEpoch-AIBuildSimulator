@@ -1,0 +1,105 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-weakened-reality",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Weakened Reality（中心范围 more，仅本体）",
+    "en": "Weakened Reality (more damage within 1m of centre, body only)"
+  },
+  "source_path": "knowledge/mechanisms/bh-weakened-reality.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-weakened-reality",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-weakened-reality]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-bh-weakened-reality 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Weakened Reality（中心范围 more，仅本体）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body、body_fire、body_cold；条件 code：target.within_center_1m；必要节点：node:bh2:27",
+      "source": "$.applicability"
+    },
+    {
+      "text": "目标位于黑洞中心 1 米内时，node 27 的独立 more 只作用于本体，不作用于 BH 施加的异常（Ignite）。当前基线固定为满足（用户规则 7），已计入基线。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "node 27 经 condition_met 过滤后进入本体 more 分组；Ignite 侧因 inheritance.exclude_tree_nodes 不含 27 而被排除。",
+      "source": "$.handler_ref.note（le_calc.damage.compute_body）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：node points、condition、exclusion evidence",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/0/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12]"
+    },
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12].alt_text"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/target.within_center_1m"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/0",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "中心 1 米的几何定义（球心/距离计算方式）在双星模型下未逐帧验证；当前用单一场景布尔条件近似。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "该节点 more 只作用于 body 是游戏文本明确；但『body only』是指本体命中还是包含其它技能来源（该技能 hit=false）无其它来源，当前无影响。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

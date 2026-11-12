@@ -1,0 +1,149 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-effect-mana-300-idols",
+  "kind": "mechanism",
+  "title": {
+    "zh": "神像词条 doubled if 300+ maximum mana（当前条件不满足，doubling 未建模）",
+    "en": "Idol affixes doubled at 300+ maximum mana (condition unmet, doubling not modeled)"
+  },
+  "source_path": "knowledge/mechanisms/fr-effect-mana-300-idols.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "not_implemented",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "mana_ge_300_idols",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=mana_ge_300_idols",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_effect:mana_ge_300_idols 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "神像词条 doubled if 300+ maximum mana（当前条件不满足，doubling 未建模）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire；条件 code：mana_ge_300",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=increased；叠层策略=none；顺序/汇总=基础 increased fire 常驻；doubled 部分仅在 mana_ge_300=true 时追加一份同额 increased；more 分组依据=n/a（increased 池）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "mana_ge_300 由快照 derived.mana 判定；不满足时 doubled contribution 进 excluded；基础倍率仍计入",
+      "source": "$.handler_ref.note（le_calc.hit_damage.evaluate_condition）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：effect definition、idol affixes、max mana estimate、excluded doubled rows",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods property=98 tags=36"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/excluded_contributions"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods property=98 tags=36（idols.0/1/3/4）"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/mana/mana_max_estimate；#/derived/mana/mana_ge_300"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/excluded_contributions[reason=condition not satisfied]"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/interaction_requirements/0/evidence_locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/mana"
+    },
+    {
+      "pointer": "$/interaction_requirements/1/evidence_locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "max mana 公式来自第三方 runtime（assumed）；本 BD ≈238.5 距 300 有 61.5 余量且无 %mana 来源，结论稳健",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "若换 BD/加入 mana 来源，需重新判定 300 阈值并可能激活 doubling",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "mana 实际消耗/恢复未建模（R6/R14），本条件不影响命中判定之外的资源循环",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,99 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-frozen-steel",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Frozen Steel（目标冰缓/冻结时的条件增伤，4 点门槛）",
+    "en": "Frozen Steel (conditional damage vs chilled/frozen, 4-point threshold)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-frozen-steel.json",
+  "evidence_state": "unresolved",
+  "implementation_state": "not_implemented",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "passive.frozen_steel",
+    "path": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+    "locator": "effects[id=passive.frozen_steel]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+      "note": "conditional_effect:passive.frozen_steel 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:mg-1:36",
+      "note": "节点数据（条件增伤、noScaling、4 点门槛、chilled OR frozen；数值见 dataset/注册表）。",
+      "source": "$.evidence_refs[3]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Frozen Steel（目标冰缓/冻结时的条件增伤，4 点门槛）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body_fire、body_cold；条件 code：target.chilled、target.frozen；必要节点：node:mg-1:36",
+      "source": "$.applicability"
+    },
+    {
+      "text": "常驻被动（已分配 4/5 点，达到 noScaling 4 点门槛）；效果只在目标冰缓或冻结时适用。操作类型（increased/more）、数值单位与作用分支（本体/点燃）均未从本地数据确认（registry support=mechanism_unresolved），不计入基线/重算。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "按当前树/节点稳定 ID 和点数绑定；统一条件程序执行。Preparation 只进入独立单次评估，不传播到循环。当前接入 charge_dot 执行链，其它执行驱动未签收。",
+      "source": "$.handler_ref.note（le_calc.conditional_node_buffs.bind / contributions）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、effect values、state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/14"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/passive.frozen_steel"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/passive_tree/nodes/11/points"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://docs/reviews/unified-report-buff-restore-20261112.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/passive.frozen_steel"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "Frozen Steel 的增量是 more 还是 increased 未确认；planner 归一化 property=-1，无法直接消费。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "该增量是否作用于 Black Hole 点燃未确认。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "需要受控测试：固定冰缓/冻结覆盖，比较 4 点前后本体与点燃数字；或从 1.5.3 代码找到 property=-1 的 stat 语义。",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

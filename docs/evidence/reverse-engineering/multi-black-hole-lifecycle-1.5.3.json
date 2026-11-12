@@ -1,0 +1,45 @@
+{
+ "source": "local game 1.5.3 GameAssembly.dll native disassembly (BlackHoleMutator.Mutate / onStartedAbility / onStoppedAbility) read-only",
+ "game_version": "1.5.3",
+ "fields": {
+  "activeHoles": {
+   "offset": "0x1f0",
+   "type": "List<GameObject>",
+   "meaning": "all currently live black-hole GameObjects tracked across casts"
+  },
+  "extraBlackHoles": {
+   "offset": "0x180",
+   "type": "float",
+   "meaning": "additional black holes spawned per cast (Scattered/Armageddon family)"
+  },
+  "forceSingleBlackHole": {
+   "offset": "0x17c",
+   "type": "bool",
+   "meaning": "Singularity: cap black holes per cast to 1 (suppresses extra-hole spawn)"
+  }
+ },
+ "findings": [
+  {
+   "id": "per-cast-limit",
+   "detail": "forceSingleBlackHole is only read in BlackHoleMutator.Mutate to gate the extraBlackHoles spawn branch (0x1830827-0x1830841); if extraBlackHoles==0 or forceSingleBlackHole is set, the extra-hole spawn path is skipped. No global count limit or destroy-existing logic exists.",
+   "status": "confirmed"
+  },
+  {
+   "id": "multi-cast-coexist",
+   "detail": "Mutate start (0x182f8cf) removes stale entries from activeHoles (call 0x18085b850 with a match predicate, i.e. RemoveAll-like) and Mutate end (0x1830db5) appends the newly spawned hole GameObject via List<GameObject>.Add@0x1803b0700. onStartedAbility (0x1831fdd) iterates over all active holes to roll blackHoleFireballChanceOnDirect per hole, proving holes from earlier casts remain alive and tracked. No code destroys an existing hole when a new cast starts.",
+   "status": "confirmed"
+  },
+  {
+   "id": "extra-hole-per-cast",
+   "detail": "extraBlackHoles>0 (and !forceSingleBlackHole) spawns additional holes for that cast via Ability::getAbility + delayed cast path (0x18308f5-0x1830973).",
+   "status": "confirmed"
+  },
+  {
+   "id": "recast-on-end",
+   "detail": "chanceToRecastOnEnd path (0x1830847-0x18308e2) can spawn another hole at end; this branch is evaluated before/independently of the forceSingleBlackHole gate, so it is a caveat for builds selecting that node (not selected in this build).",
+   "status": "partially_confirmed"
+  }
+ ],
+ "conclusion": "Multiple casts create independent black holes that coexist and each runs its own duration; Singularity (forceSingleBlackHole) only limits holes created by a single cast to 1 (and suppresses Scattered extra holes), not the global number. This matches user rule 6 and validates v1 eager/patient concurrency modeling (no global cap, overlap allowed).",
+ "v1_impact": "no numeric change required; upgrade ruleset status from assumption to confirmed for concurrency/per-cast limit. activeHoles is a live-hole registry, not a global cap."
+}

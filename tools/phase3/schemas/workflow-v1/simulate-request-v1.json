@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/simulate-request-v1.json",
+  "title": "SimulateRequest v1",
+  "description": "P2 simulate 输入：显式 case_ref + output_dir，可选 inputs 覆盖与实现指纹；输出目录必须为空（不覆盖历史 run）。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "case_ref",
+    "output_dir"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "le-simulate-request-v1"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "case_ref": {
+      "type": "string"
+    },
+    "model_id": {
+      "type": "string",
+      "enum": [
+        "black-hole",
+        "hit",
+        "bh-event"
+      ]
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "output_dir": {
+      "type": "string",
+      "description": "repository-relative run directory"
+    },
+    "inputs": {
+      "type": "object",
+      "properties": {
+        "snapshot_ref": {
+          "type": "string"
+        },
+        "ruleset_ref": {
+          "type": "string"
+        },
+        "scenario_ref": {
+          "type": "string"
+        },
+        "calc_input_ref": {
+          "type": "string"
+        },
+        "build_ref": {
+          "type": "string"
+        },
+        "conditional_registry_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "implementation_fingerprints": {
+      "type": "object"
+    },
+    "render_html": {
+      "type": "boolean"
+    },
+    "generated_at": {
+      "type": "string"
+    }
+  }
+}

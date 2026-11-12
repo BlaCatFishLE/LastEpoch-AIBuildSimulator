@@ -1,0 +1,81 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-ignite-attribute-scaling",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Intelligence 属性缩放传递给 Ignite",
+    "en": "Intelligence attribute scaling passed to Ignite"
+  },
+  "source_path": "knowledge/mechanisms/bh-ignite-attribute-scaling.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "case_bound",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-attribute-scaling",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-attribute-scaling]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-ignite-attribute-scaling 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Intelligence 属性缩放传递给 Ignite",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ignite；伤害标签：Fire、DoT、Ailment；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Intelligence 的 increased damage 先作用于 Black Hole（技能 attributeScaling），再传递给 BH 造成的 Ignite；在 Ignite inc 池中作为一条 assumed 行（规则包状态）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "attribute_row（source_path=bh2.attributeScaling[2]）以 status=assumed 并入 Ignite inc_total。",
+      "source": "$.handler_ref.note（le_calc.ignite._ignite_scaling）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：intelligence、increased_per_point",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/parameter_bindings/0/source",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/attributes/intelligence"
+    },
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling/increased_total"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "传递给 Ignite 的 Int 缩放是否与玩家侧 increased damage 严格同池（加法）在代码级未逐 stat 追踪；当前按用户规则与参考模型实现，属 confirmed 口径但非独立验证。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

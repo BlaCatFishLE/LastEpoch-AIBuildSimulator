@@ -1,0 +1,148 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-node-precise-destruction",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 树节点 20 Precise Destruction（added crit chance）",
+    "en": "Precise Destruction (Flame Reave tree node 20)"
+  },
+  "source_path": "knowledge/mechanisms/fr-node-precise-destruction.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "dataset_entity",
+    "ref": "node:letools:fr11mv:20",
+    "path": "data/releases/phase1-dataset-003/data.sqlite",
+    "locator": "#nodes node_index=20；#effects owner_entity_id=node:letools:fr11mv:20",
+    "verification": {
+      "status": "external_dataset",
+      "checked_against": "data/releases/phase1-dataset-003/data.sqlite",
+      "note": "dataset 实体引用；数据在 fetch 的 dataset 文件中，不随仓库分发，未在本轮打开"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes entity_id=node:letools:fr11mv:20",
+      "note": "Precise Destruction 节点描述/类型/上限",
+      "source": "$.evidence_refs[0]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:20",
+      "note": "Crit Chance +4%/点（added）；Width -8%/点（ignored，范围不影响命中伤害）",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 树节点 20 Precise Destruction（added crit chance）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire、Melee；条件 code：none；必要节点：node:fr11mv:20",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=crit；叠层策略=linear_per_stack；顺序/汇总=每点 +4% 作为 added crit chance 进入暴击几率池；Width -8% 显式忽略；more 分组依据=n/a（added crit chance）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "key '20'；role=stat 的 added crit chance 行；width 为 ignored",
+      "source": "$.handler_ref.note（le_calc.hit_inputs.FR_SKILL_NODE_SEMANTICS）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、value_per_point、value_total、contribution rows",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=20)"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/nodes(node_id=20)/points"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=20)/effects[*]/value_per_point"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=20)/effects[*]/value_total"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[contribution_id prefix=skill:fr11mv:20:]"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "Width 词条属于范围/几何，不影响单次命中伤害（与 Sunwreath circle 同类）",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "crit chance 的最终 cap 与 more 组见 fr-hit-critical-expected",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

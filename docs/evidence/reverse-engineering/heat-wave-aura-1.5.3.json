@@ -1,0 +1,19 @@
+{
+ "source": "local game 1.5.3 GameAssembly.dll native disassembly (BlackHoleMutator.Mutate) read-only",
+ "game_version": "1.5.3",
+ "aura_component": "RepeatedlyApplyAilmentsInRadius",
+ "call_site": {
+  "method": "BlackHoleMutator::Mutate",
+  "rva": "0x182f6e0",
+  "offset": "0x182e0e0",
+  "region": "0x18302c1-0x1830405"
+ },
+ "observations": [
+  "The Heat Wave aura object is prepared once per Mutate call: Ailment::getAilment(Ignite) -> RepeatedlyApplyAilmentsInRadius::addChance(ailment, chance, ...) at 0x1830333, immediately followed by chill/blind addChance calls on the same aura component. This code is not inside any loop over damage components/stars.",
+  "Chance per roll = actor uncapped fire resistance * blackHoleMutator.chanceToIgnitePerUncappedFireRes (0x140) * 0.5; the 0.5 factor is the aura applicationInterval.",
+  "The same aura component then gets applicationInterval=0.5f at [aura+0x98] (field 152) and applyOnStart=true at [aura+0xb4] (field 180) at 0x18303eb-0x18303fe.",
+  "Field map: RepeatedlyApplyAilmentsInRadius.applicationInterval=0x98(152), applyOnStart=0xb4(180), radius=0x90(144)."
+ ],
+ "conclusion": "Heat Wave is a single aura per Black Hole cast (one RepeatedlyApplyAilmentsInRadius instance). Binary System two stars share this one aura: there is no second aura/addChance call per star, so expected rolls per second are unchanged by Binary. Roll cadence = spawn + k*0.5 while active, applyOnStart=true; expected stacks/s = 2%/pt * points * uncapped fire res%.",
+ "v2_impact": "confirms the v2 heat_wave assumption \"one roll per Black Hole (not per star)\"; no extra numeric change beyond the 0.5s roll interval already implemented."
+}

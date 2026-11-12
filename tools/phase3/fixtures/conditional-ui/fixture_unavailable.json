@@ -1,0 +1,38 @@
+{
+  "schema": "bh-conditional-view-v1",
+  "available": false,
+  "unavailable_reason": "本报告由旧版引擎生成，未包含条件 Buff 配置数据；请用当前命令重新生成报告。",
+  "header": {
+    "title": "条件 Buff",
+    "question": "哪些条件效果可能改变 Black Hole？如何设置？",
+    "mode_label": "固定条件估算",
+    "baseline_label": "构筑基础状态",
+    "disclaimer": "条件配置只生成场景与求值说明；本页不重算 DPS。",
+    "dps_recomputed": false,
+    "dps_note": "本页不重算 DPS。"
+  },
+  "counts": {},
+  "filters": {
+    "categories": [],
+    "relevance": [],
+    "support": [],
+    "statuses": []
+  },
+  "states": [],
+  "presets": [],
+  "effects": [],
+  "groups": [],
+  "auto_notes": [],
+  "checked": {
+    "summary": [],
+    "records": [],
+    "excluded_sources": [],
+    "data_gaps": []
+  },
+  "dependency": {
+    "modules": [],
+    "note": ""
+  },
+  "export": {},
+  "client_rules": {}
+}

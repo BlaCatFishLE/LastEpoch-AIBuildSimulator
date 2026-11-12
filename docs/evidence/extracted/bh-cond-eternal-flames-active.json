@@ -1,0 +1,95 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-eternal-flames-active",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Eternal Flames 激活（节点效果翻倍）",
+    "en": "Eternal Flames active (node effect doubled)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-eternal-flames-active.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "enchant_weapon.eternal_flames.active",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=enchant_weapon.eternal_flames.active]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+      "note": "conditional_effect:enchant_weapon.eternal_flames.active 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:sb44eQ:9",
+      "note": "节点文本『doubled while active』。",
+      "source": "$.evidence_refs[3]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Eternal Flames 激活（节点效果翻倍）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ignite、duration；伤害标签：Fire、Ailment；条件 code：player.enchant_weapon_active；必要节点：node:sb44eQ:9",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Enchant Weapon 激活期间该节点效果翻倍：Ignite duration 总计翻倍，相对被动有增量行（数值见注册表）。Enchant Weapon 基础激活时长未知；固定条件模式只声明激活状态，不执行 Conflagrate 动作。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "在被动行之外追加 active_incremental_ignite_duration（+0.25）行；不重复加 total。",
+      "source": "$.handler_ref.note（le_calc.conditional.recompute.recompute_scenario）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、effect values、state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/2"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/enchant_weapon.eternal_flames.active"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/0/nodes/1/points"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.enchant_weapon_active"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/enchant_weapon.eternal_flames.active"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "Enchant Weapon 基础激活时长（秒）未知；不影响固定条件估算，但影响真实维持率。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "激活期间点燃是否继承 Conflagrate 的消费副作用未确认。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

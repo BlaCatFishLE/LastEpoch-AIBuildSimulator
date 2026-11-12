@@ -1,0 +1,163 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-ignite-scaling-pool",
+  "revision": 2,
+  "title": {
+    "zh": "Ignite 玩家侧 inc 池与标签口径",
+    "en": "Ignite player-side increased pool and tag semantics"
+  },
+  "aliases": [
+    "ignite inc pool",
+    "Elemental",
+    "DoT increased",
+    "Ailment",
+    "Spell excluded",
+    "点燃 inc 池",
+    "元素标签"
+  ],
+  "selectors": [
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "damage"
+      ]
+    },
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ignite"
+    ],
+    "tags": [
+      "Fire",
+      "DoT",
+      "Ailment",
+      "Elemental"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Ignite 的 increased 池 = 适用 Fire/Elemental/DoT/Ailment 的 increased damage 行 + Intelligence 属性缩放（经 bh-ignite-attribute-scaling）。Elemental 展开为 Fire/Cold/Lightning，所以 Elemental 增伤进入 Ignite；Spell 增伤不进入（点燃不是 Spell）。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-scaling-pool",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-scaling-pool]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "ignite inc rows",
+      "source": "current:matched_instances",
+      "note": "stat_key=damage、operation=increased、按 Ignite 标签过滤；逐行见 source-ledger。"
+    },
+    {
+      "parameter": "increased_ignite_effect",
+      "source": "current:matched_instances",
+      "unit": "fraction",
+      "note": "旧数据口径的 ailment effect（规则包说明为 legacy 行）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ignite",
+    "symbol": "_ignite_scaling",
+    "note": "collect_modifier_rows(snapshot, STAT_DAMAGE, IGNITE_TAGS, increased) + attribute 行 → inc_total。"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-elemental-tag]",
+      "note": "用户 2026-11-04 确认：Elemental 标签相当于 Fire/Cold/Lightning，进入 Ignite。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/elemental-tag-filtering-1.5.3.json",
+      "note": "1.5.3：Elemental 是独立 flag，Tags.Applicable/GetTotalIncreased 展开到三元素；Ignite 得 Elemental、不得 Spell。"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1",
+      "note": "Ignite damage type=Fire、tags=['DoT']。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling/increased_rows",
+      "note": "当前 run 的 Ignite inc 行。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Ignite inc 池 status=assumed 的索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_effect_total",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_single_stack_core",
+    "tools/phase3/tests/test_damage.py::TagMatchingTest::test_type_and_category_gating",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-ignite-attribute-scaling",
+      "requirement": "Int 缩放作为一条 inc 行进池；与 Elemental 行并列相加。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_scaling"
+    },
+    {
+      "with": "common-tag-match",
+      "requirement": "标签匹配决定一行是否进入 Ignite 池；Elemental 展开由标签匹配器实现。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#tags_match"
+    },
+    {
+      "with": "bh-ignite-penetration",
+      "requirement": "Fire Penetration with Ignite 不进 inc 池，而是点燃专属穿透。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_scaling"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-scaling-pool]",
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-elemental-tag]",
+      "docs/evidence/reverse-engineering/elemental-tag-filtering-1.5.3.json",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling",
+      "docs/mechanisms.md#35-机制条目总表"
+    ],
+    "open_questions": [
+      "整个 inc 池构成仍是 assumed（规则包 rule-ignite-scaling-pool）：Elemental/DoT/Ailment 之外是否还有玩家侧 increased 类别进入 Ignite（如 Fire Damage over Time 的独立词条）未穷举；当前池来自 snapshot 标签过滤，等价于『凡 tags 匹配 Fire+DoT/Ailment 的行』。",
+      "increased ailment effect 是 legacy 数据行（phase1<=002）；当前 dataset 003 已把该词条改为『Fire Penetration with Ignite』，引擎保留 effect_rows 分支以兼容旧数据，但本案例结果为空。"
+    ],
+    "requery_when": [
+      "出现新的 increased 类别词条时",
+      "dataset 口径变化时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-baseline-profiles",
+  "kind": "mechanism",
+  "title": {
+    "zh": "双基线口径：legacy_single_skill 与 build_base",
+    "en": "Dual baseline profiles: legacy_single_skill and build_base"
+  },
+  "source_path": "knowledge/mechanisms/bh-baseline-profiles.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "case_bound",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "基线 profile 是案例/场景口径（conditional registry baseline_profiles + conditional-scenario），没有游戏规则 ID。",
+    "verification": {
+      "status": "declared_none",
+      "checked_against": null,
+      "note": "条目声明该机制没有可引用的游戏规则 ID（ref 内写明原因）"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "双基线口径：legacy_single_skill 与 build_base",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：loop、ledger、conditional；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "两个基线必须分开核对、不可相减当作增益：legacy_single_skill = 只含 BH 技能树 + 玩家装备/被动，不含跨技能常驻自动效果；build_base = 在其上加入已确认且具备资格的跨技能常驻被动（当前为 Eternal Flames 被动，Ignite 持续时间增量见注册表）。单次观察口径 = cast start 到最后一层 Ignite 到期。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "_resolve_include_auto 按 baseline_profile 决定是否纳入 auto 效果（legacy 排除 / build_base 纳入）；单次观察窗口在 le_calc.simulate.run_single_cast。",
+      "source": "$.handler_ref.note（le_calc.conditional.recompute.recompute_scenario）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：baseline_profiles、baseline_profile、baseline output、scenario output、delta",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/parameter_bindings/1/source",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/baseline_profile"
+    },
+    {
+      "pointer": "$/parameter_bindings/2/source",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline"
+    },
+    {
+      "pointer": "$/parameter_bindings/3/source",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/scenario"
+    },
+    {
+      "pointer": "$/parameter_bindings/4/source",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/delta"
+    },
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline_profile"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.single_cast_total]"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[conditional_recompute.baseline.single_cast_total]"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/case.legacy.json#/notes"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.single_cast_total]"
+    },
+    {
+      "pointer": "$/interaction_requirements/0/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/assumptions_applied"
+    },
+    {
+      "pointer": "$/interaction_requirements/1/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline_profile"
+    },
+    {
+      "pointer": "$/interaction_requirements/2/evidence_locator",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/notes"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/black-hole/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/black-hole/case.legacy.json#/notes"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "legacy_single_skill 的『只含 BH 技能树 + 玩家装备/被动』与 build_base 的『加常驻跨技能被动』是产品口径（用户/案例决定），不是游戏内两种模式；文档与玩家页必须保持该限定。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "registry 对 build_base 的描述称『引擎没有跨技能被动输入通道…DPS 数值不变』，但条件重算通道实际通过 auto 效果应用了 Eternal Flames（conditional-recompute 的 delta 非零）。该描述与当前重算行为存在文字不一致，需 Lead 复核注册表文字（本轮不改 registry）。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

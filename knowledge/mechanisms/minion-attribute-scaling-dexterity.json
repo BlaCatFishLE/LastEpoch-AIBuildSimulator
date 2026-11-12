@@ -1,0 +1,103 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "minion-attribute-scaling-dexterity",
+  "revision": 1,
+  "title": {
+    "zh": "Ballista 召唤的敏捷属性缩放（玩家 Dex → minion 增伤）"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "Ballista 召唤的敏捷属性缩放（玩家 Dex → minion 增伤）"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "ba1574:5",
+        "ba1574:18"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "dataset skill ba1574 extensions.attributeScaling：属性 3(Dexterity) 每点 +4% increased damage（tags=Minion），另 +1% increased attack speed；Dex 取玩家当前值，经 Summoned.attributeScaling/召唤属性路径作用于 minion；节点 5 的 \"based on your Dexterity\" 是独立的 per-Dex more。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "dexterity",
+      "source": "docs/evidence/ballista/ballista-build-values-20261113.json#player_stats.dexterity.total",
+      "unit": "228"
+    },
+    {
+      "parameter": "per_point",
+      "source": "knowledge/definitions/ballista-armed-construction-v4.json#/definition/rules/attribute_scaling/ratios/dexterity",
+      "unit": "increased damage",
+      "per_point": true
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.attribute_scaling",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.rules.attribute_scaling"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "attributeScaling 收集/应用路径"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前 Dex 及来源分解"
+    },
+    {
+      "kind": "document",
+      "locator": "knowledge/definitions/ballista-armed-construction-v4.json",
+      "note": "可执行定义"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "attributeScaling 的最终应用点仍属推导，未逐指令验证 4%/Dex 的求和顺序。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "knowledge/definitions/ballista-armed-construction-v4.json"
+    ]
+  },
+  "limitations": [
+    {
+      "item": "minion 攻击速度属性缩放",
+      "reason": "只影响事件频率，不进入爆炸伤害乘区；本轮频率由场景控件给出。",
+      "blocks_full_dps": false
+    }
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": []
+}

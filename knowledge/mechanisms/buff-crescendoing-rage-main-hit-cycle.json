@@ -1,0 +1,84 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "buff-crescendoing-rage-main-hit-cycle",
+  "revision": 1,
+  "title": {
+    "zh": "Crescendoing Rage 主技能命中计数",
+    "en": "Crescendoing Rage 主技能命中计数"
+  },
+  "aliases": [
+    "Crescendoing Rage 主技能命中计数"
+  ],
+  "selectors": [
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "affix:affix:letools:affixList.singleAffixes:1124"
+      ]
+    }
+  ],
+  "reuse_mode": "shared",
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [],
+    "conditions": [
+      "crescendo"
+    ],
+    "notes": "候选命中不等于激活：先核对当前稳定定义与效果语义，再按当前条件求值。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "source_instances",
+      "source": "current:matched_instances",
+      "note": "按稳定定义 ID 和词条/节点语义绑定，不携带旧槽位。"
+    },
+    {
+      "parameter": "points_values",
+      "source": "current:matched_instances",
+      "note": "节点从当前专精取 points，装备从当前实例取 value；常量由共享规则或 dataset 提供。"
+    },
+    {
+      "parameter": "scenario",
+      "source": "current:scenario.states",
+      "note": "条件开关、层数与目标状态来自本次场景。"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "buff-crescendoing-rage-main-hit-cycle",
+    "path": "tools/phase3/rules/shared-conditional-mechanisms-v1.json",
+    "locator": "#/mechanisms/buff-crescendoing-rage-main-hit-cycle"
+  },
+  "handler_ref": {
+    "module": "le_calc.effect_binding",
+    "symbol": "component_rule_payload"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "dataset UIBuffs:248 / Crescendoing Rage description"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/void-cleave/conditional-knowledge-closeout-20261110.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "item": "计数范围",
+      "reason": "仅已实现的主技能命中计数口径；多技能施放计数与相位不能由本条推断。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "持续伤害继承",
+      "reason": "未确认，不把该加成赋予 DoT。",
+      "blocks_full_dps": false
+    }
+  ]
+}

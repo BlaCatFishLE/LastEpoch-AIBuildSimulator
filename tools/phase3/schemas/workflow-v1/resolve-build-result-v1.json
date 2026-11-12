@@ -1,0 +1,278 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/resolve-build-result-v1.json",
+  "title": "ResolveBuildResult v1",
+  "description": "resolve_build 输出：analysis_plan / bound_mechanisms / coverage / gaps / readiness。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "main_skill",
+    "model_id",
+    "analysis_plan",
+    "bound_mechanisms",
+    "coverage",
+    "gaps",
+    "issues",
+    "readiness",
+    "input_fingerprint",
+    "metrics"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "le-resolve-build-result-v1"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "main_skill": {
+      "type": "object"
+    },
+    "model_id": {
+      "type": "string"
+    },
+    "compatibility_baseline": {
+      "type": "object"
+    },
+    "analysis_plan": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "checklist"
+      ]
+    },
+    "bound_mechanisms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "mechanism_id",
+          "revision",
+          "components"
+        ],
+        "properties": {
+          "mechanism_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "entry_kind": {
+            "type": "string"
+          },
+          "evidence_state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "implementation_state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rule_refs": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "implementation_refs": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "source": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "counts"
+      ]
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "gap_id",
+          "kind",
+          "severity",
+          "blocking",
+          "question",
+          "related_ids",
+          "affected",
+          "deliverable_kind",
+          "verification_required"
+        ],
+        "properties": {
+          "gap_id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning",
+              "info"
+            ]
+          },
+          "blocking": {
+            "type": "boolean"
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "related_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "related_mechanism_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "researched_already": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "affected": {
+            "type": "object",
+            "required": [
+              "components",
+              "blocks_target"
+            ],
+            "properties": {
+              "components": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "blocks_target": {
+                "type": "boolean"
+              }
+            }
+          },
+          "deliverable_kind": {
+            "type": "string",
+            "enum": [
+              "mapping",
+              "parameter_rule",
+              "handler",
+              "bounded_assumption"
+            ]
+          },
+          "verification_required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning",
+              "info"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "related_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "required_input": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "details": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "readiness": {
+      "type": "string",
+      "enum": [
+        "ready",
+        "partial",
+        "needs_research",
+        "needs_input"
+      ]
+    },
+    "input_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "metrics": {
+      "type": "object"
+    }
+  }
+}

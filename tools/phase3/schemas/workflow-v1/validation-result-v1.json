@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/validation-result-v1.json",
+  "title": "ValidationResult v1",
+  "description": "validate_result 输出（kind=result）：结构/绑定指纹链/一致性/expected 比对。blocking 项按 contract.ValidationResult 现状放入 errors（P3 再评估是否新增 blocking 字段）。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "kind",
+    "passed",
+    "accepted",
+    "errors",
+    "checks",
+    "next_actions",
+    "outcome_effective"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "le-validation-result-v1"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "result",
+        "proposal"
+      ]
+    },
+    "passed": {
+      "type": "boolean"
+    },
+    "accepted": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "code",
+          "message"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "expected": {},
+          "actual": {},
+          "tolerance": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PASS",
+              "FAIL",
+              "SKIP",
+              "INFO"
+            ]
+          },
+          "expected": {},
+          "actual": {},
+          "tolerance": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "next_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "outcome_effective": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  }
+}

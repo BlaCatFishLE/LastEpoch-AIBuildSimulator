@@ -1,0 +1,30 @@
+using Cpp2ILInjected;
+
+[Token(Token = "0x2001453")]
+public enum TimelineID : byte
+{
+	[Token(Token = "0x400BEB9")]
+	None = 0,
+	[Token(Token = "0x400BEBA")]
+	UndeadAbom = 1,
+	[Token(Token = "0x400BEBB")]
+	OsprixWithLance = 2,
+	[Token(Token = "0x400BEBC")]
+	VoidRahyeh = 3,
+	[Token(Token = "0x400BEBD")]
+	FrostLich = 4,
+	[Token(Token = "0x400BEBE")]
+	Lagon = 5,
+	[Token(Token = "0x400BEBF")]
+	UndeadVsVoid = 6,
+	[Token(Token = "0x400BEC0")]
+	Dragons = 7,
+	[Token(Token = "0x400BEC1")]
+	Gaspar = 8,
+	[Token(Token = "0x400BEC2")]
+	Heorot = 9,
+	[Token(Token = "0x400BEC3")]
+	Volcano = 10,
+	[Token(Token = "0x400BEC4")]
+	Activities = 99
+}

@@ -1,0 +1,234 @@
+{
+  "schema": "black-hole-stage1-result-v1",
+  "fixture": true,
+  "fixture_note": "SYNTHETIC FIXTURE for HTML development only. Numbers are illustrative, not calculated results.",
+  "run": {
+    "run_id": "fixture-00000000T000000-bh-stage1-v1",
+    "generated_at": "2026-11-04T00:00:00+00:00",
+    "engine": { "id": "le_calc", "version": "0.1.0-fixture" },
+    "ruleset": { "id": "bh-stage1-v1", "sha256": "fixture", "game_version": "1.5.2" },
+    "status": "assumption",
+    "status_reason": "fixture only; several P0 rules are assumed in v1",
+    "scope_note": "限定来源：Black Hole 本体及其自然 Ignite；不是完整 BD 实战 DPS。",
+    "repro_command": "python -m le_calc run --out reports/phase-3/black-hole-stage1/<run-id>"
+  },
+  "input": {
+    "dataset": { "dataset_id": "phase1-dataset-002", "target_game_version": "1.5.2", "logical_content_sha256": "fixture" },
+    "build": { "build_id": "letools:o3ZRm9my", "revision_id": "rev-5e0e70bf7a26b3a5", "content_sha256": "fixture" },
+    "calc_input": { "path": "archive://calculation-input.json", "sha256": "fixture", "mod_count": 153, "unresolved_inputs": 0 },
+    "fingerprints": { "build_spec_sha256": "fixture", "ruleset_sha256": "fixture" }
+  },
+  "scope": {
+    "included": ["Black Hole 本体", "Black Hole 施加的自然 Ignite", "装备/神像/祝福/角色被动"],
+    "notes": ["排除 Meteor / Enchant Weapon / Flame Ward / Frost Wall / Teleport 的主动与被动技能树效果", "排除编织树与容器、外部队友增益、其他技能施加的 Ignite"]
+  },
+  "scenario": {
+    "scenario_id": "boss-0res-center-fullcover",
+    "name": "Boss、0 抗性、双星全覆盖、中心 1 米内",
+    "target": { "target_id": "synthetic-boss", "boss_tag": true, "rare_tag": true, "resistances": { "fire": 0.0, "cold": 0.0 }, "notes": "合成靶，不是任何真实 Boss" },
+    "coverage": { "both_stars_cover_target": true, "center_condition_met": true, "theoretical": true },
+    "assumptions": ["双星全覆盖为理论最优场景", "目标始终处于中心 1 米内", "穿透按参考模型允许压到 0 以下"]
+  },
+  "action_policy": {
+    "single_cast": { "policy_id": "single", "description": "t=0 施放一次，观察至最后一层 Ignite 到期", "initial_charges": 2, "mana": "unlimited" },
+    "loops": [
+      { "policy_id": "eager", "description": "可用即施放；旧黑洞存在时的新施放被数量上限拒绝" },
+      { "policy_id": "patient", "description": "等到当前黑洞消失后再施放" }
+    ]
+  },
+  "snapshot": {
+    "build_meta": { "build_id": "letools:o3ZRm9my", "revision_id": "rev-5e0e70bf7a26b3a5", "dataset_id": "phase1-dataset-002" },
+    "character": { "level": 100, "class": "Mage", "mastery": "Sorcerer" },
+    "attributes": { "strength": 10, "vitality": 10, "intelligence": 5, "dexterity": 2, "attunement": 2 },
+    "resistances": {
+      "fire": { "total": 774.0, "cap": 75.0, "capped": 75.0, "overcapped": 699.0 },
+      "cold": { "total": 245.0, "cap": 75.0, "capped": 75.0, "overcapped": 170.0 }
+    },
+    "derived": {
+      "mana_max": 184.8,
+      "cast_time_s": 0.48,
+      "cooldown_recovery_speed_increased": 0.65,
+      "skill_duration_s": 7.15,
+      "ignite_duration_s": 6.025,
+      "ignite_chance_per_second_percent": 7740.0
+    },
+    "contributions": [
+      { "contribution_id": "contrib-fixture-0001", "source_kind": "equipment", "source_label": "Withstand the Elements · 手套", "source_path": "data.equipment.hands", "stat_name": "Fire Resistance", "stat_key": "resistance", "operation": "added", "value": 0.69, "unit": "percent", "damage_tags": [], "target": "fire", "condition_code": null, "condition_status": "always", "group": null, "included": true, "exclusion_reason": null, "value_source": "source", "status": "confirmed", "evidence": [{ "kind": "catalog", "detail": "calculation-input-v1 mod equipment.hands#affix#normal#0.0", "locator": "calculation-input.json#mods[3]" }], "notes": null },
+      { "contribution_id": "contrib-fixture-0002", "source_kind": "idol", "source_label": "Grand Arcane Omen Idol · 神像", "source_path": "data.idols.entries.0", "stat_name": "Increased Ailment Duration", "stat_key": "ailment_duration", "operation": "increased", "value": 0.21, "unit": "percent", "damage_tags": [], "target": "ignite", "condition_code": null, "condition_status": "always", "group": null, "included": true, "exclusion_reason": null, "value_source": "source", "status": "confirmed", "evidence": [{ "kind": "catalog", "detail": "specialTag=1 (Ignite)", "locator": "calculation-input.json#mods[106]" }], "notes": null }
+    ],
+    "issues": [
+      { "issue_id": "issue-fixture-001", "severity": "info", "title": "fixture 数据", "detail": "本文件是开发用合成数据，不是计算结果。" }
+    ]
+  },
+  "source_ledger": [
+    { "contribution_id": "contrib-fixture-0001", "source_kind": "equipment", "source_label": "Withstand the Elements · 手套", "source_path": "data.equipment.hands", "stat_name": "Fire Resistance", "stat_key": "resistance", "operation": "added", "value": 0.69, "unit": "percent", "damage_tags": [], "target": "fire", "condition_code": null, "condition_status": "always", "group": null, "included": true, "exclusion_reason": null, "value_source": "source", "status": "confirmed", "evidence": [], "notes": null },
+    { "contribution_id": "contrib-fixture-0002", "source_kind": "idol", "source_label": "Grand Arcane Omen Idol · 神像", "source_path": "data.idols.entries.0", "stat_name": "Increased Ailment Duration", "stat_key": "ailment_duration", "operation": "increased", "value": 0.21, "unit": "percent", "damage_tags": [], "target": "ignite", "condition_code": null, "condition_status": "always", "group": null, "included": true, "exclusion_reason": null, "value_source": "source", "status": "confirmed", "evidence": [], "notes": null }
+  ],
+  "rule_ledger": [
+    { "rule_id": "rule-fixture-body-tick", "title": "本体周期结算与末跳合并", "statement": "每 0.3 秒一跳，末段不足一个周期的伤害合并到最后一跳；总伤害 = 名义速率 × 实际持续时间。", "group": "body", "status": "assumed", "evidence": [{ "kind": "user_rule", "detail": "用户 2026-11-04 规则 1" }], "affects": ["single_cast.body"] },
+    { "rule_id": "rule-fixture-heatwave", "title": "Heat Wave 每秒一次点燃判定", "statement": "每秒一次判定，几率 = 2% × 点数 × 未封顶火抗（%）。", "group": "ignite", "status": "confirmed", "evidence": [{ "kind": "user_rule", "detail": "用户 2026-11-04 规则 4" }], "affects": ["single_cast.ignite"] }
+  ],
+  "modifier_graph": {
+    "nodes": [
+      { "node_id": "mod:fire-res", "label": "未封顶火抗", "kind": "stat", "value": 774.0 },
+      { "node_id": "mod:heatwave", "label": "Heat Wave", "kind": "rule", "value": 5 },
+      { "node_id": "mod:ignite-chance", "label": "每秒点燃几率", "kind": "derived", "value": 7740.0 }
+    ],
+    "edges": [
+      { "from": "mod:fire-res", "to": "mod:ignite-chance", "label": "×2%/点" },
+      { "from": "mod:heatwave", "to": "mod:ignite-chance", "label": "×5 点" }
+    ]
+  },
+  "single_cast": {
+    "cast": { "cast_id": "cast-1", "cast_start_s": 0.0, "cast_time_s": 0.48, "black_hole_spawn_s": 0.48, "black_hole_end_s": 7.63, "maneuver": "施放动作后生成黑洞", "charges_before": 2, "charges_after": 1 },
+    "body": {
+      "duration_s": 7.15,
+      "tick_interval_s": 0.3,
+      "tick_count": 24,
+      "components": [
+        {
+          "component_id": "bh-fire",
+          "label": "火焰分量（Red Giant 转火后的基础分量）",
+          "damage_type": "Fire",
+          "per_tick_base": 204.0,
+          "per_tick_damage": 26880.5,
+          "share_of_body": 0.78,
+          "breakdown": {
+            "base": { "value": 48.0, "source_refs": ["bh2.prefab.baseDamageStats.damage[2]"] },
+            "added": { "value": 156.0, "detail": "2.4 × 65 附加法术伤害", "source_refs": ["bh2.prefab.baseDamageStats.addedDamageScaling", "equipment.weapon1#unique_mod#5"] },
+            "increased": { "total": 12.72, "rows": [{ "label": "increased Elemental and DoT Damage", "value": 8.35, "source_refs": ["source-ledger"] }] },
+            "more_groups": [{ "group": "node:tidal_force", "factor": 1.6, "source_refs": ["node:letools:bh2:2"] }],
+            "target": { "resistance": 0.0, "penetration": 0.26, "multiplier": 1.26 }
+          },
+          "expression": {
+            "node_id": "expr-bh-fire",
+            "kind": "mul",
+            "label": "火焰分量每跳伤害",
+            "value": 26880.5,
+            "children": [
+              { "node_id": "expr-bh-fire-base", "kind": "add", "label": "基础值 + 点伤", "value": 204.0, "children": [] },
+              { "node_id": "expr-bh-fire-inc", "kind": "factor", "label": "1 + inc 合计", "value": 13.72, "children": [] },
+              { "node_id": "expr-bh-fire-more", "kind": "factor", "label": "more 组乘积", "value": 22.15, "children": [] },
+              { "node_id": "expr-bh-fire-target", "kind": "factor", "label": "目标侧结算", "value": 1.26, "children": [] }
+            ]
+          }
+        },
+        {
+          "component_id": "bh-cold",
+          "label": "冰霜分量（Binary System 第二颗星）",
+          "damage_type": "Cold",
+          "per_tick_base": 204.0,
+          "per_tick_damage": 21640.2,
+          "share_of_body": 0.22,
+          "breakdown": {
+            "base": { "value": 48.0, "source_refs": ["bh2.prefab.baseDamageStats.damage[2]"] },
+            "added": { "value": 156.0, "detail": "2.4 × 65 附加法术伤害", "source_refs": ["bh2.prefab.baseDamageStats.addedDamageScaling"] },
+            "increased": { "total": 10.95, "rows": [] },
+            "more_groups": [{ "group": "node:tidal_force", "factor": 1.6, "source_refs": ["node:letools:bh2:2"] }],
+            "target": { "resistance": 0.0, "penetration": 0.0, "multiplier": 1.0 }
+          },
+          "expression": { "node_id": "expr-bh-cold", "kind": "mul", "label": "冰霜分量每跳伤害", "value": 21640.2, "children": [] }
+        }
+      ],
+      "totals": { "damage": 1161664.2, "nominal_rate_dps": 162398.6, "first_tick_s": 0.48, "last_tick_s": 7.33 }
+    },
+    "ignite": {
+      "ailment": "Ignite",
+      "damage_type": "Fire",
+      "base_damage": 40.0,
+      "base_duration_s": 2.5,
+      "duration_multiplier": 2.41,
+      "effective_duration_s": 6.025,
+      "application": {
+        "rule": "heat_wave",
+        "node": "node:letools:bh2:6",
+        "points": 5,
+        "per_point_percent": 2.0,
+        "uncapped_fire_resistance": 774.0,
+        "chance_per_second_percent": 7740.0,
+        "expected_stacks_per_roll": 77.4,
+        "roll_times_s": [0.48, 1.48, 2.48, 3.48, 4.48, 5.48, 6.48, 7.48],
+        "roll_count": 8,
+        "expected_stacks_applied": 619.2
+      },
+      "per_stack": {
+        "base_dps": 16.0,
+        "increased_total": 21.42,
+        "more_groups": [{ "group": "node:tidal_force", "factor": 1.6 }, { "group": "node:singularity", "factor": 2.0 }],
+        "dps": 7312.4,
+        "total_damage": 44057.0
+      },
+      "totals": { "damage": 27280552.4, "damage_before_bh_end": 24100111.6, "tail_damage": 3180440.8, "last_ailment_expiry_s": 13.505 },
+      "expression": { "node_id": "expr-ignite", "kind": "mul", "label": "Ignite 总伤害", "value": 27280552.4, "children": [] }
+    },
+    "totals": {
+      "single_cast_total": 28442116.6,
+      "body_total": 1161664.2,
+      "ignite_total": 27280552.4,
+      "ignite_tail_damage": 3180440.8,
+      "window_damage_until_bh_end": 25261775.8,
+      "observation_end_s": 13.505,
+      "last_ailment_expiry_s": 13.505
+    },
+    "event_trace": [
+      { "event_id": "e-0001", "t": 0.48, "kind": "body_tick", "cast_id": "cast-1", "component_id": "bh-fire", "damage_type": "Fire", "amount": 26880.5, "target_id": "synthetic-boss", "expression_ref": "expr-bh-fire", "note": "首跳" },
+      { "event_id": "e-0002", "t": 0.48, "kind": "body_tick", "cast_id": "cast-1", "component_id": "bh-cold", "damage_type": "Cold", "amount": 21640.2, "target_id": "synthetic-boss", "expression_ref": "expr-bh-cold", "note": "首跳" },
+      { "event_id": "e-0003", "t": 0.48, "kind": "ignite_roll", "cast_id": "cast-1", "component_id": null, "damage_type": "Fire", "amount": 0.0, "target_id": "synthetic-boss", "expression_ref": "expr-ignite", "note": "期望层数 77.4" },
+      { "event_id": "e-0004", "t": 1.48, "kind": "ignite_roll", "cast_id": "cast-1", "component_id": null, "damage_type": "Fire", "amount": 0.0, "target_id": "synthetic-boss", "expression_ref": "expr-ignite", "note": "期望层数 77.4" },
+      { "event_id": "e-0005", "t": 7.33, "kind": "body_tick", "cast_id": "cast-1", "component_id": "bh-fire", "damage_type": "Fire", "amount": 38080.1, "target_id": "synthetic-boss", "expression_ref": "expr-bh-fire", "note": "末跳含余量合并" },
+      { "event_id": "e-0006", "t": 7.63, "kind": "black_hole_destroyed", "cast_id": "cast-1", "component_id": null, "damage_type": null, "amount": 0.0, "target_id": null, "expression_ref": null, "note": "黑洞消失" },
+      { "event_id": "e-0007", "t": 13.505, "kind": "ignite_expiry", "cast_id": "cast-1", "component_id": null, "damage_type": "Fire", "amount": 0.0, "target_id": "synthetic-boss", "expression_ref": "expr-ignite", "note": "最后一层到期" }
+    ],
+    "time_series": [
+      { "t": 0.0, "body_cum": 0.0, "ignite_cum": 0.0, "total_cum": 0.0, "ignite_stacks": 0.0 },
+      { "t": 1.0, "body_cum": 161530.7, "ignite_cum": 0.0, "total_cum": 161530.7, "ignite_stacks": 77.4 },
+      { "t": 4.0, "body_cum": 646122.8, "ignite_cum": 2070000.0, "total_cum": 2716122.8, "ignite_stacks": 310.0 },
+      { "t": 7.63, "body_cum": 1161664.2, "ignite_cum": 24100111.6, "total_cum": 25261775.8, "ignite_stacks": 619.2 },
+      { "t": 13.505, "body_cum": 1161664.2, "ignite_cum": 27280552.4, "total_cum": 28442116.6, "ignite_stacks": 0.0 }
+    ]
+  },
+  "loops": [
+    {
+      "policy_id": "eager",
+      "label": "可用即施放",
+      "action_policy": { "policy_id": "eager", "cast_when": "charge_available", "blocked_while_active": true, "initial_charges": 2 },
+      "windows": [
+        { "window_s": 5.0, "total_damage": 1615307.0, "body_damage": 646122.8, "ignite_damage": 969184.2, "dps": 323061.4, "unsettled_tail_damage": 5000000.0, "cast_count": 1 },
+        { "window_s": 30.0, "total_damage": 11616640.2, "body_damage": 4646656.8, "ignite_damage": 6969983.4, "dps": 387221.3, "unsettled_tail_damage": 1200000.0, "cast_count": 3 },
+        { "window_s": 120.0, "total_damage": 46900000.0, "body_damage": 18700000.0, "ignite_damage": 28200000.0, "dps": 390833.3, "unsettled_tail_damage": 800000.0, "cast_count": 15 }
+      ],
+      "casts": [
+        { "cast_id": "cast-1", "t": 0.0, "charges_before": 2, "charges_after": 1, "accepted": true, "blocked_reason": null },
+        { "cast_id": "cast-2", "t": 1.0, "charges_before": 2, "charges_after": 2, "accepted": false, "blocked_reason": "active_black_hole_limit" }
+      ],
+      "resource": { "charges_max": 2, "recharge_s": 4.13, "mana": "unlimited", "note": "v1 忽略法力" },
+      "totals": { "cast_count": 15, "damage": 46900000.0, "window_dps": 390833.3, "unsettled_tail_damage": 800000.0 },
+      "event_trace": [],
+      "time_series": []
+    },
+    {
+      "policy_id": "patient",
+      "label": "尽量保留当前黑洞",
+      "action_policy": { "policy_id": "patient", "cast_when": "after_previous_expired", "blocked_while_active": true, "initial_charges": 2 },
+      "windows": [
+        { "window_s": 5.0, "total_damage": 1615307.0, "body_damage": 646122.8, "ignite_damage": 969184.2, "dps": 323061.4, "unsettled_tail_damage": 5000000.0, "cast_count": 1 },
+        { "window_s": 30.0, "total_damage": 11616640.2, "body_damage": 4646656.8, "ignite_damage": 6969983.4, "dps": 387221.3, "unsettled_tail_damage": 1200000.0, "cast_count": 3 },
+        { "window_s": 120.0, "total_damage": 46900000.0, "body_damage": 18700000.0, "ignite_damage": 28200000.0, "dps": 390833.3, "unsettled_tail_damage": 800000.0, "cast_count": 15 }
+      ],
+      "casts": [],
+      "resource": { "charges_max": 2, "recharge_s": 4.13, "mana": "unlimited", "note": "v1 忽略法力" },
+      "totals": { "cast_count": 15, "damage": 46900000.0, "window_dps": 390833.3, "unsettled_tail_damage": 800000.0 },
+      "event_trace": [],
+      "time_series": []
+    }
+  ],
+  "issues": [
+    { "issue_id": "issue-fixture-001", "severity": "info", "title": "合成 fixture", "detail": "本 result 为 HTML 开发用 fixture，请用真实 run 替换。", "scope": "global" },
+    { "issue_id": "issue-fixture-002", "severity": "warning", "title": "Heat Wave 首判时刻未验证", "detail": "v1 假设施放生成后立即判定，之后每 1 秒一次。", "scope": "ignite" }
+  ],
+  "excluded_sources": [
+    { "source_id": "skill_tree:weaver", "label": "编织树与容器", "reason": "用户范围排除 2026-11-03", "category": "scope" },
+    { "source_id": "skill_tree:sb44eQ", "label": "Enchant Weapon 及其节点", "reason": "范围外技能树（含延长/消耗 Ignite）", "category": "scope" },
+    { "source_id": "item:idols.4", "label": "Throne of Ambition · Ambition 层数", "reason": "Black Hole 本体 hit=false，范围内无合格命中事件，保持 0 层", "category": "condition" }
+  ]
+}

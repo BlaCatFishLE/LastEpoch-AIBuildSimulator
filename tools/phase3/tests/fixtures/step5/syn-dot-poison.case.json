@@ -1,0 +1,11 @@
+{
+  "schema": "le-case-v1",
+  "case_id": "syn-dot-poison",
+  "main_skill": {
+    "ability_id": "syn-dot-poison"
+  },
+  "build": {
+    "build_id": "syn-build",
+    "revision_id": "syn-rev-2"
+  }
+}

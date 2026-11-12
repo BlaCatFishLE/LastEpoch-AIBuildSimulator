@@ -1,0 +1,133 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "void-cleave-fire-main",
+  "kind": "skill",
+  "title": {
+    "zh": "Void Cleave 火焰转换主技能",
+    "en": "Void Cleave fire-converted main skill"
+  },
+  "source_path": "knowledge/skills/void-cleave-fire-main.json",
+  "evidence_state": null,
+  "implementation_state": null,
+  "state_note": "skill-template-v1 没有 evidence_state/implementation_state 字段；实现状态由 unsupported/assumptions 与所映射机制条目的状态表达",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "void-cleave-20261110"
+  ],
+  "rule_ref": {
+    "kind": "skill_template",
+    "ref": "void-cleave-fire-main",
+    "path": "knowledge/skills/void-cleave-fire-main.json",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/skills/void-cleave-fire-main.json",
+      "note": "技能模板是计算入口声明；规则 ID 由它映射的机制条目与规则包承载（见 mechanism_refs / rule_refs）"
+    }
+  },
+  "mechanism_refs": [],
+  "missing_mechanism_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Void Cleave 火焰转换主技能",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "主技能 ability_id=v01cv；职业=Sentinel；伤害标签=Fire、Melee",
+      "source": "$.ability_id/class/mastery/damage_tags"
+    },
+    {
+      "text": "计算组件：main-hit，kind=hit，damage_type=current:base_conversion_and_added_types；必须按当前节点确认 Hellish Chasm 基础火焰转换；附加伤害按类型保留。",
+      "source": "$.components[0]"
+    },
+    {
+      "text": "计算组件：natural-ignite，kind=ignite，damage_type=Fire",
+      "source": "$.components[1]"
+    },
+    {
+      "text": "计算组件：natural-bleed，kind=dot，damage_type=Physical",
+      "source": "$.components[2]"
+    },
+    {
+      "text": "计算块 increased_aggregate → le_calc.mechanics.increased_aggregate.None",
+      "source": "$.calculation_blocks[0]"
+    },
+    {
+      "text": "计算块 crit → le_calc.mechanics.crit_expected.None",
+      "source": "$.calculation_blocks[1]"
+    },
+    {
+      "text": "计算块 target_side → le_calc.mechanics.target_side.None",
+      "source": "$.calculation_blocks[2]"
+    },
+    {
+      "text": "计算块 tag_match → le_calc.mechanics.tag_match.None",
+      "source": "$.calculation_blocks[3]"
+    },
+    {
+      "text": "计算块 frequency → le_calc.dps.None",
+      "source": "$.calculation_blocks[4]"
+    },
+    {
+      "text": "当前节点点数",
+      "source": "$.supported_interactions[0]"
+    },
+    {
+      "text": "当前装备条件与词条",
+      "source": "$.supported_interactions[1]"
+    },
+    {
+      "text": "固定层数条件",
+      "source": "$.supported_interactions[2]"
+    },
+    {
+      "text": "辅助技能增益",
+      "source": "$.supported_interactions[3]"
+    },
+    {
+      "text": "本体与自然点燃/流血",
+      "source": "$.supported_interactions[4]"
+    },
+    {
+      "text": "共享网页与本机重算",
+      "source": "$.supported_interactions[5]"
+    },
+    {
+      "text": "调度说明：取动作与冷却中较长间隔；首次施放 t=0，窗口不含右端点。",
+      "source": "$.schedule.notes"
+    }
+  ],
+  "assumptions": [
+    {
+      "assumption_id": "fixed-conditions",
+      "status": "assumed",
+      "note": "限定为主技能重复施放和固定状态，不能当作完整实战循环。",
+      "source": "$.assumptions[0]"
+    },
+    {
+      "assumption_id": "current-sources-only",
+      "status": "derived",
+      "note": "装备 Buff 必须由新存档实例匹配；模板只提供实现和证据入口，不携带旧实例数值。",
+      "source": "$.assumptions[1]"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "archive://reports/void-cleave-20261110/delivery-20261110/report.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "非 Hellish Chasm 火焰转换构筑：必须按当前节点重新建立组件，不得直接复制已存在案例的 profile。",
+      "blocks_full_dps": true,
+      "source": "$.unsupported[0]"
+    },
+    {
+      "text": "资源及 Buff 获取过程：固定条件估算；不模拟获取与维持成本。",
+      "blocks_full_dps": true,
+      "source": "$.unsupported[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

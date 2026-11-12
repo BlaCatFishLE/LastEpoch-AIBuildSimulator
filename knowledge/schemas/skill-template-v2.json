@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-knowledge/skill-template-v2.json",
+  "title": "技能模板 v2（原生定义入口）",
+  "description": "原生技能模板：直接声明组件、基础伤害、静态效果、条件、调度与异常，经 compile_from_definitions 生成与 profile-v2 相同的 le-calculation-plan-v1，并由同一执行器执行。模板只保存定义与参数，不复制案例 profile 或历史实例数值；当前输入实例仍由 profile 适配器绑定。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "template_id", "ability_id", "title", "skill", "effects", "controls", "ailments", "rules", "schedule"],
+  "properties": {
+    "schema": { "const": "le-skill-template-v2" },
+    "template_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_.-]*$" },
+    "ability_id": { "type": "string", "minLength": 1 },
+    "title": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "required": ["zh"],
+          "properties": { "zh": { "type": "string" }, "en": { "type": "string" } }
+        }
+      ]
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_damage", "components"],
+      "properties": {
+        "base_damage": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "number" }
+        },
+        "added_damage_scaling": { "type": "number" },
+        "crit_chance": { "type": "number", "minimum": 0, "maximum": 1 },
+        "crit_multiplier": { "type": "number" },
+        "cooldown_s": { "type": "number", "minimum": 0 },
+        "action_s": { "type": "number", "minimum": 0 },
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hit", "dot"],
+          "properties": {
+            "hit": { "$ref": "#/$defs/component" },
+            "dot": { "$ref": "#/$defs/component" }
+          }
+        }
+      }
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["effect_id", "stat_key", "operation", "value"],
+        "properties": {
+          "effect_id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:#-]*$" },
+          "label": { "type": "string" },
+          "stat_key": {
+            "enum": [
+              "damage",
+              "attack_speed",
+              "cast_speed",
+              "crit_chance",
+              "crit_multiplier",
+              "penetration",
+              "ailment_chance",
+              "ailment_duration",
+              "cooldown_recovery",
+              "movement_speed",
+              "attribute"
+            ]
+          },
+          "operation": { "enum": ["added", "increased", "more", "base", "flag"] },
+          "value": { "type": "number" },
+          "unit": { "enum": ["flat", "percent", "seconds", "flag"] },
+          "damage_tags": { "type": "array", "items": { "type": "string" } },
+          "target": { "type": ["string", "null"] },
+          "group": { "type": ["string", "null"] },
+          "status": { "enum": ["derived", "assumed", "unresolved"] },
+          "condition": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["op", "terms"],
+            "properties": {
+              "op": { "enum": ["always", "all"] },
+              "terms": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["kind"],
+                  "properties": {
+                    "kind": { "enum": ["control_true", "control_equals", "control_count", "target_true", "code"] },
+                    "key": { "type": "string" },
+                    "value": { "type": ["boolean", "integer", "number", "string", "null"] },
+                    "code": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "source": {
+            "type": "object",
+            "properties": {
+              "kind": { "type": "string" },
+              "label": { "type": "string" },
+              "path": { "type": "string" }
+            }
+          },
+          "handler_id": { "type": "string" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "type", "default"],
+        "properties": {
+          "key": { "type": "string" },
+          "label": { "type": "string" },
+          "type": { "enum": ["boolean", "integer", "number"] },
+          "default": { "type": ["boolean", "integer", "number"] },
+          "min": { "type": ["integer", "number", "null"] },
+          "max": { "type": ["integer", "number", "null"] },
+          "readonly": { "type": "boolean" }
+        }
+      }
+    },
+    "ailments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["name", "damage_type", "duration_s", "base_damage"],
+        "properties": {
+          "name": { "type": "string" },
+          "label_zh": { "type": "string" },
+          "ailment_id": { "type": ["integer", "string", "null"] },
+          "damage_type": { "enum": ["Physical", "Fire", "Cold", "Lightning", "Void", "Poison", "Necrotic"] },
+          "duration_s": { "type": "number", "exclusiveMinimum": 0 },
+          "base_damage": { "type": "number" },
+          "chance": {
+            "type": "object",
+            "properties": {
+              "source_kinds": { "type": "array", "items": { "type": "string" } },
+              "excluded_tags": { "type": "array", "items": { "type": "string" } },
+              "additional": { "type": "array" },
+              "unmodeled_reason": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "crit": { "type": "object" },
+        "every_nth_hit": { "type": ["object", "null"] }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["windows_s"],
+      "properties": {
+        "windows_s": { "type": "array", "minItems": 1, "items": { "type": "number", "exclusiveMinimum": 0 } },
+        "first_cast_s": { "type": "number", "minimum": 0 }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["note"],
+        "properties": {
+          "assumption_id": { "type": "string" },
+          "status": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "mechanism_refs": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tags"],
+      "properties": {
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "crit_capable": { "type": "boolean" },
+        "adaptive_damage_type": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+ "source": "local game 1.5.3 GameAssembly.dll native disassembly + metadata enums (read-only)",
+ "game_version": "1.5.3",
+ "at_enum": {
+  "Physical": 1,
+  "Lightning": 2,
+  "Cold": 4,
+  "Fire": 8,
+  "Void": 16,
+  "Necrotic": 32,
+  "Poison": 64,
+  "Elemental": 128,
+  "Spell": 256,
+  "Melee": 512,
+  "Throwing": 1024,
+  "Bow": 2048,
+  "DoT": 4096,
+  "Minion": 8192,
+  "Hit": 8388608,
+  "Ailment": 33554432
+ },
+ "tag_filtering": {
+  "function": "Tags::Applicable(AT situationTags, AT statTags)",
+  "rva": "0x16abe60",
+  "offset": "0x16aa860",
+  "decoded_logic": [
+   "if ((situationTags & statTags) == statTags) return true;",
+   "else if ((statTags & 0x80) == 0) return false;  // statTags has no Elemental bit",
+   "else if ((situationTags & 0x0e) == 0) return false;  // situation has no Fire/Cold/Lightning bit",
+   "else { clear Elemental bit from statTags, set Elemental bit in situationTags; return ((situationTags|0x80) & statTags) == statTags; }"
+  ],
+  "meaning": "Elemental is a separate AT flag (128), not a union of Fire/Cold/Lightning. The matcher explicitly expands a stat tagged Elemental onto situations that include any of Fire(8)/Cold(4)/Lightning(2)."
+ },
+ "stats_filtering": {
+  "function": "Stats::GetTotalIncreased(SP property, AT checkTags, byte specialTag, int extraTag)",
+  "rva": "0x16a9ba0",
+  "offset": "0x16a85a0",
+  "decoded_logic": "inline same Elemental expansion: ecx = stat.tags; if (ecx & checkTags)==ecx apply; else require stat.tags bit7(Elemental) && checkTags bits 0xe (Fire/Cold/Lightning); replace with (checkTags|0x80)&stat.tags == stat.tags then apply stat.increasedValue.",
+  "meaning": "increased/more/added stats tagged Elemental are collected for damage whose situation tags contain Fire, Cold or Lightning; Fire-only stats (tag 8) require the Fire bit and do not match Cold/Lightning; Spell (256) requires the Spell bit, so Spell damage does NOT apply to Ignite damage (ailment situation tags lack Spell)."
+ },
+ "ignite_application": {
+  "damage_type": "Fire",
+  "conclusion": "Ignite damage situation tags are Fire (+DoT/Ailment), so increased/more Elemental damage applies to Ignite; increased Spell Damage does not. This matches user rule 3 (Elemental enters Ignite), the engine rule-ignite-elemental-tag, and the v2 Ignite inc pool {Fire, Elemental, DoT}."
+ },
+ "status": "confirmed"
+}

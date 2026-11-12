@@ -1,0 +1,112 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "common-target-resistance-penetration",
+  "kind": "mechanism",
+  "title": {
+    "zh": "目标抗性/穿透结算（穿透可压到 0 以下）",
+    "en": "Target resistance and penetration settlement"
+  },
+  "source_path": "knowledge/mechanisms/common-target-resistance-penetration.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-penetration-dot",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-penetration-dot]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-penetration-dot 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:tunklab:_:59",
+      "note": "Tunklab Penetration：可把有效抗性降到零以下，作用于所有伤害（含 DoT）。",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "目标抗性/穿透结算（穿透可压到 0 以下）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：target_side、body、ignite、hit、dot；伤害标签：Fire、Cold、Lightning；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "穿透按有效抗性扣减，允许把有效抗性压到负数；是否适用于某组件由 ruleset.target_side.penetration_applies_to 决定（BH：body/ignite 分流，Fire Penetration with Ignite 只作用于 Ignite）。注意：BH 与 FR 当前公式未收敛（见 open_questions 与 handover §2）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "body 结算：effective = res - pen（可负）→ ×(1-effective) ×(1-monster_dr)；Ignite 侧镜像实现 le_calc.ignite._ignite_target。FR 侧为独立实现 hit_damage.resolve_target/_penetration（未合并）。",
+      "source": "$.handler_ref.note（le_calc.damage._target_multiplier）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：target.resistances、penetration rows、penetration_applies_to",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/target"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/target"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/target/fire_resistance"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[legacy_single_skill.single_cast_total]"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://reports/flame-reave/p0-baseline-fr/reproduce-report.json（FR 独立实现，25/25 PASS）"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/target"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/flame-reave/p0-baseline-fr/reproduce-report.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "D2 收敛未完成：BH 把穿透折进抗性 (1-(res-pen))，FR 作独立乘区 (1+Σpen)×(1-res)；res≠0 且 pen>0 时两式相差 res·pen 交叉项（数值示例见 handover §2.1）。在 P2 合并共享算子前，本条目的 handler 不能跨模型替换。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "negative_resistance_allowed 钳制：BH 有该开关（可负），FR 无；同一场景跨模型对比前需裁定。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "scenario 显式 DR override：BH 尊重、FR 忽略（common-monster-dr 的 open question 同源）。",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

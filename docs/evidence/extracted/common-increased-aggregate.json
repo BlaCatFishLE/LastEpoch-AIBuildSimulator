@@ -1,0 +1,96 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "common-increased-aggregate",
+  "kind": "mechanism",
+  "title": {
+    "zh": "increased/reduced 加算池",
+    "en": "Increased/reduced additive pool"
+  },
+  "source_path": "knowledge/mechanisms/common-increased-aggregate.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "加算是共享聚合算子，无单条规则 ID；口径由 ruleset 各规则的 stat_key/operation/标签字段驱动。",
+    "verification": {
+      "status": "declared_none",
+      "checked_against": null,
+      "note": "条目声明该机制没有可引用的游戏规则 ID（ref 内写明原因）"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "increased/reduced 加算池",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、dot、tick、ignite、body；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "同一组件的所有适用 increased/reduced 行相加成一个池，因子 = 1 + Σinc；属性缩放（如 BH 的 Intelligence 属性系数，见 ruleset）按规则并入同一池（BH 已确认，见 bh-attribute-scaling）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "collect_modifier_rows(stat_key=damage, operation=increased) + attribute 行 → total/factor；Ignite 侧在 le_calc.ignite._ignite_scaling 复用同一收集器。",
+      "source": "$.handler_ref.note（le_calc.damage._collect_increased）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：increased rows、attribute_increase",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/increased"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling/increased_rows"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/attributes"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/0",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/increased"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "去重身份是「来源实例 + 效果行」；当前 BH 侧 ruleset 技能树行与 snapshot 玩家行天然分离，但新来源若同时出现在 snapshot 与规则包会重复计数，需要 P2 的贡献项去重契约（实施方案 §6.3）。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "FR 侧加算池在 hit_damage/hit_inputs 内独立实现，未合并；两模型对「attribute inc 是否进池」目前碰巧一致但无共享测试。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

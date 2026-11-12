@@ -1,0 +1,447 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-calculation-plan-v4",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "applications",
+    "assumptions",
+    "capabilities",
+    "components",
+    "coverage",
+    "execution_fingerprint",
+    "input_refs",
+    "issues",
+    "plan_sha256",
+    "presentation",
+    "primary_evaluation",
+    "scenario",
+    "scenario_sha256",
+    "schedule",
+    "schema",
+    "subject",
+    "target_side",
+    "version"
+  ],
+  "properties": {
+    "schema": {
+      "const": "le-calculation-plan-v4"
+    },
+    "version": {
+      "type": "string",
+      "const": "4.0.0"
+    },
+    "plan_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "subject": {
+      "type": "object",
+      "required": [
+        "case_id",
+        "main_ability_id"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string"
+        },
+        "main_ability_id": {
+          "type": "string"
+        },
+        "build_id": {},
+        "revision_id": {}
+      }
+    },
+    "case_ref": {
+      "type": "string"
+    },
+    "scenario": {
+      "type": "object",
+      "required": [
+        "states",
+        "target"
+      ],
+      "properties": {
+        "states": {
+          "type": "object"
+        },
+        "target": {
+          "type": "object"
+        }
+      }
+    },
+    "primary_evaluation": {
+      "type": "string"
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "hit_components",
+          "dot_components",
+          "applications",
+          "charge_schedule",
+          "presentation",
+          "minion_actor",
+          "explicit_stat_transfer",
+          "derived_event_rate"
+        ]
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "component_id",
+          "kind",
+          "damage_type",
+          "base_damage",
+          "target_ref"
+        ],
+        "properties": {
+          "component_id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "hit",
+              "dot"
+            ]
+          },
+          "damage_type": {
+            "enum": [
+              "Physical",
+              "Fire",
+              "Cold",
+              "Lightning",
+              "Void",
+              "Necrotic",
+              "Poison"
+            ]
+          },
+          "base_damage": {
+            "type": "number"
+          },
+          "added_damage": {
+            "type": "number"
+          },
+          "added_damage_scaling": {
+            "type": "number"
+          },
+          "increased": {
+            "type": "number"
+          },
+          "more": {
+            "type": "number"
+          },
+          "crit_chance": {
+            "type": "number"
+          },
+          "crit_multiplier": {
+            "type": "number"
+          },
+          "tick_interval_s": {
+            "type": "number"
+          },
+          "tick_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "duration_s": {
+            "type": "number"
+          },
+          "target_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "applications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "application_id",
+          "ailment_id",
+          "damage_type",
+          "base_damage",
+          "duration_s",
+          "clock",
+          "amount",
+          "target_ref"
+        ],
+        "properties": {
+          "application_id": {
+            "type": "string"
+          },
+          "ailment_id": {
+            "type": "string"
+          },
+          "damage_type": {
+            "enum": [
+              "Physical",
+              "Fire",
+              "Cold",
+              "Lightning",
+              "Void",
+              "Necrotic",
+              "Poison"
+            ]
+          },
+          "base_damage": {
+            "type": "number"
+          },
+          "duration_s": {
+            "type": "number"
+          },
+          "clock": {
+            "type": "object",
+            "required": [
+              "first_at_s",
+              "interval_s",
+              "count"
+            ]
+          },
+          "amount": {
+            "type": "object",
+            "required": [
+              "rule",
+              "stacks_per_roll"
+            ]
+          },
+          "target_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "required": [
+        "kind",
+        "horizon_s",
+        "windows_s",
+        "evaluations"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "single_cast",
+            "charge",
+            "assembly"
+          ]
+        },
+        "horizon_s": {
+          "type": "number"
+        },
+        "windows_s": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "evaluations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "evaluation_id",
+              "primary"
+            ]
+          }
+        },
+        "charges": {
+          "type": "object"
+        },
+        "action_policies": {
+          "type": "array"
+        }
+      }
+    },
+    "target_side": {
+      "type": "object",
+      "required": [
+        "unit",
+        "components"
+      ],
+      "properties": {
+        "unit": {
+          "const": "fraction"
+        },
+        "strategy": {
+          "enum": [
+            "separate_multiplier",
+            "fold_into_resistance"
+          ]
+        },
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^.+$": {
+              "type": "object",
+              "required": [
+                "ref",
+                "damage_channel",
+                "resistance",
+                "penetration",
+                "damage_reduction",
+                "strategy",
+                "negative_resistance_policy",
+                "unit",
+                "multiplier"
+              ],
+              "properties": {
+                "unit": {
+                  "const": "fraction"
+                },
+                "strategy": {
+                  "enum": [
+                    "separate_multiplier",
+                    "fold_into_resistance"
+                  ]
+                },
+                "negative_resistance_policy": {
+                  "enum": [
+                    "allow",
+                    "clamp_at_zero"
+                  ]
+                },
+                "resistance": {
+                  "type": "number"
+                },
+                "penetration": {
+                  "type": "number"
+                },
+                "damage_reduction": {
+                  "type": "number"
+                },
+                "multiplier": {
+                  "type": "number"
+                },
+                "damage_channel": {
+                  "enum": [
+                    "physical",
+                    "fire",
+                    "cold",
+                    "lightning",
+                    "void",
+                    "necrotic",
+                    "poison"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "labels": {
+          "type": "object"
+        },
+        "notes": {
+          "type": "array"
+        }
+      }
+    },
+    "input_refs": {
+      "type": "array"
+    },
+    "limitations": {
+      "type": "array"
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "status",
+        "gap_count",
+        "gaps"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "complete",
+            "partial",
+            "from_execution"
+          ]
+        },
+        "gap_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gaps": {
+          "type": "array"
+        }
+      }
+    },
+    "issues": {
+      "type": "array"
+    },
+    "assumptions": {
+      "type": "array"
+    },
+    "execution_fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "scenario_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "controlled_helper": {
+      "type": "boolean"
+    },
+    "assembly": {
+      "type": "object",
+      "required": [
+        "kind",
+        "legacy_schema",
+        "legacy_plan"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "legacy_schema": {
+          "enum": [
+            "le-calculation-plan-v1",
+            "le-calculation-plan-v2",
+            "le-calculation-plan-v3"
+          ]
+        },
+        "legacy_plan": {
+          "type": "object"
+        }
+      }
+    },
+    "execution": {
+      "type": "object"
+    },
+    "execution_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "frequency": {
+      "type": "object"
+    },
+    "actors": {
+      "type": "array"
+    },
+    "stat_transfers": {
+      "type": "array"
+    }
+  }
+}

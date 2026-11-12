@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-calc/le-recalc-response-v1.json",
+  "title": "Local recompute response v1 (le-recalc-response-v1)",
+  "description": "LIVE response contract (workflow-interface §10.3). Echoes request_id / client_edit_revision plus accepted_revision (server-side monotonic accepted edit version) and the actual recompute_endpoint so the client only applies the latest response. accepted=false carries issues and never marks an old result as applied. accepted=true carries the normalised applied_scenario + digest, the numeric result digest and (V1) the full HTML rendered by the shared renderer with the actual endpoint. 响应回显 request_id/client_edit_revision/client_session_id 与 accepted_revision；客户端在任何状态更新前必须校验全部绑定（case/model/capabilities/input/report_ref/endpoint/session）与 accepted_revision 次序。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "request_id",
+    "client_edit_revision",
+    "accepted_revision",
+    "accepted",
+    "issues",
+    "case_id",
+    "model_id",
+    "capabilities_version",
+    "input_fingerprints",
+    "report_ref",
+    "recompute_endpoint",
+    "applied_scenario",
+    "applied_scenario_digest",
+    "result_digest",
+    "html",
+    "client_session_id",
+    "client_session_legacy"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "le-recalc-response-v1"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "client_edit_revision": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "accepted_revision": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "description": "服务端最后接受的编辑版本；客户端据此丢弃旧响应（仅回显 request_id 不足）"
+    },
+    "accepted": {
+      "type": "boolean"
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "error",
+              "warning",
+              "info"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "related_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "required_input": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "details": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "case_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_id": {
+      "type": "string",
+      "enum": [
+        "black-hole",
+        "hit"
+      ]
+    },
+    "capabilities_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_fingerprints": {
+      "type": "object",
+      "required": [
+        "calc_input",
+        "ruleset",
+        "snapshot",
+        "dataset"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "calc_input": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "ruleset": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "snapshot": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "dataset": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "report_ref": {
+      "type": "object"
+    },
+    "recompute_endpoint": {
+      "type": "string",
+      "pattern": "^http://(127\\.0\\.0\\.1|localhost|\\[::1\\]):[0-9]{1,5}/recompute$"
+    },
+    "command": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "prepare",
+        "compute",
+        "recompute",
+        null
+      ]
+    },
+    "applied_scenario": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "服务端规范化后的完整场景（accepted=true 时必填）"
+    },
+    "applied_scenario_digest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "规范化场景摘要（accepted=true 时必填）"
+    },
+    "result_digest": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "本次计算结果摘要（复算一致性/缓存键）；prepare 可为 null"
+    },
+    "html": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "V1：由共享渲染器生成、嵌入实际端点的整份 HTML；拒绝时为 null"
+    },
+    "computed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "client_session_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "与请求一致的会话 id；旧客户端缺省时返回隔离的 legacy-<hash> 作用域 id"
+    },
+    "client_session_legacy": {
+      "type": "boolean",
+      "description": "true=请求未带 client_session_id（隔离 request_id 作用域，旧客户端兼容）"
+    }
+  }
+}

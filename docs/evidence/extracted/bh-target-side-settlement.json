@@ -1,0 +1,107 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-target-side-settlement",
+  "kind": "mechanism",
+  "title": {
+    "zh": "BH 目标侧结算：抗性/穿透的 body 与 Ignite 分流",
+    "en": "Black Hole target-side settlement: resistance/penetration split for body vs Ignite"
+  },
+  "source_path": "knowledge/mechanisms/bh-target-side-settlement.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-penetration-dot",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-penetration-dot]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-penetration-dot 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:tunklab:_:59",
+      "note": "Tunklab Penetration：可把有效抗性降到零以下，作用于所有伤害（含 DoT）。",
+      "source": "$.evidence_refs[0]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "BH 目标侧结算：抗性/穿透的 body 与 Ignite 分流",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：target_side、body、body_fire、body_cold、ignite；伤害标签：Fire、Cold；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "本构筑目标为 0 抗性合成 Boss；穿透按有效抗性扣减、允许负抗性。body 与 Ignite 的穿透适用范围由 ruleset.target_side.penetration_applies_to 分流：body 吃通用火焰穿透；Ignite 另加『Fire Penetration with Ignite』（见 bh-ignite-penetration）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "body：effective = res - pen（可负）→ ×(1-effective)×(1-monster_dr)；Ignite：le_calc.ignite._ignite_target 镜像同一公式并读 ignite 分流。",
+      "source": "$.handler_ref.note（le_calc.damage._target_multiplier）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：base_resistances、target.fire_resistance、penetration_applies_to、negative_resistance_allowed",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/target"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/target"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/target/fire_resistance"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.single_cast_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/target"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/target"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "0 抗性场景掩盖了 BH/FR 公式差异（res=0 时两式恒等）；换非 0 抗性目标前必须先收敛 D2。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "double-dip 是否可能：body 与 Ignite 都吃通用火穿，但只有 Ignite 吃专属火穿——该分流是规则包口径 + 用户确认，未在非 0 抗性下实测。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "negative_resistance_allowed 钳制在 BH 为 True；若未来目标抗性 > 穿透且规则改为钳制，body 数值会变，属规则开关而非机制变化。",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

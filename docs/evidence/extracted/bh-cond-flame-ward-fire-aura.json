@@ -1,0 +1,85 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-flame-ward-fire-aura",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Ward · Fire Aura（自身伤害，不进入 BH 计算）",
+    "en": "Flame Ward Fire Aura (own damage, outside Black Hole model)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-flame-ward-fire-aura.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "not_implemented",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "flame_ward.fire_aura",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=flame_ward.fire_aura]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+      "note": "conditional_effect:flame_ward.fire_aura 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Ward · Fire Aura（自身伤害，不进入 BH 计算）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：target_side；伤害标签：Fire；条件 code：player.flame_ward_active；必要节点：node:fw3d:12",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Flame Ward 生效期间获得 Fire Aura（独立火焰 DoT）；伤害属于 Flame Ward/Fire Aura 自身，不进入 Black Hole 本体/Ignite/施法/CD 路径。保留为『当前场景不相关』诊断记录。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "注册与求值识别为 not_relevant；无伤害 modifier（重算通道跳过，reason=no_damage_modifiers）。",
+      "source": "$.handler_ref.note（le_calc.conditional.evaluate.evaluate_scenario）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、effect values、state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/4"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/flame_ward.fire_aura"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/2/nodes/3/points"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.flame_ward_active"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/flame_ward.fire_aura"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "若未来把其他技能自身伤害并入 DPS，需要独立技能伤害通道；本轮不做（范围外）。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

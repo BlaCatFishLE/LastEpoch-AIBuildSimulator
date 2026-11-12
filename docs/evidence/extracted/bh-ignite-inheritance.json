@@ -1,0 +1,93 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-ignite-inheritance",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Ignite 继承 Black Hole 技能树 more",
+    "en": "Ignite inherits Black Hole skill-tree more multipliers"
+  },
+  "source_path": "knowledge/mechanisms/bh-ignite-inheritance.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-inheritance",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-inheritance]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-ignite-inheritance 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Ignite 继承 Black Hole 技能树 more",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ignite；伤害标签：Fire、DoT、Ailment；条件 code：none；必要节点：node:bh2:9",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Ignite 继承 BH 技能树中适合异常的 more 节点（2/7/10/23/28 与 Binary 9）；不继承 Weakened Reality（27，游戏文本明确不影响异常）。是否继承由 ruleset.ignite.inheritance 显式列出，不能从节点文本推定。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "按 ruleset.ignite.inheritance 过滤 tree_more_effects：节点在 inherit 集合且标签匹配 Ignite 才计入。",
+      "source": "$.handler_ref.note（le_calc.ignite._ignite_scaling）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：inherit_from_tree_nodes、exclude_tree_nodes、ignite more groups",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12].alt_text"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "继承集合当前是按用户规则 + 个别实测确定的白名单；新节点/新 BD 必须逐项判断，不能假定『技能树全部增伤都继承』。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "AilmentReceiver 的 stats 继承路径在 1.5.3 已读代码，但未做寄存器级的逐 stat 追踪；Binary more 的继承有实测支撑，其余节点的继承是白名单 + 用户规则。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

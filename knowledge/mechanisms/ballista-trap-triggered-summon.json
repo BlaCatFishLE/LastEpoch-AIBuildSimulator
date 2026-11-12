@@ -1,0 +1,120 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "ballista-trap-triggered-summon",
+  "revision": 2,
+  "title": {
+    "zh": "Explosive Trap 触发 Ballista 的来源链"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "Explosive Trap 触发 Ballista 的来源链"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "ex4tp:29",
+        "ex4tp:30",
+        "ex4tp:31"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "trigger",
+      "summon",
+      "frequency"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "当前树有 Siege Engineering（每点10%召唤Ballista概率、Ballista消耗50%法力），Automated Bombardment 和 Traps Throw Traps；按当前点数和事件建立触发链。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.frequency#derivation",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.frequency#derivation"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "parameter_bindings": [
+    {
+      "parameter": "current_points_and_mods",
+      "source": "current:calculation_input.skills.specializations/ba1574 + current:mods",
+      "unit": "current",
+      "note": "只从本次输入绑定；不保存当前31点合计倍率。"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "IL 级逆向证据（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "IL 级中文结论（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json",
+      "note": "冻结 dataset 1.5.2 原值；节点含义对照官方资料，不用新版本文案替换旧数据。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/ballista/ballista-mechanism-review-20261112.zh-CN.md"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前构筑数值包（本轮）"
+    },
+    {
+      "kind": "reverse_engineering",
+      "detail": "Siege Engineering 2/2=每点0.10、每个引爆陷阱独立 Roll；召唤走 ba1574 SummonEntityOnDeath，mana=44×0.5=22，mana 不足则整次跳过；Clustered 2/2→3 陷阱/施放，Trap Sprinkler 0.30、Automated Bombardment 0.70+11 mana；溢出门槛 ≤3 次强制引爆/2s、活动上限 6。",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#8-siege-engineering-触发链与频率代数问题-ef-q11"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "需要实测/逐指令确认每次施放的平均陷阱引爆数。",
+      "mana 约束下的稳态召唤率需场景假设。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "knowledge/definitions/ballista-armed-construction-v4.json"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": [],
+  "limitations": [
+    {
+      "item": "每次施放平均引爆数",
+      "reason": "Blast Rain 弹数、Sprinkler 逐颗判定与嵌套顺序未逐指令证明；事件率由场景控件 trap_detonation_rate_per_s 给出（默认 4/s）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "mana 约束",
+      "reason": "mana 池/回复/药水节奏未纳入频率推导；若 mana 不足，部分召唤被跳过。",
+      "blocks_full_dps": false
+    }
+  ]
+}

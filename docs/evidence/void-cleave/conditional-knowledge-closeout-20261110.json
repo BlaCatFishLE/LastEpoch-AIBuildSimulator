@@ -1,0 +1,106 @@
+{
+  "entries": [
+    {
+      "id": "buff-frenzy-speed",
+      "action": "created",
+      "title": "Frenzy 攻击速度与效果缩放",
+      "revision": 1
+    },
+    {
+      "id": "item-sword-catcher-frenzy-added-melee",
+      "action": "created",
+      "title": "Sword Catcher 的 Frenzy 附加近战伤害",
+      "revision": 1
+    },
+    {
+      "id": "fr-effect-ambition-stacks",
+      "action": "updated",
+      "title": "Throne of Ambition 层数增伤",
+      "revision": 3
+    },
+    {
+      "id": "fr-effect-haste",
+      "action": "updated",
+      "title": "Haste 移动速度及效果缩放",
+      "revision": 3
+    },
+    {
+      "id": "buff-incisive-rage",
+      "action": "created",
+      "title": "Incisive Rage 暴击率与 Deadly Strike",
+      "revision": 1
+    },
+    {
+      "id": "buff-crescendoing-rage-main-hit-cycle",
+      "action": "created",
+      "title": "Crescendoing Rage 主技能命中计数",
+      "revision": 1
+    },
+    {
+      "id": "buff-blood-rage-common-speed",
+      "action": "created",
+      "title": "Blood Rage 状态的公共攻速和移速",
+      "revision": 1
+    },
+    {
+      "id": "item-vaions-chariot-movement-to-damage",
+      "action": "created",
+      "title": "Vaion's Chariot 移速转加算伤害",
+      "revision": 1
+    },
+    {
+      "id": "skill-hellish-chasm-next-fire",
+      "action": "created",
+      "title": "Hellish Chasm 后续火焰技能增伤",
+      "revision": 1
+    },
+    {
+      "id": "skill-nether-coating",
+      "action": "created",
+      "title": "Nether Coating 攻速与致盲增伤",
+      "revision": 1
+    },
+    {
+      "id": "skill-void-supremacy",
+      "action": "created",
+      "title": "Void Supremacy 对减速目标增伤",
+      "revision": 1
+    },
+    {
+      "id": "skill-dark-duellist",
+      "action": "created",
+      "title": "Dark Duellist 准备反击时的全局增伤",
+      "revision": 1
+    },
+    {
+      "id": "skill-abyssal-retribution",
+      "action": "created",
+      "title": "Abyssal Retribution 后续主技能增伤",
+      "revision": 1
+    },
+    {
+      "id": "skill-entropic-blows",
+      "action": "created",
+      "title": "Entropic Blows 的 Time Rot 层数增伤",
+      "revision": 1
+    },
+    {
+      "id": "skill-vorpal-force",
+      "action": "created",
+      "title": "Vorpal Force 的 Bleed 层数增伤及上限",
+      "revision": 1
+    },
+    {
+      "id": "target-critical-vulnerability",
+      "action": "created",
+      "title": "Critical Vulnerability 目标被暴击率",
+      "revision": 1
+    }
+  ],
+  "created": 14,
+  "updated": 2,
+  "compatibility_note": "旧 Frenzy 复合条目补充边界；活跃 profile 与计算值不变。",
+  "shared_rule_pack": "tools/phase3/rules/shared-conditional-mechanisms-v1.json",
+  "automatic_recipe_materializer": false,
+  "remaining_scope": "本轮完成可查询知识与跨案例配方；调用方仍须按当前来源生成实例 profile，未新增自动配方物化器。"
+}

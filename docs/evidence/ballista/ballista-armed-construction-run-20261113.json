@@ -1,0 +1,145 @@
+{
+  "schema": "le-evidence-ballista-run-v1",
+  "generated_at": "2026-11-13T00:20:00+08:00",
+  "case_id": "ballista-beta5-native-20261112",
+  "main_skill": "ba1574",
+  "run_id": "dps-ballista-armed-construction-1",
+  "run_dir": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-1",
+  "template": "knowledge/definitions/ballista-armed-construction-v4.json",
+  "template_sha256": "ff5860fe0fc0ef20448a3d024f1fde5d9a52dbbb255d0069f684b5794d001873",
+  "scenario": "archive://examples/ballista-beta5-native-20261112/inputs/scenario-armed-construction-v4.json",
+  "plan_sha256": "54c58a995c6234c007b4019528f3443543eba8fe77ad7c491f8e5ad4884c8a0a",
+  "result_sha256": "af7d2ec3505f2ca2ec10ef64241be6edfa919af9181db49184ff47bd7cd41bab",
+  "scope": "Ballista Armed Construction 到期/销毁爆炸（ability_gen327）单目标 DPS；不含 bolt 命中爆炸/直击/点燃/ExploitveTrap/Falcon 自身伤害",
+  "target": {
+    "monster_level": 100,
+    "resistance": 0.0,
+    "monster_damage_reduction": 0.87,
+    "target_multiplier": 0.13
+  },
+  "scenario_states": {
+    "elixir": true,
+    "trap_detonation_rate_per_s": 4,
+    "points_siege_engineering": 2
+  },
+  "frequency": {
+    "driver": "derived_event_rate",
+    "event_rate_per_s": 0.8,
+    "event_interval_s": 1.25,
+    "upstream_rate_per_s": 4.0,
+    "gate_probability": 0.2,
+    "destroy_binding": "limit",
+    "lifecycle": {
+      "limit": 2,
+      "duration_s": 6.5,
+      "destroy_policy": "replace_or_expire",
+      "events_per_summon": 1
+    }
+  },
+  "totals": {
+    "hit_damage_per_event": 256509.87763221402,
+    "horizon_damage": 24624948.252692547,
+    "horizon_dps": 205207.9021057712,
+    "cast_count": 96,
+    "windows_s": [
+      5,
+      30,
+      120
+    ],
+    "window_dps": [
+      205207.9021057712,
+      205207.9021057712,
+      205207.9021057712
+    ]
+  },
+  "components": [
+    {
+      "component_id": "hit:Fire",
+      "base": 50.0,
+      "added": 45.75,
+      "added_effectiveness": 2.5,
+      "increased_multiplier": 15.645,
+      "more_multiplier": 41.908944,
+      "crit_chance": 1.0,
+      "crit_chance_unclamped": 0.8106,
+      "crit_multiplier": 6.99,
+      "average_crit": 5.855494,
+      "damage_per_event": 82039.86626924986,
+      "target_multiplier": 0.13
+    },
+    {
+      "component_id": "hit:Physical",
+      "added": 11.25,
+      "damage_per_event": 14445.481339674488
+    },
+    {
+      "component_id": "hit:Cold",
+      "added": 54.0,
+      "damage_per_event": 67378.74948349039
+    },
+    {
+      "component_id": "hit:Lightning",
+      "added": 42.75,
+      "damage_per_event": 53341.51000776322
+    },
+    {
+      "component_id": "hit:Void",
+      "added": 10.5,
+      "damage_per_event": 13101.423510678685
+    },
+    {
+      "component_id": "hit:Necrotic",
+      "added": 10.5,
+      "damage_per_event": 13101.423510678685
+    },
+    {
+      "component_id": "hit:Poison",
+      "added": 10.5,
+      "damage_per_event": 13101.423510678685
+    }
+  ],
+  "validation": {
+    "checks_fail": [],
+    "accepted": 1,
+    "cli_exit_code": 3,
+    "exit_note": "3 = partial：coverage=partial/32 gaps（玩家侧未建模来源），结果门禁 10/10 PASS"
+  },
+  "coverage": {
+    "status": "partial",
+    "gap_count": 32
+  },
+  "evidence_refs": [
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md"
+    },
+    {
+      "kind": "game_data",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://docs/reviews/ballista-armed-construction-20261113.zh-CN.md"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/contracts/calculation-plan-v4.md"
+    }
+  ],
+  "limitations": [
+    "trap_detonation_rate_per_s=4 为外部场景假设（λ_throw≈1.37/s × 每次施放引爆数上界≈2.60 取整）；真实值未实测，可被 HTML 控件重算。",
+    "isBallistaExplosion=true 为 prefab 序列化推断；若 false 则 Armed Construction per-Dex more 不生效。",
+    "minion 等级伤害缩放（+60% more @L100）公式已核但伤害路径无调用点，未纳入。",
+    "Elixir 按用户指定 100% 覆盖；未模拟药剂使用节奏。",
+    "monster DR 0.87 为项目 canonical 口径；游戏内多目标/全技能 DPS 量级不可直接比较。",
+    "coverage=partial：玩家侧 32 条未建模来源可能低估最终数值。"
+  ],
+  "unknowns": [
+    "isBallistaExplosion 序列化值",
+    "爆炸最终 AT 集合是否含 Hit",
+    "玩家 flat added bow damage 的转移通道细节",
+    "陷阱每次施放平均引爆数（Blast Rain 弹数/Sprinkler 嵌套）",
+    "mana 约束下的稳态召唤率"
+  ],
+  "plan_file_sha256": "ba4107102f1537f35e5dc22aaa937d366d9e0c86e0f2c79a1f2c7ca26dde759e"
+}

@@ -1,0 +1,179 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-offhand-exalted",
+  "revision": 2,
+  "title": {
+    "zh": "Whetstone Gavel 副手 Exalted：副手全部 stats +97% effectiveness",
+    "en": "Whetstone Gavel offhand-Exalted stat effectiveness multiplier"
+  },
+  "aliases": [
+    "Whetstone Gavel",
+    "offhand Exalted",
+    "97% effectiveness",
+    "副手 Exalted",
+    "Rune Hammer"
+  ],
+  "selectors": [
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "letools:uniqueList.uniques:438"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [],
+    "notes": "该乘数在本 BD 常驻（副手显示稀有度=Exalted）；『offhand_exalted』是结构性条件（副手稀有度），不是 scenario state，故条件记 none 并在 notes 说明"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "unique roll",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "offhand rarity",
+      "source": "current:matched_instances",
+      "note": "显示稀有度规则：T6/T7 词缀 → Exalted（离线存档 raw byte 4 为 bug）"
+    },
+    {
+      "parameter": "scaled contributions",
+      "source": "current:matched_instances",
+      "note": "weapon2 的全部 stat contribution ×(1+roll)"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "offhand_exalted_effect",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=offhand_exalted_effect"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_inputs",
+    "symbol": "_apply_offhand_exalted_effect",
+    "note": "_offhand_exalted_factor 读取 Whetstone roll；对 raw.item_instance_id=equipment.weapon2 的 contribution 乘 (1+roll)"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "user_conversation#2026-11-07",
+      "note": "Whetstone Gavel offhand：副手全部 stats 均获得 +97% effectiveness；副手按 Exalted 处理"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=offhand_exalted_effect",
+      "note": "ruleset effect：status confirmed、include_in baseline"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/offhand_exalted_effect",
+      "note": "scaled_contribution_ids / multiplier / status confirmed"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#E.other_conditionals",
+      "note": "研究阶段曾误判不满足；P0/第二批裁决已按 Exalted 计入"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/current-status.md#4.1.1",
+      "note": "current-status：added 290.75→382.9 已计入副手加成"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods equipment.weapon1#unique_mod#2（value_numeric=0.97）",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/slots[weapon2]/rarity；#/derived/weapon/offhand_exalted_effect/offhand_rarity",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/offhand_exalted_effect/scaled_contribution_ids",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "fr-hit-added-scaling",
+      "requirement": "副手 added 词条先放大再进 added 池",
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/offhand_exalted_effect"
+    },
+    {
+      "with": "fr-hit-critical-expected",
+      "requirement": "副手 crit multi 词条同样被放大（全部 stats）",
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/offhand_exalted_effect/scaled_contribution_ids"
+    },
+    {
+      "with": "fr-hit-attack-speed",
+      "requirement": "副手攻速词条同样被放大（全部 stats）",
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/offhand_exalted_effect/scaled_contribution_ids"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "离线存档 raw rarity byte=4 与显示稀有度规则冲突：项目约定按 T6/T7 → Exalted 处理（用户裁决），不改存档",
+      "换副手/换 roll 时该乘数失效或需重算"
+    ],
+    "requery_when": [
+      "换副手或副手词条/稀有度变化",
+      "Whetstone roll 变化"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "multiplier",
+    "stacking_policy": "none",
+    "order_policy": "在 added/攻速/暴击词条进入各自池之前放大副手 stats；只作用于 weapon2，不放大主手",
+    "more_group_source": "n/a（effectiveness 乘数，不是 more 组）"
+  },
+  "reuse_mode": "shared"
+}

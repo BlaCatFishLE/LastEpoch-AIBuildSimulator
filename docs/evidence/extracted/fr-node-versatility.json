@@ -1,0 +1,148 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-node-versatility",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 树节点 4 Versatility（其它技能叠 Rhythm 层）",
+    "en": "Versatility (Flame Reave tree node 4)"
+  },
+  "source_path": "knowledge/mechanisms/fr-node-versatility.json",
+  "evidence_state": "derived",
+  "implementation_state": "not_implemented",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R18",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/rotation/rhythm_of_fire；#/rules id=R18",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R18 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes entity_id=node:letools:fr11mv:4",
+      "note": "Versatility 节点描述/类型/上限",
+      "source": "$.evidence_refs[0]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:4",
+      "note": "Stacks on Surge/Fireball/Mana Strike/Firebrand 使用（info）；其它技能不得消耗层数、不得超过 FR 消耗阈值",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 树节点 4 Versatility（其它技能叠 Rhythm 层）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency；条件 code：none；必要节点：node:fr11mv:4",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=none；叠层策略=none；顺序/汇总=其它技能直接使用也叠 Rhythm of Fire 层；这些技能不能消耗层数；当前只登记不建模；more 分组依据=n/a（层数来源，不是乘区）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "key '4'；4 条层数来源均为 role=info，不生成 contribution；当前 rotation 只模拟纯 FR 循环",
+      "source": "$.handler_ref.note（le_calc.hit_inputs.FR_SKILL_NODE_SEMANTICS）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、value_per_point、value_total、contribution rows",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=4)"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/nodes(node_id=4)/points"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=4)/effects[*]/value_per_point"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=4)/effects[*]/value_total"
+    },
+    {
+      "pointer": "$/evidence_refs/9/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[contribution_id prefix=skill:fr11mv:4:]"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "OQ8：其它技能补层会改变 Rhythm 消耗节律（Surge 6 / Fireball 5 / Mana Strike 4 / Firebrand 3）；当前未建模",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "若加入其它技能循环，需事件模拟而非固定平均",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

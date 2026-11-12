@@ -1,0 +1,65 @@
+{
+ "source": "local game 1.5.3 GameAssembly.dll native disassembly + bh2 ability data (read-only)",
+ "game_version": "1.5.3",
+ "ability_bh2": {
+  "chargesGainedPerSecond": 0.07142999768257141,
+  "base_recharge_s": 13.9999995,
+  "maxCharges": 1.0,
+  "useDuration": 0.6,
+  "speedMultiplier": 0.8,
+  "speedScaler": "SP.CastSpeed(3)",
+  "speedScalerEffectiveness": 1.0
+ },
+ "ability_mutator_manager_fields": {
+  "blackHoleReducedCooldown": {
+   "offset": "0xad8",
+   "meaning": "Recurrence node (property 70) cooldown reduction for Black Hole"
+  },
+  "blackHoleAddedCharges": {
+   "offset": "0xae4",
+   "meaning": "Pocket Dimension added charges"
+  },
+  "blackHoleMinimumCooldown": {
+   "offset": "0xacc"
+  },
+  "blackHoleMoreDamage": {
+   "offset": "0xad4"
+  }
+ },
+ "getChargeRegen_override": {
+  "method": "BlackHoleMutator.getChargeRegen (RVA 0x2408400 override native at RVA 0x1831320 / file offset 0x182fd20)",
+  "behavior": "base = AbilityMutator.getChargeRegen() (ability.chargesGainedPerSecond + addedChargeRegen = 1/14 s); if statsManager.blackHoleReducedCooldown != 0: rate = safeQuotient(1 - reducedCooldown) then rate = base / (1 - reducedCooldown)",
+  "implication": "Recurrence (property 70, 4 points = 60%) reduces charge-regen cooldown multiplicatively as (1 - CDR): base recharge 14s -> 14*(1-0.6)=5.6s before any ICR/added-cooldown interactions. v1 currently puts Recurrence 60% into the ICR additive pool: (14+2)/(1+1.3575)=6.787s -> likely wrong; exact ICR/added-cooldown integration still to confirm."
+ },
+ "charge_manager": {
+  "fields": {
+   "charges": "0x88",
+   "chargeRegen": "0x90",
+   "maxCharges": "0x98",
+   "increasedRecoverySpeed": "0xd8"
+  },
+  "RefreshChargeInfo": "computes chargeRegen = 1.0 / cooldown when cooldown > 0 (cooldown from ability/stats query); exact stat query symbol not yet resolved"
+ },
+ "node_effects": {
+  "Recurrence": "property 70 Cooldown Reduction +15%/point (4 pts=60%), mapped to blackHoleReducedCooldown",
+  "Endless Maw": "duration +30%/point + cooldown +2s/point (accumulator; applied through added cooldown length path)",
+  "Pocket Dimension": "+1 charge/point -> blackHoleAddedCharges"
+ },
+ "open": [
+  "exact cooldown formula: how base 14s, added cooldown +2s, Recurrence CDR (1-CDR), and gear ICR combine; candidate recharges 5.6s vs 6.787s vs 3.18s (order matters)",
+  "Binary System +100% more stat stacking with structural two-component copy and Ignite inheritance (high impact)",
+  "forceSingleBlackHole / extraBlackHoles runtime semantics"
+ ],
+ "getCooldown_method": {
+  "status": "partially decoded",
+  "note": "AbilityMutator.GetCooldown(Stats, bool ignoreStats) (RVA 0x2405960) uses virtual getters for base cooldown, added cooldown length, increased cooldown recovery speed, more cooldown recovery speed, and a minimum-cooldown clamp; final result returned as 1/rate with max(minCooldown, ...) logic. Exact register-level mapping not yet finished.",
+  "candidate_recharges_s": {
+   "v1_current": 6.786731707317074,
+   "recurrence_only_14x(1-0.6)": 5.6,
+   "added_cooldown_then_cdr_16x0.4": 6.4,
+   "cdr_and_icr_7575_(14+?)/(1+icr)_x0.4": 3.641,
+   "cdr_then_icr_14x0.4/1.7575": 3.186
+  },
+  "impact": "loop DPS scales ~inversely with recharge; spread 3.19-6.79s means large potential difference vs v1, must not update ruleset until formula is pinned or validated in game."
+ }
+}

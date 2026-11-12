@@ -1,0 +1,170 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-surge-pyroclasm",
+  "revision": 2,
+  "title": {
+    "zh": "Surge Pyroclasm：额外施放 Flame Reave（未建模）",
+    "en": "Surge Pyroclasm: extra Flame Reave cast (not modeled)"
+  },
+  "aliases": [
+    "Surge",
+    "Pyroclasm",
+    "additional cast",
+    "su5g3",
+    "额外施放"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "su5g3"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "su5g3:28"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effect definition",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=surge_pyroclasm",
+      "note": "status unresolved；not_modeled"
+    },
+    {
+      "parameter": "surge tree node",
+      "source": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=su5g3；#source_records entity_kind=skill_tree_node source_scope=su5g3 source_id=28",
+      "note": "Surge node 28 Pyroclasm"
+    },
+    {
+      "parameter": "rotation policy",
+      "source": "current:matched_instances",
+      "note": "当前只施放 Flame Reave；other_skills_per_second=0"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "surge_pyroclasm",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=surge_pyroclasm"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_buffs",
+    "symbol": "screen_buffs",
+    "note": "仅作为 not_modeled 候选筛查；rotation 不含 Surge 施放"
+  },
+  "evidence_state": "unresolved",
+  "implementation_state": "not_implemented",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=surge_pyroclasm",
+      "note": "ruleset 条件效果声明（status unresolved）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=su5g3；#nodes node:letools:su5g3:28",
+      "note": "Surge node 28 Pyroclasm：Surge 可额外触发 Flame Reave"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/not_modeled_effects[id=surge_pyroclasm]",
+      "note": "本次 run 明确列为 not_modeled"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#14 明确未解决 / 需实测项",
+      "note": "OQ 列表"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/dps/rotation",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-frequency-cooldown",
+      "requirement": "额外施放属于触发/调度，需要事件模拟或明确覆盖率；不能简单乘攻速",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation"
+    },
+    {
+      "with": "fr-hit-rhythm-rotation",
+      "requirement": "Surge 也会叠 Rhythm 层（Versatility），改变消耗节律",
+      "evidence_locator": "tools/phase3/rules/fr-hit-facts-v1.json#R4.rhythm_of_fire"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "R4：Surge 触发额外 FR 的触发率/冷却/条件未量化；单技能模型不含其它技能伤害",
+      "若纳入：需同时建模 Surge 自身施放、Rhythm 补层与其它资源",
+      "blocks_full_dps=true（skill template unsupported）"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "frequency",
+    "stacking_policy": "unknown",
+    "order_policy": "若纳入循环，额外 FR 施放会改变施放次数与 Rhythm 层数；当前未实现",
+    "more_group_source": "n/a"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "su5g3"
+  ]
+}

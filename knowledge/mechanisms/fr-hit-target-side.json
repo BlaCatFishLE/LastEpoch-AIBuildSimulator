@@ -1,0 +1,206 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-target-side",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave 目标侧结算（穿透 / 火抗 / 怪物 DR）",
+    "en": "Flame Reave target-side settlement (penetration, fire resistance, monster DR)"
+  },
+  "aliases": [
+    "target side",
+    "penetration",
+    "monster DR",
+    "目标侧",
+    "穿透",
+    "怪物减伤"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "penetration"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "boss_or_rare"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "target_side"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Hit"
+    ],
+    "conditions": [
+      "boss_or_rare"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "monster_level",
+      "source": "current:matched_instances",
+      "unit": "level"
+    },
+    {
+      "parameter": "fire_resistance",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/target/fire_resistance；archive://examples/flame-reave/scenario/conditional-scenario.json#/target/fire_resistance",
+      "unit": "percent"
+    },
+    {
+      "parameter": "penetration rows",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "monster_dr",
+      "source": "tools/phase3/data/monster_dr.json（按 monster_level 查表）",
+      "unit": "percent",
+      "note": "level 100 由表决定，不在知识条目抄值"
+    },
+    {
+      "parameter": "target multiplier",
+      "source": "current:matched_instances",
+      "unit": "multiplier"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R12",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/target；#/rules id=R12"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "resolve_target",
+    "note": "merge ruleset.target 与 scenario.target；DR 由 le_calc.monster_dr.dr_for_level 查表；_penetration 求和"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/target",
+      "note": "ruleset 目标侧口径（resistance_status=assumed；rule_id R12）"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/data/monster_dr.json",
+      "note": "1..100 级怪物 DR 表"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/fr-bh-convergence-handover.zh-CN.md#2 目标侧结算",
+      "note": "BH 与 FR 两式等价性与未对齐点"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#13 E 资源/条件词条",
+      "note": "目标假设与本 BD 无穿透"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/target/monster_level；archive://examples/flame-reave/case.legacy-hit.json#/monster_level",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=penetration]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/totals/target",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-target-resistance-penetration",
+      "requirement": "共享目标侧算子需参数化 penetration_mode∈{fold_into_resistance, separate_multiplier} 与负抗钳制",
+      "evidence_locator": "docs/fr-bh-convergence-handover.zh-CN.md#4.1 第 3 条；#4.2 表 #1/#2"
+    },
+    {
+      "with": "common-monster-dr",
+      "requirement": "DR 表与按 level 查询；BH/FR 同表同值（level 100 已核对）",
+      "evidence_locator": "tools/phase3/data/monster_dr.json"
+    },
+    {
+      "with": "fr-hit-single-hit-chain",
+      "requirement": "目标乘区是单次命中的最后一环",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/formula"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "目标火抗默认 0 无 1.5.2 证据（R12 assumed）；负抗下限/区域抗性惩罚未建模",
+      "FR 用独立穿透乘区、BH 折进抗性，仅在 res≠0 且 pen>0 时有数值差（res=0 时等价）",
+      "scenario 的 target.monster_damage_reduction override 是否应生效（当前 FR 按 level 重查表，忽略显式 override）"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "penetration",
+    "stacking_policy": "additive",
+    "order_policy": "target_multiplier = (1+sum(penetration)) * (1-fire_resistance) * (1-monster_dr)；穿透是独立乘区，不折进抗性",
+    "more_group_source": "n/a（穿透不是 more 组；BH 的 fold-into-resistance 口径不同，见交接 §2）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

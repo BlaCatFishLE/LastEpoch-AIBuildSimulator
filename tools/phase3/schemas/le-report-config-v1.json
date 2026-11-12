@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-calc/le-report-config-v1.json",
+  "title": "Saved/loaded player report config v1 (le-report-config-v1)",
+  "description": "页面保存/载入的完整配置（player-report-ui §3 LIVE-04/07/08）：binding 绑定案例/模型/冻结输入/能力版本/report 引用，scenario 是完整规范化编辑场景。校验分两层：本 JSON Schema 校验结构与声明字段；Python validate_report_config() / 页面 JS 按 capabilities 做模型感知校验（未知字段、层数范围、预设、target 字段、readonly、错误绑定），使用同一 issue code 与顺序。没有 binding 的旧文件返回明确 legacy 结论（legacy_config_no_binding），不静默当作有效绑定配置。 规范字段为 schema_version；旧文件使用 schema 字段时兼容读取并给出 config_schema_field_legacy 警告。 校验器输出的 issue code 见 tools/phase3/schemas/le-report-config-v1.examples.json。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scenario"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "le-report-config-v1"
+    },
+    "schema": {
+      "const": "le-report-config-v1",
+      "description": "旧字段别名（兼容读取；新文件写 schema_version）"
+    },
+    "binding": {
+      "$ref": "#/$defs/binding"
+    },
+    "scenario": {
+      "$ref": "#/$defs/scenario"
+    }
+  },
+  "$defs": {
+    "input_fingerprints": {
+      "type": "object",
+      "required": [
+        "calc_input",
+        "ruleset",
+        "snapshot",
+        "dataset"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "calc_input": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "ruleset": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "snapshot": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "dataset": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "report_ref": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "case_id",
+        "model_id",
+        "run_id",
+        "run_dir",
+        "report_path",
+        "input_fingerprints",
+        "recompute_endpoint",
+        "ui_contract_version",
+        "renderer_fingerprint"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "le-report-ref-v1"
+        },
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_dir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "report_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_fingerprints": {
+          "$ref": "#/$defs/input_fingerprints"
+        },
+        "recompute_endpoint": {
+          "type": "string",
+          "pattern": "^http://(127\\.0\\.0\\.1|localhost|\\[::1\\]):[0-9]{1,5}/recompute$"
+        },
+        "ui_contract_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "renderer_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "canonical": {
+          "type": "boolean"
+        },
+        "generated_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "required": [
+        "case_id",
+        "model_id",
+        "capabilities_version",
+        "report_ref",
+        "input_fingerprints"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": "le-recalc-bindings-v1"
+        },
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "capabilities_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ui_contract_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "renderer_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "report_ref": {
+          "$ref": "#/$defs/report_ref"
+        },
+        "input_fingerprints": {
+          "$ref": "#/$defs/input_fingerprints"
+        },
+        "recompute_endpoint": {
+          "type": "string",
+          "pattern": "^http://(127\\.0\\.0\\.1|localhost|\\[::1\\]):[0-9]{1,5}/recompute$"
+        }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "required": [
+        "baseline_profile",
+        "target",
+        "states"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schema": {
+          "type": "string"
+        },
+        "baseline_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "object"
+        },
+        "states": {
+          "type": "object"
+        },
+        "mode": {
+          "type": "string"
+        },
+        "preset_id": {
+          "type": "string"
+        },
+        "effects": {
+          "type": "object"
+        },
+        "single_cast": {
+          "type": "object"
+        },
+        "single_hit": {
+          "type": "object"
+        },
+        "loop": {
+          "type": "object"
+        },
+        "dps": {
+          "type": "object"
+        },
+        "hit_override": {
+          "type": "object"
+        },
+        "profiles": {
+          "type": "object"
+        },
+        "assumptions": {
+          "type": "array"
+        },
+        "binding": {
+          "type": "object"
+        },
+        "case_id": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

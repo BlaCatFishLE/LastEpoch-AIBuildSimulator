@@ -1,0 +1,145 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-multi-hit-return-hits",
+  "revision": 1,
+  "title": {
+    "zh": "Flame Reave 每次施放多次返回命中与 50% less 伤害权重",
+    "en": "Flame Reave multi return hits per cast with 50% less damage weights"
+  },
+  "aliases": [
+    "Reflash",
+    "Flame Caller",
+    "multi hit",
+    "hits per cast",
+    "damage weights",
+    "额外命中",
+    "多命中"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:16",
+        "fr11mv:18"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "hits_per_cast"
+      ]
+    },
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Hit"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "fr11mv:16",
+      "fr11mv:18"
+    ],
+    "notes": "节点分配从当前计算输入读取；每次施放命中数 = base_hits + Σ返回次数，额外命中固定 50% less。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "return sources",
+      "source": "knowledge/definitions/fr-flame-reave-v3.json#/definition/rules/hit_events/return_sources",
+      "note": "node 16=2 次返回、node 18=1 次返回；require_points=1 由当前实例校验"
+    },
+    {
+      "parameter": "extra hit damage multiplier",
+      "source": "knowledge/definitions/fr-flame-reave-v3.json#/definition/rules/hit_events/extra_hit_damage_multiplier",
+      "unit": "percent",
+      "note": "0.5；权重 [1.0,0.5,0.5,0.5]"
+    },
+    {
+      "parameter": "hit count",
+      "source": "current:matched_instances#/skills/specializations/fr11mv/nodes/{16,18}/points",
+      "unit": "stack",
+      "note": "节点未分配时绑定拒绝"
+    }
+  ],
+  "rule_ref": {
+    "kind": "none",
+    "ref": "plan-v2 rules.hit_events（定义规则数据，取代旧 ruleset.hit_events）",
+    "path": "knowledge/definitions/fr-flame-reave-v3.json",
+    "locator": "#/definition/rules/hit_events"
+  },
+  "handler_ref": {
+    "module": "le_calc.plan_compiler",
+    "symbol": "_resolve_hit_events_v2",
+    "note": "编译期读取当前节点分配并生成 hits_per_cast/damage_weights；执行器按权重装配每cast伤害"
+  },
+  "aggregation": {
+    "operation": "frequency",
+    "stacking_policy": "additive",
+    "order_policy": "首击权重 1.0，其余返回命中各 50% less；每次施放伤害 = Σ(组件伤害 × 权重)",
+    "more_group_source": "n/a（权重不是 more 组）"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rules id=R1",
+      "note": "用户裁决 2026-11-07：每次施放 4 击、权重 [1.0,0.5,0.5,0.5]；迁移基线规则"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:fr11mv:16",
+      "note": "Reflash altText：additional hits always have the 50% less damage penalty"
+    },
+    {
+      "kind": "report",
+      "locator": "archive://reports/flame-reave/dps-step4-fr-2/result.json",
+      "note": "plan-v2 正式 run：hits_per_cast=4、effective=2.5、weights 一致；首击/每秒命中数分开记录"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_unified_fr_migration.py::FrD7SyntheticMultiHitTest",
+    "tools/phase3/tests/test_unified_fr_migration.py::FrV3RealBindingTest::test_numeric_mapping_matches_legacy_fr_baseline"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 fr-hit-stage1-v2 规则包保留为迁移证据；新路径使用 plan-v2 hit_events"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ],
+  "limitations": [
+    {
+      "item": "距离衰减",
+      "reason": "只建模贴脸（target_in_melee_range 默认 true）；远程衰减曲线未建模（迁移基线 OQ2）。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "命中相位",
+      "reason": "按每次施放固定权重与周期平均估算；不模拟真实动作时序与打断。",
+      "blocks_full_dps": false
+    }
+  ]
+}
+

@@ -1,0 +1,148 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-hit-more-groups",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave more 乘区分组与组间相乘",
+    "en": "Flame Reave more groups (independent multipliers)"
+  },
+  "source_path": "knowledge/mechanisms/fr-hit-more-groups.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R19",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/damage_model/more_per_group；#/effects 各 more 效果；#/rules id=R19（Enchant Weapon）/R20（Army of Skin）/R21（Reflash 50% less）",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R19 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:9; node:letools:fr11mv:12; node:letools:fr11mv:13",
+      "note": "节点 9/12/13 的 more 效果与 tags",
+      "source": "$.evidence_refs[1]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#items entity_id=item:letools:uniqueList.uniques:443",
+      "note": "Army of Skin 的 GlobalConditionalDamage more 行",
+      "source": "$.evidence_refs[2]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave more 乘区分组与组间相乘",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire、Melee、Hit；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=more；叠层策略=none；顺序/汇总=product over independent groups；组内 value 相加（同组多来源=加算）；more 分组依据=group 必须显式来自 ruleset.effects 或 snapshot contribution.group（节点/效果/装备定义），禁止仅凭词条 more 一词推定",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "按 group 求和后每组 (1+sum) 相乘；group 缺省时以 contribution_id 为组",
+      "source": "$.handler_ref.note（le_calc.hit_damage._more_groups）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：more rows、more_product、more groups",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 436600-439200"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[operation=more]；tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/totals/more_product"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/components[0]/more_groups"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "R19（EW active/passive more）在 ruleset 为 derived：exact value 来自第三方 runtime 硬编码，缺 1.5.2 游戏真值",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "R20 Army of Skin 的 high/full health 阈值与平均覆盖率未验证",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "P0 handover §4.2 #8：若把 Rhythm 平均折进 more 组会改数；当前它属于频率/循环层",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

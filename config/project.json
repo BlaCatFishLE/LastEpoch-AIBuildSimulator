@@ -1,0 +1,76 @@
+{
+ "schema": "le-project-config-v1",
+ "project": {
+  "name": "LastEpoch-BuildSimulator",
+  "version": "0.4.0",
+  "description": "Last Epoch 离线构筑导入、词缀库与统一 DPS 计划/执行/报告工具集（公开最小版：不含案例、存档、构筑 revision 与历史报告）。"
+ },
+ "python": {
+  "comment": "按顺序尝试：环境变量 LE_PYTHON → 候选列表中第一个存在的解释器 → PATH 上的 python。相对候选路径相对项目根目录解析。",
+  "candidates": [
+   ".venv/Scripts/python.exe",
+   "python"
+  ],
+  "env_override": "LE_PYTHON",
+  "min_version": "3.12"
+ },
+ "git": {
+  "comment": "Git 只用于版本信息（doctor / package-manifest），不参与计算。不在 PATH 时相关信息记为 unknown，不影响运行。",
+  "candidates": [
+   "git"
+  ],
+  "env_override": "LE_GIT",
+  "required_for_runs": false
+ },
+ "external_tools": {
+  "comment": "可选外部运行时：只有需要从新存档直接生成 tool-native wire（缺少归档 wire 的新输入路线）时才需要；普通导入后的 prepare/run/validate/serve、测试与报告都不需要。路径写仓库相对或接收方本地配置，不写机器绝对路径；环境变量可临时覆盖。未配置时依赖检查返回 undetermined / needs_input，不静默改用语义不同的路线。相关外部工具不随本项目分发。",
+  "node": {
+   "path": null,
+   "env_override": "LE_NODE",
+   "comment": "tool-native harness 需要 Node.js。仓库开发环境可指向 tools/node/node.exe；该目录不随发布包分发。"
+  },
+  "tool_native": {
+   "harness_script": "tools/save_import/scripts/tool_native/run_tool_native.js",
+   "tool_home": null,
+   "env_override": "LE_TOOL_NATIVE_HARNESS",
+   "home_env_override": "LE_TOOL_NATIVE_HOME",
+   "comment": "可选：lastepochsupertools 工具目录与 harness 脚本。仅当 case.source.tool_native_wire 缺失、需要从新存档直接读取 wire 时使用；也需要用户自行安装并通过上述配置/环境变量指向它。未配置时 prepare 返回 needs_input。"
+  }
+ },
+ "dataset": {
+  "pointer": "data/current.json"
+ },
+ "affix_db": "data/affix-db/v1/normalized/affix-db.sqlite",
+ "ruleset": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+ "conditional_registry": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+ "report_root": "reports",
+ "run_id_template": "{case_id}-{utcstamp}",
+ "overrides": {
+  "comment": "接收方不需要改本文件即可覆盖路径；环境变量只影响当前进程，不写回配置。",
+  "LE_REPO_ROOT": "项目根目录（默认由 scripts/le.ps1 的 $PSScriptRoot\\.. 推导）",
+  "LE_PYTHON": "Python 解释器绝对路径（优先于候选列表第二项）",
+  "LE_GIT": "Git 可执行文件绝对路径（仅版本信息用）",
+  "LE_CASE": "显式指定案例配置路径（等同 --case；不设默认案例，缺少 --case 时命令会明确报错）",
+  "LE_OUT_ROOT": "运行输出根目录（默认取案例 output.root，即 reports/<case-id>）"
+ },
+ "outputs": {
+  "run_manifest": "package-manifest.json",
+  "package_dir": "dist",
+  "package_excluded": [
+   ".venv",
+   ".scratch",
+   ".git",
+   "_verify",
+   "reports",
+   "data/cache",
+   "data/staging",
+   "data/normalized",
+   "data/builds",
+   "data/raw",
+   "data/releases/*/data.sqlite",
+   "tools/node",
+   "tools/jdk-*",
+   "tools/ghidra_*"
+  ]
+ }
+}

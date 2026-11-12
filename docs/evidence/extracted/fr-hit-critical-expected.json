@@ -1,0 +1,144 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-hit-critical-expected",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 暴击率/暴伤与 avg crit 期望",
+    "en": "Flame Reave critical chance, multiplier and expected multiplier"
+  },
+  "source_path": "knowledge/mechanisms/fr-hit-critical-expected.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R25",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/critical；#/effects id=chaos_flare_ignited_crit；#/rules id=R25（OQ6 暴击被动）/R21（额外命中权重）",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R25 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:20; node:letools:fr11mv:24",
+      "note": "Precise Destruction / Chaos Flare",
+      "source": "$.evidence_refs[2]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill_entity_id=skill:letools:LEAbilities.abilityList:fr11mv",
+      "note": "base 5% / 2.0",
+      "source": "$.evidence_refs[3]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 暴击率/暴伤与 avg crit 期望",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire、Melee、Hit；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=crit；叠层策略=additive；顺序/汇总=crit chance 与 crit multiplier 各自 added→increased→more 池；avg crit 作为单次命中乘区；more 分组依据=Chaos Flare 的 more crit chance 组来自 ruleset.effects node:fr11mv:24",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "chance = (base+added)*(1+inc)*prod(1+more)，cap=1；multi = (base+added)*(1+inc)*prod(1+more)；avg=(1-c)+c*m",
+      "source": "$.handler_ref.note（le_calc.hit_damage._crit_section）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：base crit、crit rows、crit cap、crit totals",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/crit_chance；#/derived/skill/crit_multiplier"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key in (crit_chance, crit_multiplier)]"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/totals/crit_chance；#/crit_multiplier；#/avg_crit"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "OQ6：Defender of Welryn per-Dex / Prodigy per-Int 的精确公式未验证；当前用快照归一值计入（R25 assumed）",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "Chaos Flare 的 more 是否直接乘 crit chance 总量为文本推导（ruleset status assumed）",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "crit multi 的装备词条 tier 显示倍率归一（84%/291%/28%）是装备位置缩放差异，未另建机制条目",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

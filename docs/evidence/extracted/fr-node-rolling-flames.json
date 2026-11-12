@@ -1,0 +1,148 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-node-rolling-flames",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 树节点 25 Rolling Flames（射程，不影响命中伤害）",
+    "en": "Rolling Flames (Flame Reave tree node 25)"
+  },
+  "source_path": "knowledge/mechanisms/fr-node-rolling-flames.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "dataset_entity",
+    "ref": "node:letools:fr11mv:25",
+    "path": "data/releases/phase1-dataset-003/data.sqlite",
+    "locator": "#nodes node_index=25；#effects owner_entity_id=node:letools:fr11mv:25",
+    "verification": {
+      "status": "external_dataset",
+      "checked_against": "data/releases/phase1-dataset-003/data.sqlite",
+      "note": "dataset 实体引用；数据在 fetch 的 dataset 文件中，不随仓库分发，未在本轮打开"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes entity_id=node:letools:fr11mv:25",
+      "note": "Rolling Flames 节点描述/类型/上限",
+      "source": "$.evidence_refs[0]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:25",
+      "note": "Range +15%/点（ignored）",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 树节点 25 Rolling Flames（射程，不影响命中伤害）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：area；伤害标签：Fire、Melee；条件 code：none；必要节点：node:fr11mv:25",
+      "source": "$.applicability"
+    },
+    {
+      "text": "范围/几何类节点：为树完整性登记，不参与伤害计算。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "聚合操作=none；叠层策略=none；顺序/汇总=Range +15%/点；仅改变命中几何，不进入单次命中伤害或频率；more 分组依据=n/a",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "key '25'；role=ignored，exclusion_reason：range/width has no effect on hit damage",
+      "source": "$.handler_ref.note（le_calc.hit_inputs.FR_SKILL_NODE_SEMANTICS）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、value_per_point、value_total、contribution rows",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=25)"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/nodes(node_id=25)/points"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=25)/effects[*]/value_per_point"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=25)/effects[*]/value_total"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[contribution_id prefix=skill:fr11mv:25:]"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "射程/范围变化对单目标贴脸 DPS 无数值影响；若目标在边缘或需要几何覆盖，需新的空间模型",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

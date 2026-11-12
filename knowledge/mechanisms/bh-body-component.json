@@ -1,0 +1,184 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-body-component",
+  "revision": 2,
+  "title": {
+    "zh": "Black Hole 本体组件与单跳伤害",
+    "en": "Black Hole body component and per-tick damage"
+  },
+  "aliases": [
+    "Black Hole 本体",
+    "RepeatedlyDamageEnemiesWithinRadius",
+    "body",
+    "本体组件",
+    "per-tick damage",
+    "单跳伤害",
+    "addedDamageScaling"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:0"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body",
+      "body_fire",
+      "body_cold",
+      "tick"
+    ],
+    "tags": [
+      "Spell",
+      "DoT"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:bh2:0"
+    ],
+    "notes": "本体组件是 RepeatedlyDamageEnemiesWithinRadius：每周期基础冷伤 + addedDamageScaling × 附加法术伤害，hit=false、damageAtStart=true；周期与基础寿命来自能力数据。数值不在此抄写，读 ruleset 组件字段。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-component",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-component]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "base_damage.cold",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/components/0/base_damage/cold",
+      "note": "Red Giant/Binary 决定最终分量；转换见 bh-red-giant / bh-binary-system。"
+    },
+    {
+      "parameter": "added_damage_scaling",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/components/0/added_damage_scaling",
+      "note": "附加法术伤害 → 每跳基础值的系数。"
+    },
+    {
+      "parameter": "damage_interval_s",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/components/0/damage_interval_s",
+      "unit": "seconds",
+      "note": "跳间隔；同时用于跳数离散化（bh-body-tick-model）。"
+    },
+    {
+      "parameter": "added_damage rows",
+      "source": "current:matched_instances",
+      "note": "stat_key=added_damage、按组件标签过滤（Spell）；逐行见 source-ledger。"
+    },
+    {
+      "parameter": "attack/added source",
+      "source": "current:matched_instances",
+      "unit": "flat",
+      "note": "当前案例的附加法术伤害合计（derived 行有来源账）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "compute_body",
+    "note": "compute_body：按 Red Giant/Binary 生成分量 → added×scaling + 基础值 → inc/more/target → 每跳伤害；表达式树写入 result.single_cast.body.components[].expression。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#abilities bh2",
+      "note": "1.5.2 数据集能力字段（冻结副本）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]",
+      "note": "bh2 prefab 组件字段与 tooltip 名义速率描述一致。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#3.1",
+      "note": "1.5.3 本体重复伤害组件读数。"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/reverse-engineering/game-data-blackhole-ignite-1.5.3.json",
+      "note": "1.5.3 游戏数据：Black Hole 本体与 Ignite。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/base_value",
+      "note": "当前 run 的本体分量与表达式树。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/flat_added_spell_damage_total",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_fire_component_golden_numbers",
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_expression_tree_is_traceable",
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[legacy_single_skill.body_total]",
+    "archive://reports/black-hole/p0-baseline-bh/reproduce-report.json（22/22 PASS）"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-red-giant",
+      "requirement": "转火后冷/火分量的替换顺序：先转火再决定 Binary 分量。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#compute_body"
+    },
+    {
+      "with": "bh-binary-system",
+      "requirement": "Binary 会生成两个结构分量；单分量口径不适用。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#compute_body"
+    },
+    {
+      "with": "common-tag-match",
+      "requirement": "分量标签集合（Fire/Cold + Spell/DoT）决定哪些 inc/more 行适用。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#BODY_FIRE_TAGS"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]",
+      "docs/evidence/reverse-engineering/README.zh-CN.md#3.1",
+      "docs/evidence/reverse-engineering/game-data-blackhole-ignite-1.5.3.json",
+      "data/releases/phase1-dataset-003/data.sqlite",
+      "tools/phase3/tests/test_damage.py"
+    ],
+    "open_questions": [
+      "component 的 damage_tags=['Spell','DoT'] 与 hit=false 已确认；本体为何种伤害类别在游戏内面板上不可直接观察，分类只影响标签过滤而非公式。",
+      "addedDamageScaling 是否对不同类型的 added 伤害（非 Spell）缩放一致未逐项验证；当前只消费匹配 Spell 标签的 added 行。"
+    ],
+    "requery_when": [
+      "出现非 Spell added 来源时",
+      "游戏版本使 bh2 能力字段变化时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

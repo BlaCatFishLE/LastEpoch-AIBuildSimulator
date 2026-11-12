@@ -1,0 +1,33 @@
+{
+ "source": "local game 1.5.3 PermaLoad.bundle Ability bh2",
+ "game_version": "1.5.3",
+ "fields": {
+  "m_Name": "BlackHole",
+  "abilityName": "Black Hole",
+  "playerAbilityID": "bh2",
+  "useDuration": 0.6000000238418579,
+  "hasMinimumUseDuration": false,
+  "minimumUseDuration": 0.0,
+  "speedScaler": 3,
+  "speedMultiplier": 0.800000011920929,
+  "maximumUseSpeed": 0.0,
+  "speedScalerAppliedAsIncrease": false,
+  "speedScalerEffectiveness": 1.0,
+  "animation": 3,
+  "useCustomAnimationDurationModifier": false,
+  "customAnimationDurationModifier": 0.0,
+  "maxCharges": 1.0,
+  "chargesGainedPerSecond": 0.07142999768257141,
+  "chargeRegenDuringUse": 0,
+  "cannotResetCooldown": false,
+  "delayedCasts": 0,
+  "delayedCastDuration": 0.25,
+  "sharedCooldown": false,
+  "manaCost": 35.0,
+  "tags": 4356
+ },
+ "derived": {
+  "base_recharge_s": 13.9999995,
+  "note": "1/chargesGainedPerSecond = 14.0s base charge recharge (before ICR/CDR); maxCharges 1 base (+1 from Pocket Dimension node id 30)"
+ }
+}

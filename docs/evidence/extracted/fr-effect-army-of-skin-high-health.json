@@ -1,0 +1,152 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-effect-army-of-skin-high-health",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Army of Skin：高血量敌人 +49% more Melee（条件效果）",
+    "en": "Army of Skin: more melee damage to high-health enemies"
+  },
+  "source_path": "knowledge/mechanisms/fr-effect-army-of-skin-high-health.json",
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "global_conditional_damage_feet",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=global_conditional_damage_feet",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_effect:global_conditional_damage_feet 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#entities entity_id=item:letools:uniqueList.uniques:443",
+      "note": "unique 443 tooltip:(26-52)% more Melee Damage to High Health Enemies；本 BD roll 0.49",
+      "source": "$.evidence_refs[0]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#items entity_id=item:letools:uniqueList.uniques:443",
+      "note": "mods[3]={property:117 GlobalConditionalDamage,specialTag:2,tags:512,type:2 More}",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Army of Skin：高血量敌人 +49% more Melee（条件效果）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Melee；条件 code：enemy_high_health",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=more；叠层策略=none；顺序/汇总=单 more 组乘在 Melee 命中上；build_base 默认 high_health=true，legacy_single_skill 关闭；more 分组依据=dataset unique 443 mods[3]（GlobalConditionalDamage specialTag=2 → enemyHealth high）；不是词条文本推定",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "条件满足时加 more 行（tags Melee，group=effect:army_of_skin:high_health）；ruleset.effects 的 stale notes 见 open_questions",
+      "source": "$.handler_ref.note（le_calc.hit_damage._effect_rows）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：effect definition、roll、more row",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 444900-447300"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods equipment.feet#unique_mod#3（value_numeric=0.49）"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/applied_effects[id=global_conditional_damage_feet]"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/interaction_requirements/0/evidence_locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/enemy_high_health"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "high health 的阈值（half/full？）与实战平均覆盖率未验证（R20 assumed）；低于阈值时该 49% more 失效",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "ruleset.effects 该条的 notes 仍写着 not applicable（Flay/Harvest），与其 modeled status、facts 更正和 stage16 实现冲突——stale note，需 Lead 复核",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "本案例 legacy_single_skill = build_base / 1.49 仅因该机制 + high-health 条件；这是案例/场景校验关系，不能写成通用 legacy 换算规则（P0 独立 review 裁定 2-A）",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

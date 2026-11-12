@@ -1,0 +1,153 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-ignite-duration-sources",
+  "revision": 1,
+  "title": {
+    "zh": "Ignite 持续时间乘区来源池",
+    "en": "Ignite duration multiplier source pool"
+  },
+  "aliases": [
+    "ignite duration",
+    "Increased Ignite Duration",
+    "点燃持续",
+    "持续时间乘区",
+    "ailment_duration"
+  ],
+  "selectors": [
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "ailment_duration"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ignite",
+      "duration"
+    ],
+    "tags": [
+      "Fire",
+      "Ailment"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Ignite 持续时间乘区 = 1 + Σ(increased Ignite duration 行)，来源包括玩家装备/神像/被动，以及条件通道追加的跨技能行（Eternal Flames 被动/激活）。持续时间乘区直接按总伤害乘区处理（每层总伤害 ∝ 持续时间），不需要单独的『每秒伤害』换算。与 Black Hole 本体 duration（bh-duration）是两个独立的池，不能混用。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-duration",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-duration]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "player duration rows",
+      "source": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_total",
+      "unit": "fraction",
+      "note": "快照派生的玩家侧 Ignite duration 合计（含 rows 明细）。"
+    },
+    {
+      "parameter": "duration rows detail",
+      "source": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_rows",
+      "note": "逐行来源（装备/神像/被动）与贡献 ID。"
+    },
+    {
+      "parameter": "conditional additions",
+      "source": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/3/values",
+      "note": "Eternal Flames 被动行（+0.25）与激活增量（另见 bh-cond-eternal-flames-*）。"
+    },
+    {
+      "parameter": "duration result",
+      "source": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/duration",
+      "note": "运行产物：base/increased_total/duration_multiplier/duration_s。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ignite",
+    "symbol": "_ignite_duration",
+    "note": "收集 stat_key=ailment_duration 的 increased/added 行（target=ignite/all）→ duration_multiplier；条件通道追加行后重算同一池。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-duration]",
+      "note": "规则 6：点燃时间延长就是一个乘区。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/duration",
+      "note": "当前 run 的 duration 池与乘区。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.ignite_total]",
+      "note": "build_base 与 legacy 的差异来自该池的常驻追加行（Eternal Flames）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/assumptions_applied",
+      "note": "条件通道追加持续时间行时的显式假设标注。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Ignite 持续时间乘区的索引行。"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_single_stack_core",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeEffectDirectionTests::test_eternal_flames_active_ignite_duration",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.ignite_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-ignite-core",
+      "requirement": "duration 乘区乘在单层总伤害上；不是每秒伤害的独立因子。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#compute_ignite_core"
+    },
+    {
+      "with": "bh-cond-eternal-flames-passive",
+      "requirement": "常驻被动追加 Ignite duration 行（build_base 差异来源）。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/3"
+    },
+    {
+      "with": "bh-cond-eternal-flames-active",
+      "requirement": "激活时追加相对被动的增量行（不重复计 total）。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/4"
+    },
+    {
+      "with": "bh-cond-apex-glyph-conversion",
+      "requirement": "Apex 的 increased Duration of Ignite/Shred 也会延长点燃（当前构筑不在 Glyph 上，条件不满足）。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/8/values"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-duration]",
+      "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_rows",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/duration",
+      "archive://examples/black-hole/expected/expected-summary.json#/checks"
+    ],
+    "open_questions": [
+      "持续时间行来源在当前案例为装备/神像/被动；是否还有技能等级或其它隐藏 duration 来源未穷举。",
+      "『持续时间延长按总伤害乘区』是用户规则 6 + 参考模型口径；游戏内逐来源叠加的加法性未单独验证。"
+    ],
+    "requery_when": [
+      "新增 duration 来源时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "case_bound"
+}

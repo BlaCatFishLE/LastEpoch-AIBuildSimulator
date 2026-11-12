@@ -1,0 +1,1508 @@
+{
+  "schema": "le-ruleset-hit-v1",
+  "ruleset_id": "fr-hit-stage1-v2",
+  "game_version": "1.5.2",
+  "created": "2026-11-07",
+  "owner": "fr-engine",
+  "scope_note": "Flame Reave (fr11mv) 本体命中模型 ruleset：只覆盖单技能直接命中、单体目标、固定条件估算；不覆盖 Ignite/DoT、其它技能伤害、资源循环与移动/中断。所有 assumed/unresolved 项都会让结果保持 status=assumption。",
+  "states": {
+    "comment": "引擎默认 states；scenario（le-hit-scenario-v1）的 profiles[baseline_profile].states / single_hit.states / dps.states 会覆盖这里。",
+    "defaults": {
+      "ignited": false,
+      "enchant_weapon_active": true,
+      "frenzy_active": false,
+      "rhythm_of_fire_stacks": 0,
+      "consume_rhythm_of_fire": false,
+      "firebrand_stacks": 0,
+      "consume_firebrand": false,
+      "blade_weaving_stacks": 0,
+      "consume_blade_weaving": false,
+      "ambition_stacks": 0,
+      "mana_ge_300": false,
+      "boss_or_rare": true,
+      "target_in_melee_range": true
+    }
+  },
+  "skill": {
+    "ability_id": "fr11mv",
+    "name": "Flame Reave",
+    "class": "Mage",
+    "mastery": "Spellblade",
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "damage_tags": [
+      "Fire"
+    ],
+    "base_damage": [
+      {
+        "damage_type": "Fire",
+        "value": 2.0
+      }
+    ],
+    "added_damage_scaling": 4.0,
+    "added_damage_effectiveness_percent": 400.0,
+    "crit_chance": 0.05,
+    "crit_multiplier": 2.0,
+    "mana_cost": 20.0,
+    "cast_time_s": 0.8,
+    "use_duration_s": 0.8,
+    "hit": true,
+    "component_locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill_entity_id=skill:letools:LEAbilities.abilityList:fr11mv index=0"
+  },
+  "attack_model": {
+    "base_rate_source": "skill_use_duration_planner",
+    "formula": "final_aps = base_aps * (1 + sum(increased_attack_speed)) * product(1 + more_attack_speed groups); base_aps = 0.75 / useDuration_s * speedMultiplier * 1.46667 = 1.3750031 (reference planner runtime; weapon attackRate is display-only)",
+    "alternatives": [
+      {
+        "source": "skill_use_duration_planner",
+        "formula": "0.75 / useDuration_s * speedMultiplier * 1.46667",
+        "fr11mv_value": 1.3750031,
+        "status": "superseded_by_user_rule",
+        "rule_id": "R3",
+        "note": "third-party planner runtime fast path: base rate only depends on useDuration; weapon attackRate is display-only"
+      },
+      {
+        "source": "weapon_average_attack_rate",
+        "formula": "average equipped weapon attackRate (Rune Hammer 0.94 / Katana 1.20)",
+        "fr11mv_value": 1.07,
+        "status": "superseded_by_user_rule",
+        "note": "chosen default; the reference runtime does not model dual-wield weapon rate aggregation",
+        "rule_ids": [
+          "R2",
+          "R3"
+        ]
+      }
+    ],
+    "dual_wield": {
+      "attack_rate": "skill base rate from useDuration/as (user rule 2026-11-07); weapon attackRate not read",
+      "added_weapon_damage": "sum: all equipped weapon added damage enters the pool (user rule 2026-11-07)",
+      "status": "confirmed",
+      "rule_id": "R2",
+      "candidate_weapon_average_final_aps": 2.45,
+      "candidate_reference_final_aps": 3.149
+    },
+    "attack_speed_pool": {
+      "increased_additive": true,
+      "more_multiplicative_per_group": true,
+      "tag_filter": "rows tagged Melee / untagged apply; Spell-only and DoT-only rows never apply"
+    },
+    "windows_s": [
+      5,
+      30,
+      120
+    ],
+    "status": "confirmed",
+    "note": "R2 unresolved: the third-party planner runtime has no dual-wield model (weapon added damage summed, rate from skill as). Default follows that reference (candidate A). Candidate B (average weapon attackRate 1.07 / per-hit average added damage) is the physically plausible alternative and is kept in alternatives; the two differ by ~28% in APS and 2x in added damage.",
+    "user_confirmation": "base_aps = as × speedMultiplier 与“双持两把武器 added 直接相加”已由用户确认（2026-11-07）。"
+  },
+  "damage_model": {
+    "formula": "component = (base + added * added_damage_scaling) * (1 + sum(increased[tags])) * product(1 + sum(more per group)[tags]) * avg_crit * (1 + penetration) * (1 - target_resistance) * (1 - monster_dr)",
+    "components": [
+      {
+        "component_id": "fr11mv:fire",
+        "label": "Flame Reave — Fire 命中",
+        "damage_type": "Fire",
+        "damage_tags": [
+          "Fire",
+          "Melee",
+          "Hit"
+        ],
+        "base_from": "skill_component"
+      }
+    ],
+    "extra_damage_type_policy": "fire_only",
+    "extra_damage_type_policy_note": "Flame Reave 无伤害转换（Rolling Thunder/Rolling Flames 未选转换），非 Fire 类型的显式 added damage（例如 sealed +5 Physical）不进入 Fire 组件；列入 excluded/assumed。",
+    "added_damage_scaling": 4.0,
+    "added_untyped_policy": "type-less added damage (e.g. '+64 Melee Damage') is treated as the skill's damage type (Fire); assumed",
+    "increased_additive": true,
+    "more_per_group": true,
+    "tag_filter": "no tags = generic; all tags must be contained in the component closure {Fire, Melee, Hit}; Elemental expands onto element components; Spell/DoT-only never apply",
+    "dot_policy": "DoT-only modifiers (tags include DoT without Hit) are excluded from hit damage",
+    "attribute_scaling": {
+      "formula": "increased Damage = sum(attribute_value * per_point_increased_damage)",
+      "status": "derived",
+      "rule_id": "R11"
+    }
+  },
+  "critical": {
+    "formula": "crit_chance = (base_chance + added_chance) * (1 + sum(increased_chance)) * product(1 + more_chance groups), capped at chance_cap; crit_multiplier = (base_multiplier + added_multiplier) * (1 + sum(increased_multiplier)) * product(1 + more_multiplier groups); avg_crit = (1 - crit_chance) + crit_chance * crit_multiplier",
+    "chance_cap": 1.0,
+    "base_from_skill": true,
+    "status": "derived",
+    "rule_id": "R12"
+  },
+  "target": {
+    "boss_or_rare": true,
+    "monster_level": 100,
+    "fire_resistance": 0.0,
+    "monster_dr_source": "tools/phase3/data/monster_dr.json (level 100 -> 0.87)",
+    "penetration_formula": "x * (1 + sum(fire penetration))",
+    "resistance_status": "assumed",
+    "rule_id": "R13"
+  },
+  "hit_events": {
+    "base_hits": 1,
+    "returns": 3,
+    "hits_per_cast": 4,
+    "source_nodes": [
+      16,
+      18
+    ],
+    "status": "confirmed",
+    "rule_id": "R1",
+    "note": "用户裁决 2026-11-07：每次施放为 4 击（1 次基础 + Reflash 2 次返回 + Flame Caller 1 次返回）。额外命中仍按 50% less damage 惩罚：伤害权重 [1.0, 0.5, 0.5, 0.5]，首击当量 2.5。",
+    "damage_weights": [
+      1.0,
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "rotation": {
+    "policy": "cooldown_limited",
+    "policy_note": "Reflash (node 16) 给 Flame Reave 增加 3s 冷却（node 17 未选，无额外 charges）；持续 DPS 由冷却而不是攻速决定。attack-speed-limited 口径同时输出作为 alternate_policy。",
+    "cooldown_s": 3.0,
+    "cooldown_formula": "(base + flat) / (1 + sum(increased cooldown recovery speed))",
+    "windows_s": [
+      5,
+      30,
+      120
+    ],
+    "other_skills_per_second": 0.0,
+    "status": "assumed",
+    "rule_id": "R15",
+    "rhythm_of_fire": {
+      "status": "assumed",
+      "cycle_casts": 4,
+      "consume_more": 1.3,
+      "average_more": 1.325,
+      "note": "FR-only steady rotation: each use grants 4 stacks; the 4th use consumes 12 stacks for +130% more (x2.3). Average more over the cycle = (3*1 + 2.3)/4 = 1.325 (assumed; other-skill stack acceleration not simulated).",
+      "rule_id": "R18"
+    }
+  },
+  "effects": [
+    {
+      "id": "heat_wave_fire_more",
+      "label": "Heat Wave — Flame Reave deals more fire damage (5 points, permanent)",
+      "source_kind": "skill_node",
+      "source_path": "data.specializations.fr11mv.nodes.9",
+      "unique_text": null,
+      "condition": null,
+      "coverage": "modeled",
+      "status": "derived",
+      "stacks_state": null,
+      "modifiers": [],
+      "applied_via": "snapshot-contribution:skill:fr11mv:9:0",
+      "include_in": [
+        "baseline",
+        "single_hit",
+        "dps"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "FR tree node 9 effect index 0: Fire Damage +10%/point (5 points, multiplicative)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:9"
+        }
+      ],
+      "next_probe": "confirm the '+10% per point' more-fire value against 1.5.2 game data (dataset effect_values already parsed)"
+    },
+    {
+      "id": "arcane_severance_melee_more",
+      "label": "Arcane Severance — Flame Reave deals more melee damage (3 points, permanent)",
+      "source_kind": "skill_node",
+      "source_path": "data.specializations.fr11mv.nodes.12",
+      "condition": null,
+      "coverage": "modeled",
+      "status": "derived",
+      "modifiers": [],
+      "applied_via": "snapshot-contribution:skill:fr11mv:12:0",
+      "include_in": [
+        "baseline",
+        "single_hit",
+        "dps"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "FR tree node 12 effect index 0: Melee Damage +4%/point (3 points, multiplicative)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:12"
+        }
+      ],
+      "next_probe": "confirm the more-melee pool semantics; the node also converts added spell damage to added melee damage (assumed conversion)"
+    },
+    {
+      "id": "ember_infusion_melee_more",
+      "label": "Ember Infusion — Flame Reave deals more melee damage (3 points, permanent)",
+      "source_kind": "skill_node",
+      "source_path": "data.specializations.fr11mv.nodes.13",
+      "condition": null,
+      "coverage": "modeled",
+      "status": "derived",
+      "modifiers": [],
+      "applied_via": "snapshot-contribution:skill:fr11mv:13:0",
+      "include_in": [
+        "baseline",
+        "single_hit",
+        "dps"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "FR tree node 13 effect index 0: Melee Damage +12%/point (3 points, multiplicative)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:13"
+        }
+      ],
+      "next_probe": "confirm node value and that it is an independent more group (multiplicative with node 9/12)"
+    },
+    {
+      "id": "rhythm_of_fire_consume",
+      "label": "Rhythm of Fire — consuming 12 stacks grants +130% more damage",
+      "source_kind": "skill_node",
+      "source_path": "data.specializations.fr11mv.nodes.3",
+      "condition": {
+        "state": "consume_rhythm_of_fire",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "modeled",
+      "status": "assumed",
+      "stacks_state": "rhythm_of_fire_stacks",
+      "max_stacks": 12,
+      "modifiers": [],
+      "applied_via": "snapshot-contribution:skill:fr11mv:3:3",
+      "include_in": [
+        "single_hit",
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "FR tree node 3 effect index 3: Damage when consuming 12 stacks +130% (more, tags=0)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:3"
+        }
+      ],
+      "next_probe": "verify the stack cycle (4 stacks/use, consume at 12) and whether the +130% applies to all three hits of the consuming cast",
+      "assumption": "consumption is modelled as a scenario state; the time-based stack cycle (4 per cast, consume at 12) is not simulated"
+    },
+    {
+      "id": "scorching_tide_ignited",
+      "label": "Scorching Tide — more melee damage against ignited enemies (3 points)",
+      "source_kind": "skill_node",
+      "source_path": "data.specializations.fr11mv.nodes.23",
+      "condition": {
+        "state": "ignited",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "modeled",
+      "status": "assumed",
+      "modifiers": [],
+      "applied_via": "snapshot-contribution:skill:fr11mv:23:0",
+      "include_in": [
+        "single_hit",
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "FR tree node 23 effect index 0: Melee Damage vs Ignited +20%/point (3 points)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:23"
+        }
+      ],
+      "next_probe": "R5: determine who reliably applies Ignite (ring2 +43% chance on hit / Arcane Flames passive / Firebrand Flare) and the realistic uptime",
+      "assumption": "target ignited state is a scenario switch, default false"
+    },
+    {
+      "id": "chaos_flare_ignited_crit",
+      "label": "Chaos Flare — more critical strike chance against ignited enemies (1 point)",
+      "source_kind": "skill_node",
+      "source_path": "data.specializations.fr11mv.nodes.24",
+      "condition": {
+        "state": "ignited",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "modeled",
+      "status": "assumed",
+      "modifiers": [],
+      "applied_via": "snapshot-contribution:skill:fr11mv:24:0",
+      "include_in": [
+        "single_hit",
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "FR tree node 24 effect index 0: More Crit Chance Against Ignited 20% (1 point, multiplicative)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:24"
+        }
+      ],
+      "next_probe": "R5: confirm ignite uptime and whether 'more crit chance' multiplies the final crit chance pool"
+    },
+    {
+      "id": "enchant_weapon_active",
+      "label": "Enchant Weapon (active) — +50% more / +50% inc melee attack speed / +25 added / +100% inc melee fire / +30% inc melee elemental",
+      "source_kind": "skill",
+      "source_path": "data.specializations.sb44eQ",
+      "condition": null,
+      "coverage": "modeled",
+      "status": "confirmed",
+      "modifiers": [
+        {
+          "stat_key": "attack_speed",
+          "operation": "increased",
+          "value": 0.5,
+          "unit": "percent",
+          "damage_tags": [
+            "Melee"
+          ],
+          "note": "Celerity 5 points x +10% increased melee attack speed"
+        },
+        {
+          "stat_key": "added_damage",
+          "operation": "added",
+          "value": 25.0,
+          "unit": "flat",
+          "damage_tags": [
+            "Fire"
+          ],
+          "note": "Molten Steel 5 points x +5 added fire damage"
+        },
+        {
+          "stat_key": "damage",
+          "operation": "increased",
+          "value": 1.0,
+          "unit": "percent",
+          "damage_tags": [
+            "Fire"
+          ],
+          "note": "Molten Steel 5 points x 20% increased fire damage with melee attacks"
+        },
+        {
+          "stat_key": "damage",
+          "operation": "increased",
+          "value": 0.3,
+          "unit": "percent",
+          "damage_tags": [
+            "Elemental"
+          ],
+          "note": "Efficacy 3 points x 10% increased elemental damage with melee attacks"
+        },
+        {
+          "stat_key": "damage",
+          "operation": "more",
+          "value": 0.5,
+          "unit": "percent",
+          "damage_tags": [
+            "Elemental",
+            "Melee"
+          ],
+          "group": "effect:enchant_weapon:active_more",
+          "note": "active: +50% more melee elemental damage (runtime class rrljt hardcoded 0.5)"
+        }
+      ],
+      "include_in": [
+        "baseline",
+        "single_hit",
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：Enchant Weapon 只要有近战命中就激活。",
+          "locator": "user_conversation#2026-11-07"
+        },
+        {
+          "kind": "catalog",
+          "detail": "Enchant Weapon skill/tree sb44eQ and buff UIBuffs:88",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=sb44eQ"
+        }
+      ],
+      "next_probe": "R4: verify Enchant Weapon active parameter mapping (attack speed/fire flat/fire increased/elemental increased) and whether the buff is always active while attacking",
+      "assumption": "Enchant Weapon is assumed active for melee attacks (Kindling Blade auto-activation, not on cooldown); legacy_single_skill profile keeps it off",
+      "notes": "用户裁决 2026-11-07：Enchant Weapon 只要有近战命中就激活，因此 FR 命中默认常驻；参数沿用 dataset sb44eQ 节点效果（Celerity/Molten Steel/Efficacy/Kindling Blade）。"
+    },
+    {
+      "id": "frenzy_active",
+      "label": "Frenzy (active) — base buff + Frenzied Flame added fire damage",
+      "source_kind": "skill_node",
+      "source_path": "data.specializations.fr11mv.nodes.6",
+      "condition": {
+        "state": "frenzy_active",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "modeled",
+      "status": "confirmed",
+      "modifiers": [
+        {
+          "stat_key": "attack_speed",
+          "operation": "increased",
+          "value": 0.456,
+          "unit": "percent",
+          "damage_tags": [],
+          "group": "effect:frenzy:attack_speed",
+          "note": "+20% base Frenzy attack/cast speed x (1 + 128% increased Effect of Frenzy on You: ring1 28% + relic 100%) = +45.6%"
+        },
+        {
+          "stat_key": "added_damage",
+          "operation": "added",
+          "value": 8.0,
+          "unit": "flat",
+          "damage_tags": [
+            "Fire"
+          ],
+          "note": "Frenzied Flame: +8 Flame Reave fire damage during Frenzy (1 point)"
+        }
+      ],
+      "include_in": [
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "Frenzy ailment: +20% increased attack speed and +20% cast speed, 1s duration",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments entity_id=ailment:letools:LEAbilities.ailmentList:34"
+        },
+        {
+          "kind": "derivation",
+          "detail": "128% increased Effect of Frenzy on You (ring1 28% + relic 100%) -> +20% x 2.28 = +45.6% attack speed",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods equipment.ring1#unique_mod#0; equipment.relic#unique_mod#3"
+        },
+        {
+          "kind": "catalog",
+          "detail": "FR tree node 6 Frenzied Flame: +8 fire damage during Frenzy",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:6"
+        }
+      ],
+      "next_probe": "R4: confirm Frenzy stack count/uptime from 10% on-hit chance and whether attack-speed effect uses the effect-increased scaling"
+    },
+    {
+      "id": "firebrand_incineration",
+      "label": "Firebrand 层数只对 Firebrand 自身生效（不作用于 FR）",
+      "source_kind": "skill_node",
+      "source_path": "data.specializations.f1b4d.nodes.7",
+      "condition": {
+        "state": "consume_firebrand",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "not_modeled",
+      "status": "confirmed",
+      "stacks_state": "firebrand_stacks",
+      "max_stacks": 9,
+      "modifiers": [
+        {
+          "stat_key": "damage",
+          "operation": "more",
+          "value_per_stack": 0.15,
+          "damage_tags": [],
+          "group": "effect:firebrand:incineration",
+          "stacks_state": "firebrand_stacks",
+          "max_stacks": 9,
+          "note": "Incineration: +15% more damage per stack consumed"
+        },
+        {
+          "stat_key": "crit_chance",
+          "operation": "added",
+          "value_per_stack": 0.06,
+          "damage_tags": [],
+          "stacks_state": "firebrand_stacks",
+          "max_stacks": 9,
+          "note": "Illuminating Fire 3 points x +2% crit chance per stack"
+        },
+        {
+          "stat_key": "crit_multiplier",
+          "operation": "added",
+          "value_per_stack": 0.12,
+          "damage_tags": [],
+          "stacks_state": "firebrand_stacks",
+          "max_stacks": 9,
+          "note": "Illuminating Fire 3 points x +4% crit multiplier per stack"
+        }
+      ],
+      "include_in": [],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "Firebrand tree f1b4d node 7 (Incineration +15%/stack) and node 8 (Illuminating Fire, 3 points: +2% crit chance / +4% crit multi per point per stack)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=f1b4d"
+        },
+        {
+          "kind": "derivation",
+          "detail": "Firebrand base max stacks 4 (altText) + Wildfire 2 points +2 + Ardent Branding 1 point +3 = 9",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=f1b4d"
+        },
+        {
+          "kind": "catalog",
+          "detail": "Firebrand buff UIBuffs:24 / skill f1b4d",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:24"
+        }
+      ],
+      "next_probe": "若 FR 后续通过节点消耗 Firebrand 层数，再重新评估；当前按用户裁决不进入 FR 伤害。",
+      "assumption": "max Firebrand stacks assumed 12; stack acquisition and consumption timing are scenario states, not simulated",
+      "notes": "Firebrand buff/树存在于 dataset（buff UIBuffs:24，skill f1b4d），但层数只作用于 Firebrand 自身；Flame Reave 不消耗 Firebrand 层数，因此不进入 FR 伤害。"
+    },
+    {
+      "id": "blade_weaving_consume",
+      "label": "Blade Weaving stacks consumed — 15% more elemental damage per stack",
+      "source_kind": "passive_node",
+      "source_path": "data.passive_tree.nodes.50",
+      "condition": {
+        "state": "consume_blade_weaving",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "modeled",
+      "status": "confirmed",
+      "stacks_state": "blade_weaving_stacks",
+      "max_stacks": 10,
+      "modifiers": [
+        {
+          "stat_key": "damage",
+          "operation": "more",
+          "value_per_stack": 0.15,
+          "damage_tags": [
+            "Elemental"
+          ],
+          "group": "effect:blade_weaving",
+          "stacks_state": "blade_weaving_stacks",
+          "max_stacks": 8,
+          "note": "Blade Weaver: 15% more elemental damage per stack consumed (melee attack >=10 mana)"
+        }
+      ],
+      "include_in": [
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "Mage passive tree node 50 Blade Weaver description; Blade Weaving buff max 10 stacks (UIBuffs:29)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:29"
+        },
+        {
+          "kind": "derivation",
+          "detail": "Blade Weaver passive has 8 allocated points; passive_bonus mg-1.buffs['50'] gives +1 max stack per point (UIBuffs:29 UI max 10 is the fully-maxed UI value, not this build)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records passive_bonus payload mg-1.buffs['50']"
+        },
+        {
+          "kind": "catalog",
+          "detail": "Blade Weaving buff UIBuffs:29 max_stacks=10",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:29"
+        }
+      ],
+      "next_probe": "R4: confirm stack gain (melee attack <10 mana), expiry and the exact per-stack more-elemental value",
+      "assumption": "层数获取/消耗时机仍需场景勾选；最大值按 dataset buff 10。"
+    },
+    {
+      "id": "ambition_stacks",
+      "label": "Ambition — 2% more Fire Damage per stack (idol unique)",
+      "source_kind": "idol",
+      "source_path": "data.idols.2",
+      "condition": {
+        "state": "ambition_stacks",
+        "op": ">",
+        "value": 0
+      },
+      "coverage": "modeled",
+      "status": "confirmed",
+      "stacks_state": "ambition_stacks",
+      "max_stacks": 20,
+      "modifiers": [
+        {
+          "stat_key": "damage",
+          "operation": "more",
+          "value_per_stack": 0.02,
+          "damage_tags": [
+            "Fire"
+          ],
+          "group": "effect:ambition",
+          "stacks_state": "ambition_stacks",
+          "max_stacks": 20,
+          "note": "idols.2 unique description: 2% more Fire Damage per stack of Ambition"
+        }
+      ],
+      "include_in": [
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "idols.2 unique descriptions: gain a stack when hitting boss/rare (1s cooldown), 2% more Fire Damage per stack, 20 maximum stacks",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods idols.2#unique_description#0..#5"
+        },
+        {
+          "kind": "catalog",
+          "detail": "Ambition buff UIBuffs:79 max_stacks=20",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:79"
+        }
+      ],
+      "next_probe": "R4: confirm Ambition stack ramp against a boss (1 stack/second, 4s expiry) and whether 2% more fire is per stack additive in one more group"
+    },
+    {
+      "id": "mana_ge_300_idols",
+      "label": "Idol affix 'increased fire damage, doubled if 300+ maximum mana'",
+      "source_kind": "idol",
+      "source_path": "data.idols.0",
+      "condition": {
+        "state": "mana_ge_300",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "not_modeled",
+      "status": "confirmed",
+      "modifiers": [],
+      "applied_via": "snapshot-contribution:mod:idols.*#affix#normal#1.0#doubled",
+      "include_in": [],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "4 idol affixes (idols.0/1/3/4) 25-37% increased fire damage, doubled at 300+ max mana; base values always apply, doubling bonus gated on mana_ge_300",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods"
+        },
+        {
+          "kind": "derivation",
+          "detail": "derived max mana from snapshot ~<300 -> mana_ge_300=false (bonus off)",
+          "locator": "snapshot:derived.mana.mana_max_estimate"
+        }
+      ],
+      "next_probe": "confirm max mana derivation once skill levels / weaver tree are in scope; 300+ would double 4 idol affixes (R6)",
+      "notes": "用户裁决：mana 相关当前都不建模；300 mana 翻倍效果不参与基线。"
+    },
+    {
+      "id": "haste_active",
+      "label": "Relic unique 'You have Haste'",
+      "source_kind": "unique",
+      "source_path": "data.equipment.relic",
+      "unique_text": "You have Haste",
+      "condition": null,
+      "coverage": "not_modeled",
+      "status": "confirmed",
+      "modifiers": [],
+      "include_in": [],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "Haste ailment: +30% movement speed only (property 9), 4s",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments entity_id=ailment:letools:LEAbilities.ailmentList:33"
+        },
+        {
+          "kind": "catalog",
+          "detail": "Relic unique description: You have Haste",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods equipment.relic#unique_description#1"
+        }
+      ],
+      "assumption": "unresolved: no numeric Haste parameters available yet; not counted in the baseline",
+      "notes": "dataset Haste ailment (ailmentList:33) 只提供 +30% movement speed（property 9），没有伤害/攻速加成；因此对 FR DPS 不建模。",
+      "next_probe": "Haste 只加移动速度（DB property 9），不进入伤害；无需再补参数。"
+    },
+    {
+      "id": "global_conditional_damage_feet",
+      "label": "Army of Skin — 49% more Melee Damage to High Health Enemies (Flame Reave hits)",
+      "source_kind": "unique",
+      "source_path": "data.equipment.feet",
+      "coverage": "modeled",
+      "status": "assumed",
+      "modifiers": [
+        {
+          "stat_key": "damage",
+          "operation": "more",
+          "value": 0.49,
+          "unit": "percent",
+          "damage_tags": [
+            "Melee"
+          ],
+          "group": "effect:army_of_skin:high_health",
+          "note": "Army of Skin (26-52)% more Melee Damage to High Health Enemies; this build rolled 49%"
+        }
+      ],
+      "include_in": [
+        "build_base",
+        "single_hit",
+        "dps",
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "dataset unique 443 tooltip: (26-52)% more Melee Damage to High Health Enemies; roll 49%",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#entities entity_id=item:letools:uniqueList.uniques:443"
+        },
+        {
+          "kind": "reference_third_party",
+          "detail": "planner runtime rrlPo(): specialTag 2 -> {enemyHealth:\"high\"}; high|full is true",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 444900-447300"
+        },
+        {
+          "kind": "catalog",
+          "detail": "szefo94 unique table key 443 text",
+          "locator": "tools/save_import/scripts/source-data/szefo94/uniques.json#443"
+        }
+      ],
+      "next_probe": "R4/OQ10: confirm the high/full-health threshold and whether the average DPS window should assume it is always satisfied",
+      "notes": "Army of Skin · 高血量敌人 +49% more Melee Damage：通过 condition.enemy_high_health 建模（build_base 默认 true，低于阈值时失效）；该 unique 词条作用于 Flame Reave 命中，属于命中乘区。",
+      "condition": {
+        "state": "enemy_high_health",
+        "op": "==",
+        "value": true
+      },
+      "assumption": "enemy_high_health defaults true in the build_base profile (boss/rare starts at high health); under 50% health this multiplier is lost"
+    },
+    {
+      "id": "offhand_exalted_effect",
+      "label": "Whetstone Gavel offhand Exalted：副手全部 stats +97% effectiveness（已计入）",
+      "source_kind": "unique",
+      "source_path": "data.equipment.weapon1",
+      "unique_text": "If you have an Exalted Weapon in your offhand its stats have 97% increased effectiveness",
+      "coverage": "modeled",
+      "status": "confirmed",
+      "modifiers": [],
+      "include_in": [
+        "baseline",
+        "single_hit",
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：副手应该是 Exalted；先报告副手数值。",
+          "locator": "user_conversation#2026-11-07"
+        },
+        {
+          "kind": "catalog",
+          "detail": "tools/save_import/scripts/build_mappings.py display_rarity_rule: Exalted when any affix tier0 >= 5; weapon2 has two T7 affixes (tier0=6)",
+          "locator": "tools/save_import/scripts/build_mappings.py#display_rarity_rule"
+        },
+        {
+          "kind": "derivation",
+          "detail": "bd.json equipment.weapon2 affixes: Melee Fire Damage tier 7 / Crit Multi tier 7; raw rarity byte 4 (Rare)",
+          "locator": "archive://examples/flame-reave/inputs/bd.json#equipment.weapon2"
+        },
+        {
+          "kind": "catalog",
+          "detail": "save_import display_rarity_rule: Exalted when any affix tier0 >= 5; offhand has T7 affixes",
+          "locator": "tools/save_import/scripts/build_mappings.py#display_rarity_rule"
+        }
+      ],
+      "next_probe": "无需再补；若后续换副手/换 roll，按同一乘数更新。",
+      "notes": "副手显示稀有度 Exalted（T6/T7）；用户确认作用于副手全部 stats；实现为 weapon2 来源 contributions ×1.97。",
+      "applied_via": "derived:weapon2 contributions x1.97"
+    },
+    {
+      "id": "ignite_source_ring2",
+      "label": "+43% Chance to Ignite on Hit (ring2 unique)",
+      "source_kind": "equipment",
+      "source_path": "data.equipment.ring2",
+      "condition": {
+        "state": "ignited",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "not_modeled",
+      "status": "confirmed",
+      "modifiers": [],
+      "include_in": [
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "ring2 unique_mod#0: +43% Chance to Ignite on Hit (Fire hit ailment chance)",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods equipment.ring2#unique_mod#0"
+        }
+      ],
+      "next_probe": "R5: with 43% chance on hit and 3 hits/cast, estimate ignite uptime and whether Scorching Tide/Chaos Flare can be treated as active",
+      "assumption": "not modelled: ignite application/uptime is outside the hit model; the ignited state is a scenario switch",
+      "notes": "ring2 +43% ignite 属于非 FR 自身来源；用户裁决只建模 FR 相关点燃，故不建模。"
+    },
+    {
+      "id": "ambition_gain_source",
+      "label": "Ambition stack gain (idols.2: on boss/rare hit, 1s cooldown)",
+      "source_kind": "idol",
+      "source_path": "data.idols.2",
+      "unique_text": "You gain a stack of Ambition when you hit a boss or rare enemy (1 second cooldown)",
+      "condition": {
+        "state": "boss_or_rare",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "not_modeled",
+      "status": "unresolved",
+      "modifiers": [],
+      "include_in": [
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "idols.2 unique description: stack gain condition and 1s cooldown",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods idols.2#unique_description#0"
+        }
+      ],
+      "next_probe": "R4: model the Ambition stack ramp (1 stack/s vs 4s expiry) to decide the representative stack count for DPS",
+      "assumption": "stack count is a scenario state; no time simulation"
+    },
+    {
+      "id": "dragons_ambition_cold_armor",
+      "label": "Ambition: 2% more Cold Damage / 2% more Armor per stack (non-Fire lines)",
+      "source_kind": "idol",
+      "source_path": "data.idols.2",
+      "coverage": "not_modeled",
+      "status": "derived",
+      "modifiers": [],
+      "include_in": [],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "idols.2 unique descriptions #2 (Cold) and #3 (Armor); Flame Reave is Fire",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods idols.2#unique_description#2"
+        }
+      ],
+      "next_probe": "none",
+      "notes": "not applicable: Cold damage / Armor do not modify Fire hit damage"
+    },
+    {
+      "id": "surge_pyroclasm",
+      "label": "Surge Pyroclasm — casts an additional Flame Reave",
+      "source_kind": "skill",
+      "source_path": "data.specializations.su5g3",
+      "condition": null,
+      "coverage": "not_modeled",
+      "status": "unresolved",
+      "modifiers": [],
+      "include_in": [
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "Surge tree su5g3 node 28 Pyroclasm (1 point): Surge can trigger an additional Flame Reave",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=su5g3"
+        }
+      ],
+      "next_probe": "R4: quantify the extra Flame Reave casts triggered by Surge and add them to the rotation (out of scope for the single-skill DPS)",
+      "assumption": "not modelled: single-skill scope only"
+    },
+    {
+      "id": "fire_aura_ignite_sources",
+      "label": "Arcane Flames / Fire Aura / Firebrand Flare ignite sources",
+      "source_kind": "passive_node",
+      "source_path": "data.passive_tree.nodes.7",
+      "condition": {
+        "state": "ignited",
+        "op": "==",
+        "value": true
+      },
+      "coverage": "not_modeled",
+      "status": "confirmed",
+      "modifiers": [],
+      "include_in": [
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "Arcane Flames passive (node 7), Firebrand Flare (f1b4d node 23), Fire Aura triggers",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:mg-1:7"
+        }
+      ],
+      "next_probe": "R5: pick the dominant ignite source and estimate uptime before enabling ignited-dependent effects in scenario",
+      "notes": "Fire Aura/其他技能的点燃来源不建模；只保留 FR 自身 ignite chance（树节点 22 / Arcane Flames）。"
+    },
+    {
+      "id": "excoriation_unique_package",
+      "label": "Excoriation / Flay-Harvest unique package (feet descriptions)",
+      "source_kind": "unique",
+      "source_path": "data.equipment.feet",
+      "unique_text": "Each stack of Excoriation grants Flay and Harvest 13% increased Area of Effect and +5 Melee Damage",
+      "condition": null,
+      "coverage": "not_modeled",
+      "status": "derived",
+      "modifiers": [],
+      "include_in": [],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "feet unique descriptions #0-#3: Excoriation stack mechanics scoped to Flay/Harvest",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods equipment.feet"
+        }
+      ],
+      "next_probe": "none for Flame Reave",
+      "notes": "not applicable: Flay/Harvest are out of scope"
+    },
+    {
+      "id": "enchant_weapon_passive_more",
+      "label": "Enchant Weapon (passive) — permanent +15% more melee elemental while specialized",
+      "source_kind": "skill",
+      "source_path": "data.specializations.sb44eQ",
+      "condition": null,
+      "coverage": "modeled",
+      "status": "derived",
+      "modifiers": [
+        {
+          "stat_key": "damage",
+          "operation": "more",
+          "value": 0.15,
+          "unit": "percent",
+          "damage_tags": [
+            "Elemental",
+            "Melee"
+          ],
+          "group": "effect:enchant_weapon:passive_more",
+          "note": "Enchant Weapon passive: +15% more melee elemental (runtime class rrljt hardcoded .15)"
+        }
+      ],
+      "include_in": [
+        "baseline",
+        "build_base",
+        "single_hit",
+        "dps",
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "reference_third_party",
+          "detail": "planner runtime class rrljt hardcoded passive .15 more melee elemental",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 676800-682200 (class rrljt)"
+        }
+      ],
+      "next_probe": "R4: confirm passive +15% more melee elemental applies whenever Enchant Weapon is specialized (not gated on active)"
+    }
+  ],
+  "rules": [
+    {
+      "id": "R1",
+      "title": "每次施放对同一目标的命中次数",
+      "status": "confirmed",
+      "statement": "每次施放对同一目标 4 击：1 次基础命中 + Reflash 2 次返回 + Flame Caller 1 次返回；额外命中 50% less damage。",
+      "affects": [
+        "hit_events",
+        "dps"
+      ],
+      "assumption": "用户裁决 2026-11-07 已确认每次施放 4 击与权重 [1.0,0.5,0.5,0.5]；残留未建模项：第 1 击距离衰减（OQ2，默认贴脸=1.0，远程衰减曲线待研究）。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "detail": "fr11mv tree nodes 16/18 text",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes tree_entity_id=tree:letools:LESkillTrees:fr11mv"
+        },
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：每次施放对同一目标 4 击（1 次基础 + Reflash 2 次返回 + Flame Caller 1 次返回），额外命中 50% less；权重 [1.0,0.5,0.5,0.5]（首击当量 2.5）。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R2",
+      "title": "双持合成",
+      "status": "confirmed",
+      "statement": "双持合成口径（用户确认）: 两把武器都生效，added damage 直接相加（本 BD: Rune Hammer +64 与 Katana +38 以及两把武器的 added 词条全部进池，不取平均）；攻速基础不读武器 attackRate，按技能 as/useDuration 公式。",
+      "affects": [
+        "attack_model",
+        "added_damage"
+      ],
+      "assumption": "用户裁决 2026-11-07 已确认双持两把武器都生效、added damage 直接相加；残留未验证项：真实游戏双持的伤害/攻速合成机制无游戏真值（OQ3），当前按求和口径。",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "weapon bases attackRate 0.94 / 1.2 and implicit melee damage 64 / 38",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#entities item:letools:itemList.equippable_7:10; item:letools:itemList.equippable_9:9"
+        },
+        {
+          "kind": "third_party_reference",
+          "detail": "planner runtime displays weapon attackRate but its DPS model uses useDuration; no dual-wield rule found",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js"
+        },
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：双持就是两把武器都生效，直接相加。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R3",
+      "title": "攻速基础公式",
+      "status": "confirmed",
+      "statement": "近战攻速（用户确认）：base_aps = as × speedMultiplier = 1.1 × speedMultiplier / useDuration；rate = base_aps × (1+Σincreased AS) × Π(1+more AS)；speedScaler=2 选 AttackSpeed 池；useDelay 与武器 attackRate 不参与。",
+      "affects": [
+        "attack_model"
+      ],
+      "assumption": "用户裁决 2026-11-07 已确认 base_aps = as × speedMultiplier、武器 attackRate 不参与；残留未验证项：游戏真值（OQ4），weapon_average_attack_rate 仅作为备选口径保留。",
+      "evidence": [
+        {
+          "kind": "third_party_reference",
+          "detail": "rrlnr: cg = .75/useDuration*speedMultiplier*1.46667; rate = cg*(1+inc)*more",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 569845"
+        },
+        {
+          "kind": "catalog",
+          "detail": "fr11mv extensions as=1.3750031, useDuration=0.8, speedMultiplier=1, speedScaler=2",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#skills source_skill_id=fr11mv"
+        },
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：攻速基础公式正确。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R4",
+      "title": "added damage 缩放",
+      "status": "confirmed",
+      "statement": "(base + added × added_damage_scaling) 使用技能组件的 addedDamageScaling=4（dataset added_damage_effectiveness=400%）。",
+      "affects": [
+        "damage_model"
+      ],
+      "evidence": [
+        {
+          "kind": "game_data",
+          "detail": "skill_components fr11mv index 0: baseDamageStats.addedDamageScaling=4, added_damage_effectiveness=400",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill_entity_id=skill:letools:LEAbilities.abilityList:fr11mv"
+        }
+      ]
+    },
+    {
+      "id": "R5",
+      "title": "无类型 added damage 的伤害类型",
+      "status": "confirmed",
+      "statement": "伤害类型/标签（用户确认）：无类型 added damage 是“自适应” 伤害，可当作任意属性的 added damage；本案例单 Fire 组件下按 Fire 结算。typed added damage（如 Physical/Cold）属于各自类型。",
+      "affects": [
+        "damage_model",
+        "added_damage"
+      ],
+      "assumption": "reference runtime 会把 added damage 按基础伤害类型分布；本模型按 DESIGN 缺省“Fire 单类型”处理。",
+      "evidence": [
+        {
+          "kind": "third_party_reference",
+          "detail": "rrlzr: per-type added damage + distributed added pool",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 574120"
+        },
+        {
+          "kind": "catalog",
+          "detail": "weapon2 sealed affix +5 Physical Damage (tags Physical+Melee) is the only typed non-Fire added damage",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods equipment.weapon2#affix#sealed#0.0"
+        },
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：无类型 added damage 是自适应，可以当做任意属性的 added damage，在这里就是 fire。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R6",
+      "title": "mana 相关不建模（仅保留阈值估算）",
+      "status": "confirmed",
+      "statement": "mana 相关不建模：实际法力消耗、恢复与资源循环不进入伤害模型；实现只保留 Flame Reave 耗蓝与 max mana 估算，用于 ≥10（Blade Weaver 消耗）与 ≥300（神像 doubled）条件判定（用户裁决 2026-11-07）。",
+      "affects": [
+        "snapshot",
+        "effects"
+      ],
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：mana 相关当前不建模（实际消耗/恢复/资源循环）；实现仅保留 cost/max mana 估算供 ≥10 与 ≥300 条件判定。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R7",
+      "title": "Enchant Weapon 近战命中常驻激活",
+      "status": "confirmed",
+      "statement": "Enchant Weapon 只要近战命中就激活（用户裁决 2026-11-07），因此 FR 命中默认享受 EW active 效果。",
+      "affects": [
+        "damage_model",
+        "frequency",
+        "effects"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "feet unique descriptions scope Excoriation to Flay/Harvest; weapon2 rarity=Rare",
+          "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods equipment.feet; equipment.weapon1; equipment.weapon2"
+        },
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决：Enchant Weapon 确实只要有近战命中就激活。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ],
+      "assumption": "Army of Skin 的 49% more Melee Damage to High Health Enemies 默认生效（enemy high/full health）；低于阈值时失效。"
+    },
+    {
+      "id": "R8",
+      "title": "无伤害转换（fire_only 组件策略）",
+      "status": "confirmed",
+      "statement": "没有转伤机制：非 Fire 的 typed added damage 不会被转成 Fire，保持排除（fire_only 组件策略）。",
+      "affects": [
+        "damage_model"
+      ],
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：没有转伤机制，非 fire 不会转成 fire。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R9",
+      "title": "标签过滤规则",
+      "status": "derived",
+      "statement": "词条 damage_tags 必须是组件标签闭包 {Fire,Melee,Hit} 的子集；无标签视为通用；Elemental 展开到元素；Spell-only / DoT-only / Minion/Bow/Throwing 等不适用。",
+      "affects": [
+        "damage_model"
+      ],
+      "evidence": [
+        {
+          "kind": "third_party_reference",
+          "detail": "rrljp tag containment + Elemental expansion branch",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 439692"
+        }
+      ]
+    },
+    {
+      "id": "R10",
+      "title": "Firebrand 层数作用范围（仅 Firebrand 自身）",
+      "status": "confirmed",
+      "statement": "Firebrand 层数只对 Firebrand 自身生效（Incineration/Illuminating Fire），Flame Reave 不消耗 Firebrand 层数。",
+      "affects": [
+        "effects",
+        "mapping"
+      ],
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：Firebrand 层数就对 Firebrand 自己生效。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R11",
+      "title": "额外命中 50% less 伤害权重（第 4 击）",
+      "status": "confirmed",
+      "statement": "第 4 击与其他返回命中一样是 50% less。",
+      "affects": [
+        "hit_events",
+        "dps"
+      ],
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：第 4 击是 50% less。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R12",
+      "title": "目标侧：抗性与穿透、怪物 DR",
+      "status": "assumed",
+      "statement": "目标火抗默认 0；穿透按 ×(1+Σpen)；怪物 DR 按 monster_level 查 data/monster_dr.json（100 级=0.87）。负抗下限与区域抗性惩罚不建模。",
+      "affects": [
+        "target"
+      ],
+      "assumption": "目标抗性 0 是假设；穿透对负抗/下限的行为无 1.5.2 证据。",
+      "evidence": [
+        {
+          "kind": "third_party_reference",
+          "detail": "offense calc has no enemy resistance input; penetration is ×(1+Σpen)",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 574580"
+        },
+        {
+          "kind": "catalog",
+          "detail": "tunklab mobdr table levels 1..100",
+          "locator": "tools/phase3/data/monster_dr.json"
+        }
+      ]
+    },
+    {
+      "id": "R13",
+      "title": "冷却与持续 DPS 口径",
+      "status": "assumed",
+      "statement": "Reflash(node16) 给 Flame Reave 增加 3s 冷却；node17 未选、无额外 charges。ICR 加算池由装备提供 112%（waist 30 + feet implicit 32 + feet affix 30 + ring1 10 + altar 10）→ 有效冷却 = 3/(1+1.12) = 1.415s，低于攻速允许的施放间隔（0.3168s）→ 基线 DPS 主约束为 cooldown_limited；attack-speed-limited 作为 alternate 同时报告。",
+      "affects": [
+        "rotation",
+        "dps"
+      ],
+      "assumption": "node16 的 3s 冷却是否在 retur n 结束后才开始、以及 ICR 公式 (base)/(1+ICR) 均为假设；若 Lead 选择攻速口径，把 ruleset.rotation.policy 改为 attack_speed_limited。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "detail": "FR tree node 16 effect index 1: Cooldown (seconds) 3; node 17 (charges/ICR) not selected",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:16"
+        },
+        {
+          "kind": "third_party_reference",
+          "detail": "cooldown = (base+flat)/(1+ΣICR)",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 667435"
+        }
+      ]
+    },
+    {
+      "id": "R14",
+      "title": "mana 条件估算",
+      "status": "confirmed",
+      "statement": "mana 相关（实际消耗、300 max mana、Blade Weaver mana 条件）当前不建模；mana 效果整体关闭。",
+      "affects": [
+        "resource",
+        "effects"
+      ],
+      "assumption": "mana 公式采用 reference planner 口径（除 1+efficiency 的形式被简化为 ×(1+inc)），只用于 ≥10 / <10 mana 和 300 mana 阈值判定。",
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：mana 相关的当前都不建模。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R15",
+      "title": "Blade Weaver 条件",
+      "status": "derived",
+      "statement": "Flame Reave 估算耗蓝 >=10，因此会消耗 Blade Weaving 层数（每层 15% more elemental）而不是获得层数；层数由更便宜的近战攻击提供，默认 0。",
+      "affects": [
+        "effects"
+      ],
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "Mage passive node 50 Blade Weaver description; Blade Weaving max 10 (UIBuffs:29)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:29"
+        }
+      ]
+    },
+    {
+      "id": "R16",
+      "title": "技能等级 27（只影响节点数量）",
+      "status": "confirmed",
+      "statement": "实际 27 级；等级只影响可分配技能节点数量，不改变伤害；FR 已按 27 点建树。",
+      "affects": [
+        "skill",
+        "snapshot"
+      ],
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：实际 27 级；等级不影响伤害，只影响节点数量；27 级节点已点对。",
+          "locator": "user_conversation#2026-11-07"
+        },
+        {
+          "kind": "catalog",
+          "detail": "bd.json specializations.fr11mv points_total = 27; snapshot structure_counts.fr11mv_points_total = 27",
+          "locator": "archive://examples/flame-reave/inputs/bd.json#specializations.fr11mv"
+        }
+      ]
+    },
+    {
+      "id": "R17",
+      "title": "组件口径：Fire 单类型",
+      "status": "assumed",
+      "statement": "Flame Reave 无伤害转换（未选转换节点），模型只计算 Fire 组件；显式非 Fire typed added damage 不进入该组件。",
+      "affects": [
+        "damage_model"
+      ],
+      "assumption": "reference runtime 会为其它伤害类型的 added damage 生成独立组件；本模型按 DESIGN 缺省只保留 Fire。",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "skill tags=Fire+Melee; component damage_type=Fire; no conversion node selected",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#skills source_skill_id=fr11mv"
+        }
+      ]
+    },
+    {
+      "id": "R18",
+      "title": "Rhythm of Fire 循环未做时间模拟",
+      "status": "assumed",
+      "statement": "Rhythm of Fire 按 scenario state 处理：consume_rhythm_of_fire=true 时 +130% more；时间循环（每次使用 +4 层、12 层消耗）不在 DPS 窗口内模拟。",
+      "affects": [
+        "effects",
+        "dps"
+      ],
+      "assumption": "若按循环平均，4 次施放中 1 次获得 +130% more → 平均约 ×1.325；本轮不建立该循环。",
+      "evidence": [
+        {
+          "kind": "game_data",
+          "detail": "FR tree node 3: using grants 4 stacks; consumes at 12 for +130% more",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:3"
+        }
+      ]
+    },
+    {
+      "id": "R19",
+      "status": "derived",
+      "statement": "Enchant Weapon：active 时 +50% more melee elemental、+50% increased melee attack speed、+25 added melee fire、+100% increased melee fire、+30% increased melee elemental；passive（专精后常驻）+15% more melee elemental。duration 9s / effective cooldown 8.33s（ICR +80%），Kindling Blade 自动施放 ⇒ 持续近战时视为常驻（assumed）。",
+      "evidence": [
+        {
+          "kind": "reference_third_party",
+          "detail": "planner runtime class rrljt hardcoded active/passive more values",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 676800-682200"
+        },
+        {
+          "kind": "catalog",
+          "detail": "sb44eQ allocated nodes 1/7/14/16/17/18/20/25 and their per-point values",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=sb44eQ"
+        }
+      ],
+      "title": "Enchant Weapon active/passive 参数与常驻假设",
+      "affects": [
+        "damage_model",
+        "frequency",
+        "effects"
+      ]
+    },
+    {
+      "id": "R20",
+      "status": "assumed",
+      "statement": "Army of Skin 的 49% more Melee Damage to High Health Enemies 进入 hit 乘区，enemy_high_health 默认真（boss/rare 起手满血），低于阈值时失效。",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "dataset unique 443 tooltip + szefo94 uniques key 443",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#entities item:letools:uniqueList.uniques:443"
+        },
+        {
+          "kind": "reference_third_party",
+          "detail": "runtime rrlPo specialTag 2 -> enemyHealth high",
+          "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 444900-447300"
+        }
+      ],
+      "assumption": "enemy_high_health 在 build_base 场景默认为真（boss/rare 起手满血）；实际战斗平均覆盖可能低于 100%。",
+      "title": "Army of Skin 高血量条件乘区",
+      "affects": [
+        "damage_model",
+        "effects"
+      ]
+    },
+    {
+      "id": "R21",
+      "status": "derived",
+      "statement": "Reflash/Flame Caller 的额外命中固定 50% less：每次施放对同一目标 4 击（1 次基础 + Reflash 2 次返回 + Flame Caller 1 次返回），伤害权重 [1.0, 0.5, 0.5, 0.5]，首击当量 2.5（altText 证据；与 R1 / hit_events.damage_weights 一致）。",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "fr11mv node 16 Reflash altText: additional hits always have the 50% less damage penalty",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:fr11mv:16"
+        }
+      ],
+      "title": "Reflash / Flame Caller 额外命中伤害权重",
+      "affects": [
+        "hit_events",
+        "dps"
+      ]
+    },
+    {
+      "id": "R22",
+      "status": "assumed",
+      "statement": "纯 Flame Reave 循环每 4 次施放消耗一次 12 层 Rhythm of Fire，获得 ×2.3 more；DPS 用周期平均 ×1.325（固定条件估算）。",
+      "evidence": [
+        {
+          "kind": "catalog",
+          "detail": "fr11mv node 3 Rhythm of Fire: +4 stacks on use, consume at 12 for +130% more",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:3"
+        }
+      ],
+      "assumption": "纯 FR 循环每 4 次施放消耗一次 Rhythm of Fire；其它技能补层会改变触发频率，本轮不模拟。",
+      "title": "Rhythm of Fire 纯 FR 循环平均",
+      "affects": [
+        "rotation",
+        "dps",
+        "effects"
+      ]
+    },
+    {
+      "id": "R24",
+      "title": "多击次数条件化",
+      "status": "confirmed",
+      "statement": "每次施放命中数（默认 4）作为可配置条件参数；可用 scenario.hit_override 覆盖击中数和伤害权重，默认取 ruleset.hit_events。",
+      "affects": [
+        "hit_events",
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：每次释放 4 击；建议在条件 buff 栏填单次多少击中。",
+          "locator": "user_conversation#2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "R25",
+      "title": "OQ6 暴击类被动计入暴击率",
+      "status": "assumed",
+      "statement": "Prodigy 与 Defender of Welryn 的暴击贡献按快照值计入暴击率（added +0.01 / increased +0.08），不再排除；per-attribute scaling 的精确公式仍未验证。",
+      "affects": [
+        "critical",
+        "snapshot"
+      ],
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "用户裁决 2026-11-07：OQ6 记入暴击率。",
+          "locator": "user_conversation#2026-11-07"
+        },
+        {
+          "kind": "catalog",
+          "detail": "passive nodes mg-1:51 Prodigy (+1% crit per 15 Int) and mg-1:71 Defender of Welryn (+8% increased crit per Dex)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes tree_entity_id=tree:letools:LECharTrees.trees:mg-1"
+        }
+      ],
+      "assumption": "快照把两个节点归一为 added 0.01 / increased 0.08；按属性缩放的公式未验证，暂按快照值计入。"
+    }
+  ],
+  "open_questions": [
+    {
+      "id": "R12",
+      "question": "OQ6 暴击被动的 per-attribute 缩放公式（Prodigy per 15 Int / Defender per Dex）是否应按属性值展开，而不是用快照归一值？",
+      "owner": "fr-researcher",
+      "affects": [
+        "critical",
+        "snapshot"
+      ]
+    },
+    {
+      "id": "R15",
+      "question": "FR 点燃的 DoT 伤害是否要作为独立组件接入（当前只建模 ignited 条件）？",
+      "owner": "fr-researcher",
+      "affects": [
+        "damage_model"
+      ]
+    }
+  ],
+  "user_confirmations": {
+    "date": "2026-11-07",
+    "items": [
+      "双持：两把武器都生效，added damage 直接相加（不取平均）。",
+      "攻速基础公式：base_aps = as × speedMultiplier（= 1.1 × speedMultiplier / useDuration），武器 attackRate 不参与。",
+      "无类型 added damage 是自适应伤害，本案例按 Fire 结算。",
+      "技能等级：离线存档 bug，实际 27 级；等级只影响技能节点数量、不影响伤害；FR 已按 27 点建树。",
+      "每次施放对同一目标 4 击（1 次基础 + 3 次返回）；多击次数应作为可配置条件参数。",
+      "距离衰减作为条件 Buff：当前按贴脸（不触发），远程最多 50% less。（实现状态：v2 起未建模——ruleset 无距离/半径 effect，只有 states.target_in_melee_range 默认 true；远程衰减曲线待研究。）",
+      "Firebrand 层数只对 Firebrand 自己生效，不作用于 Flame Reave。",
+      "OQ6 的暴击类被动（Prodigy / Defender of Welryn）计入暴击率。",
+      "Whetstone Gavel 的 offhand 应为 Exalted（显示稀有度由 T6+ 词缀决定），待核对副手数值后再决定建模方式。（实现状态：已按 Exalted 处理——effects.offhand_exalted_effect 对副手全部 stats ×(1+97%) 计入；换副手/稀有度需重算。）",
+      "Exalted = 有 T6/T7 词缀的 Rare 装备；本地 BD 已把副手显示稀有度修正为 Exalted（离线存档 raw byte 4 是 bug，不改存档）。",
+      "Enchant Weapon 只要有近战命中就激活（常驻）。",
+      "Frenzy / Firebrand / Blade Weaving / Ambition / Haste 的数值以本地 dataset 为准：Frenzy +20% attack/cast speed、+128% increased Effect → +45.6%；Haste 只加移动速度。",
+      "点燃只建模 FR 自身相关的来源（FR 树 Ignite Chance / Arcane Flames）；其他技能的点燃来源不建模。",
+      "high health 作为可勾选的目标条件；Rhythm of Fire 作为可勾选的 buff（当次施放是否有 12 层可消耗）；mana 相关当前都不建模。",
+      "第 4 击是 50% less；权重 [1,0.5,0.5,0.5] 确认。",
+      "Whetstone Gavel offhand：副手全部 stats 均获得 +97% effectiveness（用户确认）。",
+      "tier 显示倍率词缀（crit multi/shred/chill）按展示值归一：84% / 291% / 28%；这是装备位置缩放差异。",
+      "距离衰减先不管，只研究贴脸（不建立远程条件）。（实现状态：v2 起未建模，只有 states.target_in_melee_range 默认 true；远程衰减曲线待研究。）",
+      "R8：没有转伤机制，非 Fire 的 added/typed damage 不会被转成 Fire。"
+    ],
+    "locator": "user_conversation#2026-11-07"
+  }
+}

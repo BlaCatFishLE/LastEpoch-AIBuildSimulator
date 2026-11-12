@@ -1,0 +1,460 @@
+{
+  "artifact": "affix-db",
+  "format_version": 1,
+  "schema_version": 1,
+  "builder_version": "1.0.0",
+  "source": {
+    "source": "tunklab",
+    "base_url": "https://lastepoch.tunklab.com",
+    "data_version": "1.5.2",
+    "snapshot_inventory_sha256": "db1fc107171c7636620f7d05d1b96d4fbb596af9e183ac04c9fe330fe726f400",
+    "datasets": {
+      "ability_properties": {
+        "kind": "ability_properties",
+        "version": "1.5.2",
+        "chunk_file": "chunks/0fck0mbhof9-d.js",
+        "chunk_sha256": "64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9",
+        "locator": "chunk_sha256=64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9;file=chunks/0fck0mbhof9-d.js;chars=4938614-5577574;bytes=4938634-5577620;snippet_sha256=f832d095c6462d45acc89444df815fa1d4a17fcd3e9467a122e833ceafb0550f",
+        "char_start": 4938614,
+        "char_end": 5577574,
+        "byte_start": 4938634,
+        "byte_end": 5577620,
+        "snippet_sha256": "f832d095c6462d45acc89444df815fa1d4a17fcd3e9467a122e833ceafb0550f"
+      },
+      "affixes": {
+        "kind": "affixes",
+        "version": "1.5.2",
+        "chunk_file": "chunks/0fck0mbhof9-d.js",
+        "chunk_sha256": "64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9",
+        "locator": "chunk_sha256=64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9;file=chunks/0fck0mbhof9-d.js;chars=326929-1346640;bytes=326929-1346640;snippet_sha256=dda0c2242bdc6666685b0f7632e819aae5b44cbc9bc8835684e36d9585d7712a",
+        "char_start": 326929,
+        "char_end": 1346640,
+        "byte_start": 326929,
+        "byte_end": 1346640,
+        "snippet_sha256": "dda0c2242bdc6666685b0f7632e819aae5b44cbc9bc8835684e36d9585d7712a"
+      },
+      "equipment": {
+        "kind": "equipment",
+        "version": "1.5.2",
+        "chunk_file": "chunks/0fck0mbhof9-d.js",
+        "chunk_sha256": "64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9",
+        "locator": "chunk_sha256=64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9;file=chunks/0fck0mbhof9-d.js;chars=6036547-6618440;bytes=6036593-6618486;snippet_sha256=efda952c6489966aeb74a03f1313edba3f2d2ec71318d71e9cb6e9d4908b40de",
+        "char_start": 6036547,
+        "char_end": 6618440,
+        "byte_start": 6036593,
+        "byte_end": 6618486,
+        "snippet_sha256": "efda952c6489966aeb74a03f1313edba3f2d2ec71318d71e9cb6e9d4908b40de"
+      },
+      "player_properties": {
+        "kind": "player_properties",
+        "version": "1.5.2",
+        "chunk_file": "chunks/0fck0mbhof9-d.js",
+        "chunk_sha256": "64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9",
+        "locator": "chunk_sha256=64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9;file=chunks/0fck0mbhof9-d.js;chars=5769384-5831993;bytes=5769430-5832039;snippet_sha256=6213aaca84fdcd1a35fc07687ea5f6adaa71e0b76d3c2441ae9d8ba1e11207f7",
+        "char_start": 5769384,
+        "char_end": 5831993,
+        "byte_start": 5769430,
+        "byte_end": 5832039,
+        "snippet_sha256": "6213aaca84fdcd1a35fc07687ea5f6adaa71e0b76d3c2441ae9d8ba1e11207f7"
+      },
+      "player_stat_properties": {
+        "kind": "player_stat_properties",
+        "version": "1.5.2",
+        "chunk_file": "chunks/0fck0mbhof9-d.js",
+        "chunk_sha256": "64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9",
+        "locator": "chunk_sha256=64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9;file=chunks/0fck0mbhof9-d.js;chars=5577608-5769363;bytes=5577654-5769409;snippet_sha256=230309199723666409a21ad5901c03948319cecbb146fc5abad7216e36680c1a",
+        "char_start": 5577608,
+        "char_end": 5769363,
+        "byte_start": 5577654,
+        "byte_end": 5769409,
+        "snippet_sha256": "230309199723666409a21ad5901c03948319cecbb146fc5abad7216e36680c1a"
+      }
+    },
+    "chunks": [
+      {
+        "file_name": "chunks/0-8itj8_g2l_7.js",
+        "sha256": "e9844aa55100aece494f5144cb8c229b9275f0acc48ee5a3e0017842bebab855",
+        "size_bytes": 52005,
+        "role": "page-code-chunk"
+      },
+      {
+        "file_name": "chunks/02ql66vylkpki.js",
+        "sha256": "a3985fc5c5e58a28a3fe81f3575e95093066b84705a8345da6240cf9beebf7e4",
+        "size_bytes": 914237,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/04daogqg7d3m5.js",
+        "sha256": "c337579f19deffa8e9a5286ab2d8f54f39ea539b03a617ff04cffd0a40186b33",
+        "size_bytes": 25763,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/07bfngprh9fgg.js",
+        "sha256": "77118460c1d9a76c25301db1dd4425dc64cb79dda2731da67150060e310b44f0",
+        "size_bytes": 21570,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/07n8uvrt-_x2v.js",
+        "sha256": "5cb0023662d6f7c618aec6b3158b6a177ce590b0c6f1bd41fc4c351981c6b6e3",
+        "size_bytes": 28550,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/08neplhpu0lu9.js",
+        "sha256": "48b4ffb885ce512c20919e972f28b0c8e6fe59d361f85c5bcb12448d74d4d8af",
+        "size_bytes": 38342,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/09fd-pgqr4qpb.js",
+        "sha256": "5b167fd88ae11e7d48fbddff1037937bac45002a461d86eb5f4f262c6cc17a55",
+        "size_bytes": 31583,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/0ahedza5zuakz.js",
+        "sha256": "bc262a424e0d5ba2a2c9c9a862532df326fe3d0b529749ad19c9fc87daa8f3b0",
+        "size_bytes": 7256,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/0fck0mbhof9-d.js",
+        "sha256": "64b84a7d4abcb31a8068b98e06312bbd59a3ca97f311c6aaebaf81bb16fdf3e9",
+        "size_bytes": 7964239,
+        "role": "data-chunk"
+      },
+      {
+        "file_name": "chunks/0jebm0x4bx9vj.js",
+        "sha256": "4505de4e53752750b3aa73086ad1b147da4f5850a35e79240a4554e668c00b5e",
+        "size_bytes": 661437,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/0r-5q-7h5r3v1.js",
+        "sha256": "c468806f5cbf73743fcf6db2bd3c57866a2027a2efe13d7ffd648531bd9dbb6f",
+        "size_bytes": 22455,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/1i2xtmqs0t81j.js",
+        "sha256": "caa824e0e623ffd09c72278694b797785278f881366738246aedd3478f060101",
+        "size_bytes": 113257,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/1otbc2n4o6e7j.js",
+        "sha256": "25d778db5c07d73c2e8f6aaacf5c5646ee44c83161e57bc9429c5eca4e6c4496",
+        "size_bytes": 47912,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/1rgx11giwsmxs.js",
+        "sha256": "1958f888e1de345ac71706f1a017c94f31df8bb19a4eff487e8bf9fc577256ad",
+        "size_bytes": 9154,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/2poci0_iz8dbr.js",
+        "sha256": "bbb7a2eb9a2db8046f99720c5420662cefd4c94dcf3626828832bed657e34dd8",
+        "size_bytes": 23252,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/2xhglqzxtulw3.js",
+        "sha256": "5e005de3f87c4ff4b7b6e069e9d8b49348249f43128133769b7f0141b5f6f7af",
+        "size_bytes": 63477,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/2yjtmnwngbgg9.js",
+        "sha256": "5b483d30330610cd1b13814ab1f1df21614cb21fc8a77bd982829e567bd3e790",
+        "size_bytes": 26698,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/35g1mdawgcb_1.js",
+        "sha256": "363d582e8db6858c143e98f87acabb51c9838481282f6a15eef78447629e3ded",
+        "size_bytes": 255425,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/3ka0o4j005ffo.js",
+        "sha256": "856d4376b80aacf9585e53a843416d95b271c0b16026eda8c9de9f4daaeb180d",
+        "size_bytes": 184678,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/3ui84ngbuppv0.js",
+        "sha256": "223568da442239a5e56fed63a5c8bd0303b45757a965ff4dd76add8a1f7cc6b7",
+        "size_bytes": 27045,
+        "role": "page-chunk"
+      },
+      {
+        "file_name": "chunks/turbopack-077hmtqrhcoji.js",
+        "sha256": "3f0ba0c36a0758d76b55b6717fd77e65f46ae1295bb22fa441476e1eb7854d51",
+        "size_bytes": 11199,
+        "role": "page-chunk"
+      }
+    ]
+  },
+  "formula": {
+    "modifier": "(1 + base.affixEffectModifier) / (1 + affix.standardAffixEffectModifier)",
+    "effective": "raw_min/max * modifier",
+    "roll_slots": "slot 0 uses tier.minRoll/maxRoll; slot i>0 uses tier.extraRolls[i-1]"
+  },
+  "display_policies": {
+    "in_game": "unity-dotnet-round-half-to-even",
+    "tunklab_page": "tunklab-js-math-round-half-up"
+  },
+  "versions": {
+    "source_data": "1.5.2",
+    "local_game_reference": "1.5.3 (tunklab source is 1.5.2; not restated as game data)"
+  },
+  "counts": {
+    "affixes": 1156,
+    "equipment_types": 47,
+    "equipment_sub_bases": 1570,
+    "equipment_globals": 7,
+    "affix_eligible_bases": 2539,
+    "affix_tiers": 1156,
+    "affix_base_ranges": 21533,
+    "omen_special_ranges": 5,
+    "player_properties": 113,
+    "player_stat_properties": 713,
+    "ability_properties": 177,
+    "unresolved_can_roll_on": 2
+  },
+  "stats": {
+    "schema_version": 1,
+    "source_versions": {
+      "ability_properties": "1.5.2",
+      "affixes": "1.5.2",
+      "equipment": "1.5.2",
+      "player_properties": "1.5.2",
+      "player_stat_properties": "1.5.2"
+    },
+    "counts": {
+      "affixes": 1156,
+      "equipment_types": 47,
+      "equipment_sub_bases": 1570,
+      "equipment_globals": 7,
+      "affix_eligible_bases": 2539,
+      "affix_tiers": 1156,
+      "affix_base_ranges": 21533,
+      "omen_special_ranges": 5,
+      "player_properties": 113,
+      "player_stat_properties": 713,
+      "ability_properties": 177,
+      "unresolved_can_roll_on": 2
+    },
+    "affixes_with_ranges": 1156,
+    "affixes_without_ranges": 0,
+    "tiers_total": 6238,
+    "roll_slots_total": 1696,
+    "base_type_ids_referenced": 35,
+    "range_rows_by_slot": {
+      "0": 15118,
+      "1": 6415
+    },
+    "range_rows_by_tier": {
+      "1": 3454,
+      "2": 2617,
+      "3": 2617,
+      "4": 2617,
+      "5": 2617,
+      "6": 2617,
+      "7": 2617,
+      "8": 2377
+    },
+    "display_unresolved_ranges": 0,
+    "special_affix_type_counts": {
+      "Corrupted": 134,
+      "Experimental": 12,
+      "FakeUniqueMod": 38,
+      "IdolEnchantment": 49,
+      "IdolWeaver": 66,
+      "Personal": 26,
+      "Set": 61,
+      "Standard": 770
+    },
+    "affix_type_counts": {
+      "Prefix": 884,
+      "Suffix": 272
+    },
+    "standard_affix_effect_modifier_counts": {
+      "-0.05": 11,
+      "-0.33": 37,
+      "-0.62": 42,
+      "-0.83": 42,
+      "0.0": 821,
+      "0.17": 48,
+      "0.5": 82,
+      "0.75": 59,
+      "2.2": 14
+    },
+    "equipment_globals": {
+      "bloodForgingPotentialExtraCriticalSuccessChance": 0.3,
+      "disabledBaseTypesForModels": [
+        0,
+        2,
+        101,
+        11,
+        17,
+        18,
+        20,
+        21,
+        22,
+        24,
+        25,
+        102,
+        103,
+        104,
+        105,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "disabledBaseTypesToRoll": [
+        24,
+        11
+      ],
+      "globalIdolRerollChance": 0.1,
+      "iceForgingPotentialPreservationChance": 0.3,
+      "omenIdolAffixEffectModifier": 0,
+      "typesWithVariableEquipModels": [
+        5,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        18,
+        23,
+        15,
+        19,
+        0,
+        1,
+        2,
+        3,
+        4,
+        6
+      ]
+    },
+    "omen_idol_affix_effect_modifier": 0.0,
+    "omen_sub_bases": [
+      {
+        "base_type_id": 29,
+        "sub_type_id": 10,
+        "slug": "grand_primal_omen_idol",
+        "name": "Grand Primal Omen Idol",
+        "affix_effectiveness": 1
+      },
+      {
+        "base_type_id": 29,
+        "sub_type_id": 11,
+        "slug": "grand_arcane_omen_idol",
+        "name": "Grand Arcane Omen Idol",
+        "affix_effectiveness": 1
+      },
+      {
+        "base_type_id": 29,
+        "sub_type_id": 12,
+        "slug": "grand_iron_omen_idol",
+        "name": "Grand Iron Omen Idol",
+        "affix_effectiveness": 1
+      },
+      {
+        "base_type_id": 29,
+        "sub_type_id": 13,
+        "slug": "grand_spectral_omen_idol",
+        "name": "Grand Spectral Omen Idol",
+        "affix_effectiveness": 1
+      },
+      {
+        "base_type_id": 29,
+        "sub_type_id": 14,
+        "slug": "grand_umbral_omen_idol",
+        "name": "Grand Umbral Omen Idol",
+        "affix_effectiveness": 1
+      }
+    ],
+    "omen_special_range_status": [
+      "unresolved: tunklab canRollOn does not include baseTypeID 29 (Grand Idol)"
+    ],
+    "issues": []
+  },
+  "artifacts": [
+    {
+      "path": "normalized/affix-db.sqlite",
+      "sha256": "8a7c37fcacb00d49ae221feccabf540694ebf0393e5a553e66bf6de0cd7fc712",
+      "size_bytes": 19218432
+    },
+    {
+      "path": "normalized/source-extraction.json",
+      "sha256": "4c0521e5cff9b461283119a60c25130ef47ec1f0f5620a9619ec295b67023bc4",
+      "size_bytes": 12667
+    },
+    {
+      "path": "normalized/index/affixes.json",
+      "sha256": "7d98c1e2b02ca7ecaaa4e1b00a4c141226449cbbfc4bc233fd54c8ace12fbdc9",
+      "size_bytes": 905035
+    },
+    {
+      "path": "normalized/index/equipment-types.json",
+      "sha256": "862daac9b9f159b621441832f7b7be24d8a202bcc7e985de2e911362bf5d106d",
+      "size_bytes": 14187
+    },
+    {
+      "path": "normalized/index/equipment-sub-bases.json",
+      "sha256": "c19e99256347b3e03b35892c7f0a45306eaea0bfad7cb8c641f258c7107c74d9",
+      "size_bytes": 567243
+    },
+    {
+      "path": "normalized/index/equipment-globals.json",
+      "sha256": "e25bbdd275f34f6f7a4e1a0523cc2e23222a88d434002e592dec273506a5b545",
+      "size_bytes": 701
+    },
+    {
+      "path": "normalized/index/omen-special-ranges.json",
+      "sha256": "67d6352498a850ee1173e4c3b3031feec17a1b2c07eae770cc7c9bb8c5cd0f48",
+      "size_bytes": 5513
+    },
+    {
+      "path": "normalized/index/affix-eligible-bases.json",
+      "sha256": "393414b15d2f0a8b43bcade30c42c271474e72c9d1c3e1df1fcfeb4b0098b6f2",
+      "size_bytes": 405617
+    },
+    {
+      "path": "normalized/index/affix-tiers.json",
+      "sha256": "9a6c3eabd0ddddc722ccee15a13613c56d56d7c76ea015626474264eaceb2ed1",
+      "size_bytes": 999194
+    },
+    {
+      "path": "normalized/index/stat-properties.json",
+      "sha256": "de21b8569412849bd00cc87b9aac3315d0882ec56a0b0451787be47936a9257c",
+      "size_bytes": 194794
+    },
+    {
+      "path": "normalized/index/summary.json",
+      "sha256": "16158388615aee3f8da5cad63e5341629e6cd3999d9f5c60dd4e7d9c4454cfa1",
+      "size_bytes": 4547
+    },
+    {
+      "path": "README.md",
+      "sha256": "31d0652aa7687f3130dbc59207ce1bd20556676761bac1ae8e10c6c1520653d7",
+      "size_bytes": 10892
+    }
+  ],
+  "integrity_problems": []
+}

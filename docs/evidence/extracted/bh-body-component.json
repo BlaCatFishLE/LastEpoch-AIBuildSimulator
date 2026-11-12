@@ -1,0 +1,103 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-body-component",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Black Hole 本体组件与单跳伤害",
+    "en": "Black Hole body component and per-tick damage"
+  },
+  "source_path": "knowledge/mechanisms/bh-body-component.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-component",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-component]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-bh-component 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#abilities bh2",
+      "note": "1.5.2 数据集能力字段（冻结副本）。",
+      "source": "$.evidence_refs[0]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Black Hole 本体组件与单跳伤害",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body、body_fire、body_cold、tick；伤害标签：Spell、DoT；条件 code：none；必要节点：node:bh2:0",
+      "source": "$.applicability"
+    },
+    {
+      "text": "本体组件是 RepeatedlyDamageEnemiesWithinRadius：每周期基础冷伤 + addedDamageScaling × 附加法术伤害，hit=false、damageAtStart=true；周期与基础寿命来自能力数据。数值不在此抄写，读 ruleset 组件字段。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "compute_body：按 Red Giant/Binary 生成分量 → added×scaling + 基础值 → inc/more/target → 每跳伤害；表达式树写入 result.single_cast.body.components[].expression。",
+      "source": "$.handler_ref.note（le_calc.damage.compute_body）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：base_damage.cold、added_damage_scaling、damage_interval_s、added_damage rows、attack/added source",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/base_value"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/flat_added_spell_damage_total"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[legacy_single_skill.body_total]"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://reports/black-hole/p0-baseline-bh/reproduce-report.json（22/22 PASS）"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/0",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "component 的 damage_tags=['Spell','DoT'] 与 hit=false 已确认；本体为何种伤害类别在游戏内面板上不可直接观察，分类只影响标签过滤而非公式。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "addedDamageScaling 是否对不同类型的 added 伤害（非 Spell）缩放一致未逐项验证；当前只消费匹配 Spell 标签的 added 行。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

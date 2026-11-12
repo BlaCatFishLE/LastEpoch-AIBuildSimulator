@@ -1,0 +1,130 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-dot-tick-model",
+  "revision": 2,
+  "title": {
+    "zh": "Black Hole 本体纯 DoT 逐跳模型（ceil_full_ticks）",
+    "en": "Black Hole body pure-DoT tick model"
+  },
+  "aliases": [
+    "black hole body",
+    "RepeatedlyDamageEnemiesWithinRadius",
+    "damage interval",
+    "DoT tick",
+    "ceil_full_ticks"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:4",
+        "bh2:9"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "dot",
+      "tick"
+    ],
+    "tags": [
+      "Cold",
+      "Fire",
+      "Spell",
+      "DoT"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "bh2:4",
+      "bh2:9"
+    ],
+    "notes": "base 48 Cold、addedDamageScaling 2.4、interval 0.3、damageAtStart、duration 2.75 + 树时长；Binary 双组件、Red Giant 转 Fire 并 +0.8s。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "base damage / added scaling / tick interval",
+      "source": "knowledge/definitions/black-hole-v3.json#/definition/rules/dot_components",
+      "note": "编译期与 dataset 技能常量核对"
+    },
+    {
+      "parameter": "duration",
+      "source": "knowledge/definitions/black-hole-v3.json#/definition/rules/dot_components/base_duration_s + node_bindings skill_duration",
+      "unit": "seconds",
+      "note": "当前 2.75 + 1.6 = 7.15s"
+    },
+    {
+      "parameter": "tick count",
+      "source": "le_calc.plan_compiler_v3.compile_v3",
+      "note": "ceil(duration/tick_interval)=24，末跳满伤害"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "plan-v3 components[].duration_s/tick_interval_s/remainder_policy",
+    "path": "knowledge/definitions/black-hole-v3.json",
+    "locator": "#/definition/rules/dot_components"
+  },
+  "handler_ref": {
+    "module": "le_calc.plan_executor_v3",
+    "symbol": "_dot_component_result",
+    "note": "逐组件执行基础/加算/更多/穿透/目标乘区并离散为 tick"
+  },
+  "aggregation": {
+    "operation": "none",
+    "stacking_policy": "additive",
+    "order_policy": "逐跳求和；tick 数向上取整，末跳不合并余量",
+    "more_group_source": "贡献行 group"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill:letools:LEAbilities.abilityList:bh2#component#0",
+      "note": "RepeatedlyDamageEnemiesWithinRadius: 48 Cold, addedDamageScaling 2.4, damageInterval 0.3, hit=false"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#7",
+      "note": "1.5.3 OnUpdateTick/OnDestroy：tick 数 = ceil(duration/interval)，末跳满伤害"
+    },
+    {
+      "kind": "report",
+      "locator": "archive://reports/black-hole/dps-step4-bh-2/result.json",
+      "note": "plan-v3 正式 run：24 tick、fire per_tick 35660.2982857、cold 12020.4420710（复验 P1 补修后 run）"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_unified_bh_migration.py::BhD8HandOracleTest",
+    "tools/phase3/tests/test_unified_bh_migration.py::BhD12LegacyMappingTest::test_real_bh_v3_matches_legacy_semantics_and_numbers"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 BH 计算器与 ruleset-bh-stage1-v4 仅作迁移证据；生产路径为 plan-v3。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ],
+  "limitations": [
+    {
+      "item": "非伤害效果",
+      "reason": "chill/shock/blind/无视/拉怪不建模。",
+      "blocks_full_dps": false
+    }
+  ]
+}

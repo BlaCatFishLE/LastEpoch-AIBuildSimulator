@@ -1,0 +1,144 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cond-frozen-steel",
+  "revision": 3,
+  "title": {
+    "zh": "Frozen Steel（目标冰缓/冻结时的条件增伤，4 点门槛）",
+    "en": "Frozen Steel (conditional damage vs chilled/frozen, 4-point threshold)"
+  },
+  "aliases": [
+    "Frozen Steel",
+    "冰冻钢",
+    "chilled",
+    "frozen",
+    "noScaling 门槛"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "mg-1:36"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body_fire",
+      "body_cold"
+    ],
+    "conditions": [
+      "target.chilled",
+      "target.frozen"
+    ],
+    "notes": "常驻被动（已分配 4/5 点，达到 noScaling 4 点门槛）；效果只在目标冰缓或冻结时适用。操作类型（increased/more）、数值单位与作用分支（本体/点燃）均未从本地数据确认（registry support=mechanism_unresolved），不计入基线/重算。",
+    "required_nodes": [
+      "node:mg-1:36"
+    ]
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "passive.frozen_steel",
+    "path": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+    "locator": "effects[id=passive.frozen_steel]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "current:matched_instances",
+      "unit": "points",
+      "note": "按 tree/node 匹配当前点数，不使用历史案例索引或总值。"
+    },
+    {
+      "parameter": "effect values",
+      "source": "tools/phase3/rules/shared-conditional-node-buffs-v1.json#effects[id=passive.frozen_steel]",
+      "note": "per_point × 当前点数，constant 不乘点数；来源证据沿用原条目。"
+    },
+    {
+      "parameter": "state",
+      "source": "current:scenario#/states",
+      "note": "临时 Buff 默认关闭，目标条件单独声明；单次就绪不等于循环常驻。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional_node_buffs",
+    "symbol": "bind / contributions",
+    "note": "按当前树/节点稳定 ID 和点数绑定；统一条件程序执行。Preparation 只进入独立单次评估，不传播到循环。当前接入 charge_dot 执行链，其它执行驱动未签收。"
+  },
+  "evidence_state": "unresolved",
+  "implementation_state": "not_implemented",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/14",
+      "note": "注册表条目（support=mechanism_unresolved；research=assumed）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/14",
+      "note": "当前 run 求值：机制未确认。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/passive.frozen_steel",
+      "note": "条件重算通道：skipped/mechanism_unresolved。"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:mg-1:36",
+      "note": "节点数据（条件增伤、noScaling、4 点门槛、chilled OR frozen；数值见 dataset/注册表）。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "支持级别分类表。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/passive_tree/nodes/11/points",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_preparation_and_frozen_steel_are_conditional",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeSkippedTests::test_unsupported_effects_skipped_and_dps_unchanged",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeChannelSupportTests::test_expected_state_split",
+    "archive://docs/reviews/unified-report-buff-restore-20261112.zh-CN.md"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-cond-chilled-touch",
+      "requirement": "两者都依赖目标冰缓/冻结，但操作类型与作用分支不同；Frozen Steel 未确认前不能与 Chilled Touch 合并。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/shared_states"
+    },
+    {
+      "with": "common-increased-aggregate",
+      "requirement": "若确认是 increased，才可进入 inc 池；若是 more 则独立乘区——未确认前不接入。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/14/research/open_questions"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/14",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/passive.frozen_steel",
+      "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:mg-1:36"
+    ],
+    "open_questions": [
+      "Frozen Steel 的增量是 more 还是 increased 未确认；planner 归一化 property=-1，无法直接消费。",
+      "该增量是否作用于 Black Hole 点燃未确认。",
+      "需要受控测试：固定冰缓/冻结覆盖，比较 4 点前后本体与点燃数字；或从 1.5.3 代码找到 property=-1 的 stat 语义。"
+    ],
+    "requery_when": [
+      "受控测试/代码语义补齐后"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared"
+}

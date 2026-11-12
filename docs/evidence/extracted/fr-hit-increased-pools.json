@@ -1,0 +1,145 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-hit-increased-pools",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave increased 加算池（damage / attack speed / 属性缩放）",
+    "en": "Flame Reave increased additive pools (damage, attack speed, attribute scaling)"
+  },
+  "source_path": "knowledge/mechanisms/fr-hit-increased-pools.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R9",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/damage_model/increased_additive；#/attack_model/attack_speed_pool；#/damage_model/attribute_scaling；#/rules id=R9（注意 R 条目 title/statement 漂移，见 research_notes）",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R9 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave increased 加算池（damage / attack speed / 属性缩放）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、frequency；伤害标签：Fire、Melee、Hit；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=increased；叠层策略=additive；顺序/汇总=multiplier = 1 + sum(increased rows)；同一效果不能同时进静态快照与 ruleset 两次",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "increased 池在 compute_single_hit 内按 tags_apply 求和；attack speed 池在 hit_simulate._attack_speed_pools",
+      "source": "$.handler_ref.note（le_calc.hit_damage.compute_single_hit）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：increased damage rows、increased_total、attribute scaling、attributes、increased attack speed rows",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 436600-439200"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=damage and operation=increased]"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/totals/increased_total"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/attribute_scaling"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/attributes"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=attack_speed and operation=increased]"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "任务 +2 全属性是否计入（OQ6，当前含任务版 347 点表）",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "Prodigy / Defender of Welryn 的 per-attribute 公式未验证（R25 用快照归一值）",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "ruleset 的规则以 title/statement 与 JSON 结构定位为准（fr-hit-stage1-v2 已统一文案）",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

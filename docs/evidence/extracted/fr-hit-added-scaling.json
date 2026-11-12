@@ -1,0 +1,152 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-hit-added-scaling",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave added damage 池与缩放（400% effectiveness，fire_only）",
+    "en": "Flame Reave added damage pool and scaling (400% effectiveness, fire-only component policy)"
+  },
+  "source_path": "knowledge/mechanisms/fr-hit-added-scaling.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R4",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/damage_model/added_damage_scaling；#/damage_model/added_untyped_policy；#/damage_model/extra_damage_type_policy；#/rules id=R4/R5/R8/R17",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R4 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill_entity_id=skill:letools:LEAbilities.abilityList:fr11mv",
+      "note": "addedDamageScaling=4 / added_damage_effectiveness=400%",
+      "source": "$.evidence_refs[1]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:12",
+      "note": "Arcane Severance：added spell → added melee 的换算节点",
+      "source": "$.evidence_refs[2]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave added damage 池与缩放（400% effectiveness，fire_only）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire、Melee、Hit；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=added；叠层策略=additive；顺序/汇总=(base + sum(added) * added_damage_scaling)；added 先加总再统一乘 scaling",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "按 tags_apply + typed/untyped 规则把 added 行分到各组件；fire_only 策略排除非 Fire typed added",
+      "source": "$.handler_ref.note（le_calc.hit_damage._component_added_pool）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：added_damage rows、added_damage_scaling、weapon added policy、component added pool result",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=added_damage and included=true]"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/added_damage_scaling"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/added_damage_policy"
+    },
+    {
+      "pointer": "$/evidence_refs/9/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/components[0]/added_scaled"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/interaction_requirements/2/evidence_locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/weapon/offhand_exalted_effect"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "typed non-Fire added（weapon2 sealed +5 Physical、Frozen Steel +4 Cold）当前按 fire_only 排除，未建独立组件（R17 assumed）",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "Arcane Severance 换算出的 added melee 类型未定（本模型按 Fire 处理，assumed）",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "added 行中 spell/DoT/Minion 等 tag 的边界依赖 tags_apply 实现，需与 common-tag-match 收敛",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

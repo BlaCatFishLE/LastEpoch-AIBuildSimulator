@@ -1,0 +1,229 @@
+{
+  "schema": "le-definition-catalog-v1",
+  "generated_at": "2026-11-13T00:10:00+00:00",
+  "note": "共享定义候选目录（元数据/能力/适用条件）；不是第二套计算配置，模板正文仍是权威。",
+  "entries": [
+    {
+      "template_id": "bh-black-hole-v3",
+      "path": "knowledge/definitions/black-hole-v3.json",
+      "schema": "le-skill-template-v3",
+      "binding_version": "definitions_v3.selector-v1",
+      "ability_id": "bh2",
+      "plan_version": "le-calculation-plan-v3",
+      "revision": "sha256:e221e12300635ad1",
+      "sha256": "e221e12300635ad12c0941f694a16da8916f764a6bdf5980bf540d3c932cab19",
+      "capabilities": [
+        "dot_components",
+        "ignite_clock",
+        "charge_schedule",
+        "attribute_scaling"
+      ],
+      "applicability": {
+        "ability_id": "bh2",
+        "required_class": "Mage",
+        "required_facts": [
+          "main_skill.ability_id",
+          "main_skill.class"
+        ],
+        "notes": [
+          "Black Hole 纯 DoT/独立 Ignite/充能调度；要求当前实例确为 Mage 且专精 bh2。"
+        ]
+      }
+    },
+    {
+      "template_id": "fr-flame-reave-v3",
+      "path": "knowledge/definitions/fr-flame-reave-v3.json",
+      "schema": "le-skill-template-v3",
+      "binding_version": "definitions_v3.selector-v1",
+      "ability_id": "fr11mv",
+      "plan_version": "le-calculation-plan-v2",
+      "revision": "sha256:23cdccdfe555f670",
+      "sha256": "23cdccdfe555f670e397dac58adfe1c4501961da3b5524fe3867ab0b2eaaa79c",
+      "capabilities": [
+        "hit_components",
+        "hit_events",
+        "multi_hit_events",
+        "item_effectiveness",
+        "added_damage_conversion",
+        "attribute_scaling"
+      ],
+      "applicability": {
+        "ability_id": "fr11mv",
+        "required_class": "Mage",
+        "required_skill_tags": [
+          "Fire",
+          "Melee"
+        ],
+        "required_facts": [
+          "main_skill.ability_id",
+          "main_skill.class",
+          "main_skill.damage_tags"
+        ],
+        "notes": [
+          "Flame Reave 火焰近战多命中；其它技能变体不自动套用。"
+        ]
+      }
+    },
+    {
+      "template_id": "void-cleave-fire-main-v3",
+      "path": "knowledge/definitions/void-cleave-fire-main-v3.json",
+      "schema": "le-skill-template-v3",
+      "binding_version": "definitions_v3.selector-v1",
+      "ability_id": "v01cv",
+      "plan_version": "le-calculation-plan-v1",
+      "revision": "sha256:ce371e28c11edd34",
+      "sha256": "ce371e28c11edd34a8648d1c4a73bd15b17388eeab85fe4ff9361a679ea05768",
+      "capabilities": [
+        "hit_components",
+        "attribute_scaling"
+      ],
+      "applicability": {
+        "ability_id": "v01cv",
+        "required_class": "Sentinel",
+        "required_conversion_premises": [
+          "Riftflame",
+          "Hellish Chasm"
+        ],
+        "required_facts": [
+          "main_skill.ability_id",
+          "main_skill.class",
+          "main_skill.conversion_premises"
+        ],
+        "notes": [
+          "Void Cleave 转火由真实专精节点 Riftflame/Hellish Chasm 前提驱动；不按 Fire 标签写死。"
+        ]
+      }
+    },
+    {
+      "template_id": "void-cleave-fire-main-v4",
+      "path": "knowledge/definitions/void-cleave-fire-main-v4.json",
+      "schema": "le-skill-template-v3",
+      "binding_version": "definitions_v3.selector-v1",
+      "ability_id": "v01cv",
+      "plan_version": "le-calculation-plan-v4",
+      "revision": "sha256:5a87309095bb6d32",
+      "sha256": "5a87309095bb6d326599f00687512cb6aac774bb545c2812c7a09cbeb61798a5",
+      "capabilities": [
+        "hit_components",
+        "presentation"
+      ],
+      "applicability": {
+        "ability_id": "v01cv",
+        "required_class": "Sentinel",
+        "required_conversion_premises": [
+          "Riftflame",
+          "Hellish Chasm"
+        ],
+        "required_facts": [
+          "main_skill.ability_id",
+          "main_skill.class",
+          "main_skill.conversion_premises"
+        ],
+        "notes": [
+          "Void Cleave 转火由真实专精节点 Riftflame/Hellish Chasm 前提驱动；不按 Fire 标签写死。"
+        ]
+      },
+      "migration": {
+        "canonical_run_id": "dps-step5-v4-vc-1"
+      },
+      "preferred": true
+    },
+    {
+      "template_id": "fr-flame-reave-v4",
+      "path": "knowledge/definitions/fr-flame-reave-v4.json",
+      "schema": "le-skill-template-v3",
+      "binding_version": "definitions_v3.selector-v1",
+      "ability_id": "fr11mv",
+      "plan_version": "le-calculation-plan-v4",
+      "revision": "sha256:5a2c28e4378de0a6",
+      "sha256": "5a2c28e4378de0a667a55485d29273c22a3fdf2f14dd709b33d4708d3211a639",
+      "capabilities": [
+        "hit_components",
+        "hit_events",
+        "multi_hit_events",
+        "item_effectiveness",
+        "added_damage_conversion",
+        "attribute_scaling"
+      ],
+      "applicability": {
+        "ability_id": "fr11mv",
+        "required_class": "Mage",
+        "required_skill_tags": [
+          "Fire",
+          "Melee"
+        ],
+        "required_facts": [
+          "main_skill.ability_id",
+          "main_skill.class",
+          "main_skill.damage_tags"
+        ],
+        "notes": [
+          "Flame Reave 火焰近战多命中；其它技能变体不自动套用。"
+        ]
+      },
+      "preferred": true,
+      "migration": {
+        "canonical_run_id": "dps-step5-v4-fr-1"
+      }
+    },
+    {
+      "template_id": "black-hole-v4",
+      "path": "knowledge/definitions/black-hole-v4.json",
+      "schema": "le-skill-template-v3",
+      "binding_version": "definitions_v3.selector-v1",
+      "ability_id": "bh2",
+      "plan_version": "le-calculation-plan-v4",
+      "revision": "sha256:e95b2fcc67cb374e",
+      "sha256": "e95b2fcc67cb374ec121acb6cc6b7c5b521772a6232a846ca7ecdbb2b4949447",
+      "capabilities": [
+        "dot_components",
+        "ignite_clock",
+        "charge_schedule",
+        "attribute_scaling"
+      ],
+      "applicability": {
+        "ability_id": "bh2",
+        "required_class": "Mage",
+        "required_facts": [
+          "main_skill.ability_id",
+          "main_skill.class"
+        ],
+        "notes": [
+          "Black Hole 纯 DoT/独立 Ignite/充能调度；要求当前实例确为 Mage 且专精 bh2。"
+        ]
+      },
+      "preferred": true,
+      "migration": {
+        "canonical_run_id": "dps-step5-v4-bh-1"
+      }
+    },
+    {
+      "template_id": "ballista-armed-construction-v4",
+      "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+      "schema": "le-skill-template-v3",
+      "binding_version": "definitions_v3.selector-v1",
+      "ability_id": "ba1574",
+      "plan_version": "le-calculation-plan-v4",
+      "revision": "sha256:1611b8a0f4975d7c",
+      "sha256": "1611b8a0f4975d7c8f3509f84868ae922b3ad62ae7e34aecfb7f6f30ec1c16d5",
+      "capabilities": [
+        "hit_components",
+        "minion_actor",
+        "explicit_stat_transfer",
+        "derived_event_rate",
+        "attribute_scaling"
+      ],
+      "applicability": {
+        "ability_id": "ba1574",
+        "required_class": "Rogue",
+        "required_facts": [
+          "main_skill.ability_id",
+          "main_skill.class"
+        ],
+        "notes": [
+          "Ballista 主技能专精；DPS 口径只含 Armed Construction 到期/销毁爆炸。其它 Minion/召唤技能不自动套用。"
+        ]
+      }
+    }
+  ]
+}

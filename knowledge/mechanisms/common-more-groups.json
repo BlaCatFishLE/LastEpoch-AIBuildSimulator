@@ -1,0 +1,124 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "common-more-groups",
+  "revision": 2,
+  "title": {
+    "zh": "more 分组与逐组独立相乘",
+    "en": "More/less grouping: per-group additive, cross-group multiplicative"
+  },
+  "aliases": [
+    "more groups",
+    "group_more_rows",
+    "more 乘区",
+    "独立乘区",
+    "more_group"
+  ],
+  "selectors": [
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "common-more-groups"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "dot",
+      "tick",
+      "ignite",
+      "body"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "同一 group 内的多条 more 先相加，每组产生一个因子 (1+Σmore)，不同 group 之间相乘。group 必须显式来自机制/规则定义（ruleset effect.group），不能从词条文本推定。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-more-aggregation",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-more-aggregation]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "more_group",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/skill_tree_nodes",
+      "note": "节点效果的 group 字段（如 node:bh2:2）；缺失时按 contribution_id 自成一组。"
+    },
+    {
+      "parameter": "more_value",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/skill_tree_nodes",
+      "note": "value_total 为当前案例点数下的冻结值；换点数必须重算 ruleset。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "group_more_rows",
+    "note": "分组相加 → 每组 factor=(1+Σ) → 组间乘积；tree_more_groups 负责把 ruleset 技能树 more 行接入同一分组器。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-bh-more-aggregation]",
+      "note": "用户规则 3：同一节点相加、不同节点独立乘区；参考模型一致。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/bd-reuse-pipeline-v1-implementation.zh-CN.md#6.3",
+      "note": "统一贡献项：more_group 必须显式来自机制定义；组内相加/每层独立相乘需区分政策。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups",
+      "note": "当前 run 的 more 分组账（节点 group 与 factor 均可在产物中核对）。"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_fire_component_golden_numbers",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_skill_node_groups_are_node_scoped",
+    "tools/phase3/tests/test_simulate.py::LoopTest::test_steady_state_cross_check",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-increased-aggregate",
+      "requirement": "more 不进 inc 加算池：先算 (1+Σinc) 再加乘 Π(1+Σmore_group)。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#compute_body"
+    },
+    {
+      "with": "common-tag-match",
+      "requirement": "每条 more 行先按组件标签过滤，再按 group 聚合；过滤失败不得计入。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#tree_more_groups"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-bh-more-aggregation]",
+      "docs/bd-reuse-pipeline-v1-implementation.zh-CN.md#6.3",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body"
+    ],
+    "open_questions": [
+      "当前 ruleset 的技能树 more 值是「当前案例点数」的冻结 value_total；引擎不读输入节点点数。复用同一节点到不同点数的新 BD 时必须重算规则/新增规则条目（见 bh-skill-tree-more-nodes）。",
+      "FR hit 模型有自己的 more 分组实现，尚未与 BH 合并为同一入口（实施方案 §6.2 先适配后合并）。",
+      "每层独立相乘（multiplicative_per_stack）在 BH 当前节点里未出现；schema 的 stacking_policy 保留该选项，但本案例只用 additive。"
+    ],
+    "requery_when": [
+      "P2 共享算子合并后",
+      "新 BD 出现 per-stack more 节点时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "reuse_mode": "shared"
+}

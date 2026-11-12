@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/resolve-build-request-v1.json",
+  "title": "ResolveBuildRequest v1",
+  "description": "P2 resolve_build 输入。纯 JSON、无聊天上下文；case_ref 与 input_refs 显式给出，knowledge 可注入知识目录/索引路径或 lookup callable 由调用方在进程内适配。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "main_skill",
+    "case_ref"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "le-resolve-build-request-v1"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "case_ref": {
+      "type": "string",
+      "description": "repository-relative case.json"
+    },
+    "main_skill": {
+      "type": "object",
+      "required": [
+        "ability_id"
+      ],
+      "properties": {
+        "ability_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "input_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string",
+            "description": "repository-relative POSIX path"
+          },
+          "asset_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "schema_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "compatibility_baseline": {
+      "type": "object"
+    },
+    "knowledge": {
+      "type": "object",
+      "properties": {
+        "knowledge_dir": {
+          "type": "string"
+        },
+        "index_path": {
+          "type": "string"
+        },
+        "root": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

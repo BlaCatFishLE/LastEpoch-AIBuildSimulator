@@ -1,0 +1,91 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "black-hole-v4",
+  "kind": "definition",
+  "title": {
+    "zh": "Black Hole（bh2）纯 DoT 共享定义 v3",
+    "en": null
+  },
+  "source_path": "knowledge/definitions/black-hole-v4.json",
+  "evidence_state": null,
+  "implementation_state": null,
+  "state_note": "共享定义模板没有 evidence_state/implementation_state 字段；证据状态见定义内 limitations/coverage 与 evidence 定位，登记状态见对应机制条目",
+  "rule_ref": {
+    "kind": "definition_template",
+    "ref": "black-hole-v4",
+    "path": "knowledge/definitions/black-hole-v4.json",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/black-hole-v4.json",
+      "note": "共享定义模板本身是计算权威（自包含规则段），不引用外部规则 ID；规则 ID 在对应规则包/机制条目中单独登记"
+    }
+  },
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Black Hole（bh2）纯 DoT 共享定义 v3",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "ability_id=bh2；binding_version=definitions_v3.selector-v1",
+      "source": "$.ability_id/binding_version/capabilities"
+    },
+    {
+      "text": "定义规则段（共享计算语义的权威位置）：dot_components、ignite_model、charge_schedule、dot_target、attribute_scaling、row_reclassifications、overcapped_scaling",
+      "source": "$.definition.rules"
+    },
+    {
+      "text": "迁移口径：S5 BH 迁移：DoT 本体/独立施加时钟/充能调度迁移到 plan-v3/result-v5；旧计算器仅作 D12 对照。",
+      "source": "$.migration.note"
+    },
+    {
+      "text": "迁移口径：canonical case.json 必须走 definitions_v3；legacy/profile/hit 文件仅作迁移证据，不参与默认入口。",
+      "source": "$.migration.entry_policy"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/definition/rules/dot_components/evidence/0/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0].raw_payload.prefab.components[3]"
+    },
+    {
+      "pointer": "$/definition/rules/attribute_scaling/evidence/0/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0].raw_payload.attributeScaling"
+    },
+    {
+      "pointer": "$/definition/evidence/0/detail",
+      "original": "archive://reports/black-hole/verify-baseline-black-hole-20261110T1245/result.json（旧 BH 计算器基线，仅作语义/数值对照，不作为新 handler）"
+    },
+    {
+      "pointer": "$/definition/evidence/0/locator",
+      "original": "archive://reports/black-hole/verify-baseline-black-hole-20261110T1245/result.json"
+    },
+    {
+      "pointer": "$/migration/canonical_case",
+      "original": "archive://examples/black-hole/case.json"
+    },
+    {
+      "pointer": "$/migration/migration_case",
+      "original": "archive://examples/black-hole/case.legacy.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "BH 切片只覆盖本体 DoT 与 Ignite 期望层数；chill/shock/blind/无视等非伤害效果未建模。",
+      "source": "$.definition.limitations[0]"
+    },
+    {
+      "text": "Heat Wave 期望层数模型假设每次 roll 独立、无层数上限；报告按期望值而非整数事件计数。",
+      "source": "$.definition.limitations[1]"
+    },
+    {
+      "text": "充能按顺序恢复（同一时间一个恢复计时器），max charges 只提供起手爆发；法力消耗/恢复未建模。",
+      "source": "$.definition.limitations[2]"
+    },
+    {
+      "text": "rotation/移动/拉怪/双星覆盖条件只按场景假设（双星全覆盖、中心 1m 内）。",
+      "source": "$.definition.limitations[3]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

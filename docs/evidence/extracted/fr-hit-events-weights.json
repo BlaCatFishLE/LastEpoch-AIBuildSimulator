@@ -1,0 +1,146 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-hit-events-weights",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 每次施放命中次数与伤害权重（4 击）",
+    "en": "Flame Reave hits per cast and damage weights (4 hits)"
+  },
+  "source_path": "knowledge/mechanisms/fr-hit-events-weights.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R1",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/hit_events；#/rules id=R1/R11/R21/R24",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R1 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=fr11mv source_id=16",
+      "note": "Reflash：额外命中 always 50% less damage；two additional times",
+      "source": "$.evidence_refs[1]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=fr11mv source_id=18",
+      "note": "Flame Caller：returning hit always 50% less damage",
+      "source": "$.evidence_refs[2]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=fr11mv source_id=16",
+      "note": "Reflash requirements=[{nodeId:18}]：Flame Caller 是前置",
+      "source": "$.evidence_refs[3]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill_entity_id=skill:letools:LEAbilities.abilityList:fr11mv",
+      "note": "本体 canDamageSameEnemyAgain=false；多命中只能来自树节点",
+      "source": "$.evidence_refs[4]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 每次施放命中次数与伤害权重（4 击）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、frequency；伤害标签：Fire、Melee、Hit；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=multiplier；叠层策略=additive；顺序/汇总=per-cast damage = single-hit damage × sum(damage_weights)；窗口伤害 = per-cast × 施放次数；more 分组依据=n/a（权重来自 ruleset.hit_events，不是 more 组）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "读取 ruleset.hit_events / derived.hit_count；scenario.hit_override 优先；hit_report 汇总",
+      "source": "$.handler_ref.note（le_calc.hit_simulate.simulate）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：hits_per_cast、damage_weights、derived hit count、hit_override",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/hit_count"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/hit_override（可选）"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "OQ2：本体第 1 击的距离衰减曲线未建模（当前贴脸=1.0；远程最多 50% less 未作为 ruleset.effect 注册，只在 snapshot 注释中提及）",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "dataset 的 partialSkillBonuses 无 node 16/18 命中 flag，4 击结论基于文本 + 用户裁决",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

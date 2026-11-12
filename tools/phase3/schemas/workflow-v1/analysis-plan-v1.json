@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/analysis-plan-v1.json",
+  "title": "Analysis plan v1",
+  "description": "固定九项探查清单 + 每项自动复用/agent 缺口/状态；由 resolve_build 产出，artifacts.write_analysis_artifacts 写为 analysis-plan.json。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "plan_id",
+    "case_id",
+    "main_skill",
+    "checklist",
+    "components",
+    "knowledge_index",
+    "scope_sources",
+    "counts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "le-analysis-plan-v1"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "main_skill": {
+      "type": "object",
+      "required": [
+        "ability_id",
+        "model_id"
+      ],
+      "properties": {
+        "ability_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "model_id": {
+          "type": "string"
+        }
+      }
+    },
+    "checklist": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title_zh",
+          "title_en",
+          "automatic_reuse",
+          "agent_gap",
+          "components",
+          "calculation_blocks",
+          "status",
+          "reason",
+          "mechanisms",
+          "model_blocks"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title_zh": {
+            "type": "string"
+          },
+          "title_en": {
+            "type": "string"
+          },
+          "automatic_reuse": {
+            "type": "string"
+          },
+          "agent_gap": {
+            "type": "string"
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "calculation_blocks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "supported",
+              "partial",
+              "not_applicable",
+              "needs_research",
+              "needs_input"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "mechanisms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "model_blocks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "skill_template": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "knowledge_index": {
+      "type": "object",
+      "required": [
+        "knowledge_dir",
+        "index_path"
+      ],
+      "properties": {
+        "knowledge_dir": {
+          "type": "string"
+        },
+        "index_path": {
+          "type": "string"
+        },
+        "index_digest": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "scope_sources": {
+      "type": "object"
+    },
+    "counts": {
+      "type": "object"
+    }
+  }
+}

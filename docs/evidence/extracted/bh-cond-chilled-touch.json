@@ -1,0 +1,99 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-chilled-touch",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Chilled Touch（Frost Wall + 目标冰缓：+more 伤害）",
+    "en": "Chilled Touch (Frost Wall active + chilled target: more damage)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-chilled-touch.json",
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "frost_wall.chilled_touch",
+    "path": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+    "locator": "effects[id=frost_wall.chilled_touch]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+      "note": "conditional_effect:frost_wall.chilled_touch 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:fr4wl:16",
+      "note": "节点数据与条件文本。",
+      "source": "$.evidence_refs[3]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Chilled Touch（Frost Wall + 目标冰缓：+more 伤害）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body_fire、body_cold、ignite；条件 code：player.frost_wall_active、target.chilled；必要节点：node:fr4wl:16",
+      "source": "$.applicability"
+    },
+    {
+      "text": "需要 Frost Wall 存续且目标冰缓；效果为玩家造成伤害的 +more。作用分支（是否含 Ignite）在注册表中未确认（research=assumed），当前重算通道按 body+ignite 应用。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "按当前树/节点稳定 ID 和点数绑定；统一条件程序执行。Preparation 只进入独立单次评估，不传播到循环。当前接入 charge_dot 执行链，其它执行驱动未签收。",
+      "source": "$.handler_ref.note（le_calc.conditional_node_buffs.bind / contributions）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、effect values、state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/6"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/frost_wall.chilled_touch"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/4/nodes/8/points"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.frost_wall_active"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://docs/reviews/unified-report-buff-restore-20261112.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/frost_wall.chilled_touch"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "Chilled Touch 的 more 是否作用于 Black Hole 施加的 Ignite 未确认；注册表 research.status=assumed，重算通道当前按 body+ignite 应用（若最终确认不含点燃，重算数值会偏低）。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "目标冰缓来源：本构筑 Frost Wall 点了 Pyroglass（冰缓→点燃），Frost Wall 自身可能不再施加冰缓；固定条件模式只声明目标冰缓，不模拟来源。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

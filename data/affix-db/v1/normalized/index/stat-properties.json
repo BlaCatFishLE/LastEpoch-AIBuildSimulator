@@ -1,0 +1,6486 @@
+{
+  "playerProperties": [
+    {
+      "property": 0,
+      "propertyName": "Damage",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 1,
+      "propertyName": "Ailment Chance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 2,
+      "propertyName": "Attack Speed",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 3,
+      "propertyName": "Cast Speed",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 4,
+      "propertyName": "Critical Strike Chance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 5,
+      "propertyName": "Critical Strike Multiplier",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 6,
+      "propertyName": "Damage Taken",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": true
+    },
+    {
+      "property": 7,
+      "propertyName": "Health",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 8,
+      "propertyName": "Mana",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 9,
+      "propertyName": "Movement Speed",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 10,
+      "propertyName": "Armor",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 11,
+      "propertyName": "Dodge Rating",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 12,
+      "propertyName": "Stun Avoidance",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 13,
+      "propertyName": "Fire Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 14,
+      "propertyName": "Cold Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 15,
+      "propertyName": "Lightning Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 16,
+      "propertyName": "Ward Retention",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 17,
+      "propertyName": "Health Regen",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 18,
+      "propertyName": "Mana Regen",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 19,
+      "propertyName": "Strength",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 20,
+      "propertyName": "Vitality",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 21,
+      "propertyName": "Intelligence",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 22,
+      "propertyName": "Dexterity",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 23,
+      "propertyName": "Attunement",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 24,
+      "propertyName": "Damage Dealt to Mana Before Health",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 25,
+      "propertyName": "Channel Cost",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": true
+    },
+    {
+      "property": 26,
+      "propertyName": "Void Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 27,
+      "propertyName": "Necrotic Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 28,
+      "propertyName": "Poison Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 29,
+      "propertyName": "Block Chance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 30,
+      "propertyName": "All Resistances",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": true,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 38,
+      "propertyName": "Health Gain",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 39,
+      "propertyName": "Ward Gain",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 40,
+      "propertyName": "Mana Gain",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 41,
+      "propertyName": "Adaptive Spell Damage",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 42,
+      "propertyName": "Increased Ailment Duration",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 43,
+      "propertyName": "Increased Ailment Effect",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 44,
+      "propertyName": "Increased Healing Effectiveness",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 45,
+      "propertyName": "Increased Stun Chance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 46,
+      "propertyName": "All Attributes",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": true,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 47,
+      "propertyName": "Increased Chance To Find Potions",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 48,
+      "propertyName": "Health Gained on Potion Use",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 49,
+      "propertyName": "Potion Slots",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 51,
+      "propertyName": "Damage Leeched as Health",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": true,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 52,
+      "propertyName": "Elemental Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 53,
+      "propertyName": "Block Effectiveness",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 55,
+      "propertyName": "Increased Stun Immunity Duration",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 56,
+      "propertyName": "Stun Immunity",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 58,
+      "propertyName": "Dark Protection (deprecated)",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 59,
+      "propertyName": "Penetration",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 62,
+      "propertyName": "Chance to receive a Glancing Blow when hit",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 66,
+      "propertyName": "Mana Cost",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": true
+    },
+    {
+      "property": 67,
+      "propertyName": "Freeze Rate Multiplier",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 69,
+      "propertyName": "Mana Efficiency",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 70,
+      "propertyName": "Increased Cooldown Recovery Speed",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 64,
+      "propertyName": "Physical Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 60,
+      "propertyName": "Current Health Drained per Second",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": true
+    },
+    {
+      "property": 65,
+      "propertyName": "Cull on Hit",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 34,
+      "propertyName": "Damage Taken as Lightning",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 31,
+      "propertyName": "Damage Taken as Physical",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 32,
+      "propertyName": "Damage Taken as Fire",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 33,
+      "propertyName": "Damage Taken as Cold",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 36,
+      "propertyName": "Damage Taken as Void",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 37,
+      "propertyName": "Damage Taken as Poison",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 35,
+      "propertyName": "Damage Taken as Necrotic",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 61,
+      "propertyName": "Maximum Companions",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 50,
+      "propertyName": "Chance to gain Haste for 1 second on Hit",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 73,
+      "propertyName": "Chance to Chill Attackers",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 74,
+      "propertyName": "Chance to Slow Attackers",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 85,
+      "propertyName": "Damage Reflected to Attackers",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 86,
+      "propertyName": "Damage Reflected",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 87,
+      "propertyName": "Chance to Shock Attackers",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 89,
+      "propertyName": "Critical Strike Avoidance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 90,
+      "propertyName": "Potion Health Converted to Ward",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 91,
+      "propertyName": "Ward Gained on Potion Use",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 93,
+      "propertyName": "Overkill Damage Leeched as Health",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": true,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 92,
+      "propertyName": "Ward per Second",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 94,
+      "propertyName": "Damage Dealt to Mana Before Health or Ward",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 95,
+      "propertyName": "Increased Stun Duration",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 71,
+      "propertyName": "Duration of Stuns Received",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": true,
+      "dontDisplayPlus": false,
+      "lessIsBetter": true
+    },
+    {
+      "property": 97,
+      "propertyName": "Chance to Gain 30 Ward when Hit",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 99,
+      "propertyName": "Mana Spent Gained as Ward",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 100,
+      "propertyName": "Ailment Conversion",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 102,
+      "propertyName": "Increased Leech Rate",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 103,
+      "propertyName": "Freeze Rate per stack of Chill",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 104,
+      "propertyName": "Increased Drop Rate",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 105,
+      "propertyName": "Increased Experience",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 106,
+      "propertyName": "Physical and Void Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 107,
+      "propertyName": "Necrotic and Poison Resistance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 110,
+      "propertyName": "Damage Taken From Nearby Enemies",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": true
+    },
+    {
+      "property": 111,
+      "propertyName": "Block Chance Against Distant Enemies",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 112,
+      "propertyName": "Chance to Receive a Critical Strike",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": true
+    },
+    {
+      "property": 75,
+      "propertyName": "Endurance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 76,
+      "propertyName": "Endurance Threshold",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 88,
+      "propertyName": "Level of Skills",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": true,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 113,
+      "propertyName": "Damage Taken While Moving",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": true
+    },
+    {
+      "property": 96,
+      "propertyName": "Maximum Health gained as Endurance Threshold",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 114,
+      "propertyName": "reduced Bonus Damage Taken from Critical Strikes",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 115,
+      "propertyName": "More Damage Per Stack",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 116,
+      "propertyName": "increased Area for Area Skills",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 117,
+      "propertyName": "Global Conditional Damage",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 118,
+      "propertyName": "Armor Mitigation also applies to Damage over Time",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": true,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 119,
+      "propertyName": "Ward Decay Threshold",
+      "roundingForAdded": 1,
+      "roundingForAddedName": "Integer",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 121,
+      "propertyName": "Parry Chance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 122,
+      "propertyName": "Lens",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 123,
+      "propertyName": "Tracker Property",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 124,
+      "propertyName": "Unimportance Modifier",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 128,
+      "propertyName": "Immunity",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 129,
+      "propertyName": "Chance to Cast When Hit",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 127,
+      "propertyName": "Chance to Cast",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": true,
+      "lessIsBetter": false
+    },
+    {
+      "property": 131,
+      "propertyName": "Global Conditional Penetration",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 132,
+      "propertyName": "Global Conditional Critical Strike Chance",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": false,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    },
+    {
+      "property": 133,
+      "propertyName": "Global Conditional Critical Strike Multiplier",
+      "roundingForAdded": 0,
+      "roundingForAddedName": "Hundredth",
+      "displayAddedAsPercentage": true,
+      "displayAddedAsTenthOfValue": false,
+      "displayAsPercentageOf": false,
+      "displayAsAddedTo": false,
+      "dontDisplayPlus": false,
+      "lessIsBetter": false
+    }
+  ],
+  "playerStatProperties": [
+    {
+      "tagIndex": 0,
+      "propertyName": "Chance to gain Haste for 3 seconds when you Summon a Totem",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 1,
+      "propertyName": "Chance to Cast Lightning Strike when you use a skill that costs at least 10 Mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 2,
+      "propertyName": "Chance on kill to refresh the cooldown of a random companion activatable ability",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 3,
+      "propertyName": "Chance To Chill Nearby Enemies when you use a skill that costs at least 20 Mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 4,
+      "propertyName": "Bees Per 10 Seconds",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 5,
+      "propertyName": "Chance on hit to summon a Thorn Totem (1 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 6,
+      "propertyName": "Mana gained when auto transforming back to human form",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 7,
+      "propertyName": "Chance to cast Ice Thorns when you are hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 8,
+      "propertyName": "Gain Inspiration when you stun an enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 9,
+      "propertyName": "Chance to cast Healing Nova when hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 10,
+      "propertyName": "Chance to create an Earthquake Aftershock at a nearby enemy on melee attack (up to 10 times per 2 seconds)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 11,
+      "propertyName": "Chance for an Avalanche Boulder to drop at a nearby enemy on spell cast (up to 3 times per second)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 12,
+      "propertyName": "Chance for an Avalanche Boulder to drop at a nearby enemy on melee attack (up to 3 times per second)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 13,
+      "propertyName": "Increased Aspect of the Shark Effect",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 14,
+      "propertyName": "Increased Aspect of the Shark Duration",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 15,
+      "propertyName": "Increased Aspect of the Boar Effect",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 16,
+      "propertyName": "Increased Aspect of the Boar Duration",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 17,
+      "propertyName": "Increased Aspect of the Viper Effect",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 18,
+      "propertyName": "Increased Aspect of the Viper Duration",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 19,
+      "propertyName": "Increased Aspect of the Lynx Effect",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 20,
+      "propertyName": "Increased Aspect of the Lynx Duration",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 21,
+      "propertyName": "Chance on Melee Kill to heal a Random Minion to Full Health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 22,
+      "propertyName": "Increased Spell Damage if you have an active Totem",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 23,
+      "propertyName": "Increased Cold Damage per active Totem",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 24,
+      "propertyName": "Potion Use Cleanses Stun and Freeze",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 25,
+      "propertyName": "Seconds of Stun Immunity after using Teleport",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 26,
+      "propertyName": "Chance to cast Fire Aura on Crit (up to 3 times per second)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 27,
+      "propertyName": "Chance to gain Critical Effluence when you cast a spell",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 28,
+      "propertyName": "Chance to Cast Water Orb when you hit a Boss or Rare Enemy (3 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 29,
+      "propertyName": "Chance to gain Lightning Aegis when hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 30,
+      "propertyName": "Chance to summon Arek's Flesh when a hit leaves you below half health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 31,
+      "propertyName": "Chance to cast Elemental Nova when Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 32,
+      "propertyName": "Chance to cast Fire Aura when Hit (up to 3 times per second)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 33,
+      "propertyName": "Ward gained when damage leaves you at low health",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 34,
+      "propertyName": "Increased lightning damage. This effect is doubled if you have 300 or more maximum mana.",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 35,
+      "propertyName": "Increased cold damage. This effect is doubled if you have 300 or more maximum mana.",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 36,
+      "propertyName": "Increased fire damage. This effect is doubled if you have 300 or more maximum mana.",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 37,
+      "propertyName": "Chance to forge a weapon when hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 38,
+      "propertyName": "Increased fire damage with at least 3 Forged Weapons.",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 39,
+      "propertyName": "Chance to apply Time Rot to Attackers when Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 40,
+      "propertyName": "Chance to create a Void Rift when you hit an enemy (2 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 41,
+      "propertyName": "Increased spell critical strike chance. This effect is doubled if you have 300 or more maximum mana.",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 42,
+      "propertyName": "Chance to cast Fire Trail when you are crit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 43,
+      "propertyName": "Increased Necrotic Damage if you have been Hit Recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 44,
+      "propertyName": "Chance to cast Fire Aura on Kill with Fire Skills (up to 3 times per second)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 45,
+      "propertyName": "Increased Health Regen per point of Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 46,
+      "propertyName": "Increased health regen if you have stunned an enemy recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 47,
+      "propertyName": "Increased damage if you have cast Devouring Orb recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 48,
+      "propertyName": "Chance to taunt nearby enemies for 2 seconds when you stun an enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 49,
+      "propertyName": "Chance to cast Void Rift on Kill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 50,
+      "propertyName": "Chance to create a Void Essence on Kill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 51,
+      "propertyName": "Chance to use Manifest Strike on melee hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 52,
+      "propertyName": "Chance to cast Divine Bolt when you use a 0 mana cost skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 53,
+      "propertyName": "Increased cold spell damage if you have directly cast a physical spell recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 54,
+      "propertyName": "Chance to cast Smite on hit with throwing attacks (up to 10 times per 2 seconds)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 55,
+      "propertyName": "Health gained when stunned",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 56,
+      "propertyName": "Increased physical spell damage if you have directly cast a cold spell recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 57,
+      "propertyName": "increased Echo Damage when a skill is Echoed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 58,
+      "propertyName": "Increased void damage if Echoed recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 59,
+      "propertyName": "Increased melee damage if Echoed recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 60,
+      "propertyName": "Chance to gain Inspiration when you kill an enemy with a void skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 61,
+      "propertyName": "Increased Fire Damage if you have used a Lightning Spell Recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 62,
+      "propertyName": "Increased Cold Damage if you have used a Fire Spell Recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 63,
+      "propertyName": "Increased Lightning Damage if you have used a Cold Spell Recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 64,
+      "propertyName": "Chance to gain Haste when you kill an enemy with a spell",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 65,
+      "propertyName": "Ward Retention if you have hit an enemy with a physical spell recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 66,
+      "propertyName": "Chance to cast Divine Bolt each second while channeling",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 67,
+      "propertyName": "Ward gained when you hit an enemy with a cold spell",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 68,
+      "propertyName": "Chance to cast Avalanche Boulder at target when you critically hit with a spell.",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 69,
+      "propertyName": "Missing Health gained as Ward per second",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 70,
+      "propertyName": "Current Health Lost per second",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 71,
+      "propertyName": "Melee Physical Damage if wielding a Sword",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 72,
+      "propertyName": "Chance to Inflict Bleed on Hit if wielding an Axe",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 73,
+      "propertyName": "Chance to cast Poison Nova when Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 74,
+      "propertyName": "Melee Physical Damage if wielding a Mace",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 75,
+      "propertyName": "Crossbow Mercenaries",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 76,
+      "propertyName": "Chance to cast Tidal Wave when you use a Melee Attack (1 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 77,
+      "propertyName": "Chance to gain Deicide for 15 seconds when you kill a rare or boss enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 78,
+      "propertyName": "Increased spell critical strike chance if you have cast Wandering Spirits recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 79,
+      "propertyName": "You are chilled every 3 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 80,
+      "propertyName": "Every 3 seconds if you are on high health you lose 25% of your current health and gain Apocalypse for 3 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 81,
+      "propertyName": "Chance to cast Abyssal Echoes on Melee Kill or Melee Hit Boss or Rare Enemy (3 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 82,
+      "propertyName": "Every 3 seconds your ward is consumed, granting a stack of Demise per 13 ward consumed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 83,
+      "propertyName": "Chance for the nearest minion to the target location to cast Dragonflame Nova when you use a minion skill (up to 3 times per second)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 84,
+      "propertyName": "Mana Gained On Transforming Back To Human Form",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 85,
+      "propertyName": "Maximum Companion",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 86,
+      "propertyName": "Increased Companion Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 87,
+      "propertyName": "Ward Gained when you stop moving (2 second cooldown)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 88,
+      "propertyName": "Critical strike chance if you have dealt a critical strike recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 89,
+      "propertyName": "less Critical Strike Chance if you have dealt a Critical Strike Recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 90,
+      "propertyName": "Current Mana gained as Ward when you stop moving (2 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 91,
+      "propertyName": "Chance to Gain 20 Ward on Melee Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 92,
+      "propertyName": "Chance to be Marked For Death for 4 seconds on Potion Use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 93,
+      "propertyName": "Increased Damage per 100% Increased Movement Speed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 94,
+      "propertyName": "Increased Crit Chance per Equipped Sword",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 95,
+      "propertyName": "Increased Crit Chance per Equipped Dagger",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 96,
+      "propertyName": "Health Gained when you receive a Glancing Blow",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 97,
+      "propertyName": "Chance to gain Dusk Shroud when Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 98,
+      "propertyName": "Chance to Inflict Bleed on Hit per equipped Sword",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 99,
+      "propertyName": "Chance to Poison on Hit per equipped Dagger",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 100,
+      "propertyName": "Boss and Rare Enemy Dodge Rating Reduction on Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 101,
+      "propertyName": "Health Gained when you use a Bow Attack and Hit at least one Enemy",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 102,
+      "propertyName": "Chance to gain Dusk Shroud when you use a Melee Attack that hits",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 103,
+      "propertyName": "Dodge Rating if you have been hit recently",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 104,
+      "propertyName": "Stacks of Silver Shroud gained when you Drop Below High Health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 105,
+      "propertyName": "Health gained per stack of any Shroud when you kill an enemy or you hit a rare or boss enemy.",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 106,
+      "propertyName": "Mana cost gained as More Bow Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 107,
+      "propertyName": "Chance to gain Crimson Shroud when you use a Melee Attack that hits",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 108,
+      "propertyName": "Mana gained if you use a 0 cost attack that hits at least 1 enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 109,
+      "propertyName": "Elemental Arrows generated per second",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 110,
+      "propertyName": "Extra Elemental Arrows consumed per bow attack",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 111,
+      "propertyName": "Maximum Elemental Arrows",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 112,
+      "propertyName": "Elemental Resistance per Elemental Arrow",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 113,
+      "propertyName": "Added fire and lightning damage per Elemental Arrow used",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 114,
+      "propertyName": "Shock and Ignite chance on triple Elemental Arrow consume",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 115,
+      "propertyName": "increased Elemental Damage per Elemental Arrow used",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 116,
+      "propertyName": "Increased Bow Attack Speed for 3 seconds when you use a Bow Attack (10 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 117,
+      "propertyName": "Chance to gain a stack of Reen's Ire for 5 seconds when you crit with a melee attack, up to 30 times per 5 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 118,
+      "propertyName": "Health gained when you Dodge",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 119,
+      "propertyName": "Critical Strike Multiplier while Dual Wielding",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 120,
+      "propertyName": "Physical Throwing Damage while Dual Wielding",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 121,
+      "propertyName": "Increased Damage while wielding a Sword",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 122,
+      "propertyName": "Increased Damage while wielding a Dagger",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 123,
+      "propertyName": "Increased Damage while wielding a Bow",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 124,
+      "propertyName": "Physical Penetration while wielding a Dagger",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 125,
+      "propertyName": "Fire Penetration while wielding a Dagger",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 126,
+      "propertyName": "Increased Companion Revive Range",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 127,
+      "propertyName": "Increased Companion Revive Speed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 128,
+      "propertyName": "Reduced Downed Companion Decay Rate",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 129,
+      "propertyName": "Less Damage Taken while wielding a Two Handed Melee Weapon",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 130,
+      "propertyName": "Ward Gained On 30% of Crits",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 131,
+      "propertyName": "Health gained on Kill per stack of Bleed on the Target",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 132,
+      "propertyName": "Increased Companion Size",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 133,
+      "propertyName": "When a hit leaves you below your endurance threshold you are slowed and release a Wave of Void (2 second cooldown)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 134,
+      "propertyName": "Chance to cast Icicle on Bow Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 135,
+      "propertyName": "Current Mana gained as Ward on Block",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 136,
+      "propertyName": "Current Mana gained as Ward when you cast a Fire Spell",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 137,
+      "propertyName": "Chance to gain a stack of Ruby Venom for 12 seconds on Block",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 138,
+      "propertyName": "Seconds of Haste Duration and Full Recovery when damage leaves you below 30% health (20 second cooldown)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 139,
+      "propertyName": "Seconds of Ancient Flight when you move after attacking",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 140,
+      "propertyName": "You are Damned when you cast a spell",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 141,
+      "propertyName": "added Critical Strike Multiplier Converted to Physical Penetration with Bleed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 142,
+      "propertyName": "added Critical Strike Multiplier Converted to Poison Penetration with Poison",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 143,
+      "propertyName": "Ward gained when you Dodge",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 144,
+      "propertyName": "Shock Chance per Intelligence",
+      "roundingForAdded": 3,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 145,
+      "propertyName": "increased Shock Duration per Intelligence",
+      "roundingForAdded": 3,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 146,
+      "propertyName": "Spell Lightning Damage per 2 Intelligence",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 147,
+      "propertyName": "Using a potion grants you Falsewater Fury until you run out of mana",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 148,
+      "propertyName": "Gain Searing Blades when you directly use a Melee Attack and hit at least one enemy",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 149,
+      "propertyName": "Glancing Blow Chance Converted to Block Chance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 150,
+      "propertyName": "Gain Cold Infusion when you cast a cold spell",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 151,
+      "propertyName": "Gain Fire Infusion when you cast a fire spell",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 152,
+      "propertyName": "Gain Lightning Infusion when you cast a lightning spell",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 153,
+      "propertyName": "Chance to cast stationary fire Tornado at a nearby enemy on hit (up to 2 times per 3 seconds)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 154,
+      "propertyName": "Increased Movement Speed per Added Melee Void Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 155,
+      "propertyName": "Chance to cast Lightning Blast with 2 additional chains when you use a Melee Attack and hit at least one enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 156,
+      "propertyName": "Chance to Throw an Axe at a nearby enemy on hit (1 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 157,
+      "propertyName": "Gain a stack of Void Barrier every 3 seconds while above your endurance threshold\r",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 158,
+      "propertyName": "chance to cast Freezing Concoction on Potion Use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 159,
+      "propertyName": "chance to Cleanse All Ailments on Potion Use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 160,
+      "propertyName": "Chance to gain a stack of Ambition when you hit a boss or rare enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 161,
+      "propertyName": "Melee fire damage with next void melee attack every 2 seconds",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 162,
+      "propertyName": "Ignite chance with next void melee attack every 2 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 163,
+      "propertyName": "Melee void damage with next fire melee attack every 2 seconds",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 164,
+      "propertyName": "Time Rot chance with next fire melee attack every 2 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 165,
+      "propertyName": "Ward Retention per 100% uncapped Cold Resistance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 166,
+      "propertyName": "Chance to summon a Storm Totem on hit (8 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 167,
+      "propertyName": "Current Health converted to Ward when you directly cast a Necrotic Spell",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 168,
+      "propertyName": "Current Health converted to Ward when you directly cast an Elemental Spell",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 169,
+      "propertyName": "Chance to gain a stack of Abyssal Rite on Crit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 170,
+      "propertyName": "Chance for every 3rd fire spell to crit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 171,
+      "propertyName": "Increased Attack And Cast Speed with a Sword or Axe",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 172,
+      "propertyName": "Chance to gain Haste for 2 seconds on Heal while below Endurance Threshold (5 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 173,
+      "propertyName": "Ward consumed when you use a melee attack",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 174,
+      "propertyName": "chance to cast Smite at a nearby enemy on Kill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 175,
+      "propertyName": "Critical Strike Chance for Totems per Intelligence",
+      "roundingForAdded": 3,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 176,
+      "propertyName": "Spell Damage per Strength",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 177,
+      "propertyName": "Dodge Converted to Armor",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 178,
+      "propertyName": "Chance to gain 50 Health on Minion Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 179,
+      "propertyName": "Chance to gain 50 Health on Minion Death",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 180,
+      "propertyName": "Bow Physical Damage if you have at least 40 Dexterity",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 181,
+      "propertyName": "Chance for Downed Minions to Revive after 2 seconds (6 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 182,
+      "propertyName": "Cold Penetration with Frostbite per 10% Freeze Rate Multiplier",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 183,
+      "propertyName": "Increased Movement Speed per 2 Dexterity (up to 20%)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 184,
+      "propertyName": "Chance to Cast Thorn Shield on yourself when you directly use a Physical Skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 185,
+      "propertyName": "Spell Physical Damage per 3 Attunement",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 186,
+      "propertyName": "Chance each second to cast Summon Vines if you are Moving",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 187,
+      "propertyName": "Crit Avoidance per Attunement",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 188,
+      "propertyName": "Increased Armor per Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 189,
+      "propertyName": "Increased Melee Damage per Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 190,
+      "propertyName": "Missing Health regained on Potion Use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 191,
+      "propertyName": "Missing Health gained as Ward on Potion Use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 192,
+      "propertyName": "Increased Flat Damage Reflected to Attackers per 100 Armor",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 193,
+      "propertyName": "Increased Flat Damage Reflected to Attackers per Attunement",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 194,
+      "propertyName": "Dodge Chance converted to Glancing Blow Chance at twice its value",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 195,
+      "propertyName": "Melee Poison Chance per 1% uncapped Fire Resistance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 196,
+      "propertyName": "Increased Melee Cold Damage per 10 Health Regen, up to 2000%",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 197,
+      "propertyName": "When you use a movement skill stats on Julra's Stardial are tripled for 4 seconds (12 second cooldown)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 198,
+      "propertyName": "When you kill a stunned enemy a different nearby enemy is stunned for 2 seconds (excludes bosses)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 199,
+      "propertyName": "Stats on your gloves also apply to your minions",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 200,
+      "propertyName": "Health Regen also applies to Ward",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 201,
+      "propertyName": "Freeze Rate Multiplier for you and your minions per Attunement",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 202,
+      "propertyName": "Melee Critical Strike Chance While Below 100 Dodge Rating",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 203,
+      "propertyName": "Chance to Cast Dragon Fire on Crit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 204,
+      "propertyName": "Health Gained on Companion Hit",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 205,
+      "propertyName": "More Hit Damage if you have only one Singularity equipped",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 206,
+      "propertyName": "Singularities Equipped",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 207,
+      "propertyName": "Chance to Reveal a Wandering Spirit on Kill (1 Second Cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 208,
+      "propertyName": "Current Health is set to Endurance Threshold",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 209,
+      "propertyName": "Viscera gained per 2 seconds",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 210,
+      "propertyName": "Chance to gain a stack of Viscera on Kill or when you hit a boss or rare enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 211,
+      "propertyName": "Remaining Volcanic Orb Cooldown Recovered when you use a Melee Attack and hit at least one Enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 212,
+      "propertyName": "Chance to cast Sacrifice on your lowest health minion on minion death (1 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 213,
+      "propertyName": "Stacks of Mountains Endurance for each second you have not moved (Maximum of 3)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 214,
+      "propertyName": "Chance to Gain Ward on Hit per Ignite and Damned on You and the Target (up to 2000 ward, 2 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 215,
+      "propertyName": "Cannot be Stunned by Blocked Hits",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 216,
+      "propertyName": "Block Chance per point of your Lowest Attribute",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 217,
+      "propertyName": "Seconds of Damage Immunity After being Hit (15 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 218,
+      "propertyName": "Block Chance per 5 Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 219,
+      "propertyName": "Endurance per 5 Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 220,
+      "propertyName": "Block Chance per 2% Endurance above the Cap",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 221,
+      "propertyName": "Chance to Ignite yourself when you use a Fire or Necrotic Skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 222,
+      "propertyName": "Spell Damage for Fire and Necrotic skills per stack of Ignite on You (up to 20 stacks)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 223,
+      "propertyName": "Chance to gain Frenzy for 2 seconds when you directly use a Fire or Necrotic skill per stack of Ignite on You",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 224,
+      "propertyName": "Chance to Ignite yourself on Kill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 225,
+      "propertyName": "Necrotic Penetration with Damned per stack of Damned on you (up to 40) for Spells you cast while Damned",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 226,
+      "propertyName": "Heal all totems and give them 2 seconds of Damage Immunity when you use a Potion",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 227,
+      "propertyName": "Spell Lightning Damage for all existing totems for 20 seconds when you directly cast Summon Storm Totem",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 228,
+      "propertyName": "More Damage with your next Movement Skill Every 3 Seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 229,
+      "propertyName": "Lightning Penetration with your next Throwing Attack within two seconds when you directly use a Lightning Bow Attack",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 230,
+      "propertyName": "Lightning Penetration with your next Throwing Attack within two seconds when you directly use a Lightning Bow Attack",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 231,
+      "propertyName": "Seconds of Haste when you proc both of Zeurial's Hunt's effects within 2 seconds",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 232,
+      "propertyName": "Chance to Gain 75 Ward when you hit a Shocked Enemy (up to 3 times per 2 seconds)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 233,
+      "propertyName": "Chance per 20 Ward to gain Haste for 2 seconds when you directly use a Melee Attack",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 234,
+      "propertyName": "Increased Damage with Elemental Melee Attacks per 200 Ward",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 235,
+      "propertyName": "Chance to repeat Bow Ability",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 236,
+      "propertyName": "Gathering Fury increased attack speed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 237,
+      "propertyName": "Ward Gain on Transform",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 238,
+      "propertyName": "Ward Retention on Transform",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 239,
+      "propertyName": "More Dodge Rating for 4 seconds when you use a Potion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 240,
+      "propertyName": "Damage Taken if you have at least 180 Total Attributes",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 241,
+      "propertyName": "Ward gained when you Dodge While Channelling",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 242,
+      "propertyName": "Mana gained when you Dodge While Channelling",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 243,
+      "propertyName": "Increased Physical Damage while Dual Wielding",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 244,
+      "propertyName": "Melee Damage if you have at least 200 Total Attributes",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 245,
+      "propertyName": "Chance to gain Haste for 2 seconds when you Block a hit from a Distant Enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 246,
+      "propertyName": "Damage Taken for each Meteor you have cast recently (up to 18)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 247,
+      "propertyName": "Chance to Cast Meteor on Crit if above 0 Mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 248,
+      "propertyName": "Mana gained on Potion Use for each Meteor you have cast recently (up to 200 Mana gained)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 249,
+      "propertyName": "Potion Slots if you have at least 900 Mana",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 250,
+      "propertyName": "Damage Taken from Chilled Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 251,
+      "propertyName": "Damage Taken from Ignited Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 252,
+      "propertyName": "Damage Taken from Shocked Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 253,
+      "propertyName": "Chance to throw Shurikens on Block",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 254,
+      "propertyName": "Damage Taken per 2% Resistance above the normal cap",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 255,
+      "propertyName": "Maximum Less Damage Taken per 2% Resistance above the normal cap",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 256,
+      "propertyName": "increased Mana Regen per 100 Maximum Mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 257,
+      "propertyName": "Damage Taken from enemies within 4 metres",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 258,
+      "propertyName": "Block Chance against enemies within 4 metres",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 259,
+      "propertyName": "Damage Taken if you have at least 1000 Ward",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 260,
+      "propertyName": "increased Spell Critical Strike Chance per Intelligence",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 261,
+      "propertyName": "Damage Taken while you have at least 400 Current Mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 262,
+      "propertyName": "Damage Taken with at least 400 Current Mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 263,
+      "propertyName": "Current Health and Ward lost when you directly cast a Spell",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 264,
+      "propertyName": "chance to throw a Burning Dagger on hit (up to 2 times per second)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 265,
+      "propertyName": "Chance to throw a Burning Dagger when you drink a Potion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 266,
+      "propertyName": "chance to gain Frozen Vengeance on Minion Death",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 267,
+      "propertyName": "Stats that normally apply for 4 seconds after you use a potion instead apply at all times",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 268,
+      "propertyName": "Ward gained on hit per 10 missing mana if your current ward is lower than your missing health",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 269,
+      "propertyName": "Seconds of Disabled Health Leech after you directy cast a Spell ",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 270,
+      "propertyName": "Gain a stack of Golden Aegis each second",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 271,
+      "propertyName": "Block Chance per stack of Golden Aegis",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 272,
+      "propertyName": "Block Effectiveness per 1% Total Uncapped Resistance",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 273,
+      "propertyName": "chance to gain Haste for 3 seconds when a nearby enemy dies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 274,
+      "propertyName": "Ward gained when you gain Haste or refresh its duration",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 275,
+      "propertyName": "Damage over Time taken while you have Haste",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 276,
+      "propertyName": "seconds of Haste and Frenzy for your minions when you gain Haste or refresh its duration",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 277,
+      "propertyName": "chance on Hit to grant one of your minions Aspect of the Spider (2 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 278,
+      "propertyName": "Effective Endurance Threshold per 10 Missing Mana",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 279,
+      "propertyName": "Minimum percentage of health to gain when a nearby enemy or ally dies (2 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 280,
+      "propertyName": "Maximum percentage of health to gain when a nearby enemy or ally dies (2 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 281,
+      "propertyName": "Damage Taken per Active Shadow (1 in 6 chance)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 282,
+      "propertyName": "Damage over Time Taken from Slowed Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 283,
+      "propertyName": "chance on hit with Lightning Skills to grant your Wolves additional Melee Lightning Damage equal to your Melee Lightning Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 284,
+      "propertyName": "Block Chance per Strength against enemies within 4 metres",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 285,
+      "propertyName": "Health per Vitality",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 286,
+      "propertyName": "Armor against Shocked Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 287,
+      "propertyName": "Block Chance per Shock on the Attacker",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 288,
+      "propertyName": "Ward per Second per 3% uncapped Necrotic Resistance",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 289,
+      "propertyName": "Mana gained when you use 3 zero mana cost skills in a row (3 second cooldown)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 290,
+      "propertyName": "Ward gained when you use 3 zero mana cost skills in a row (3 second cooldown)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 291,
+      "propertyName": "Damage Taken from Ignited Shocked or Chilled Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 292,
+      "propertyName": "Ward gained when you directly Cast a Spell",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 293,
+      "propertyName": "increased Mana Regen if you have at least 50 Intelligence",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 294,
+      "propertyName": "increased Health Regen if you have at least 50 Intelligence",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 295,
+      "propertyName": "Spell Damage with your next Direct Spell Cast after using a Traversal Skill",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 296,
+      "propertyName": "Critical Strike Chance with your next Direct Spell Cast after using a Traversal Skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 297,
+      "propertyName": "Critical Strike Chance with your next Direct Spell Cast after using a Traversal Skill if it costs at least 30 Mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 298,
+      "propertyName": "Stats that grant bonus spell damage and crit chance for your next direct spell cast after using a traversal skill also apply to traversal skills themselves",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 299,
+      "propertyName": "Ward Gained when you use a Traversal Skill",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 300,
+      "propertyName": "Ward per Second if you have at least 60 Intelligence",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 301,
+      "propertyName": "Seconds of Rune of Dilation after using a Traversal Skill",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 302,
+      "propertyName": "Ward Gained when you directly use an Area Skill",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 303,
+      "propertyName": "Ward Gained per Active Rune when you directly use an Area Skill",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 304,
+      "propertyName": "Armor Shred Chance converted to Frostbite Chance for Cold Spells",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 305,
+      "propertyName": "increased Cooldown Recovery Speed per 6 Intelligence",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 306,
+      "propertyName": "Chance to inflict Brand of Deception on hit with Lightning skills that cost at least 15 mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 307,
+      "propertyName": "Brand of Deception Damage per 1% Shock Chance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 308,
+      "propertyName": "Ward Gained when you hit a Branded Boss or Rare Enemy with a Spell",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 309,
+      "propertyName": "Endurance applies to all damage dealt to mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 310,
+      "propertyName": "Endurance applies to All Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 311,
+      "propertyName": "Armor gained as Ward after channelling for 2 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 312,
+      "propertyName": "Critical Strike Multiplier per 100 ward against bosses and rare enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 313,
+      "propertyName": "Ward Gained every 2 seconds",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 314,
+      "propertyName": "Ward Gained every 2 seconds if you have a Heo Rune or are standing in your Glyph of Dominion",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 315,
+      "propertyName": "Chance to gain Runeword Cataclysm on Crit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 316,
+      "propertyName": "Chance to gain Runeword Hurricane when you directly use a Lightning Skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 317,
+      "propertyName": "Chance to gain Runeword Avalanche when you directly use a Cold Skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 318,
+      "propertyName": "Chance to gain Runeword Inferno when you directly use a Fire Skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 319,
+      "propertyName": "increased Runeword Buff Duration",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 320,
+      "propertyName": "Chance when you gain a Runeword Buff for Party Members within 16 metres to also Gain the buff",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 321,
+      "propertyName": "Critical Strike Avoidance against Shocked Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 322,
+      "propertyName": "Endurance Threshold per stack of Ignite on the Attacker",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 323,
+      "propertyName": "Armor per stack of Shock on the Attacker",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 324,
+      "propertyName": "increased Spell Damage per 1% increased Movement Speed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 325,
+      "propertyName": "Maximum Mana gained as Endurance Threshold",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 326,
+      "propertyName": "Elemental Bees Per 10 Seconds",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 327,
+      "propertyName": "chance to gain Fire Aura each Second",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 328,
+      "propertyName": "Ward Gained on Hit with Hydrahedron",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 329,
+      "propertyName": "chance to Invoke Hydrahedron on kill with fire skills (9 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 330,
+      "propertyName": "Seconds of Haste after you use a Traversal Skill",
+      "roundingForAdded": 2,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 331,
+      "propertyName": "Seconds of Frenzy after you use a Traversal Skill",
+      "roundingForAdded": 2,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 332,
+      "propertyName": "Ward gained per 10 Missing Mana when you use a Traversal Skill",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 333,
+      "propertyName": "Minions teleported around you after you use a Traversal Skill",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 334,
+      "propertyName": "Endurance Threshold if you have not been Hit Recently",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 335,
+      "propertyName": "Ward Gained on Potion Use per 10 Intelligence",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 336,
+      "propertyName": "Mana Gained on Potion Use",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 337,
+      "propertyName": "Seconds of Traversal Skill Cooldowns Recovered on Potion Use",
+      "roundingForAdded": 2,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 338,
+      "propertyName": "Bees Summoned on Potion Use",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 339,
+      "propertyName": "Intelligence Equals Strength",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 340,
+      "propertyName": "Damage Taken while Leeching",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 341,
+      "propertyName": "increased Area for Area Skills per 3 Dexterity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 342,
+      "propertyName": "increased Cast Speed per 2 Intelligence",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 343,
+      "propertyName": "Mana Gained on Potion Use per 4 Intelligence",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 344,
+      "propertyName": "The Cuckoo may permanently change into a random exalted item when a nearby enemy dies",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 345,
+      "propertyName": "Current mana gained as ward per second",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 346,
+      "propertyName": "Damage Taken from Ignited Damned or Bleeding Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 347,
+      "propertyName": "Damage Taken from Cursed Enemies\t",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 348,
+      "propertyName": "Health Leech Against Cursed Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 349,
+      "propertyName": "Cleanse Torment when damage leaves you below half health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 350,
+      "propertyName": "Gain Bleed Overload when you use a Physical skill and enemies within 15 meters have a combined 25 stacks of bleed or more",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 351,
+      "propertyName": "Rip Blood from up to 5 nearby enemies when you gain Bleed Overload",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 352,
+      "propertyName": "Chance per Curse to gain 13 Mana on hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 353,
+      "propertyName": "Ward per second per Intelligence while channeling",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 354,
+      "propertyName": "More Armor per Curse on the attacker",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 355,
+      "propertyName": "Ward Decay Threshold per uncapped Necrotic Resistance",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 356,
+      "propertyName": "Damage Taken per Curse on attacker",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 357,
+      "propertyName": "Gain Poison Overload when you use a Damage Over Time skill and enemies within 15 meters have a combined 25 stacks of poison or more",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 358,
+      "propertyName": "Poisons spread to nearby enemies from poisoned enemies within 15 meters when you use a potion",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 359,
+      "propertyName": "Chance to deal double damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 360,
+      "propertyName": "Chance to deal double damage per curse on the target",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 361,
+      "propertyName": "Critical Strike Multiplier when dealing double damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 362,
+      "propertyName": "Inflict Damned on yourself when you or your minions kill an enemy or take a hit",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 363,
+      "propertyName": "Gain Damned Overload when you use a Necrotic skill and enemies within 15 meters have a combined 20 stacks of damned or more",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 364,
+      "propertyName": "Chain Damned enemies to the ground for 2 seconds when you gain Damned Overload",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 365,
+      "propertyName": "Chance to chain nearby Damned enemies to the ground each second while you have Damned Overload",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 366,
+      "propertyName": "When you gain Ignite Overload or Damned Overload all ignited and damned enemies within 15 meters are inflicted with Witchfire",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 367,
+      "propertyName": "Witchfires spread to nearby enemies from Witchfired enemies you hit while you have Ignite Overload or Damned Overload",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 368,
+      "propertyName": "Gain Ignite Overload when you use a Fire skill and enemies within 15 meters have a combined 25 stacks of ignite or more",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 369,
+      "propertyName": "Strike up to 3 nearby enemies with Flame Whip when you gain Ignite Overload",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 370,
+      "propertyName": "Strike a nearby enemy with Flame Whip when you kill an ignited enemy or hit an ignited boss or rare enemy while you have Ignite Overload",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 371,
+      "propertyName": "Chance to gain Haste when you kill a cursed enemy or hit a cursed boss or rare enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 372,
+      "propertyName": "Nearby enemies afflicted with Anguish when you directly cast a Curse skill",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 373,
+      "propertyName": "Damage Taken from Withered enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 374,
+      "propertyName": "Hitting a boss or rare enemy also triggers the damage from Anguish",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 375,
+      "propertyName": "Ward gained per curse cleansed on self and nearby allies when a hit leaves you below 35% health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 376,
+      "propertyName": "More Witchfire damage per Ignite Chance with Fire Skills",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 377,
+      "propertyName": "More Witchfire damage per Damned Chance with Necrotic Skills",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 378,
+      "propertyName": "Mana per Intelligence",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 379,
+      "propertyName": "More damage over time per active Ailment Overload",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 380,
+      "propertyName": "More damage per Negative Ailment on You",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 381,
+      "propertyName": "Cast Defiling Nova when you gain Poison Overload",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 382,
+      "propertyName": "Belt Stat Multiplier for 1 second on Potion Use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 383,
+      "propertyName": "Potion Slot per equipped Weaver Item",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 384,
+      "propertyName": "Max Health gained as Endurance Threshold if you have not been hit in the last 4 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 385,
+      "propertyName": "more Damage while you have Haste",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 386,
+      "propertyName": "Chance to throw Caltrops on dodge with enemy nearby",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 387,
+      "propertyName": "Mana gained on Dodge",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 388,
+      "propertyName": "UNUSED",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 389,
+      "propertyName": "Block Effectiveness per Dexterity",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 390,
+      "propertyName": "Melee damage per Dexterity with a Spear",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 391,
+      "propertyName": "Ability on Bar which grants 3 Silver Shroud",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 392,
+      "propertyName": "Block Chance converted to Glancing Blow chance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 393,
+      "propertyName": "Glancing Blow chance is doubled if not hit in the last 4 seconds",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 394,
+      "propertyName": "Minion Critical Strike Multiplier per 1% uncapped Critical Strike Avoidance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 395,
+      "propertyName": "Seconds of Haste on Potion use",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 396,
+      "propertyName": "Armor per dexterity",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 397,
+      "propertyName": "Health gained on Minion Crit",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 398,
+      "propertyName": "Chance to retaliate with Shield Throw on Block (up to 2 times per second)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 399,
+      "propertyName": "Increased Cast Speed while Cursed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 400,
+      "propertyName": "Increased Damage Over Time while you have an Ailment Overload",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 401,
+      "propertyName": "Cinder Strike Melee Damage per Falcon Hit in the past 6 seconds if you are unarmed",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 402,
+      "propertyName": "increased Cinder Strike Area per Falcon Hit in the past 6 seconds if you are unarmed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 403,
+      "propertyName": "Falcon Melee Damage for 4 seconds on Crit (1 second cooldown)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 404,
+      "propertyName": "Falcon Ability Remaining Cooldown Recovery on Crit (1 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 405,
+      "propertyName": "to 75% less Damage depending on Area Level for You and your Minions",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 406,
+      "propertyName": "to 200% more Damage Taken depending on Area Level for You and your Minions",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 407,
+      "propertyName": "increased Movement Speed per 4 Character Levels",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 408,
+      "propertyName": "increased Mana Regen per 3 Attunement",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 409,
+      "propertyName": "chance to recover 8% of Aerial Assault's remaining cooldown on Throwing Hit (up to 3 times)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 410,
+      "propertyName": "chance on Parry to restore you and a random minion to full health and grant Frenzy for 5 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 411,
+      "propertyName": "Melee Damage while you have Frenzy",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 412,
+      "propertyName": "Lethal Mirage's remaining cooldown recovered on Melee Hit (up to 12 times)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 413,
+      "propertyName": "Lightning Penetration per 5 Dexterity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 414,
+      "propertyName": "Void Penetration per 5 Dexterity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 415,
+      "propertyName": "Sigils of Hope Mana Cost consumed to cast it every 6 seconds while above half mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 416,
+      "propertyName": "Sacrifice Mana Cost consumed to automatically Sacrifice Minions after 2 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 417,
+      "propertyName": "Parry Chance with Traitor's Tongue equipped in the mainhand",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 418,
+      "propertyName": "Critical Strike Chance with Traitor's Tongue equipped in the offhand",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 419,
+      "propertyName": "Critical Strike Chance with non-channeled skills if you have not dealt a Critical Strike Recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 420,
+      "propertyName": "Melee Cold Penetration per 3 Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 421,
+      "propertyName": "Spell Lightning Penetration per 5 Attunement",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 422,
+      "propertyName": "Stun Avoidance per Attunement",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 423,
+      "propertyName": "Increased Health Regeneration per Uncapped Endurance Threshold",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 424,
+      "propertyName": "Health Regeneration per 3 Attunement",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 425,
+      "propertyName": "Dodge Rating converted to Endurance Threshold",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 426,
+      "propertyName": "Ward Decay Threshold per Intelligence",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 427,
+      "propertyName": "Increased Critical Strike Chance per Dexterity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 428,
+      "propertyName": "Chance to cast Frost Claw when you use a melee attack and hit at least one enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 429,
+      "propertyName": "Ward regen per second per 10 Maximum Mana",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 430,
+      "propertyName": "Armor Mitigation also applies to Damage over Time per 2 Attunement",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 431,
+      "propertyName": "Critical Strike Multiplier per 2 Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 432,
+      "propertyName": "Armor given as Healing to Minions when you use a Potion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 433,
+      "propertyName": "Increased Attack Speed for Minions for 3 seconds after using a skill that costs at least 20 mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 434,
+      "propertyName": "Physical and Fire Penetration per 5 Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 435,
+      "propertyName": "Less damage taken. This effect is doubled if you have 50% or more block chance.",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 436,
+      "propertyName": "Less Fire Damage taken per 10% Fire Resistance above cap",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 437,
+      "propertyName": "Maximum less fire damage taken from fire resistance above cap",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 438,
+      "propertyName": "Increased Area per stack of Stalwart consumed when using a melee or throwing area skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 439,
+      "propertyName": "Throwing Critical Strike Chance per 5 Dexterity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 440,
+      "propertyName": "More Melee Void Damage per 3 Vitality",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 441,
+      "propertyName": "Thorns per 1% Armor Mitigation",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 442,
+      "propertyName": "Critical Strike Chance per 10 Intelligence",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 443,
+      "propertyName": "Ward Gained on Crit (up to 5 times per second)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 444,
+      "propertyName": "chance to cast Voidwinter Bolts when you hit an enemy with Javelin or a Melee Attack (up to 8 times per 2 seconds)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 445,
+      "propertyName": "Added Melee Damage applied as Added Spell Damage to Cold and Void Spells",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 446,
+      "propertyName": "Melee Damage per 2 Attunement",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 447,
+      "propertyName": "Spell Damage per 2 Strength",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 448,
+      "propertyName": "chance to cast Smite on Melee hit (up to 3 times per second)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 449,
+      "propertyName": "Seconds of Haste after you use Evade",
+      "roundingForAdded": 2,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 450,
+      "propertyName": "Slow and Chill Immunity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 451,
+      "propertyName": "Bleed Immunity while on Low Health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 452,
+      "propertyName": "Blind Immunity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 453,
+      "propertyName": "Chill Immunity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 454,
+      "propertyName": "Armor against Chilled Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 455,
+      "propertyName": "Armor against Blinded Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 456,
+      "propertyName": "chance to transfer all stacks of Shock on you to nearby enemies when you use Evade",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 457,
+      "propertyName": "chance to cast Static Orb when you Evade for 90% of its mana cost",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 458,
+      "propertyName": "Current Health and Ward lost when you use Evade",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 459,
+      "propertyName": "Seconds of Frenzy after you use Evade",
+      "roundingForAdded": 2,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 460,
+      "propertyName": "chance to refund 20% of mana cost, doubled at 300 mana or tripled at 1000 mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 461,
+      "propertyName": "chance to inflict Spark Charge on hit with skills that cost at least 40 mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 462,
+      "propertyName": "chance to take 0 Damage when Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 463,
+      "propertyName": "Endurance Threshold added as Ward Decay Threshold",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 464,
+      "propertyName": "More Spell Damage per Mana Cost",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 465,
+      "propertyName": "Threat Generated",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 466,
+      "propertyName": "Ward gained on Elemental Arrow used",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 467,
+      "propertyName": "Slow Immunity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 468,
+      "propertyName": "Increased Health Regen per Strength for you and your Companions",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 469,
+      "propertyName": "Swiftness",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 470,
+      "propertyName": "chance to gain Dusk Shroud on Dodge",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 471,
+      "propertyName": "No Ward",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 472,
+      "propertyName": "No Ward Gain in Combat",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 473,
+      "propertyName": "Max Health gained as Ward Decay Threshold",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 474,
+      "propertyName": "Max Health gained as Ward per Second",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 475,
+      "propertyName": "chance to gain Dilation when you directly use a Melee Attack and hit at least one enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 476,
+      "propertyName": "increased Area for Melee Area Skills per 1 Mana Cost",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 477,
+      "propertyName": "Critical Strike Chance for Melee Attacks per 1 Mana Cost",
+      "roundingForAdded": 3,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 478,
+      "propertyName": "Melee Critical Strike multiplier per 10 Max Mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 479,
+      "propertyName": "Create a Wandering Spirit on direct Fire, Necrotic, or Void Skill Use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 480,
+      "propertyName": "Cast Doom Pulse when you directly cast a Fire, Cold, Lightning, Necrotic, or Void Spell.",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 481,
+      "propertyName": "Mana spent gained as Maximum Mana for 5 seconds (up to 500)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 482,
+      "propertyName": "Chance to Upgrade when you slay a Harbinger",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 483,
+      "propertyName": "Endurance Threshold per Uncapped Elemental Resistance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 484,
+      "propertyName": "Increased Bleed Duration per Endurance Threshold",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 485,
+      "propertyName": "Endurance Threshold per Attunement",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 486,
+      "propertyName": "Increased Health Regen per Attunement",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 487,
+      "propertyName": "Fire Resistance Shred Chance per Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 488,
+      "propertyName": "More Lightning Damage Over Time per 1% Lightning Critical Strike Multiplier",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 489,
+      "propertyName": "Fire Penetration per 1% increased Healing Effectiveness",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 490,
+      "propertyName": "Damage Taken from Time Rotting Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 491,
+      "propertyName": "More Time Rot Damage per 1% Global Slow Chance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 492,
+      "propertyName": "More Time Rot Damage per 1% Global Time Rot Chance with Void Skills",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 493,
+      "propertyName": "More Time Rot Damage per 1% Increased Attack, Cast, or Throwing Speed, whichever is lowest",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 494,
+      "propertyName": "Haste gives block chance instead of increased movement speed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 495,
+      "propertyName": "Tolmat's Historic Minions",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 496,
+      "propertyName": "Damage Redirected to your Highest Health Minion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 497,
+      "propertyName": "Maximum Primordial Items",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 498,
+      "propertyName": "Hit Damage Taken from Bosses and Rare enemies is dealt over 4 seconds instead",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 499,
+      "propertyName": "Mana Spent Reflected to you as Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 500,
+      "propertyName": "Chance to gain a Storm Stack when you directly use a melee attack\r and hit at least one enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 501,
+      "propertyName": "Ward per Second for each Curse affecting you",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 502,
+      "propertyName": "Crystalwind stacks gained per second while moving",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 503,
+      "propertyName": "Crystalwind stacks gained when you use Evade",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 504,
+      "propertyName": "Chance to Slow Bosses and Rare Enemies on hit per stack of Crystalwind consumed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 505,
+      "propertyName": "Chance to Petrify other enemies on hit per stack of Crystalwind consumed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 506,
+      "propertyName": "Damage per stack of Crystalwind consumed",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 507,
+      "propertyName": "Critical Strike Chance applies to Potion Use Crit Chance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 508,
+      "propertyName": "Chance to cast Smite on hit (max 6 per 10 seconds, this cooldown resets when you use a potion)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 509,
+      "propertyName": "Volatile Reversal cooldown reset on potion use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 510,
+      "propertyName": "Stats on this item are doubled for 5 seconds after hitting a boss or rare enemy that is low life",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 511,
+      "propertyName": "More Critical Strike Multiplier per Slow on the Target",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 512,
+      "propertyName": "Chance to inflict Spiders on Melee Hit per equipped Weaver's Will Item",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 513,
+      "propertyName": "Critical Strike Multiplier against Frozen Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 514,
+      "propertyName": "Melee Fire Damage per Forged Weapon",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 515,
+      "propertyName": "Endurance Threshold per Strength",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 516,
+      "propertyName": "Increased Duration of Bleed, Poison, and Electrify per equipped Weaver's Will item (up to 5)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 517,
+      "propertyName": "Weapon Stat Multiplier for Casts Consuming Elemental Essence",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 518,
+      "propertyName": "Amulet Stat Multiplier for Chosen Minion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 519,
+      "propertyName": "You have Haste",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 520,
+      "propertyName": "While you have both Ignite Overload and Damned Overload, enemies within 10 meters are inflicted with Witchfire every second",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 521,
+      "propertyName": "More Witchfire Damage per increased Curse Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 522,
+      "propertyName": "Chance every second for each enemy looking at you to be Petrified for 2 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 523,
+      "propertyName": "Chance on block to Petrify the attacker for 2 seconds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 524,
+      "propertyName": "Block Effectiveness applies to Damage over Time as if it had been Blocked",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 525,
+      "propertyName": "Damage Reduction to Health below Endurance Threshold with Delayed Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 526,
+      "propertyName": "chance to cast Glacier along Evade path",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 527,
+      "propertyName": "Max Health gained as Endurance Threshold for 4 seconds when you use a potion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 528,
+      "propertyName": "Critical Strike Multiplier applies to Potions",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 529,
+      "propertyName": "Kismet Stacks gained when you directly use a Melee Attack and hit at least one enemy",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 530,
+      "propertyName": "Melee Critical Strike Multiplier per meter from the target (up to 5 meters)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 531,
+      "propertyName": "Block Chance converted to Parry Chance while not wielding a shield",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 532,
+      "propertyName": "Bleed chance per active Crimson Shroud",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 533,
+      "propertyName": "Ward granted by Silver Shroud per stack",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 534,
+      "propertyName": "Chance to not consume Silver Shrouds when hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 535,
+      "propertyName": "Increased Damage while Dual Wielding",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 536,
+      "propertyName": "Less Damage Over Time taken while using a Shield",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 537,
+      "propertyName": "Spell Damage while wielding a Staff",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 538,
+      "propertyName": "seconds of haste when you use Evade",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 539,
+      "propertyName": "chance to throw Acid Flask on Bow Hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 540,
+      "propertyName": "Ward gained per second while wielding a Staff",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 541,
+      "propertyName": "Ward gained when you use Evade",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 542,
+      "propertyName": "Increased Critical Strike Chance while using a Catalyst",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 543,
+      "propertyName": "Critical Strike Multiplier while using a Catalyst",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 544,
+      "propertyName": "Seconds of Frenzy when you gain Poison Overload",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 545,
+      "propertyName": "Spell Damage while wielding a 2 Handed Axe",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 546,
+      "propertyName": "chance to gain Frenzy for 3 seconds when you Echo an ability",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 547,
+      "propertyName": "Spell Damage while using a Shield",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 548,
+      "propertyName": "Increased mana regeneration while you control a minion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 549,
+      "propertyName": "Endurance Threshold against Shocked enemies",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 550,
+      "propertyName": "seconds of Haste after you transform",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 551,
+      "propertyName": "Chance to not consume a Potion on Potion use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 552,
+      "propertyName": "random Totems teleported to your location after you use a traversal skill",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 553,
+      "propertyName": "Limited to One Companion of Each Type",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 554,
+      "propertyName": "Chance to gain 100 ward when you are hit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 555,
+      "propertyName": "Shock Immunity",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 556,
+      "propertyName": "Ward Gained when you use Enchant Weapon ",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 557,
+      "propertyName": "Evade Charges gained on Potion Use",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 558,
+      "propertyName": "After you use Evade to move next to an enemy you attack it with Gathering Storm",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 559,
+      "propertyName": "Rage gained per second while Transformed",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 560,
+      "propertyName": "Increased Mana regeneration while you control a minion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 561,
+      "propertyName": "Damage taken from slowed enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 562,
+      "propertyName": "Damage Redirected to your Lowest Health Minion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 563,
+      "propertyName": "More Damage Over Time per 1% Current Health Drain",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 564,
+      "propertyName": "Hit Damage Taken is dealt over 4 seconds instead",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 565,
+      "propertyName": "Increased Mana per stack of Spirit Battery",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 566,
+      "propertyName": "All Attributes per Complete Set",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 567,
+      "propertyName": "All Resistances per Complete Set",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 568,
+      "propertyName": "All Skills per Complete Set",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 569,
+      "propertyName": "Chance to Ignite on Hit per 10% uncapped Fire Resistance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 570,
+      "propertyName": "Chance to create a Wildfire Wisp next to an ignited enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 571,
+      "propertyName": "Chance for Wildfire Wisps within 12 metres to repeat Fire Skills",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 572,
+      "propertyName": "Fire Penetration with Ignite for skills cast from Wildfire Wisps",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 573,
+      "propertyName": "Ignite Chance for skills cast from Wildfire Wisps",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 574,
+      "propertyName": "Damage dealt to enemies facing you every 0.5 seconds per 1 Damage Reflected to Attackers",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 575,
+      "propertyName": "Damage Reflected to Bosses and Rare Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 576,
+      "propertyName": "Damage Reflected to Attackers per 10% uncapped Physical Resistance",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 577,
+      "propertyName": "Enemies attacked with Vengeance after using a Movement Skill (max 2 per 12 seconds)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 578,
+      "propertyName": "Summon Anuroks up to your Companion Limit",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 579,
+      "propertyName": "Chance for Primordial Blood on Kill (up to 5 times per 2 seconds)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 580,
+      "propertyName": "Chance to inflict Bleed on Hit for Primordial Blood per stack of Bleed on the enemy releasing it (up to 20)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 581,
+      "propertyName": "chance to cast Flame Ward after using a movement skill within 16 metres of a boss or rare enemy (max 2 per 16 seconds)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 582,
+      "propertyName": "Main Hand Weapon Stat Multiplier per equipped non-idol Magic Item",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 583,
+      "propertyName": "Non-Unique Idol Stat Multiplier",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 584,
+      "propertyName": "Bleed Immunity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 585,
+      "propertyName": "increased Effect of Skill Level modifiers on Legendary Affixes",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 586,
+      "propertyName": "increased effect of stats on your Non-Unique Idols that are a different shape to all other equipped Non-Unique Idols",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 587,
+      "propertyName": "Damage Taken from the First Hit Received from each enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 588,
+      "propertyName": "Overkill damage from your hits and your minion hits dealt as direct damage to surrounding enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 589,
+      "propertyName": "increased effectiveness of Stats on an offhand Exalted Weapon",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 590,
+      "propertyName": "You can deal Super Critical Strikes",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 591,
+      "propertyName": "chance to Repeat your most recent Bow Attack after Evading",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 592,
+      "propertyName": "increased Movement Speed per 10 Dexterity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 593,
+      "propertyName": "chance to gain a stack of Excoriation when Flay kills an enemy or hits a boss or rare enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 594,
+      "propertyName": "chance to Summon a Rift Beast when a hit leaves a Boss or Champion below 40% health (40 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 595,
+      "propertyName": "Maximum Companions if this is your only equipped Unique Idol",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 596,
+      "propertyName": "Health per Attunement",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 597,
+      "propertyName": "Mana per Attunement",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 598,
+      "propertyName": "Damage Taken from Bosses and Rare Enemies while below half mana",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 599,
+      "propertyName": "Health Leech also drains the health of the nearest enemy within 6 meters",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 600,
+      "propertyName": "Health Leech also drains the health of the nearest enemy within 6 meters while you have Frenzy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 601,
+      "propertyName": "Melee Damage leeched as Health while you have Frenzy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 602,
+      "propertyName": "Melee Damage while you have Frenzy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 603,
+      "propertyName": "increased Damage Taken while you have Frenzy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 604,
+      "propertyName": "Seconds of Frenzy on Potion Use",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 605,
+      "propertyName": "increased Effect of Frenzy while Dual Wielding",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 606,
+      "propertyName": "increased Effect of Frenzy per Strength",
+      "roundingForAdded": 3,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 607,
+      "propertyName": "chance to gain Ancestral Pack on minion hit (1 second cooldown)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 608,
+      "propertyName": "Endurance Threshold gained as Ward when you gain a stack of Ancestral Pack",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 609,
+      "propertyName": "Maximum Health applied as a Ward Limit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 610,
+      "propertyName": "Maximum Health gained as Ward Decay Threshold",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 611,
+      "propertyName": "Disabled Mana Regen",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 612,
+      "propertyName": "Mana and 12 Health gained on Hit per 12% increased mana regen (up to 4 times per 2 seconds)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 613,
+      "propertyName": "You have Frenzy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 614,
+      "propertyName": "Maximum Block Chance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 615,
+      "propertyName": "Spirit Battery stacks gained when triggered",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 616,
+      "propertyName": "Summons Tyrannosaur Minion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 617,
+      "propertyName": "playerPropertyAddedUnarmedMeleeDamage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 618,
+      "propertyName": "UNUSED",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 619,
+      "propertyName": "playerPropertyTakesLessHitDamageFromEnemiesInHailOfArrows",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 620,
+      "propertyName": "Critical Strike Chance per 40 Total Attributes",
+      "roundingForAdded": 3,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 621,
+      "propertyName": "Level of All Skills per 120 Total Attributes",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 622,
+      "propertyName": "Armor Mitigation also applies to damage over time per 10 Total Attributes",
+      "roundingForAdded": 3,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 623,
+      "propertyName": "Increased effect of equipped weapon legendary affixes",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 624,
+      "propertyName": "Block Effectiveness per 1% Increased Movement Speed",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 625,
+      "propertyName": "chance to Block hits taken while Moving",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 626,
+      "propertyName": "chance to gain Haste for 5 seconds after you Block",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 627,
+      "propertyName": "Fire Penetration per Intelligence",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 628,
+      "propertyName": "Chill Chance gained as Frostbite chance with Enchant Weapon, Doubled while Active",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 629,
+      "propertyName": "current Health drained per second while above 80% Health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 630,
+      "propertyName": "Chance to not consume a Potion when you use a Potion and restore at least 20% of Maximum Health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 631,
+      "propertyName": "Critical Strike Multiplier per 10 Bleeds on the target, up to 200 Bleeds",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 632,
+      "propertyName": "Damage while Dual Wielding if your Mainhand is a different item type than your Offhand",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 633,
+      "propertyName": "Health Regeneration per Summoned Bee",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 634,
+      "propertyName": "You have a Queen Bee",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 635,
+      "propertyName": "Chance on Block to apply Marked For Death to the Attacker",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 636,
+      "propertyName": "Damage for Melee Attacks per 1 Mana Cost (up to 20)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 637,
+      "propertyName": "Current Health lost when you directly use a Skill",
+      "roundingForAdded": 3,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 638,
+      "propertyName": "Damage Taken while you don't have Frenzy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 639,
+      "propertyName": "Chance for non-Critical Strikes to inflict Critical Vulnerability",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 640,
+      "propertyName": "More Damage per stack of Frailty",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 641,
+      "propertyName": "More Damage against Slowed Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 642,
+      "propertyName": "More Damage against Bleeding Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 643,
+      "propertyName": "Seconds of Frenzy granted to you and your Minions when Enemy damage leaves you at Low Health",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 644,
+      "propertyName": "Parry Chance while Dual Wielding",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 645,
+      "propertyName": "Parry Chance gained as Increased Melee Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 646,
+      "propertyName": "Added Melee Damage gained as Added Spell Damage",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 647,
+      "propertyName": "Increased Armor during Haste",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 648,
+      "propertyName": "Current Health lost on Potion Use",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 649,
+      "propertyName": "All Attributes with at least 7 Corrupted non-Idol Items equipped",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 650,
+      "propertyName": "Strength Converted to Brutality",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 651,
+      "propertyName": "Intelligence Converted to Madness",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 652,
+      "propertyName": "Dexterity Converted to Guile",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 653,
+      "propertyName": "Attunement Converted to Apathy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 654,
+      "propertyName": "Vitality Converted to Rampancy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 655,
+      "propertyName": "Increased effect of Corrupted affixes",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 656,
+      "propertyName": "Increased Area for Area Spells per 10 Madness",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 657,
+      "propertyName": "Chance to take 0 damage when hit per 10 Guile",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 658,
+      "propertyName": "Increased Health per 10 Brutality",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 659,
+      "propertyName": "Increased effect of Haste per 10 Rampancy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 660,
+      "propertyName": "Less Necrotic, Void and Poison damage taken per 10 Apathy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 661,
+      "propertyName": "Storm Sprites summoned around totem (up to 2 times per 6 seconds)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 662,
+      "propertyName": "Melee Fire Damage per 5% uncapped Poison Resistance",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 663,
+      "propertyName": "Increased Mana per 2 Vitality",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 664,
+      "propertyName": "You use a potion every second, even if you have no potions",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 665,
+      "propertyName": "Current Health lost on potion use for every potion used recently",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 666,
+      "propertyName": "You cannot have specializable non-Skeleton minions",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 667,
+      "propertyName": "Increased Effect of Frenzy on you per 1 of your highest Attribute",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 668,
+      "propertyName": "Increased Effect of Haste on you per 1 of your lowest Attribute",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 669,
+      "propertyName": "Increased Area of Effect for Area Skills while you have Frenzy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 670,
+      "propertyName": "Damage Taken is redirected to your Summoned Bear while it is above half health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 671,
+      "propertyName": "Hit Damage taken from Enemies that are afflicted by Spirit Plague is dealt over 4 seconds instead",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 672,
+      "propertyName": "Reduced Bonus Damage Taken from Critical Strikes per 4% Overcapped Physical Resistance (up to 200% Overcapped Physical Resistance)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 673,
+      "propertyName": "Increased Attack Speed per 5% Overcapped Physical Resistance (up to 200% Overcapped Physical Resistance)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 674,
+      "propertyName": "Parry Chance per 10% Overcapped Physical Resistance (up to 200% Overcapped Physical Resistance)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 675,
+      "propertyName": "Armor per 1% Overcapped Physical Resistance (up to 200% Overcapped Physical Resistance)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 676,
+      "propertyName": "Increased Cast Speed per 5% Overcapped Cold Resistance (up to 200% Overcapped Cold Resistance)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 677,
+      "propertyName": "Damage Over Time Taken per 8% Overcapped Cold Resistance (up to 200% Overcapped Cold Resistance)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 678,
+      "propertyName": "Minion Spell Damage per 5% Overcapped Cold Resistance (up to 200% Overcapped Cold Resistance)",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 679,
+      "propertyName": "Increased Cooldown Recovery Speed per 8% Overcapped Cold Resistance (up to 200% Overcapped Cold Resistance)",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 680,
+      "propertyName": "When you use a Companion Ability you and your companions gain Aspect of the Grole",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 681,
+      "propertyName": "Seconds of Cooldown Removed from all active Companion Abilities when you use a Companion Ability",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 682,
+      "propertyName": "Hit Damage taken from Bosses and Rare Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 683,
+      "propertyName": "Chance to inflict Bleed on hit per 1 Mana Cost",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 684,
+      "propertyName": "Ward per Second per 1% Uncapped Cold Resistance",
+      "roundingForAdded": 1,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 685,
+      "propertyName": "Hit Damage taken bypasses Ward",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 686,
+      "propertyName": "Minion Fire Penetration per 3% Overcapped Fire Resistance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 687,
+      "propertyName": "Health Leech does not end upon reaching Full Health",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 688,
+      "propertyName": "Damage over Time leeched as health per 20% Cold Resistance",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 689,
+      "propertyName": "Chance to inflict Bleed on Hit per 1 Strength",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 690,
+      "propertyName": "Chance to Ignite on Hit per 1 Attunement",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 691,
+      "propertyName": "More Damage per stack of Stalwart consumed when using a melee or throwing area skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 692,
+      "propertyName": "Your Block Chance and Block Effectiveness are also granted to your Minions",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 693,
+      "propertyName": "Blood rune chance on Minion Death or Kill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 694,
+      "propertyName": "Blood explosion on Kill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 695,
+      "propertyName": "Bloodice Shard on ability cast",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 696,
+      "propertyName": "Chance to repeat Ability",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 697,
+      "propertyName": "Blood potion chance on kill or when you hit a Boss or Rare Enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 698,
+      "propertyName": "Blood ice explosion chance every 5 minion hits",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 699,
+      "propertyName": "Increased area of effect on third cast",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 700,
+      "propertyName": "Ice Nova when you kill a Boss or Rare Enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 701,
+      "propertyName": "Chance of Deadly Strike on Crit",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 702,
+      "propertyName": "Chance of Ice Nova when you hit a Boss or Rare Enemy",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 703,
+      "propertyName": "Icy Shockwave after using a Traversal Skill",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 704,
+      "propertyName": "Increased damage on third cast",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 705,
+      "propertyName": "Glancing Blow chance per 5 points of Dexterity",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 706,
+      "propertyName": "Potion Health also healed over 4 seconds after using a Potion",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": true
+    },
+    {
+      "tagIndex": 707,
+      "propertyName": "Minion Fire Aura",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 708,
+      "propertyName": "Blood runes on evade",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 709,
+      "propertyName": "UNUSED",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 710,
+      "propertyName": "UNUSED",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 711,
+      "propertyName": "Damage Taken from Chilled or Bleeding Enemies",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    },
+    {
+      "tagIndex": 712,
+      "propertyName": "Monstrous Rage minion explosion on death",
+      "roundingForAdded": 0,
+      "displayAddedAsPercentage": false
+    }
+  ],
+  "abilityProperties": [
+    {
+      "abilityID": 1,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 12,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 75,
+      "slotCount": 18
+    },
+    {
+      "abilityID": 223,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 336,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 78,
+      "slotCount": 28
+    },
+    {
+      "abilityID": 162,
+      "slotCount": 7
+    },
+    {
+      "abilityID": 186,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 106,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 91,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 197,
+      "slotCount": 21
+    },
+    {
+      "abilityID": 218,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 107,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 216,
+      "slotCount": 22
+    },
+    {
+      "abilityID": 267,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 157,
+      "slotCount": 21
+    },
+    {
+      "abilityID": 256,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 285,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 153,
+      "slotCount": 25
+    },
+    {
+      "abilityID": 253,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 137,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 138,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 120,
+      "slotCount": 23
+    },
+    {
+      "abilityID": 291,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 146,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 140,
+      "slotCount": 20
+    },
+    {
+      "abilityID": 68,
+      "slotCount": 4
+    },
+    {
+      "abilityID": 97,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 139,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 143,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 108,
+      "slotCount": 6
+    },
+    {
+      "abilityID": 318,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 294,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 354,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 215,
+      "slotCount": 24
+    },
+    {
+      "abilityID": 87,
+      "slotCount": 2
+    },
+    {
+      "abilityID": 19,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 39,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 250,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 251,
+      "slotCount": 2
+    },
+    {
+      "abilityID": 185,
+      "slotCount": 23
+    },
+    {
+      "abilityID": 0,
+      "slotCount": 0
+    },
+    {
+      "abilityID": 270,
+      "slotCount": 19
+    },
+    {
+      "abilityID": 156,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 195,
+      "slotCount": 21
+    },
+    {
+      "abilityID": 263,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 224,
+      "slotCount": 20
+    },
+    {
+      "abilityID": 340,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 379,
+      "slotCount": 23
+    },
+    {
+      "abilityID": 469,
+      "slotCount": 9
+    },
+    {
+      "abilityID": 440,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 468,
+      "slotCount": 23
+    },
+    {
+      "abilityID": 478,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 377,
+      "slotCount": 20
+    },
+    {
+      "abilityID": 341,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 479,
+      "slotCount": 24
+    },
+    {
+      "abilityID": 481,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 405,
+      "slotCount": 4
+    },
+    {
+      "abilityID": 450,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 50,
+      "slotCount": 20
+    },
+    {
+      "abilityID": 214,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 445,
+      "slotCount": 19
+    },
+    {
+      "abilityID": 473,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 61,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 517,
+      "slotCount": 5
+    },
+    {
+      "abilityID": 505,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 339,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 8,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 510,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 408,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 17,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 179,
+      "slotCount": 19
+    },
+    {
+      "abilityID": 154,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 504,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 7,
+      "slotCount": 20
+    },
+    {
+      "abilityID": 402,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 22,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 536,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 65,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 533,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 565,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 560,
+      "slotCount": 4
+    },
+    {
+      "abilityID": 227,
+      "slotCount": 9
+    },
+    {
+      "abilityID": 582,
+      "slotCount": 5
+    },
+    {
+      "abilityID": 24,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 220,
+      "slotCount": 10
+    },
+    {
+      "abilityID": 559,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 550,
+      "slotCount": 21
+    },
+    {
+      "abilityID": 562,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 206,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 152,
+      "slotCount": 19
+    },
+    {
+      "abilityID": 199,
+      "slotCount": 21
+    },
+    {
+      "abilityID": 370,
+      "slotCount": 21
+    },
+    {
+      "abilityID": 411,
+      "slotCount": 29
+    },
+    {
+      "abilityID": 353,
+      "slotCount": 9
+    },
+    {
+      "abilityID": 166,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 205,
+      "slotCount": 2
+    },
+    {
+      "abilityID": 114,
+      "slotCount": 18
+    },
+    {
+      "abilityID": 66,
+      "slotCount": 4
+    },
+    {
+      "abilityID": 173,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 489,
+      "slotCount": 3
+    },
+    {
+      "abilityID": 689,
+      "slotCount": 48
+    },
+    {
+      "abilityID": 690,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 694,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 696,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 703,
+      "slotCount": 21
+    },
+    {
+      "abilityID": 47,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 708,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 261,
+      "slotCount": 18
+    },
+    {
+      "abilityID": 373,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 727,
+      "slotCount": 24
+    },
+    {
+      "abilityID": 734,
+      "slotCount": 25
+    },
+    {
+      "abilityID": 738,
+      "slotCount": 5
+    },
+    {
+      "abilityID": 722,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 743,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 757,
+      "slotCount": 18
+    },
+    {
+      "abilityID": 733,
+      "slotCount": 11
+    },
+    {
+      "abilityID": 718,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 715,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 721,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 730,
+      "slotCount": 6
+    },
+    {
+      "abilityID": 321,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 731,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 314,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 172,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 508,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 793,
+      "slotCount": 2
+    },
+    {
+      "abilityID": 29,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 782,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 403,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 101,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 797,
+      "slotCount": 3
+    },
+    {
+      "abilityID": 213,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 187,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 88,
+      "slotCount": 10
+    },
+    {
+      "abilityID": 803,
+      "slotCount": 0
+    },
+    {
+      "abilityID": 175,
+      "slotCount": 8
+    },
+    {
+      "abilityID": 201,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 428,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 209,
+      "slotCount": 16
+    },
+    {
+      "abilityID": 284,
+      "slotCount": 1
+    },
+    {
+      "abilityID": 234,
+      "slotCount": 4
+    },
+    {
+      "abilityID": 324,
+      "slotCount": 2
+    },
+    {
+      "abilityID": 56,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 71,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 118,
+      "slotCount": 10
+    },
+    {
+      "abilityID": 219,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 369,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 100,
+      "slotCount": 10
+    },
+    {
+      "abilityID": 231,
+      "slotCount": 5
+    },
+    {
+      "abilityID": 74,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 200,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 194,
+      "slotCount": 10
+    },
+    {
+      "abilityID": 282,
+      "slotCount": 14
+    },
+    {
+      "abilityID": 235,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 807,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 482,
+      "slotCount": 3
+    },
+    {
+      "abilityID": 483,
+      "slotCount": 3
+    },
+    {
+      "abilityID": 735,
+      "slotCount": 9
+    },
+    {
+      "abilityID": 350,
+      "slotCount": 18
+    },
+    {
+      "abilityID": 15,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 816,
+      "slotCount": 3
+    },
+    {
+      "abilityID": 58,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 580,
+      "slotCount": 15
+    },
+    {
+      "abilityID": 881,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 815,
+      "slotCount": 10
+    },
+    {
+      "abilityID": 232,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 167,
+      "slotCount": 10
+    },
+    {
+      "abilityID": 372,
+      "slotCount": 13
+    },
+    {
+      "abilityID": 246,
+      "slotCount": 19
+    },
+    {
+      "abilityID": 394,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 371,
+      "slotCount": 10
+    },
+    {
+      "abilityID": 924,
+      "slotCount": 12
+    },
+    {
+      "abilityID": 553,
+      "slotCount": 17
+    },
+    {
+      "abilityID": 922,
+      "slotCount": 11
+    },
+    {
+      "abilityID": 950,
+      "slotCount": 28
+    },
+    {
+      "abilityID": 923,
+      "slotCount": 13
+    }
+  ],
+  "statPropertyEnum": {
+    "0": "Damage",
+    "1": "AilmentChance",
+    "2": "AttackSpeed",
+    "3": "CastSpeed",
+    "4": "CriticalChance",
+    "5": "CriticalMultiplier",
+    "6": "DamageTaken",
+    "7": "Health",
+    "8": "Mana",
+    "9": "Movespeed",
+    "10": "Armour",
+    "11": "DodgeRating",
+    "12": "StunAvoidance",
+    "13": "FireResistance",
+    "14": "ColdResistance",
+    "15": "LightningResistance",
+    "16": "WardRetention",
+    "17": "HealthRegen",
+    "18": "ManaRegen",
+    "19": "Strength",
+    "20": "Vitality",
+    "21": "Intelligence",
+    "22": "Dexterity",
+    "23": "Attunement",
+    "24": "ManaBeforeHealthPercent",
+    "25": "ChannelCost",
+    "26": "VoidResistance",
+    "27": "NecroticResistance",
+    "28": "PoisonResistance",
+    "29": "BlockChance",
+    "30": "AllResistances",
+    "31": "DamageTakenAsPhysical",
+    "32": "DamageTakenAsFire",
+    "33": "DamageTakenAsCold",
+    "34": "DamageTakenAsLightning",
+    "35": "DamageTakenAsNecrotic",
+    "36": "DamageTakenAsVoid",
+    "37": "DamageTakenAsPoison",
+    "38": "HealthGain",
+    "39": "WardGain",
+    "40": "ManaGain",
+    "41": "AdaptiveSpellDamage",
+    "42": "IncreasedAilmentDuration",
+    "43": "IncreasedAilmentEffect",
+    "44": "IncreasedHealing",
+    "45": "IncreasedStunChance",
+    "46": "AllAttributes",
+    "47": "IncreasedPotionDropRate",
+    "48": "PotionHealth",
+    "49": "PotionSlots",
+    "50": "HasteOnHitChance",
+    "51": "HealthLeech",
+    "52": "ElementalResistance",
+    "53": "BlockEffectiveness",
+    "54": "None",
+    "55": "IncreasedStunImmunityDuration",
+    "56": "StunImmunity",
+    "57": "ManaDrain",
+    "58": "AbilityProperty",
+    "59": "Penetration",
+    "60": "CurrentHealthDrain",
+    "61": "MaximumCompanions",
+    "62": "GlancingBlowChance",
+    "63": "CullPercentFromPassives",
+    "64": "PhysicalResistance",
+    "65": "CullPercentFromWeapon",
+    "66": "ManaCost",
+    "67": "FreezeRateMultiplier",
+    "68": "FreezeAvoidance",
+    "69": "ManaEfficiency",
+    "70": "IncreasedCooldownRecoverySpeed",
+    "71": "ReceivedStunDuration",
+    "72": "NegativePhysicalResistance",
+    "73": "ChillRetaliationChance",
+    "74": "SlowRetaliationChance",
+    "75": "Endurance",
+    "76": "EnduranceThreshold",
+    "77": "NegativeArmour",
+    "78": "NegativeFireResistance",
+    "79": "NegativeColdResistance",
+    "80": "NegativeLightningResistance",
+    "81": "NegativeVoidResistance",
+    "82": "NegativeNecroticResistance",
+    "83": "NegativePoisonResistance",
+    "84": "NegativeElementalResistance",
+    "85": "Thorns",
+    "86": "PercentReflect",
+    "87": "ShockRetaliationChance",
+    "88": "LevelOfSkills",
+    "89": "CritAvoidance",
+    "90": "PotionHealthConvertedToWard",
+    "91": "WardOnPotionUse",
+    "92": "WardRegen",
+    "93": "OverkillLeech",
+    "94": "ManaBeforeWardPercent",
+    "95": "IncreasedStunDuration",
+    "96": "MaximumHealthGainedAsEnduranceThreshold",
+    "97": "ChanceToGain30WardWhenHit",
+    "98": "PlayerProperty",
+    "99": "ManaSpentGainedAsWard",
+    "100": "AilmentConversion",
+    "101": "PerceivedUnimportanceModifier",
+    "102": "IncreasedLeechRate",
+    "103": "MoreFreezeRatePerStackOfChill",
+    "104": "IncreasedDropRate",
+    "105": "IncreasedExperience",
+    "106": "PhysicalAndVoidResistance",
+    "107": "NecroticAndPoisonResistance",
+    "108": "DamageTakenBuff",
+    "109": "IncreasedChanceToBeStunned",
+    "110": "DamageTakenFromNearbyEnemies",
+    "111": "BlockChanceAgainstDistantEnemies",
+    "112": "ChanceToBeCrit",
+    "113": "DamageTakenWhileMoving",
+    "114": "ReducedBonusDamageTakenFromCrits",
+    "115": "DamagePerStackOfAilment",
+    "116": "IncreasedAreaForAreaSkills",
+    "117": "GlobalConditionalDamage",
+    "118": "ArmourMitigationAppliesToDamageOverTime",
+    "119": "WardDecayThreshold",
+    "120": "EffectOfAilmentOnYou",
+    "121": "ParryChance",
+    "122": "CircleOfFortuneLensEffect",
+    "123": "TrackerProperty",
+    "124": "UnimportanceModifier",
+    "125": "FreezeImmunity",
+    "126": "ChanceToCastForAbility",
+    "127": "ChanceToCastForTags",
+    "128": "AilmentImmunity",
+    "129": "AbilityRetaliationChance",
+    "130": "IdolAltarProperty",
+    "131": "GlobalConditionalPenetration",
+    "132": "GlobalConditionalCritChance",
+    "133": "GlobalConditionalCritMulti"
+  }
+}

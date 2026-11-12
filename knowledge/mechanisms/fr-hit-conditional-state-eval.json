@@ -1,0 +1,199 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-conditional-state-eval",
+  "revision": 2,
+  "title": {
+    "zh": "FR 条件状态求值（scenario states 分层覆盖与 fail-closed）",
+    "en": "FR conditional state evaluation (scenario state layering and fail-closed)"
+  },
+  "aliases": [
+    "conditional state",
+    "states",
+    "条件求值",
+    "scenario",
+    "fail-closed",
+    "hit_buffs"
+  ],
+  "selectors": [
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "ignited",
+        "enchant_weapon_active",
+        "frenzy_active",
+        "consume_rhythm_of_fire",
+        "consume_blade_weaving",
+        "ambition_stacks",
+        "enemy_high_health",
+        "mana_ge_300",
+        "target_in_melee_range"
+      ]
+    },
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "state map",
+      "source": "current:matched_instances",
+      "note": "ruleset defaults → snapshot derived.applied_states → profile → top-level states → section states"
+    },
+    {
+      "parameter": "ruleset defaults",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/states/defaults",
+      "unit": "mixed"
+    },
+    {
+      "parameter": "snapshot resolved states",
+      "source": "current:matched_instances",
+      "note": "双持/mana 阈值等已判定事实"
+    },
+    {
+      "parameter": "buff screening",
+      "source": "current:matched_instances",
+      "note": "条件候选的 modeled/not_modeled/unresolved 状态与 next_probe"
+    }
+  ],
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "hit-state-evaluation",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/states；#/effects[*].condition；archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "evaluate_condition",
+    "note": "支持 ignited/enchant_weapon_active/mana_ge_300/boss_or_rare/dual_wield/frenzy/rhythm_consume 等原子；未知条件返回 None（fail-closed），不得当 false 静默丢弃"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/states/defaults",
+      "note": "ruleset 默认状态与 effect condition"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/applied_states",
+      "note": "快照冻结的已判定状态"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/states；#/buffs/applied",
+      "note": "本次 run 的生效状态与筛查"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/fr-bh-convergence-handover.zh-CN.md#5.4 open questions",
+      "note": "条件状态对不齐的风险清单"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles；#/single_hit/states；#/dps/states",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/applied_states",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "FR 的固定条件求值与 BH 的 discover/scenario/evaluate/recompute 通道不等价；共享前需明确固定估算与重算语义",
+      "evidence_locator": "docs/fr-bh-convergence-handover.zh-CN.md#1 第 5 行；#3 FR 独有行为 #6"
+    },
+    {
+      "with": "fr-hit-single-hit-chain",
+      "requirement": "所有条件行在进入各池前求值",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model"
+    },
+    {
+      "with": "fr-hit-rhythm-rotation",
+      "requirement": "循环状态（consume_rhythm_of_fire）与单次状态共用同一 state 空间",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "ignited 的可达性/覆盖率未建模（R5：Arcane Flames/Sunwreath/Firebrand Flare 均可能点燃，但 uptime 无数据）",
+      "enemy_high_health 的阈值与实战平均覆盖率未验证（R20 assumed）",
+      "scenario.profiles 的 legacy_single_skill.comment 与 states 存在语义漂移（注释说关 EW，states 里 EW=true），需 Lead 复核"
+    ],
+    "requery_when": [
+      "scenario states 或 baseline_profile 变化",
+      "新增条件效果/状态"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "none",
+    "stacking_policy": "none",
+    "order_policy": "later layers win；不可判定条件 → contribution 进 excluded（reason=unresolved condition），不进入命中也计 0",
+    "more_group_source": "n/a"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

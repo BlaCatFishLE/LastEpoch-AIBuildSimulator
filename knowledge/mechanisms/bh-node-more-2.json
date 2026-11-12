@@ -1,0 +1,144 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-node-more-2",
+  "revision": 1,
+  "title": {
+    "zh": "Black Hole 节点 2：当前点数 more 映射"
+  },
+  "aliases": [
+    "Tidal Force",
+    "Flaming",
+    "Umbral Core",
+    "Singularity more",
+    "Binary more",
+    "技能树 more",
+    "node more groups"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body",
+      "body_fire",
+      "ignite"
+    ],
+    "tags": [
+      "Fire"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "每个节点的 more 是一个独立 group（node:bh2:<id>）；同一节点多点相加（ruleset value_total），不同节点之间相乘。节点 2/7/10/28 无条件；9 是 Binary 的独立 more（见 bh-binary-system）；23/27 带条件（见 bh-supermassive / bh-weakened-reality）。注意：节点效果引用的 rule-bh-tidal-force / -flaming / -umbral-core / -singularity / -supermassive 未注册在 ruleset.rules[] 中（见 open_questions）。",
+    "required_nodes": [
+      "node:bh2:2"
+    ]
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-more-aggregation",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-more-aggregation]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "current:matched_instances",
+      "per_point": true
+    },
+    {
+      "parameter": "effect",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/skill_tree_nodes",
+      "note": "按 node_id 查已确认 value_per_point，运行时乘当前点数"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ruleset",
+    "symbol": "Ruleset",
+    "note": "Ruleset.tree_more_effects 方法；从 ruleset.skill_tree_nodes 提取 damage more 效果；damage.tree_more_groups 按 group 聚合；计算在 damage.compute_body / ignite._ignite_scaling。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes",
+      "note": "节点文本与每点数值（Tidal Force/Flaming/Umbral Core 等）。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json#/effects",
+      "note": "Tidal Force/Flaming/Singularity 的 Stats.Stat more 构造（代码级）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups",
+      "note": "当前 run 的本体 more 组（含 node:bh2:2/7/10/23/28/9）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups",
+      "note": "Ignite 侧 more 组（继承规则见 bh-ignite-inheritance）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/3/nodes",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_fire_component_golden_numbers",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_skill_node_damage_multipliers",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_skill_node_groups_are_node_scoped",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-more-groups",
+      "requirement": "走统一分组器：组内相加、组间相乘；group 必须来自 ruleset。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#group_more_rows"
+    },
+    {
+      "with": "bh-ignite-inheritance",
+      "requirement": "哪些 node more 进入 Ignite 由 ruleset.ignite.inheritance 决定；不能默认全部继承。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/inheritance"
+    },
+    {
+      "with": "common-tag-match",
+      "requirement": "Flaming 带 Fire 标签，只作用于火分量与 Ignite，不作用于冷分量。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#tree_more_groups"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/skill_tree_nodes",
+      "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes",
+      "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups",
+      "tools/phase3/tests/test_stats.py"
+    ],
+    "open_questions": [],
+    "requery_when": [
+      "补/删悬空 rule_id 后",
+      "新 BD 使用不同节点点数时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

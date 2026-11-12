@@ -1,0 +1,141 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-heat-wave-ignite-clock",
+  "revision": 2,
+  "title": {
+    "zh": "Black Hole Ignite：Heat Wave 独立施加时钟与期望层数",
+    "en": "Black Hole Ignite independent Heat Wave application clock"
+  },
+  "aliases": [
+    "Heat Wave",
+    "Ignite",
+    "application clock",
+    "uncapped fire resistance",
+    "ignite duration"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:6"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "ailment_duration",
+        "ignite"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "dot",
+      "ailment"
+    ],
+    "tags": [
+      "Fire",
+      "DoT",
+      "Ailment"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "bh2:6"
+    ],
+    "notes": "base 40 Fire / 2.5s；每次施放 spawn + k*0.5s 判定，偏移 < duration；每判定期望层数 = 机会×未封顶火抗×0.5。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "chance per point",
+      "source": "knowledge/definitions/black-hole-v3.json#/definition/rules/ignite_model/chance_source",
+      "note": "节点 6 当前 5 点 → chance_total 0.1"
+    },
+    {
+      "parameter": "uncapped fire resistance",
+      "source": "current:matched_instances#/effects resistance 行聚合",
+      "unit": "percent",
+      "note": "当前 948.94（含装备/神像/被动/溢出）"
+    },
+    {
+      "parameter": "ignite duration",
+      "source": "knowledge/definitions/black-hole-v3.json#/definition/rules/row_reclassifications bh:ignite-duration",
+      "unit": "seconds",
+      "note": "property 42 special_tag=1（含被动 Chronomancy）→ 7.648s"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "plan-v3 schedule.ignite",
+    "path": "knowledge/definitions/black-hole-v3.json",
+    "locator": "#/definition/rules/ignite_model"
+  },
+  "handler_ref": {
+    "module": "le_calc.plan_executor_v3",
+    "symbol": "_ignite_core/_ignite_application",
+    "note": "每批判定独立计时并各自到期；期望值模型"
+  },
+  "aggregation": {
+    "operation": "none",
+    "stacking_policy": "additive",
+    "order_policy": "每批判定独立，到期即结束；不延长既有层数",
+    "more_group_source": "贡献行 group（节点 2/7/10/23/28/9 继承，27 排除）"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1",
+      "note": "Ignite base 40 Fire / 2.5s"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/heat-wave-aura-1.5.3.json",
+      "note": "aura applicationInterval=0.5s、applyOnStart=true、每黑洞一个 aura"
+    },
+    {
+      "kind": "validation",
+      "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json",
+      "note": "单次黑洞约 710 层 vs 模型 711.75（15 判定）"
+    },
+    {
+      "kind": "report",
+      "locator": "archive://reports/black-hole/dps-step4-bh-2/result.json",
+      "note": "未封顶火抗 948.94、47.447 层/判定、15 判定、per_stack 13373.3635441（复验 P1 补修后 run）"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_unified_bh_migration.py::BhD8HandOracleTest::test_pure_dot_independent_application_clock_and_expiry",
+    "tools/phase3/tests/test_unified_bh_migration.py::BhD12LegacyMappingTest"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 BH 计算器与 ruleset-bh-stage1-v4 仅作迁移证据；生产路径为 plan-v3。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ],
+  "limitations": [
+    {
+      "item": "整数事件抽样",
+      "reason": "使用期望层数而非整数 roll 抽样；上限/非独立假设未建模。",
+      "blocks_full_dps": false
+    }
+  ]
+}

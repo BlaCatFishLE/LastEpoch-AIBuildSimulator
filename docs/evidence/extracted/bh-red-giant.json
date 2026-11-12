@@ -1,0 +1,81 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-red-giant",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Red Giant 冷转火",
+    "en": "Red Giant: cold-to-fire conversion"
+  },
+  "source_path": "knowledge/mechanisms/bh-red-giant.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-red-giant",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-red-giant]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-bh-red-giant 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Red Giant 冷转火",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body、body_fire、body_cold；伤害标签：Fire、Cold；条件 code：none；必要节点：node:bh2:4",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Red Giant：本体 base cold 转换为 fire（加火、抵消冷；Binary 未启用时净转换为纯火），同时 duration 增加、不再拉怪。added 伤害是否随转换一并改类型在规则包里是显式 v1 假设（apply conversion to added damage too），见 open_questions。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "compute_body：ruleset.has_red_giant 为真时把单分量改造成 Fire；Binary 开启时保留冷分量（见 bh-binary-system）。",
+      "source": "$.handler_ref.note（le_calc.damage.compute_body）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：convert.from/to、node points",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/0/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[14]"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[legacy_single_skill.body_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/0",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[14]"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "节点文本说 'base' cold damage 转换；added spell damage 是否也随转换改类型是规则包显式 v1 假设（structural.red_giant.note）。当前实现把 added 一并按转换后类型结算；需游戏内对照（带 cold/火 added 的 Build 观察伤害类型）。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "不再拉怪只影响命中覆盖/生存，不进入单目标 DPS 模型。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

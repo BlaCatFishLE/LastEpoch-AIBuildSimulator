@@ -1,0 +1,157 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cond-preparation",
+  "revision": 3,
+  "title": {
+    "zh": "Preparation（下一次元素法术 +increased 伤害）",
+    "en": "Preparation (next elemental spell: increased damage)"
+  },
+  "aliases": [
+    "Preparation",
+    "预备",
+    "下一次元素法术",
+    "mg-1:4"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "mg-1:4"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body_fire",
+      "body_cold"
+    ],
+    "tags": [
+      "Spell",
+      "Elemental"
+    ],
+    "conditions": [
+      "player.preparation_ready"
+    ],
+    "notes": "被动按固定刷新间隔提供一次『下一次元素法术』增益，被下一次元素法术消耗；固定条件模式只声明本次施法就绪，不模拟刷新与消耗顺序。效果只作用于本体（Spell/Elemental 标签），不进入 Ignite。",
+    "required_nodes": [
+      "node:mg-1:4"
+    ]
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "passive.preparation",
+    "path": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+    "locator": "effects[id=passive.preparation]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "current:matched_instances",
+      "unit": "points",
+      "note": "按 tree/node 匹配当前点数，不使用历史案例索引或总值。"
+    },
+    {
+      "parameter": "effect values",
+      "source": "tools/phase3/rules/shared-conditional-node-buffs-v1.json#effects[id=passive.preparation]",
+      "note": "per_point × 当前点数，constant 不乘点数；来源证据沿用原条目。"
+    },
+    {
+      "parameter": "state",
+      "source": "current:scenario#/states",
+      "note": "临时 Buff 默认关闭，目标条件单独声明；单次就绪不等于循环常驻。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional_node_buffs",
+    "symbol": "bind / contributions",
+    "note": "按当前树/节点稳定 ID 和点数绑定；统一条件程序执行。Preparation 只进入独立单次评估，不传播到循环。当前接入 charge_dot 执行链，其它执行驱动未签收。"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "draft",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/15",
+      "note": "注册表条目（research=assumed；t=0 就绪与刷新时序未确认）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/15",
+      "note": "当前 run 求值：未声明就绪（默认关闭）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/passive.preparation",
+      "note": "条件重算通道状态：仅单次可声明。"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-preparation]",
+      "note": "规则包 unresolved：v1 不默认生效。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "支持级别分类表。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/passive_tree/nodes/2/points",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.preparation_ready",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/single_cast/preparation_ready",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeEffectDirectionTests::test_preparation_single_cast_only",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeChannelSupportTests::test_cast_state_effects_are_single_cast_only",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_preparation_and_frozen_steel_are_conditional",
+    "archive://docs/reviews/unified-report-buff-restore-20261112.zh-CN.md"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-cast-time",
+      "requirement": "施法动作/时间不改变 Preparation 的消耗语义；循环模拟才需要时序。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/15/support/engine_gap"
+    },
+    {
+      "with": "bh-ignite-scaling-pool",
+      "requirement": "点燃不是 Spell，不继承该 increased（规则包口径）。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-preparation]"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/15",
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-preparation]",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/passive.preparation"
+    ],
+    "open_questions": [
+      "单次测试开始时 Preparation 是否就绪未确认（用户 2026-11-05 确认释放 BH 会消耗它，但 t=0 状态未定）。",
+      "刷新间隔与元素法术消耗顺序未接入；循环口径不支持。",
+      "点燃是否继承 Preparation 的 increased damage 未确认（规则包按 Spell 标签排除）。"
+    ],
+    "requery_when": [
+      "循环时序模拟接入后",
+      "t=0 状态实测后"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared"
+}

@@ -1,0 +1,153 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-node-reflash",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 树节点 16 Reflash（额外命中与 3s 冷却）",
+    "en": "Reflash (Flame Reave tree node 16)"
+  },
+  "source_path": "knowledge/mechanisms/fr-node-reflash.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R1",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/hit_events；#/rotation；#/rules id=R1/R13/R21",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R1 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes entity_id=node:letools:fr11mv:16",
+      "note": "Reflash 节点描述/类型/上限",
+      "source": "$.evidence_refs[0]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:16",
+      "note": "Expands and Returns Again（flag：two additional hits，额外命中 50% less）；Cooldown 3s",
+      "source": "$.evidence_refs[1]"
+    },
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=fr11mv source_id=16",
+      "note": "Reflash 描述/altText：two additional times / 50% less",
+      "source": "$.evidence_refs[5]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 树节点 16 Reflash（额外命中与 3s 冷却）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency、hit；伤害标签：Fire、Melee；条件 code：none；必要节点：node:fr11mv:16",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=frequency；叠层策略=none；顺序/汇总=命中次数 +2 返回（与 node 18 合计 4 击）；冷却 3s 进入 rotation；命中权重固定 50% less；more 分组依据=n/a（flag + cooldown）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "key '16'；两个 role=info：hit_count_returns / cooldown_s；分别被 _hit_count_section 与 _rotation_config 消费",
+      "source": "$.handler_ref.note（le_calc.hit_inputs.FR_SKILL_NODE_SEMANTICS）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、value_per_point、value_total、contribution rows",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=16)"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/nodes(node_id=16)/points"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=16)/effects[*]/value_per_point"
+    },
+    {
+      "pointer": "$/evidence_refs/9/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=16)/effects[*]/value_total"
+    },
+    {
+      "pointer": "$/evidence_refs/10/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[contribution_id prefix=skill:fr11mv:16:]"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "R13 assumed：冷却从何时起算、ICR 公式无游戏真值",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "OQ1：Reflash 与 Flame Caller 的返回是否独立事件（当前按用户裁决 4 击）",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

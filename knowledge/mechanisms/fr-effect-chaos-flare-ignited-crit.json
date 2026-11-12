@@ -1,0 +1,181 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-chaos-flare-ignited-crit",
+  "revision": 2,
+  "title": {
+    "zh": "Chaos Flare：目标 ignited 时 crit chance ×1.2（条件效果）",
+    "en": "Chaos Flare: more critical strike chance vs ignited enemies"
+  },
+  "aliases": [
+    "Chaos Flare",
+    "ignited",
+    "more crit chance",
+    "node 24",
+    "条件效果"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:24"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "ignited"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Hit"
+    ],
+    "conditions": [
+      "ignited"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effect definition",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=chaos_flare_ignited_crit",
+      "note": "condition: ignited==true"
+    },
+    {
+      "parameter": "more value",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "crit chance result",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "chaos_flare_ignited_crit",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=chaos_flare_ignited_crit"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "_effect_rows",
+    "note": "条件满足时加 more crit_chance 行（group=node:fr11mv:24）；_crit_section 把 more 乘在 crit chance 总量上"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=chaos_flare_ignited_crit",
+      "note": "ruleset 条件效果声明（status assumed）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects+effect_values owner_entity_id=node:letools:fr11mv:24",
+      "note": "Chaos Flare：More Crit Chance Against Ignited 20%/点"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#B.crit_model",
+      "note": "crit chance 池与 more 口径"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#10 B 暴击",
+      "note": "研究阶段推导：more 乘 crit chance 总量"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=24)/effects[0]/value_total",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/totals/crit_chance（ignited 切换时）",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "ignited 状态由 scenario 提供",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/states"
+    },
+    {
+      "with": "fr-hit-critical-expected",
+      "requirement": "more crit chance 与 crit chance cap/avg crit 的交互",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/critical"
+    },
+    {
+      "with": "fr-effect-ignite-sources",
+      "requirement": "ignited 可达性",
+      "evidence_locator": "tools/phase3/rules/fr-hit-facts-v1.json#R5.ignited_sources"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "Chaos Flare 的 more 是否直接乘 crit chance 总量：文本/参考模型推导（assumed），无游戏内实测",
+      "ignited uptime 未建模（同 Scorching Tide）",
+      "crit chance 触顶时该 more 的边际收益为 0；需与 crit cap 一起看"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "more",
+    "stacking_policy": "linear_per_stack",
+    "order_policy": "crit chance 的 more 组：乘在 (base+added)×(1+inc) 之后；cap=1.0",
+    "more_group_source": "dataset 节点定义 + ruleset effect（R5 assumed）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

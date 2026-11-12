@@ -1,0 +1,497 @@
+{
+  "schema": "le-extracted-coverage-boundaries-v1",
+  "generated_at": "2026-11-12T21:35:05Z",
+  "note": "覆盖边界汇总；由 skill 模板 unsupported、共享定义 limitations/coverage 与条件注册表 support.level 生成，不是新证据。逐条机制状态见 docs/evidence/extracted/<entry-id>.json。",
+  "scopes": [
+    {
+      "scope_id": "bh2",
+      "label": "Black Hole（Mage）本体 DoT + 自然 Ignite",
+      "skill_template": "knowledge/skills/bh-black-hole.json",
+      "mechanisms": "knowledge/mechanisms/bh-*.json、knowledge/mechanisms/common-*.json",
+      "shared_definitions": [
+        {
+          "path": "knowledge/definitions/black-hole-v4.json",
+          "limitations": [
+            {
+              "text": "BH 切片只覆盖本体 DoT 与 Ignite 期望层数；chill/shock/blind/无视等非伤害效果未建模。"
+            },
+            {
+              "text": "Heat Wave 期望层数模型假设每次 roll 独立、无层数上限；报告按期望值而非整数事件计数。"
+            },
+            {
+              "text": "充能按顺序恢复（同一时间一个恢复计时器），max charges 只提供起手爆发；法力消耗/恢复未建模。"
+            },
+            {
+              "text": "rotation/移动/拉怪/双星覆盖条件只按场景假设（双星全覆盖、中心 1m 内）。"
+            }
+          ]
+        },
+        {
+          "path": "knowledge/definitions/black-hole-v3.json",
+          "limitations": [
+            {
+              "text": "BH 切片只覆盖本体 DoT 与 Ignite 期望层数；chill/shock/blind/无视等非伤害效果未建模。"
+            },
+            {
+              "text": "Heat Wave 期望层数模型假设每次 roll 独立、无层数上限；报告按期望值而非整数事件计数。"
+            },
+            {
+              "text": "充能按顺序恢复（同一时间一个恢复计时器），max charges 只提供起手爆发；法力消耗/恢复未建模。"
+            },
+            {
+              "text": "rotation/移动/拉怪/双星覆盖条件只按场景假设（双星全覆盖、中心 1m 内）。"
+            }
+          ]
+        }
+      ],
+      "unsupported_boundaries": [
+        {
+          "item": "其他技能的主动/被动树效果进入主 DPS（Meteor、Enchant Weapon、Flame Ward、Frost Wall 等）",
+          "reason": "不建模跨技能自身伤害；仅作为条件 Buff 候选被发现/配置/部分重算。完整 BD DPS 需另建多技能伤害通道。",
+          "blocks_full_dps": false
+        },
+        {
+          "item": "编织者天赋树与容器",
+          "reason": "按用户决定（scope letools-build-scope-v2）不纳入 BD 导入范围；原始响应归档。其中可能含主技能增伤，因此不能据此声称完整 DPS。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "队伍/外部队友 Buff",
+          "reason": "未建模；报告只反映单人构筑。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "法力消耗与恢复",
+          "reason": "本阶段口径为无限法力；长期循环/资源受限的可持续性未建模。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "非伤害状态（Chill/Blind 等）的施加与覆盖",
+          "reason": "未建模，只作为目标/玩家条件来源；点火几率与冰缓覆盖率不精确。",
+          "blocks_full_dps": false
+        },
+        {
+          "item": "Crescendoing Rage",
+          "reason": "规则包 unresolved + 用户决定本阶段 deferred；单次口径可声明，循环相位未接入。若声称完整循环 DPS 则缺该乘区。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "Preparation（下一次元素法术）",
+          "reason": "规则包 unresolved；t=0 就绪/刷新间隔/消耗顺序未确认，v1 不默认生效。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "神像祭坛网格条件 CDR（Pyramidal Altar）",
+          "reason": "grid_validation=not_verified，布局条件无法自动判定；不计祭坛 ICR（频率影响）。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "Frozen Steel / Conflagrate / Apex Glyph 转换",
+          "reason": "mechanism_unresolved / needs_action_or_time_simulation；未确认或需动作模拟，不计入基线。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "完整 BD 实战 DPS、循环操作序列、空间轨道物理",
+          "reason": "当前是限定来源（BH 本体 + 自然 Ignite）+ 限定目标场景（Boss、0 抗、双星全覆盖、中心 1m、目标不动不死）的固定条件估算；不是实战 DPS。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "未选节点的触发链（recast-on-end、extraBlackHoles 家族）",
+          "reason": "本构筑未选；若新 BD 选择，需要额外黑洞/重施语义建模（证据仅 partially_confirmed）。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "hit 模型的暴击/命中口径",
+          "reason": "BH 本体 hit=false 且 crit_chance/crit_multiplier=0，不使用 hit 的暴击算子；该差异是有意为之，不是缺口。",
+          "blocks_full_dps": false
+        }
+      ],
+      "schedule_note": "charge-based + cast-time 双约束的事件调度；eager/patient 两种动作策略；单次口径观察至最后一层 Ignite 到期。目标/策略均为固定条件估算，不是实战 DPS。"
+    },
+    {
+      "scope_id": "fr11mv",
+      "label": "Flame Reave（Mage / Spellblade）击中模型",
+      "skill_template": "knowledge/skills/fr-flame-reave.json",
+      "mechanisms": "knowledge/mechanisms/fr-*.json、knowledge/mechanisms/common-*.json",
+      "shared_definitions": [
+        {
+          "path": "knowledge/definitions/fr-flame-reave-v4.json",
+          "limitations": [
+            {
+              "text": "只覆盖 Flame Reave 本体直接命中：不包含 Ignite/DoT 本体伤害、其它技能伤害、召唤物与队伍 Buff。"
+            },
+            {
+              "text": "单次命中评估与持续输出评估共享当前 states 取值，但使用独立场景文件与独立场景哈希；周期平均因子只作用于持续输出。"
+            },
+            {
+              "text": "fire_only：只计算 Fire 组件，显式非 Fire typed added damage（Physical/Cold/Bow/Spell 等）不进入本组件；无转伤机制。"
+            },
+            {
+              "text": "无类型 added damage 按自适应 Fire 结算；非 Fire typed added damage 保持排除。"
+            },
+            {
+              "text": "多命中按每次施放 4 击、权重 [1.0,0.5,0.5,0.5]（额外命中 50% less）；距离衰减未建模，默认贴脸。"
+            },
+            {
+              "text": "Rhythm of Fire 按纯 FR 每 4 次施放消耗一次的固定条件估算（×1.325），不模拟叠层获取/消耗过程与其它技能补层。"
+            },
+            {
+              "text": "mana 相关不建模（无限法力口径）；只保留当前状态条件。"
+            },
+            {
+              "text": "Enchant Weapon 视为近战命中期间常驻（Kindling Blade 自动施放，assumed）；Army of Skin 高血量条件默认成立。"
+            },
+            {
+              "text": "目标火抗 0、怪物等级减伤按迁移基线口径；负抗下限与区域抗性不建模。"
+            },
+            {
+              "text": "旧单次命中/持续输出的表头与指标不逐字沿用，差异见迁移记录（archive://docs/reviews/unified-dps-step4-fr-implementation.zh-CN.md）。"
+            }
+          ]
+        },
+        {
+          "path": "knowledge/definitions/fr-flame-reave-v3.json",
+          "limitations": [
+            {
+              "text": "只覆盖 Flame Reave 本体直接命中：不包含 Ignite/DoT 本体伤害、其它技能伤害、召唤物与队伍 Buff。"
+            },
+            {
+              "text": "单次命中评估与持续输出评估共享当前 states 取值，但使用独立场景文件与独立场景哈希；周期平均因子只作用于持续输出。"
+            },
+            {
+              "text": "fire_only：只计算 Fire 组件，显式非 Fire typed added damage（Physical/Cold/Bow/Spell 等）不进入本组件；无转伤机制。"
+            },
+            {
+              "text": "无类型 added damage 按自适应 Fire 结算；非 Fire typed added damage 保持排除。"
+            },
+            {
+              "text": "多命中按每次施放 4 击、权重 [1.0,0.5,0.5,0.5]（额外命中 50% less）；距离衰减未建模，默认贴脸。"
+            },
+            {
+              "text": "Rhythm of Fire 按纯 FR 每 4 次施放消耗一次的固定条件估算（×1.325），不模拟叠层获取/消耗过程与其它技能补层。"
+            },
+            {
+              "text": "mana 相关不建模（无限法力口径）；只保留当前状态条件。"
+            },
+            {
+              "text": "Enchant Weapon 视为近战命中期间常驻（Kindling Blade 自动施放，assumed）；Army of Skin 高血量条件默认成立。"
+            },
+            {
+              "text": "目标火抗 0、怪物等级减伤按迁移基线口径；负抗下限与区域抗性不建模。"
+            },
+            {
+              "text": "旧单次命中/持续输出的表头与指标不逐字沿用，差异见迁移记录（archive://docs/reviews/unified-dps-step4-fr-implementation.zh-CN.md）。"
+            }
+          ]
+        }
+      ],
+      "unsupported_boundaries": [
+        {
+          "item": "技能等级缩放（R16）",
+          "reason": "实际 27 级只决定可分配节点数量；dataset levelScaling=[]，+Level of Skills 词条无伤害路径（用户裁决 2026-11-07）。结论：不需要 level scaling 伤害建模。",
+          "blocks_full_dps": false
+        },
+        {
+          "item": "typed Physical/Cold added damage（weapon2 sealed +5 Physical、Frozen Steel +4 Cold）",
+          "reason": "fire_only 组件策略排除非 Fire typed added，未建独立 Cold/Physical 组件；会少算非 Fire 伤害（R17 assumed，OQ9）。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "Haste（relic unique 'You have Haste'）",
+          "reason": "dataset 1.5.2 Haste 只提供 +30% movement speed（property 9），无伤害/攻速路径；不建模（不是漏算）。",
+          "blocks_full_dps": false
+        },
+        {
+          "item": "Ignite 来源与 uptime（Sunwreath +43% on melee hit、Arcane Flames、Firebrand Flare）",
+          "reason": "只提供 scenario ignited 开关；点燃施加/覆盖率/ignite DoT 伤害未建模（R5/OQ，ruleset.open_questions R15）。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "Surge Pyroclasm 额外施放 Flame Reave",
+          "reason": "单技能模型不含 Surge 施放/触发率；额外 FR 施放会改变循环与 Rhythm 层数（R4 unresolved）。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "Firebrand 层数对 FR 的潜在影响（OQ7：每层 +5 melee fire / Incineration）",
+          "reason": "按用户裁决 2026-11-07：Firebrand 层数只对 Firebrand 自身生效，FR 不消耗；若改判需新 run 与 expected。",
+          "blocks_full_dps": false
+        },
+        {
+          "item": "距离衰减（本体 up to 50% less at max distance）",
+          "reason": "默认贴脸（target_in_melee_range=true，权重首击=1.0）；远程条件与衰减曲线未建模，且 ruleset.effects 未注册对应 effect（仅 snapshot 注释提及）。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "资源循环（法力消耗/恢复、无限 mana 口径）",
+          "reason": "mana 公式为 assumed，仅用于 300 mana 与 ≥10 阈值判定；mana 恢复与其它资源未模拟（R6/R14）。",
+          "blocks_full_dps": false
+        },
+        {
+          "item": "完整 rotation / 操作序列 / 其它技能主动伤害（EW/Firebrand/Surge/Flame Ward 等）",
+          "reason": "固定条件估算，只模拟 Flame Reave 本体命中；其它技能只作为条件来源筛查（current-status §3.2）。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "召唤物 / 队伍 Buff / 非伤害状态（Chill/Blind 等）",
+          "reason": "未建模；本契约限定单人、限定来源与目标场景。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "crit 缩放类被动 per-attribute 公式（Prodigy per-Int、Defender of Welryn per-Dex，OQ6）",
+          "reason": "当前把两节点归一为快照值计入（R25 assumed）；精确公式未验证，可能影响 crit chance/满暴判定。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "目标火抗非 0 / 负抗下限 / 区域抗性惩罚",
+          "reason": "R12 assumed：火抗默认 0、穿透 ×(1+Σpen)、负抗钳制未建模；对非 0 抗或负抗目标会偏。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "范围/几何类效果（Dancing Flames/Rolling Flames 射程、Precise Destruction 宽度、Sunwreath circle −35% 半径）",
+          "reason": "只影响命中几何，不改变单目标贴脸命中伤害与频率；不建空间模型。",
+          "blocks_full_dps": false
+        },
+        {
+          "item": "编织者天赋树与容器、神像祭坛网格条件 CDR",
+          "reason": "输入范围未覆盖编织者树（原始响应归档）；祭坛网格条件 CDR grid_validation=not_verified，不计 10% CDR（current-status §3.2）。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "Ignite DoT 作为独立组件",
+          "reason": "当前只建模 ignited 条件，不建模点燃持续伤害（ruleset.open_questions R15）。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "玩家 HTML / 本地重算的验收状态",
+          "reason": "FR 页面与 serve 重算通道代码存在，但 P0 盘点未通过 player-report-ui 契约验收（HTML/LIVE 分开记录）；本模板只做能力声明草案，不声称页面通过。",
+          "blocks_full_dps": false
+        }
+      ],
+      "schedule_note": "主策略 cooldown_limited（有效冷却 3/(1+ICR) 门控施放速率）；备选策略 attack_speed_limited 同时输出（result.dps.alternate_policy）。窗口按期望（可小数）施放次数聚合，complete_casts 仅作透明度字段，不用于重算总伤害。数值以 ruleset/scenario 为权威，模板中的 cooldown_s/hit_weights/hits_per_cast/windows_s/more_factor 是调度结构声明（换 BD 或改 policy 必须重锁 expected）。"
+    },
+    {
+      "scope_id": "v01cv",
+      "label": "Void Cleave 火焰转换主技能",
+      "skill_template": "knowledge/skills/void-cleave-fire-main.json",
+      "mechanisms": "knowledge/mechanisms/skill-*.json、knowledge/mechanisms/item-*.json、knowledge/mechanisms/attribute-*.json、knowledge/mechanisms/buff-*.json、knowledge/mechanisms/target-*.json",
+      "shared_definitions": [
+        {
+          "path": "knowledge/definitions/void-cleave-fire-main-v4.json",
+          "limitations": [
+            {
+              "text": "固定条件下模拟主技能连续施放；不模拟法力维持、移动、中断及辅助技能自身伤害。"
+            },
+            {
+              "text": "Time Rot、Bleed 和易伤作为用户指定的固定目标条件，不模拟获取、叠层与过期。"
+            },
+            {
+              "text": "Crescendoing Rage 按主技能独立计数的每第三次命中建模；持续伤害继承尚未确认，暂不赋予这部分加成。"
+            },
+            {
+              "text": "Deadly Strike 额外倍率依据本地工具提示；固定状态与目标易伤的合成仍属推导，未经游戏内实测。"
+            },
+            {
+              "text": "动作时长取 dataset castTime（2.0 秒）；对装备条件与通道仍有未支持来源，全部保留在工程账本。"
+            },
+            {
+              "text": "未建模敌方护甲和减抗/穿甲积累；目标面板的抗性是输入的有效抗性。"
+            },
+            {
+              "text": "当前 mastery 为 Forge Guard，不加入 Void Knight 回响。"
+            },
+            {
+              "text": "辅助技能 Buff 均按用户指定的已获得状态计算，不模拟动作占用或维持成本；多个下一次施放加成不能视为无条件常驻。"
+            },
+            {
+              "text": "持续伤害施加概率只纳入装备/神像/祝福词条与显式节点规则；被动与其它 meta 词条的施加来源未纳入概率模型（见 coverage.gaps）。"
+            },
+            {
+              "text": "Void→点燃穿透的输入池按标签闭包 ['Void'] 计算（含无标签通用增伤行），该口径未实测确认。"
+            },
+            {
+              "text": "施加概率超过 100% 时当前按线性期望计入，超过 100% 是否产生额外层数未确认。"
+            },
+            {
+              "section": "coverage.confirmed_inactive",
+              "text": "12% increased Effect of Frenzy while Dual Wielding：当前装备为双手武器，条件确定不满足"
+            },
+            {
+              "section": "coverage.not_applicable_mods",
+              "text": "Vaion's Chariot：下一次移动技能 40% more 伤害，作用于移动技能而非主技能本体，不在当前计算范围"
+            },
+            {
+              "section": "coverage.assumed_active_mods",
+              "text": "神像祭坛 10% 冷却恢复：'若无更大的神像位于更小神像上方' 的网格布局条件未从输入验证"
+            }
+          ]
+        },
+        {
+          "path": "knowledge/definitions/void-cleave-fire-main-v3.json",
+          "limitations": [
+            {
+              "text": "固定条件下模拟主技能连续施放；不模拟法力维持、移动、中断及辅助技能自身伤害。"
+            },
+            {
+              "text": "Time Rot、Bleed 和易伤作为用户指定的固定目标条件，不模拟获取、叠层与过期。"
+            },
+            {
+              "text": "Crescendoing Rage 按主技能独立计数的每第三次命中建模；持续伤害继承尚未确认，暂不赋予这部分加成。"
+            },
+            {
+              "text": "Deadly Strike 额外倍率依据本地工具提示；固定状态与目标易伤的合成仍属推导，未经游戏内实测。"
+            },
+            {
+              "text": "动作时长取 dataset castTime（2.0 秒）；对装备条件与通道仍有未支持来源，全部保留在工程账本。"
+            },
+            {
+              "text": "未建模敌方护甲和减抗/穿甲积累；目标面板的抗性是输入的有效抗性。"
+            },
+            {
+              "text": "当前 mastery 为 Forge Guard，不加入 Void Knight 回响。"
+            },
+            {
+              "text": "辅助技能 Buff 均按用户指定的已获得状态计算，不模拟动作占用或维持成本；多个下一次施放加成不能视为无条件常驻。"
+            },
+            {
+              "text": "持续伤害施加概率只纳入装备/神像/祝福词条与显式节点规则；被动与其它 meta 词条的施加来源未纳入概率模型（见 coverage.gaps）。"
+            },
+            {
+              "text": "Void→点燃穿透的输入池按标签闭包 ['Void'] 计算（含无标签通用增伤行），该口径未实测确认。"
+            },
+            {
+              "text": "施加概率超过 100% 时当前按线性期望计入，超过 100% 是否产生额外层数未确认。"
+            },
+            {
+              "section": "coverage.confirmed_inactive",
+              "text": "12% increased Effect of Frenzy while Dual Wielding：当前装备为双手武器，条件确定不满足"
+            },
+            {
+              "section": "coverage.not_applicable_mods",
+              "text": "Vaion's Chariot：下一次移动技能 40% more 伤害，作用于移动技能而非主技能本体，不在当前计算范围"
+            },
+            {
+              "section": "coverage.assumed_active_mods",
+              "text": "神像祭坛 10% 冷却恢复：'若无更大的神像位于更小神像上方' 的网格布局条件未从输入验证"
+            }
+          ]
+        }
+      ],
+      "unsupported_boundaries": [
+        {
+          "item": "非 Hellish Chasm 火焰转换构筑",
+          "reason": "必须按当前节点重新建立组件，不得直接复制已存在案例的 profile。",
+          "blocks_full_dps": true
+        },
+        {
+          "item": "资源及 Buff 获取过程",
+          "reason": "固定条件估算；不模拟获取与维持成本。",
+          "blocks_full_dps": true
+        }
+      ],
+      "schedule_note": "取动作与冷却中较长间隔；首次施放 t=0，窗口不含右端点。"
+    },
+    {
+      "scope_id": "ba1574",
+      "label": "Ballista · Armed Construction（Rogue / Falconer，minion actor，partial）",
+      "skill_template": null,
+      "mechanisms": "knowledge/mechanisms/minion-*.json、knowledge/mechanisms/ballista-*.json",
+      "shared_definitions": [
+        {
+          "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+          "limitations": [
+            {
+              "text": "只统计 Armed Construction 的到期/销毁爆炸伤害；不含 Explosive Delivery 的 bolt 命中爆炸、箭矢直击、点燃 DoT 或 Explosive Trap/Falcon 自身伤害（用户指定口径）。"
+            },
+            {
+              "text": "陷阱引爆事件率是外部场景假设（控件 trap_detonation_rate_per_s），上界由 λ_throw×每次施放引爆数推导；未做游戏内实测。"
+            },
+            {
+              "text": "Elixir 按 100% 覆盖；minion 等级缩放因伤害路径无调用点未纳入；isBallistaExplosion 按推断 true 建模。"
+            },
+            {
+              "text": "暴击几率按 LE 通用口径 (base+added)×(1+increased) 聚合并钳制到 [0,1]；暴击伤害按 base+added。"
+            },
+            {
+              "text": "目标为 100 级 Boss Dummy、0 抗性、无额外减伤；不建模敌方护甲/减抗/暴击抑制。"
+            },
+            {
+              "text": "Shared Enhancements 转移按 Stat 行复制（added/increased/more 全部乘比例、保留 tags、召唤时快照）；tag 匹配沿用通用 subset 语义。"
+            },
+            {
+              "text": "Minion 原生 Minion 标签伤害/暴击行按 100% actor 行处理；与转移规则显式互斥（exclude_tags=[Minion]）。"
+            },
+            {
+              "text": "{\"id\": \"limitation:controls\", \"kind\": \"limitation\", \"note\": \"Siege Engineering 点数来自当前输入专精绑定，不暴露为场景控件；陷阱引爆率控件 min=1（0 表示无事件，本口径不支持零事件重算）。\", \"scope\": \"result\", \"status\": \"assumed\"}"
+            },
+            {
+              "section": "coverage.gaps",
+              "text": "陷阱引爆事件率是场景假设（上游控件），未做游戏内实测；每次施放引爆数存在 0.60–2.60×λ_throw 的未验证区间。"
+            },
+            {
+              "section": "coverage.gaps",
+              "text": "isBallistaExplosion=true 为 prefab 序列化推断（IL 无写点），决定 Armed Construction per-Dex more 是否生效。"
+            },
+            {
+              "section": "coverage.gaps",
+              "text": "minion 等级伤害缩放（+0.6 more @L100）公式已核但伤害路径无调用点，未纳入。"
+            },
+            {
+              "section": "coverage.gaps",
+              "text": "爆炸最终 AT tag 是否含 Hit 未确认；当前按 {Bow,Fire}+Minion 闭包处理。"
+            },
+            {
+              "section": "coverage.gaps",
+              "text": "玩家 added bow damage 的转移通道按 Shared Enhancements Stat 复制处理；武器基础伤害是否计入玩家 Stat 未实测。"
+            },
+            {
+              "section": "coverage.assumed_active_mods",
+              "text": "Elixir of Construction 按用户指定的 100% 窗口覆盖出理论 DPS；不模拟药剂实际使用节奏。"
+            }
+          ]
+        }
+      ],
+      "unsupported_boundaries": [],
+      "schedule_note": null
+    }
+  ],
+  "conditional_effects": {
+    "registry": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "registry_id": "bh-conditional-effects-v1",
+    "dataset_id": "phase1-dataset-003",
+    "effect_count": 17,
+    "support_levels": {
+      "engine_supported": [
+        "idol.fire_damage_mana_threshold",
+        "idol.fire_damage_mana_threshold.idols_3",
+        "main_skill.supermassive",
+        "main_skill.weakened_reality"
+      ],
+      "mechanism_unresolved": [
+        "equipment.apex_glyph_conversion",
+        "passive.frozen_steel"
+      ],
+      "needs_action_or_time_simulation": [
+        "enchant_weapon.conflagrate",
+        "ring.crescendoing_rage"
+      ],
+      "needs_rule_mapping": [
+        "enchant_weapon.eternal_flames.active",
+        "enchant_weapon.eternal_flames.passive",
+        "flame_ward.fire_aura",
+        "flame_ward.infusion",
+        "frost_wall.chilled_touch",
+        "idol.throne_of_ambition",
+        "idol_altar.layout_cdr",
+        "meteor.craterborn",
+        "passive.preparation"
+      ]
+    },
+    "note": "support.level 含义见 docs/mechanisms.md §1；固定条件估算，不模拟获取/维持成本。"
+  },
+  "cross_cutting_notes": [
+    "各 scope 的共享定义是计算权威；逐实例数值由当前存档绑定，公开仓库不含案例数值。",
+    "同一机制在多个 scope 复用时，以 knowledge/mechanisms/common-*.json 的条目为准；scope 内条目只补充差异。",
+    "行为/时序类条件效果（conflagrate、crescendoing rage 等）只做固定条件估算，不模拟动作序列。",
+    "本轮未重跑游戏内实测；证据状态沿用条目登记值，不因发布整理而升级或降级。"
+  ]
+}

@@ -1,0 +1,5736 @@
+{
+ "schema": "le-ballista-build-values-v1",
+ "generated_at": "2026-11-13",
+ "case": {
+  "case_id": "ballista-beta5-native-20261112",
+  "build_id": "letools:ballista-beta5-native-20261112",
+  "revision_id": "rev-c83726fd2c25625d",
+  "content_sha256": "c83726fd2c25625db4d52d30093e9bac905b884464b9a6cb98abcee65faf98bb",
+  "game_version": "1.5.2",
+  "dataset_id": "phase1-dataset-003",
+  "character": {
+   "level": 100,
+   "class": "Rogue",
+   "mastery": "Falconer"
+  },
+  "calculation_input": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json"
+ },
+ "dataset": {
+  "dataset_id": "phase1-dataset-003",
+  "path": "data/releases/phase1-dataset-003/data.sqlite",
+  "target_game_version": "1.5.2"
+ },
+ "conventions": {
+  "dps_unit": "ability_gen327 (Explosives) triggered by node:letools:ba1574:5 Armed Construction on Ballista expiry/destroy",
+  "player_side_pools": "increased damage / added damage / crit pools are reported as source pools; applicability to the minion requires an explicit transfer rule",
+  "minion_default_inheritance": "none (user-confirmed): player attributes/crit/damage modifiers do not apply to the Ballista unless a node states it",
+  "transfer_nodes": {
+   "22": "Shared Enhancements: your damage modifiers apply to your Ballista at a reduced ratio (25%/point)",
+   "27": "Perfect Aim: your critical strike chance and critical strike multiplier apply to your Ballista at a reduced ratio (25%/point)"
+  },
+  "reported_value_kinds": [
+   "dataset raw",
+   "mapped/derived from existing pipeline",
+   "computed this round"
+  ]
+ },
+ "abilities": {
+  "ba1574": {
+   "source_skill_id": "ba1574",
+   "internalName": "summonBallista",
+   "skill_type": "active",
+   "mana_cost": 44.0,
+   "cast_time_ms": 600,
+   "tags_raw": "0",
+   "tags_decoded": [],
+   "as": 1.8333375,
+   "useDelay": 0.15,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.15,
+   "useDuration_letools_raw": 0.6,
+   "speedScaler": 54,
+   "speedMultiplier": 1,
+   "attributeScaling": {
+    "3": [
+     {
+      "property": 0,
+      "specialTag": 0,
+      "tags": 8192,
+      "addedValue": 0,
+      "increasedValue": 0.04,
+      "moreValues": []
+     },
+     {
+      "property": 2,
+      "specialTag": 0,
+      "tags": 8192,
+      "addedValue": 0,
+      "increasedValue": 0.01,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [
+    {
+     "property": 7,
+     "specialTag": 0,
+     "tags": 8192,
+     "addedValue": 75,
+     "increasedValue": 0,
+     "moreValues": []
+    }
+   ],
+   "comboAbilities": [
+    "ba1574_bblsc7_1"
+   ],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "SummonEntityOnDeath",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "SummonEntityOnDeath",
+      "entity": 100053,
+      "randomActorInstead": false,
+      "randomActors": [],
+      "numberToSummon": 1,
+      "limitDuration": true,
+      "duration": 10,
+      "followsCreator": false,
+      "statList": [],
+      "limit": 2,
+      "limitNumber": true,
+      "companion": false,
+      "summonIsASummoner": true
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ba1574']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ba1574']"
+  },
+  "entity_bbl7_57": {
+   "source_skill_id": "entity_bbl7_57",
+   "internalName": "ballistaBolt",
+   "skill_type": "internal",
+   "mana_cost": 0.0,
+   "cast_time_ms": 2300,
+   "tags_raw": "2049",
+   "tags_decoded": [
+    "Physical",
+    "Bow"
+   ],
+   "as": 0.47826198,
+   "useDelay": 1.6,
+   "useDuration": null,
+   "useDelay_letools_raw": 1.6,
+   "useDuration_letools_raw": 2.3,
+   "speedScaler": 2,
+   "speedMultiplier": 1.5,
+   "attributeScaling": {
+    "3": [
+     {
+      "property": 2,
+      "specialTag": 0,
+      "tags": 0,
+      "addedValue": 0,
+      "increasedValue": 0.05,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [],
+   "comboAbilities": [],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DamageEnemyOnHit",
+     "damage_type": "Physical",
+     "base_damage": 40.0,
+     "added_damage_effectiveness": 200.0,
+     "config": {
+      "type": "DamageEnemyOnHit",
+      "baseDamageStats": {
+       "damage": [
+        40,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "critChance": 0.05,
+       "critMultiplier": 2,
+       "critType": 0,
+       "hit": true,
+       "cullPercent": 0,
+       "flatCull": 0,
+       "increasedStunChance": 0,
+       "increasedStunDuration": 0,
+       "addedDamageScaling": 2,
+       "additionalLeech": 0,
+       "freezeRate": 0,
+       "convertAllAddedDamage": false,
+       "damageTypeToConvertTo": 0,
+       "penetration": []
+      },
+      "damageTags": 2048,
+      "damageModifier": 0,
+      "highPriorityDoT": false,
+      "canDamageSameEnemyAgain": false,
+      "canDamageSameEnemyAgainAfterDuration": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['entity_bbl7_57']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.3
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['entity_bbl7_57']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['entity_bbl7_57']"
+  },
+  "ability_gen327": {
+   "source_skill_id": "ability_gen327",
+   "internalName": "ballistaExplosion",
+   "skill_type": "internal",
+   "mana_cost": 0.0,
+   "cast_time_ms": 1000,
+   "tags_raw": "2056",
+   "tags_decoded": [
+    "Fire",
+    "Bow"
+   ],
+   "as": 1.1000025,
+   "useDelay": 0.5,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.5,
+   "useDuration_letools_raw": 1,
+   "speedScaler": 3,
+   "speedMultiplier": 1,
+   "attributeScaling": {},
+   "levelScaling": [],
+   "comboAbilities": [],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DamageEnemyOnHit",
+     "damage_type": "Fire",
+     "base_damage": 50.0,
+     "added_damage_effectiveness": 250.0,
+     "config": {
+      "type": "DamageEnemyOnHit",
+      "baseDamageStats": {
+       "damage": [
+        0,
+        50,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "critChance": 0.05,
+       "critMultiplier": 2,
+       "critType": 0,
+       "hit": true,
+       "cullPercent": 0,
+       "flatCull": 0,
+       "increasedStunChance": 0,
+       "increasedStunDuration": 0,
+       "addedDamageScaling": 2.5,
+       "additionalLeech": 0,
+       "freezeRate": 0,
+       "convertAllAddedDamage": false,
+       "damageTypeToConvertTo": 0,
+       "penetration": []
+      },
+      "damageTags": 2048,
+      "damageModifier": 0,
+      "highPriorityDoT": false,
+      "canDamageSameEnemyAgain": false,
+      "canDamageSameEnemyAgainAfterDuration": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen327']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen327']"
+  },
+  "ability_gen517": {
+   "source_skill_id": "ability_gen517",
+   "internalName": "ballistaShot",
+   "skill_type": "internal",
+   "mana_cost": 0.0,
+   "cast_time_ms": 500,
+   "tags_raw": "2049",
+   "tags_decoded": [
+    "Physical",
+    "Bow"
+   ],
+   "as": 2.200005,
+   "useDelay": 0.25,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.25,
+   "useDuration_letools_raw": 0.5,
+   "speedScaler": 2,
+   "speedMultiplier": 1.5,
+   "attributeScaling": {
+    "3": [
+     {
+      "property": 2,
+      "specialTag": 0,
+      "tags": 0,
+      "addedValue": 0,
+      "increasedValue": 0.05,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [],
+   "comboAbilities": [],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DamageEnemyOnHit",
+     "damage_type": "Physical",
+     "base_damage": 40.0,
+     "added_damage_effectiveness": 200.0,
+     "config": {
+      "type": "DamageEnemyOnHit",
+      "baseDamageStats": {
+       "damage": [
+        40,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "critChance": 0.05,
+       "critMultiplier": 2,
+       "critType": 0,
+       "hit": true,
+       "cullPercent": 0,
+       "flatCull": 0,
+       "increasedStunChance": 0,
+       "increasedStunDuration": 0,
+       "addedDamageScaling": 2,
+       "additionalLeech": 0,
+       "freezeRate": 0,
+       "convertAllAddedDamage": false,
+       "damageTypeToConvertTo": 0,
+       "penetration": []
+      },
+      "damageTags": 2048,
+      "damageModifier": 0,
+      "highPriorityDoT": false,
+      "canDamageSameEnemyAgain": false,
+      "canDamageSameEnemyAgainAfterDuration": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen517']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.3
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen517']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen517']"
+  },
+  "ba1574_bblsc7_1": {
+   "source_skill_id": "ba1574_bblsc7_1",
+   "internalName": "ballistaShotCommand",
+   "skill_type": "internal",
+   "mana_cost": 44.0,
+   "cast_time_ms": 600,
+   "tags_raw": "0",
+   "tags_decoded": [],
+   "as": 1.8333375,
+   "useDelay": 0.3,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.3,
+   "useDuration_letools_raw": 0.6,
+   "speedScaler": 2,
+   "speedMultiplier": 1.5,
+   "attributeScaling": {
+    "3": [
+     {
+      "property": 2,
+      "specialTag": 0,
+      "tags": 0,
+      "addedValue": 0,
+      "increasedValue": 0.05,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [],
+   "comboAbilities": [],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.1
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ba1574_bblsc7_1']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ba1574_bblsc7_1']"
+  },
+  "ability_gen237": {
+   "source_skill_id": "ability_gen237",
+   "internalName": "smallExplosion",
+   "skill_type": "internal",
+   "mana_cost": 0.0,
+   "cast_time_ms": 1000,
+   "tags_raw": "1032",
+   "tags_decoded": [
+    "Fire",
+    "Throwing"
+   ],
+   "as": 1.1000025,
+   "useDelay": 0.5,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.5,
+   "useDuration_letools_raw": 1,
+   "speedScaler": 3,
+   "speedMultiplier": 1,
+   "attributeScaling": {},
+   "levelScaling": [],
+   "comboAbilities": [],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DamageEnemyOnHit",
+     "damage_type": "Fire",
+     "base_damage": 40.0,
+     "added_damage_effectiveness": 200.0,
+     "config": {
+      "type": "DamageEnemyOnHit",
+      "baseDamageStats": {
+       "damage": [
+        0,
+        40,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "critChance": 0.05,
+       "critMultiplier": 2,
+       "critType": 0,
+       "hit": true,
+       "cullPercent": 0,
+       "flatCull": 0,
+       "increasedStunChance": 0,
+       "increasedStunDuration": 0,
+       "addedDamageScaling": 2,
+       "additionalLeech": 0,
+       "freezeRate": 0,
+       "convertAllAddedDamage": false,
+       "damageTypeToConvertTo": 0,
+       "penetration": []
+      },
+      "damageTags": 1024,
+      "damageModifier": 0,
+      "highPriorityDoT": false,
+      "canDamageSameEnemyAgain": false,
+      "canDamageSameEnemyAgainAfterDuration": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen237']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen237']"
+  }
+ },
+ "abilities_extra": {
+  "ex4tp": {
+   "source_skill_id": "ex4tp",
+   "internalName": "explosiveTrap",
+   "skill_type": "active",
+   "mana_cost": 8.0,
+   "cast_time_ms": 1350,
+   "tags_raw": "1032",
+   "tags_decoded": [
+    "Fire",
+    "Throwing"
+   ],
+   "as": 0.81481665,
+   "useDelay": 0.4,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.4,
+   "useDuration_letools_raw": 1.35,
+   "speedScaler": 2,
+   "speedMultiplier": 1.8,
+   "attributeScaling": {
+    "3": [
+     {
+      "property": 0,
+      "specialTag": 0,
+      "tags": 0,
+      "addedValue": 0,
+      "increasedValue": 0.04,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [],
+   "comboAbilities": [],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.3
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "CreateAbilityObjectOnDeath",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "CreateAbilityObjectOnDeath",
+      "abilityToInstantiate": "ex4tp_fi9_1",
+      "aimingMethod": 2,
+      "aimingDistance": 0,
+      "createAtTarget": false,
+      "createAtStartLocation": false,
+      "createAtCastLocation": false,
+      "failsIfFailedAbility": false,
+      "additionalCasts": 0,
+      "randomExtraCasts": 0,
+      "fireInCircle": false,
+      "fireInLine": false,
+      "alsoCastAfterDelay": false,
+      "delay": 0,
+      "failsIfAbilityFailsToHit": false,
+      "chanceToCast": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp']"
+  },
+  "ex4tp_fi9_1": {
+   "source_skill_id": "ex4tp_fi9_1",
+   "internalName": "explosiveTrapOnGround",
+   "skill_type": "internal",
+   "mana_cost": 3.0,
+   "cast_time_ms": 1000,
+   "tags_raw": "258",
+   "tags_decoded": [
+    "Lightning",
+    "Spell"
+   ],
+   "as": 1.1000025,
+   "useDelay": 0.5,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.5,
+   "useDuration_letools_raw": 1,
+   "speedScaler": 3,
+   "speedMultiplier": 1,
+   "attributeScaling": {
+    "2": [
+     {
+      "property": 0,
+      "specialTag": 0,
+      "tags": 0,
+      "addedValue": 0,
+      "increasedValue": 0.04,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [],
+   "comboAbilities": [],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 30
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp_fi9_1']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "MineTrigger",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "MineTrigger",
+      "ability": "ex4tp_fi9_1_detex_1",
+      "triggerType": 0,
+      "castDelay": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp_fi9_1']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp_fi9_1']"
+  },
+  "ex4tp_fi9_1_detex_1": {
+   "source_skill_id": "ex4tp_fi9_1_detex_1",
+   "internalName": "explosiveTrapDamage",
+   "skill_type": "internal",
+   "mana_cost": 0.0,
+   "cast_time_ms": 750,
+   "tags_raw": "1032",
+   "tags_decoded": [
+    "Fire",
+    "Throwing"
+   ],
+   "as": 1.46667,
+   "useDelay": 0.4,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.4,
+   "useDuration_letools_raw": 0.75,
+   "speedScaler": 3,
+   "speedMultiplier": 1,
+   "attributeScaling": {
+    "3": [
+     {
+      "property": 0,
+      "specialTag": 0,
+      "tags": 0,
+      "addedValue": 0,
+      "increasedValue": 0.04,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [],
+   "comboAbilities": [],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DamageEnemyOnHit",
+     "damage_type": "Fire",
+     "base_damage": 30.0,
+     "added_damage_effectiveness": 150.0,
+     "config": {
+      "type": "DamageEnemyOnHit",
+      "baseDamageStats": {
+       "damage": [
+        0,
+        30,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "critChance": 0.05,
+       "critMultiplier": 2,
+       "critType": 0,
+       "hit": true,
+       "cullPercent": 0,
+       "flatCull": 0,
+       "increasedStunChance": 0,
+       "increasedStunDuration": 0,
+       "addedDamageScaling": 1.5,
+       "additionalLeech": 0,
+       "freezeRate": 0,
+       "convertAllAddedDamage": false,
+       "damageTypeToConvertTo": 0,
+       "penetration": []
+      },
+      "damageTags": 1024,
+      "damageModifier": 0,
+      "highPriorityDoT": false,
+      "canDamageSameEnemyAgain": false,
+      "canDamageSameEnemyAgainAfterDuration": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp_fi9_1_detex_1']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp_fi9_1_detex_1']"
+  },
+  "ability_gen408": {
+   "source_skill_id": "ability_gen408",
+   "internalName": "blastRainStarter",
+   "skill_type": "internal",
+   "mana_cost": 10.0,
+   "cast_time_ms": 750,
+   "tags_raw": "2056",
+   "tags_decoded": [
+    "Fire",
+    "Bow"
+   ],
+   "as": 1.46667,
+   "useDelay": 0.3,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.3,
+   "useDuration_letools_raw": 0.75,
+   "speedScaler": 2,
+   "speedMultiplier": 1.5,
+   "attributeScaling": {
+    "3": [
+     {
+      "property": 0,
+      "specialTag": 0,
+      "tags": 0,
+      "addedValue": 0,
+      "increasedValue": 0.04,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [],
+   "comboAbilities": [
+    "deeco_2"
+   ],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.3
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "CastAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "CastAfterDuration",
+      "ability": "ability_gen408_ex4tp_1",
+      "abilitiesSequence": [],
+      "randomAbilitiesToCast": [],
+      "preventDuplicateAbilitiesInARow": false,
+      "interval": 1,
+      "castOnStartAsWell": true,
+      "limitCasts": true,
+      "remainingCasts": 1,
+      "randomExtraCasts": 0,
+      "castRemainingExtrasAllOnDeath": 0,
+      "castChance": 1,
+      "manaToPayOnCast": 0,
+      "alternateAbility": "",
+      "chanceToUseAlternateAbility": 0,
+      "playerCanCastOnlyInCombat": false
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408']"
+    },
+    {
+     "component_index": 2,
+     "component_type": "CastAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "CastAfterDuration",
+      "ability": "ability_gen408_ex4tp_1",
+      "abilitiesSequence": [],
+      "randomAbilitiesToCast": [],
+      "preventDuplicateAbilitiesInARow": false,
+      "interval": 0.05,
+      "castOnStartAsWell": false,
+      "limitCasts": true,
+      "remainingCasts": 2,
+      "randomExtraCasts": 0,
+      "castRemainingExtrasAllOnDeath": 0,
+      "castChance": 1,
+      "manaToPayOnCast": 0,
+      "alternateAbility": "",
+      "chanceToUseAlternateAbility": 0,
+      "playerCanCastOnlyInCombat": false
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408']"
+  },
+  "ability_gen408_ex4tp_1": {
+   "source_skill_id": "ability_gen408_ex4tp_1",
+   "internalName": "blastRainProjectile",
+   "skill_type": "internal",
+   "mana_cost": 10.0,
+   "cast_time_ms": 750,
+   "tags_raw": "1032",
+   "tags_decoded": [
+    "Fire",
+    "Throwing"
+   ],
+   "as": 1.46667,
+   "useDelay": 0.3,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.3,
+   "useDuration_letools_raw": 0.75,
+   "speedScaler": 2,
+   "speedMultiplier": 1.5,
+   "attributeScaling": {
+    "3": [
+     {
+      "property": 0,
+      "specialTag": 0,
+      "tags": 0,
+      "addedValue": 0,
+      "increasedValue": 0.04,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [],
+   "comboAbilities": [
+    "deeco_2"
+   ],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.5
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408_ex4tp_1']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "CreateAbilityObjectOnDeath",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "CreateAbilityObjectOnDeath",
+      "abilityToInstantiate": "ex4tp_fi9_1",
+      "aimingMethod": 2,
+      "aimingDistance": 0,
+      "createAtTarget": false,
+      "createAtStartLocation": false,
+      "createAtCastLocation": false,
+      "failsIfFailedAbility": false,
+      "additionalCasts": 0,
+      "randomExtraCasts": 0,
+      "fireInCircle": false,
+      "fireInLine": false,
+      "alsoCastAfterDelay": false,
+      "delay": 0,
+      "failsIfAbilityFailsToHit": false,
+      "chanceToCast": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408_ex4tp_1']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408_ex4tp_1']"
+  },
+  "fi9": {
+   "source_skill_id": "fi9",
+   "internalName": "fireball",
+   "skill_type": "active",
+   "mana_cost": 3.0,
+   "cast_time_ms": 750,
+   "tags_raw": "264",
+   "tags_decoded": [
+    "Fire",
+    "Spell"
+   ],
+   "as": 1.46667,
+   "useDelay": 0.27,
+   "useDuration": null,
+   "useDelay_letools_raw": 0.27,
+   "useDuration_letools_raw": 0.75,
+   "speedScaler": 3,
+   "speedMultiplier": 1,
+   "attributeScaling": {
+    "2": [
+     {
+      "property": 0,
+      "specialTag": 0,
+      "tags": 0,
+      "addedValue": 0,
+      "increasedValue": 0.04,
+      "moreValues": []
+     }
+    ]
+   },
+   "levelScaling": [],
+   "comboAbilities": [],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DamageEnemyOnHit",
+     "damage_type": "Fire",
+     "base_damage": 25.0,
+     "added_damage_effectiveness": 125.0,
+     "config": {
+      "type": "DamageEnemyOnHit",
+      "baseDamageStats": {
+       "damage": [
+        0,
+        25,
+        0,
+        0,
+        0,
+        0,
+        0
+       ],
+       "critChance": 0.05,
+       "critMultiplier": 2,
+       "critType": 0,
+       "hit": true,
+       "cullPercent": 0,
+       "flatCull": 0,
+       "increasedStunChance": 0,
+       "increasedStunDuration": 0,
+       "addedDamageScaling": 1.25,
+       "additionalLeech": 0,
+       "freezeRate": 0,
+       "convertAllAddedDamage": false,
+       "damageTypeToConvertTo": 0,
+       "penetration": []
+      },
+      "damageTags": 256,
+      "damageModifier": 0,
+      "highPriorityDoT": false,
+      "canDamageSameEnemyAgain": false,
+      "canDamageSameEnemyAgainAfterDuration": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['fi9']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.875
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['fi9']"
+    },
+    {
+     "component_index": 2,
+     "component_type": "ChanceToApplyAilmentsOnHit",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "ChanceToApplyAilmentsOnHit",
+      "targetType": 0,
+      "ailments": [
+       {
+        "ailment": 1,
+        "chance": 0.4,
+        "rolledSeparately": false,
+        "increasedDuration": 0,
+        "increasedEffect": 0
+       }
+      ],
+      "chanceModifier": 0,
+      "canApplyToSameEnemyAgain": false,
+      "cannotApply": []
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['fi9']"
+    }
+   ],
+   "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['fi9']"
+  }
+ },
+ "minion": {
+  "entity_id": "minion:letools:LEAbilities.entityList:100053",
+  "minion_type": "rogue_ballista",
+  "inherits": null,
+  "health": {
+   "maxHealth": 1000.0,
+   "currentHealth": 1000.0,
+   "damageable": true,
+   "canDie": true,
+   "baseHealthRegenPerSecond": 0,
+   "addedHealthRegenPerSecond": 0,
+   "effectiveHealthModifier": 2,
+   "startingHealthPercentage": 1
+  },
+  "base_stats_stats": {
+   "level": 1,
+   "stats": [
+    {
+     "property": 0,
+     "specialTag": 0,
+     "tags": 0,
+     "addedValue": 0,
+     "increasedValue": 0,
+     "moreValues": [
+      0.5
+     ]
+    },
+    {
+     "property": 2,
+     "specialTag": 0,
+     "tags": 0,
+     "addedValue": 0,
+     "increasedValue": 0.2,
+     "moreValues": []
+    }
+   ]
+  },
+  "actor_data": {
+   "id": 433532438,
+   "genId": "rogue_ballista",
+   "nameKey": "Actors.Actor_Name_Ballista"
+  },
+  "abilityList": {
+   "abilities": [
+    "entity_bbl7_57"
+   ]
+  },
+  "abilityMutators": {
+   "fi9": {
+    "increasedDamage": 0,
+    "increasedCastSpeed": 0,
+    "addedCritChance": 0,
+    "increasedDuration": 0,
+    "increasedProjectileSpeed": 0,
+    "increasedFreezeRate": 0,
+    "addedFreezeRate": 0,
+    "increasedRadius": 0.2,
+    "extraProjectiles": 0,
+    "pierceChance": 0
+   }
+  },
+  "abilityRangeList": {
+   "ranges": [
+    {
+     "minRange": 0,
+     "engageRange": 13,
+     "maxRange": 20,
+     "persuitRange": 40
+    }
+   ]
+  },
+  "threat": 0.001,
+  "base_stats_decoded": [
+   {
+    "property": 0,
+    "property_name": "Damage",
+    "addedValue": 0,
+    "increasedValue": 0,
+    "moreValues": [
+     0.5
+    ],
+    "tags": 0,
+    "interpretation_candidate": "Damage: moreValues [0.5] -> +50% more damage (candidate reading of actor base stats)"
+   },
+   {
+    "property": 2,
+    "property_name": "Attack Speed",
+    "addedValue": 0,
+    "increasedValue": 0.2,
+    "moreValues": [],
+    "tags": 0,
+    "interpretation_candidate": "Attack Speed: increasedValue 0.2 -> +20% increased attack speed (candidate)"
+   }
+  ],
+  "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.entityList[100053]"
+ },
+ "nodes": {
+  "tree": "tree:letools:LESkillTrees:ba1574",
+  "points_total": 31,
+  "nodes": [
+   {
+    "node_entity_id": "node:letools:ba1574:2",
+    "tree": "ba1574",
+    "node_id": "2",
+    "name": "Efficient Construction",
+    "node_type": "normal",
+    "max_points": 2,
+    "current_points": 2,
+    "description": "Ballista costs significantly less mana, but has a shorter duration.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 18,
+      "requirement": 1
+     },
+     {
+      "nodeId": 6,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:2#stat#0",
+      "stat_name": "Mana Cost",
+      "statNameKey": "Skills.Skill_ba1574_2_0_Stat",
+      "property": 8,
+      "property_dataset_name": "Mana",
+      "property_namespace_known": true,
+      "property_semantics_label": "Mana",
+      "property_note": "dataset coreDB.propertyList maps this id to a different stat name ('Mana'); the node-context semantics is the letools stat_name label -> do not use the dataset name blindly",
+      "value_text": "-25%",
+      "value_numeric": -0.25,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:2#stat#1",
+      "stat_name": "Duration (seconds)",
+      "statNameKey": "Skills.Skill_ba1574_2_1_Stat",
+      "property": 5093,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Duration",
+      "property_note": null,
+      "value_text": "-20%",
+      "value_numeric": -0.2,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:2",
+    "name_key": "Skills.Skill_ba1574_2_Name",
+    "mechanic_classes": [
+     "mana",
+     "duration"
+    ],
+    "description_operation_candidates": [
+     "reduced_duration"
+    ]
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:5",
+    "tree": "ba1574",
+    "node_id": "5",
+    "name": "Armed Construction",
+    "node_type": "notable",
+    "max_points": 4,
+    "current_points": 4,
+    "description": "Ballista now also explodes when it expires or is destroyed. This explosion deals more damage (multiplicative with other modifiers) and hits enemies in a larger area based on your Dexterity.",
+    "relatedAbilities": [
+     "ability_gen327"
+    ],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 12,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:5#stat#0",
+      "stat_name": "Ballista Explodes",
+      "statNameKey": "Skills.Skill_ba1574_5_0_Stat",
+      "property": 5078,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Skill config flag (e.g. Ballista Explodes / Exploding Bolts)",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": true,
+      "downside": false,
+      "per_point": "one-time",
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:5#stat#1",
+      "stat_name": "More Damage per Dexterity",
+      "statNameKey": "Skills.Skill_ba1574_5_1_Stat",
+      "property": 0,
+      "property_dataset_name": "Damage",
+      "property_namespace_known": true,
+      "property_semantics_label": "Damage",
+      "property_note": null,
+      "value_text": "+1%",
+      "value_numeric": 0.01,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:5#stat#2",
+      "stat_name": "Increased Area per Dexterity",
+      "statNameKey": "Skills.Skill_ba1574_5_2_Stat",
+      "property": 5015,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Increased Area",
+      "property_note": null,
+      "value_text": "+1%",
+      "value_numeric": 0.01,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:5",
+    "name_key": "Skills.Skill_ba1574_5_Name",
+    "mechanic_classes": [
+     "explosion",
+     "crit? no",
+     "area",
+     "more_damage_per_dex"
+    ],
+    "description_operation_candidates": [
+     "more_damage"
+    ]
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:10",
+    "tree": "ba1574",
+    "node_id": "10",
+    "name": "Flaming Shots",
+    "node_type": "normal",
+    "max_points": 5,
+    "current_points": 4,
+    "description": "Ballista bolts are lit on fire dealing additional fire damage and have a chance to ignite enemies.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 18,
+      "requirement": 1
+     },
+     {
+      "nodeId": 4,
+      "requirement": 2
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:10#stat#0",
+      "stat_name": "Fire Damage",
+      "statNameKey": "Skills.Skill_ba1574_10_0_Stat",
+      "property": 5037,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Added Fire Damage",
+      "property_note": null,
+      "value_text": "+3",
+      "value_numeric": 3.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:10#stat#1",
+      "stat_name": "Ignite Chance",
+      "statNameKey": "Skills.Skill_ba1574_10_1_Stat",
+      "property": 10001,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Ignite Chance",
+      "property_note": null,
+      "value_text": "+10%",
+      "value_numeric": 0.1,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:10",
+    "name_key": "Skills.Skill_ba1574_10_Name",
+    "mechanic_classes": [
+     "added_fire_damage(bolt)",
+     "ignite_chance(bolt)"
+    ],
+    "description_operation_candidates": []
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:11",
+    "tree": "ba1574",
+    "node_id": "11",
+    "name": "Rapid Fire",
+    "node_type": "normal",
+    "max_points": 4,
+    "current_points": 1,
+    "description": "Ballista has increased attack speed.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 18,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:11#stat#0",
+      "stat_name": "Attack Speed",
+      "statNameKey": "Skills.Skill_ba1574_11_0_Stat",
+      "property": 2,
+      "property_dataset_name": "Attack Speed",
+      "property_namespace_known": true,
+      "property_semantics_label": "Attack Speed",
+      "property_note": null,
+      "value_text": "+6%",
+      "value_numeric": 0.06,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:11",
+    "name_key": "Skills.Skill_ba1574_11_Name",
+    "mechanic_classes": [
+     "attack_speed"
+    ],
+    "description_operation_candidates": [
+     "increased_attack_speed"
+    ]
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:12",
+    "tree": "ba1574",
+    "node_id": "12",
+    "name": "Explosive Delivery",
+    "node_type": "notable",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Ballista's bolts now explode on hit dealing fire damage in an area, but has less attack speed (multiplicative with other modifiers).",
+    "relatedAbilities": [
+     "ability_gen327"
+    ],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 10,
+      "requirement": 3
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:12#stat#0",
+      "stat_name": "Exploding Bolts",
+      "statNameKey": "Skills.Skill_ba1574_12_0_Stat",
+      "property": 5078,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Skill config flag (e.g. Ballista Explodes / Exploding Bolts)",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:12#stat#1",
+      "stat_name": "Less Attack Speed",
+      "statNameKey": "Skills.Skill_ba1574_12_1_Stat",
+      "property": 2,
+      "property_dataset_name": "Attack Speed",
+      "property_namespace_known": true,
+      "property_semantics_label": "Attack Speed",
+      "property_note": null,
+      "value_text": "-40%",
+      "value_numeric": -0.4,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [
+     {
+      "effect_id": "skill_bonus:letools:planner.partialSkillBonuses:ba1574#mods#12#explodeFire",
+      "raw_text": "{\"explodeFire\": true}",
+      "ext": {
+       "node_key": "12",
+       "node_entity_id": "node:letools:ba1574:12",
+       "tree_id": "ba1574",
+       "source_section": "mods",
+       "flag": "explodeFire",
+       "value": true
+      }
+     }
+    ],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:12",
+    "name_key": "Skills.Skill_ba1574_12_Name",
+    "mechanic_classes": [
+     "hit_explosion_conversion",
+     "attack_speed(less)"
+    ],
+    "description_operation_candidates": [
+     "less_attack_speed"
+    ]
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:14",
+    "tree": "ba1574",
+    "node_id": "14",
+    "name": "Practical Build",
+    "node_type": "normal",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Ballista deals more damage (multiplicative with other modifiers) and has more attack speed (multiplicative with other modifiers), but has a shorter duration.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 2,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:14#stat#0",
+      "stat_name": "Damage",
+      "statNameKey": "Skills.Skill_ba1574_14_0_Stat",
+      "property": 0,
+      "property_dataset_name": "Damage",
+      "property_namespace_known": true,
+      "property_semantics_label": "Damage",
+      "property_note": null,
+      "value_text": "+40%",
+      "value_numeric": 0.4,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:14#stat#1",
+      "stat_name": "More Attack Speed",
+      "statNameKey": "Skills.Skill_ba1574_14_1_Stat",
+      "property": 2,
+      "property_dataset_name": "Attack Speed",
+      "property_namespace_known": true,
+      "property_semantics_label": "Attack Speed",
+      "property_note": null,
+      "value_text": "+40%",
+      "value_numeric": 0.4,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:14#stat#2",
+      "stat_name": "Duration (seconds)",
+      "statNameKey": "Skills.Skill_ba1574_14_2_Stat",
+      "property": 5093,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Duration",
+      "property_note": null,
+      "value_text": "-25%",
+      "value_numeric": -0.25,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:14",
+    "name_key": "Skills.Skill_ba1574_14_Name",
+    "mechanic_classes": [
+     "more_damage",
+     "more_attack_speed",
+     "duration"
+    ],
+    "description_operation_candidates": [
+     "more_damage",
+     "more_attack_speed",
+     "reduced_duration"
+    ]
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:15",
+    "tree": "ba1574",
+    "node_id": "15",
+    "name": "Sturdy Foundation",
+    "node_type": "normal",
+    "max_points": 3,
+    "current_points": 2,
+    "description": "Ballista has more health and lasts longer.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 11,
+      "requirement": 1
+     },
+     {
+      "nodeId": 16,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:15#stat#0",
+      "stat_name": "Health",
+      "statNameKey": "Skills.Skill_ba1574_15_0_Stat",
+      "property": 7,
+      "property_dataset_name": "Health",
+      "property_namespace_known": true,
+      "property_semantics_label": "Health",
+      "property_note": null,
+      "value_text": "+25%",
+      "value_numeric": 0.25,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:15#stat#1",
+      "stat_name": "Duration",
+      "statNameKey": "Skills.Skill_ba1574_15_1_Stat",
+      "property": 5093,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Duration",
+      "property_note": null,
+      "value_text": "+15%",
+      "value_numeric": 0.15,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:15",
+    "name_key": "Skills.Skill_ba1574_15_Name",
+    "mechanic_classes": [
+     "health",
+     "duration"
+    ],
+    "description_operation_candidates": [
+     "increased_duration",
+     "more_health"
+    ]
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:18",
+    "tree": "ba1574",
+    "node_id": "18",
+    "name": "Agile Engineering",
+    "node_type": "normal",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Ballista takes less time to place and has increased attack speed based on your Dexterity.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 0,
+      "requirement": 0
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:18#stat#0",
+      "stat_name": "Placement Speed per Dexterity",
+      "statNameKey": "Skills.Skill_ba1574_18_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "+1%",
+      "value_numeric": 0.01,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:18#stat#1",
+      "stat_name": "Attack Speed per 5 Dexterity",
+      "statNameKey": "Skills.Skill_ba1574_18_1_Stat",
+      "property": 2,
+      "property_dataset_name": "Attack Speed",
+      "property_namespace_known": true,
+      "property_semantics_label": "Attack Speed",
+      "property_note": null,
+      "value_text": "+1%",
+      "value_numeric": 0.01,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:18",
+    "name_key": "Skills.Skill_ba1574_18_Name",
+    "mechanic_classes": [
+     "attack_speed_per_dex",
+     "placement_speed"
+    ],
+    "description_operation_candidates": [
+     "increased_attack_speed"
+    ]
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:22",
+    "tree": "ba1574",
+    "node_id": "22",
+    "name": "Shared Enhancements",
+    "node_type": "normal",
+    "max_points": 3,
+    "current_points": 3,
+    "description": "Your damage modifiers also apply to your Ballista, but at a reduced ratio.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 0,
+      "requirement": 0
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:22#stat#0",
+      "stat_name": "Damage Stat Ratio",
+      "statNameKey": "Skills.Skill_ba1574_22_0_Stat",
+      "property": 0,
+      "property_dataset_name": "Damage",
+      "property_namespace_known": true,
+      "property_semantics_label": "Damage",
+      "property_note": null,
+      "value_text": "+25%",
+      "value_numeric": 0.25,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:22",
+    "name_key": "Skills.Skill_ba1574_22_Name",
+    "mechanic_classes": [
+     "player_damage_modifier_ratio"
+    ],
+    "description_operation_candidates": []
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:23",
+    "tree": "ba1574",
+    "node_id": "23",
+    "name": "Heavy Bolts",
+    "node_type": "normal",
+    "max_points": 3,
+    "current_points": 3,
+    "description": "Ballista deals more damage (multiplicative with other modifiers), but has less attack speed (multiplicative with other modifiers).",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 22,
+      "requirement": 1
+     },
+     {
+      "nodeId": 26,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:23#stat#0",
+      "stat_name": "Damage",
+      "statNameKey": "Skills.Skill_ba1574_23_0_Stat",
+      "property": 0,
+      "property_dataset_name": "Damage",
+      "property_namespace_known": true,
+      "property_semantics_label": "Damage",
+      "property_note": null,
+      "value_text": "+12%",
+      "value_numeric": 0.12,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:23#stat#1",
+      "stat_name": "Less Attack Speed",
+      "statNameKey": "Skills.Skill_ba1574_23_1_Stat",
+      "property": 2,
+      "property_dataset_name": "Attack Speed",
+      "property_namespace_known": true,
+      "property_semantics_label": "Attack Speed",
+      "property_note": null,
+      "value_text": "-5%",
+      "value_numeric": -0.05,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:23",
+    "name_key": "Skills.Skill_ba1574_23_Name",
+    "mechanic_classes": [
+     "more_damage",
+     "attack_speed(less)"
+    ],
+    "description_operation_candidates": [
+     "more_damage",
+     "less_attack_speed"
+    ]
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:25",
+    "tree": "ba1574",
+    "node_id": "25",
+    "name": "Elixir of Construction",
+    "node_type": "normal",
+    "max_points": 3,
+    "current_points": 3,
+    "description": "Ballista deals more damage (multiplicative with other modifiers) if constructed within 4 seconds of using a potion.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 31,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:25#stat#0",
+      "stat_name": "Damage",
+      "statNameKey": "Skills.Skill_ba1574_25_0_Stat",
+      "property": 0,
+      "property_dataset_name": "Damage",
+      "property_namespace_known": true,
+      "property_semantics_label": "Damage",
+      "property_note": null,
+      "value_text": "+15%",
+      "value_numeric": 0.15,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:25",
+    "name_key": "Skills.Skill_ba1574_25_Name",
+    "mechanic_classes": [
+     "more_damage_conditional_potion"
+    ],
+    "description_operation_candidates": [
+     "more_damage"
+    ]
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:26",
+    "tree": "ba1574",
+    "node_id": "26",
+    "name": "Sharpened Tips",
+    "node_type": "normal",
+    "max_points": 2,
+    "current_points": 1,
+    "description": "Improves Ballista's base critical strike chance.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 23,
+      "requirement": 1
+     },
+     {
+      "nodeId": 6,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:26#stat#0",
+      "stat_name": "Base Crit Chance",
+      "statNameKey": "Skills.Skill_ba1574_26_0_Stat",
+      "property": 5007,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Base Critical Strike Chance",
+      "property_note": null,
+      "value_text": "+3%",
+      "value_numeric": 0.03,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:26",
+    "name_key": "Skills.Skill_ba1574_26_Name",
+    "mechanic_classes": [
+     "base_crit_chance"
+    ],
+    "description_operation_candidates": []
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:27",
+    "tree": "ba1574",
+    "node_id": "27",
+    "name": "Perfect Aim",
+    "node_type": "normal",
+    "max_points": 4,
+    "current_points": 4,
+    "description": "Your critical strike chance and critical strike multipliers also apply to your Ballista, but at a reduced ratio.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 26,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:27#stat#0",
+      "stat_name": "Critical Chance Stat Ratio",
+      "statNameKey": "Skills.Skill_ba1574_27_0_Stat",
+      "property": 4,
+      "property_dataset_name": "Critical Strike Chance",
+      "property_namespace_known": true,
+      "property_semantics_label": "Critical Strike Chance",
+      "property_note": null,
+      "value_text": "+25%",
+      "value_numeric": 0.25,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ba1574:27#stat#1",
+      "stat_name": "Critical Strike Multiplier Stat Ratio",
+      "statNameKey": "Skills.Skill_ba1574_27_1_Stat",
+      "property": 5,
+      "property_dataset_name": "Critical Strike Multiplier",
+      "property_namespace_known": true,
+      "property_semantics_label": "Critical Strike Multiplier",
+      "property_note": null,
+      "value_text": "+25%",
+      "value_numeric": 0.25,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:27",
+    "name_key": "Skills.Skill_ba1574_27_Name",
+    "mechanic_classes": [
+     "player_crit_chance_ratio",
+     "player_crit_multi_ratio"
+    ],
+    "description_operation_candidates": []
+   },
+   {
+    "node_entity_id": "node:letools:ba1574:31",
+    "tree": "ba1574",
+    "node_id": "31",
+    "name": "Care Package",
+    "node_type": "normal",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Ballistae which have hit an enemy have a chance to drop a potion when destroyed, based on the time they existed.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 15,
+      "requirement": 2
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ba1574:31#stat#0",
+      "stat_name": "Potion Drop Chance Per Second",
+      "statNameKey": "Skills.Skill_ba1574_31_0_Stat",
+      "property": 49,
+      "property_dataset_name": "Potion Slots",
+      "property_namespace_known": true,
+      "property_semantics_label": "Potion Slots",
+      "property_note": "dataset coreDB.propertyList maps this id to a different stat name ('Potion Slots'); the node-context semantics is the letools stat_name label -> do not use the dataset name blindly",
+      "value_text": "10%",
+      "value_numeric": 0.1,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ba1574:31",
+    "name_key": "Skills.Skill_ba1574_31_Name",
+    "mechanic_classes": [
+     "potion_drop"
+    ],
+    "description_operation_candidates": []
+   }
+  ]
+ },
+ "nodes_explosive_trap": {
+  "tree": "tree:letools:LESkillTrees:ex4tp",
+  "points_total": 25,
+  "nodes": [
+   {
+    "node_entity_id": "node:letools:ex4tp:0",
+    "tree": "ex4tp",
+    "node_id": "0",
+    "name": "Net",
+    "node_type": "root",
+    "max_points": 0,
+    "current_points": 0,
+    "description": null,
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [],
+    "stats": [],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:0",
+    "name_key": "Skills.Skill_ex4tp_0_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:2",
+    "tree": "ex4tp",
+    "node_id": "2",
+    "name": "Ash Compartment",
+    "node_type": "normal",
+    "max_points": 4,
+    "current_points": 1,
+    "description": "Explosive Trap deals more damage (multiplicative with other modifiers) and its hits shred enemy fire resistance.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 0,
+      "requirement": 0
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:2#stat#0",
+      "stat_name": "Damage",
+      "statNameKey": "Skills.Skill_ex4tp_2_0_Stat",
+      "property": 0,
+      "property_dataset_name": "Damage",
+      "property_namespace_known": true,
+      "property_semantics_label": "Damage",
+      "property_note": null,
+      "value_text": "+5%",
+      "value_numeric": 0.05,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:2#stat#1",
+      "stat_name": "Fire Res Shred Stacks",
+      "statNameKey": "Skills.Skill_ex4tp_2_1_Stat",
+      "property": 10042,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Fire Resistance Shred Stacks",
+      "property_note": null,
+      "value_text": "1",
+      "value_numeric": 1.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:2",
+    "name_key": "Skills.Skill_ex4tp_2_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:7",
+    "tree": "ex4tp",
+    "node_id": "7",
+    "name": "Static Mines",
+    "node_type": "normal",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Explosive Trap's base fire damage is converted to lightning. Consequently this damage scales with increases to lightning damage, but not increases to fire damage.\n\nFire resistance shred chance from all sources is converted to lightning resistance shred.\n\nSwaps Explosive Trap's '{'Fire'}' tag for a '{'Lightning'}' tag.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 2,
+      "requirement": 1
+     },
+     {
+      "nodeId": 9,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:7#stat#0",
+      "stat_name": "Fire -> Lightning Conversion",
+      "statNameKey": "Skills.Skill_ex4tp_7_0_Stat",
+      "property": 5091,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Fire -> Lightning Conversion",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:7#stat#1",
+      "stat_name": "Fire -> Lightning Res Shred Chance",
+      "statNameKey": "Skills.Skill_ex4tp_7_1_Stat",
+      "property": 10075,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Fire -> Lightning Res Shred Chance",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     }
+    ],
+    "config_mods": [
+     {
+      "effect_id": "skill_bonus:letools:planner.partialSkillBonuses:ex4tp#mods#7#convertToLightning",
+      "raw_text": "{\"convertToLightning\": true}",
+      "ext": {
+       "node_key": "7",
+       "node_entity_id": "node:letools:ex4tp:7",
+       "tree_id": "ex4tp",
+       "source_section": "mods",
+       "flag": "convertToLightning",
+       "value": true
+      }
+     }
+    ],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:7",
+    "name_key": "Skills.Skill_ex4tp_7_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:8",
+    "tree": "ex4tp",
+    "node_id": "8",
+    "name": "Lightning Bomb",
+    "node_type": "normal",
+    "max_points": 5,
+    "current_points": 2,
+    "description": "Explosive Trap's hits have a chance to shock enemies and inflict them with a '{'Spark Charge'}'.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 7,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:8#stat#0",
+      "stat_name": "Shock Chance",
+      "statNameKey": "Skills.Skill_ex4tp_8_0_Stat",
+      "property": 10005,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Shock Chance",
+      "property_note": null,
+      "value_text": "+25%",
+      "value_numeric": 0.25,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:8#stat#1",
+      "stat_name": "Spark Charge Chance",
+      "statNameKey": "Skills.Skill_ex4tp_8_1_Stat",
+      "property": 5072,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Spark Charge Chance",
+      "property_note": null,
+      "value_text": "+20%",
+      "value_numeric": 0.2,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:8",
+    "name_key": "Skills.Skill_ex4tp_8_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:9",
+    "tree": "ex4tp",
+    "node_id": "9",
+    "name": "Trapas",
+    "node_type": "normal",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "When directly using Explosive Trap, an unconverted Explosive Trap and a trap corresponding to each conversion node you have taken are thrown at the same time. Traps thrown this way are thrown in a small area.\n\nAdditionally, Explosive Trap deals less damage in a smaller area (both multiplicative with other modifiers) and cost additional mana.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 7,
+      "requirement": 1
+     },
+     {
+      "nodeId": 10,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:9#stat#0",
+      "stat_name": "Default And Converted Trap Thrown",
+      "statNameKey": "Skills.Skill_ex4tp_9_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:9#stat#1",
+      "stat_name": "Damage",
+      "statNameKey": "Skills.Skill_ex4tp_9_1_Stat",
+      "property": 0,
+      "property_dataset_name": "Damage",
+      "property_namespace_known": true,
+      "property_semantics_label": "Damage",
+      "property_note": null,
+      "value_text": "-30%",
+      "value_numeric": -0.3,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:9#stat#2",
+      "stat_name": "Less Area",
+      "statNameKey": "Skills.Skill_ex4tp_9_2_Stat",
+      "property": 5015,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Increased Area",
+      "property_note": null,
+      "value_text": "-30%",
+      "value_numeric": -0.3,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:9#stat#3",
+      "stat_name": "Mana Cost",
+      "statNameKey": "Skills.Skill_ex4tp_9_3_Stat",
+      "property": 66,
+      "property_dataset_name": "Mana Cost",
+      "property_namespace_known": true,
+      "property_semantics_label": "Mana Cost",
+      "property_note": null,
+      "value_text": "+3",
+      "value_numeric": 3.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [
+     {
+      "effect_id": "skill_bonus:letools:planner.partialSkillBonuses:ex4tp#mods#9#throwsTrapOfEachConversion",
+      "raw_text": "{\"throwsTrapOfEachConversion\": true}",
+      "ext": {
+       "node_key": "9",
+       "node_entity_id": "node:letools:ex4tp:9",
+       "tree_id": "ex4tp",
+       "source_section": "mods",
+       "flag": "throwsTrapOfEachConversion",
+       "value": true
+      }
+     }
+    ],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:9",
+    "name_key": "Skills.Skill_ex4tp_9_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:10",
+    "tree": "ex4tp",
+    "node_id": "10",
+    "name": "Coldsnap Mines",
+    "node_type": "normal",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Explosive Trap's base fire damage is converted to cold. Consequently this damage scales with increases to cold damage, but not increases to fire damage.\n\nFire resistance shred chance from all sources is converted to cold resistance shred.\n\nSwaps Explosive Trap's '{'Fire'}' tag for a '{'Cold'}' tag.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 9,
+      "requirement": 1
+     },
+     {
+      "nodeId": 13,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:10#stat#0",
+      "stat_name": "Fire -> Cold Conversion",
+      "statNameKey": "Skills.Skill_ex4tp_10_0_Stat",
+      "property": 5128,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Fire -> Cold Conversion",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:10#stat#1",
+      "stat_name": "Fire -> Cold Res Shred Chance",
+      "statNameKey": "Skills.Skill_ex4tp_10_1_Stat",
+      "property": 10074,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Fire -> Cold Res Shred Chance",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     }
+    ],
+    "config_mods": [
+     {
+      "effect_id": "skill_bonus:letools:planner.partialSkillBonuses:ex4tp#mods#10#convertToCold",
+      "raw_text": "{\"convertToCold\": true}",
+      "ext": {
+       "node_key": "10",
+       "node_entity_id": "node:letools:ex4tp:10",
+       "tree_id": "ex4tp",
+       "source_section": "mods",
+       "flag": "convertToCold",
+       "value": true
+      }
+     }
+    ],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:10",
+    "name_key": "Skills.Skill_ex4tp_10_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:11",
+    "tree": "ex4tp",
+    "node_id": "11",
+    "name": "Flash Frozen",
+    "node_type": "normal",
+    "max_points": 3,
+    "current_points": 1,
+    "description": "Explosive Trap's hits have a chance to chill enemies.\n\nAdditionally, Explosive Trap has additional freeze rate per Intelligence.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 10,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:11#stat#0",
+      "stat_name": "Chill Stacks",
+      "statNameKey": "Skills.Skill_ex4tp_11_0_Stat",
+      "property": 10003,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Chill Stacks",
+      "property_note": null,
+      "value_text": "1",
+      "value_numeric": 1.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:11#stat#1",
+      "stat_name": "Freeze Rate Per Int",
+      "statNameKey": "Skills.Skill_ex4tp_11_1_Stat",
+      "property": 67,
+      "property_dataset_name": "Freeze Rate Multiplier",
+      "property_namespace_known": true,
+      "property_semantics_label": "Freeze Rate Multiplier",
+      "property_note": null,
+      "value_text": "+1",
+      "value_numeric": 1.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:11",
+    "name_key": "Skills.Skill_ex4tp_11_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:19",
+    "tree": "ex4tp",
+    "node_id": "19",
+    "name": "Jelkhor''s Blueprint",
+    "node_type": "normal",
+    "max_points": 3,
+    "current_points": 2,
+    "description": "Explosive Trap costs less mana and it has increased throwing attack speed.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 17,
+      "requirement": 1
+     },
+     {
+      "nodeId": 23,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:19#stat#0",
+      "stat_name": "Mana Efficiency",
+      "statNameKey": "Skills.Skill_ex4tp_19_0_Stat",
+      "property": 69,
+      "property_dataset_name": "Mana Efficiency",
+      "property_namespace_known": true,
+      "property_semantics_label": "Mana Efficiency",
+      "property_note": null,
+      "value_text": "+8%",
+      "value_numeric": 0.08,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:19#stat#1",
+      "stat_name": "Throwing Attack Speed",
+      "statNameKey": "Skills.Skill_ex4tp_19_1_Stat",
+      "property": 2,
+      "property_dataset_name": "Attack Speed",
+      "property_namespace_known": true,
+      "property_semantics_label": "Attack Speed",
+      "property_note": null,
+      "value_text": "+4%",
+      "value_numeric": 0.04,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 1024,
+      "tags_decoded": [
+       "Throwing"
+      ],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:19",
+    "name_key": "Skills.Skill_ex4tp_19_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:20",
+    "tree": "ex4tp",
+    "node_id": "20",
+    "name": "Sky Signal",
+    "node_type": "notable",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Whenever one of your Explosive Traps detonate, your '{'Falcon'}' gains physical and elemental penetration for a short duration.\n\nThis effect can trigger up to a maximum of 15 times within 3 seconds.",
+    "relatedAbilities": [
+     "falc0"
+    ],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 19,
+      "requirement": 2
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:20#stat#0",
+      "stat_name": "Elemental Penetration",
+      "statNameKey": "Skills.Skill_ex4tp_20_0_Stat",
+      "property": 59,
+      "property_dataset_name": "Penetration",
+      "property_namespace_known": true,
+      "property_semantics_label": "Penetration",
+      "property_note": null,
+      "value_text": "+2%",
+      "value_numeric": 0.02,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 128,
+      "tags_decoded": [
+       "Elemental"
+      ],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:20#stat#1",
+      "stat_name": "Physical Penetration",
+      "statNameKey": "Skills.Skill_ex4tp_20_1_Stat",
+      "property": 59,
+      "property_dataset_name": "Penetration",
+      "property_namespace_known": true,
+      "property_semantics_label": "Penetration",
+      "property_note": null,
+      "value_text": "+2%",
+      "value_numeric": 0.02,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 1,
+      "tags_decoded": [
+       "Physical"
+      ],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:20#stat#2",
+      "stat_name": "Buff Duration (seconds)",
+      "statNameKey": "Skills.Skill_ex4tp_20_2_Stat",
+      "property": 5093,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Duration",
+      "property_note": null,
+      "value_text": "3",
+      "value_numeric": 3.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": true,
+      "downside": false,
+      "per_point": "one-time",
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:20",
+    "name_key": "Skills.Skill_ex4tp_20_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:21",
+    "tree": "ex4tp",
+    "node_id": "21",
+    "name": "Free Lofting Bird",
+    "node_type": "notable",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Whenever one of your Explosive Traps detonate, your '{'Falcon's'}' skills recover a portion of their remaining cooldowns.",
+    "relatedAbilities": [
+     "falc0",
+     "ailment_aa32a_11",
+     "db992",
+     "aa989"
+    ],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 20,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:21#stat#0",
+      "stat_name": "Falcon Skills Cooldown Recovered",
+      "statNameKey": "Skills.Skill_ex4tp_21_0_Stat",
+      "property": 5026,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Cooldown Recovered",
+      "property_note": null,
+      "value_text": "3%",
+      "value_numeric": 0.03,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:21",
+    "name_key": "Skills.Skill_ex4tp_21_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:23",
+    "tree": "ex4tp",
+    "node_id": "23",
+    "name": "Minefield",
+    "node_type": "normal",
+    "max_points": 4,
+    "current_points": 1,
+    "description": "You can now have more active Explosive Traps.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 0,
+      "requirement": 0
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:23#stat#0",
+      "stat_name": "Maximum Traps",
+      "statNameKey": "Skills.Skill_ex4tp_23_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "+1",
+      "value_numeric": 1.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:23",
+    "name_key": "Skills.Skill_ex4tp_23_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:24",
+    "tree": "ex4tp",
+    "node_id": "24",
+    "name": "Clustered Explosives",
+    "node_type": "normal",
+    "max_points": 2,
+    "current_points": 2,
+    "description": "When you directly use Explosive Trap you throw additional traps, but Explosive Trap costs more mana.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 23,
+      "requirement": 2
+     },
+     {
+      "nodeId": 25,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:24#stat#0",
+      "stat_name": "Additional Traps Thrown",
+      "statNameKey": "Skills.Skill_ex4tp_24_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "+1",
+      "value_numeric": 1.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:24#stat#1",
+      "stat_name": "Mana Cost",
+      "statNameKey": "Skills.Skill_ex4tp_24_1_Stat",
+      "property": 66,
+      "property_dataset_name": "Mana Cost",
+      "property_namespace_known": true,
+      "property_semantics_label": "Mana Cost",
+      "property_note": null,
+      "value_text": "+6",
+      "value_numeric": 6.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:24",
+    "name_key": "Skills.Skill_ex4tp_24_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:25",
+    "tree": "ex4tp",
+    "node_id": "25",
+    "name": "Subtle Sabotage",
+    "node_type": "normal",
+    "max_points": 2,
+    "current_points": 2,
+    "description": "Explosive Trap costs less mana, but deals less damage (multiplicative with other modifiers) in a smaller area.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 24,
+      "requirement": 1
+     },
+     {
+      "nodeId": 19,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:25#stat#0",
+      "stat_name": "Mana Cost",
+      "statNameKey": "Skills.Skill_ex4tp_25_0_Stat",
+      "property": 66,
+      "property_dataset_name": "Mana Cost",
+      "property_namespace_known": true,
+      "property_semantics_label": "Mana Cost",
+      "property_note": null,
+      "value_text": "-12%",
+      "value_numeric": -0.12,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:25#stat#1",
+      "stat_name": "Damage",
+      "statNameKey": "Skills.Skill_ex4tp_25_1_Stat",
+      "property": 0,
+      "property_dataset_name": "Damage",
+      "property_namespace_known": true,
+      "property_semantics_label": "Damage",
+      "property_note": null,
+      "value_text": "-8%",
+      "value_numeric": -0.08,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:25#stat#2",
+      "stat_name": "Area",
+      "statNameKey": "Skills.Skill_ex4tp_25_2_Stat",
+      "property": 5015,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "Increased Area",
+      "property_note": null,
+      "value_text": "-8%",
+      "value_numeric": -0.08,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:25",
+    "name_key": "Skills.Skill_ex4tp_25_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:26",
+    "tree": "ex4tp",
+    "node_id": "26",
+    "name": "Blast Rain",
+    "node_type": "notable",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "You now shoot arrows attached with Explosive Traps up into the air that then drop down around the target location.\n\nExplosive Trap now scales with your bow damage instead of throwing damage and your bow attack speed instead of throwing attack speed.\n\nThis requires wielding a bow.",
+    "relatedAbilities": [
+     "ability_gen408_ex4tp_1"
+    ],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 24,
+      "requirement": 2
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:26#stat#0",
+      "stat_name": "Traps Rain",
+      "statNameKey": "Skills.Skill_ex4tp_26_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:26#stat#1",
+      "stat_name": "Throwing -> Bow Damage",
+      "statNameKey": "Skills.Skill_ex4tp_26_1_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:26#stat#2",
+      "stat_name": "Throwing -> Bow Attack Speed",
+      "statNameKey": "Skills.Skill_ex4tp_26_2_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:26#stat#3",
+      "stat_name": "Requires A Bow",
+      "statNameKey": "Skills.Skill_ex4tp_26_3_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     }
+    ],
+    "config_mods": [
+     {
+      "effect_id": "skill_bonus:letools:planner.partialSkillBonuses:ex4tp#mods#26#castingBow",
+      "raw_text": "{\"castingBow\": true}",
+      "ext": {
+       "node_key": "26",
+       "node_entity_id": "node:letools:ex4tp:26",
+       "tree_id": "ex4tp",
+       "source_section": "mods",
+       "flag": "castingBow",
+       "value": true
+      }
+     }
+    ],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:26",
+    "name_key": "Skills.Skill_ex4tp_26_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:27",
+    "tree": "ex4tp",
+    "node_id": "27",
+    "name": "Impact Trigger",
+    "node_type": "normal",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Explosive Traps now instantly detonate when the arrows hit the ground via the '{'Blast Rain'}' node, ignoring the arming time.\n\nAdditionally, Explosive Trap has a higher chance to stun enemies.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 26,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:27#stat#0",
+      "stat_name": "Traps Explode Immediately When Hit",
+      "statNameKey": "Skills.Skill_ex4tp_27_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:27#stat#1",
+      "stat_name": "Increased Stun Chance",
+      "statNameKey": "Skills.Skill_ex4tp_27_1_Stat",
+      "property": 45,
+      "property_dataset_name": "Increased Stun Chance",
+      "property_namespace_known": true,
+      "property_semantics_label": "Increased Stun Chance",
+      "property_note": null,
+      "value_text": "75%",
+      "value_numeric": 0.75,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:27#stat#2",
+      "stat_name": "Arming Time Is Ignored",
+      "statNameKey": "Skills.Skill_ex4tp_27_2_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:27",
+    "name_key": "Skills.Skill_ex4tp_27_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:28",
+    "tree": "ex4tp",
+    "node_id": "28",
+    "name": "Trap Sprinkler",
+    "node_type": "normal",
+    "max_points": 3,
+    "current_points": 3,
+    "description": "Whenever an Explosive Trap detonates, it has a chance to drop a fresh Explosive Trap at its location as long as there is an enemy within 6 meters, but Explosive Trap costs more mana.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 23,
+      "requirement": 1
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:28#stat#0",
+      "stat_name": "Trap Drop Chance",
+      "statNameKey": "Skills.Skill_ex4tp_28_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "+10%",
+      "value_numeric": 0.1,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:28#stat#1",
+      "stat_name": "Trap Drop Distance (meters)",
+      "statNameKey": "Skills.Skill_ex4tp_28_1_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "6",
+      "value_numeric": 6.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": true,
+      "downside": false,
+      "per_point": "one-time",
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:28#stat#2",
+      "stat_name": "Mana Cost",
+      "statNameKey": "Skills.Skill_ex4tp_28_2_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "+1",
+      "value_numeric": 1.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:28",
+    "name_key": "Skills.Skill_ex4tp_28_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:29",
+    "tree": "ex4tp",
+    "node_id": "29",
+    "name": "Automated Bombardment",
+    "node_type": "normal",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Explosive Trap has an additional chance to drop a fresh Explosive Trap via the '{'Trap Sprinkler'}' node, but Explosive Trap costs more mana.\n\nTraps dropped this way cannot drop more additional traps.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 28,
+      "requirement": 2
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:29#stat#0",
+      "stat_name": "Trap Drop Chance",
+      "statNameKey": "Skills.Skill_ex4tp_29_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "+70%",
+      "value_numeric": 0.7,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:29#stat#1",
+      "stat_name": "Mana Cost",
+      "statNameKey": "Skills.Skill_ex4tp_29_1_Stat",
+      "property": 66,
+      "property_dataset_name": "Mana Cost",
+      "property_namespace_known": true,
+      "property_semantics_label": "Mana Cost",
+      "property_note": null,
+      "value_text": "+11",
+      "value_numeric": 11.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": true,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:29",
+    "name_key": "Skills.Skill_ex4tp_29_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:30",
+    "tree": "ex4tp",
+    "node_id": "30",
+    "name": "Siege Engineering",
+    "node_type": "notable",
+    "max_points": 2,
+    "current_points": 2,
+    "description": "Whenever an Explosive Trap detonates, it now has a chance to create a '{'Ballista'}' for you.\n\nThis consumes mana equal to a portion of '{'Ballista's'}' mana cost.",
+    "relatedAbilities": [
+     "ba1574"
+    ],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 28,
+      "requirement": 2
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:30#stat#0",
+      "stat_name": "Summon Ballista Chance",
+      "statNameKey": "Skills.Skill_ex4tp_30_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "10%",
+      "value_numeric": 0.1,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:30#stat#1",
+      "stat_name": "Ballista Mana Consumption",
+      "statNameKey": "Skills.Skill_ex4tp_30_1_Stat",
+      "property": 66,
+      "property_dataset_name": "Mana Cost",
+      "property_namespace_known": true,
+      "property_semantics_label": "Mana Cost",
+      "property_note": null,
+      "value_text": "50%",
+      "value_numeric": 0.5,
+      "value_kind": "percent_modifier",
+      "unit": "%",
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": true,
+      "downside": true,
+      "per_point": "one-time",
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:30",
+    "name_key": "Skills.Skill_ex4tp_30_Name"
+   },
+   {
+    "node_entity_id": "node:letools:ex4tp:31",
+    "tree": "ex4tp",
+    "node_id": "31",
+    "name": "Trapuchet",
+    "node_type": "normal",
+    "max_points": 1,
+    "current_points": 1,
+    "description": "Explosive Traps dropped by the '{'Trap Sprinkler'}' node are now flung at a nearby enemy within 12 meters instead of being dropped.\n\nExplosive Traps dropped by the '{'Trap Sprinkler'}' node can now drop Explosive Traps when there's an enemy within 12 meters even if there is not an enemy within 6 meters.",
+    "relatedAbilities": [],
+    "triggeredAbilities": {},
+    "requirements": [
+     {
+      "nodeId": 28,
+      "requirement": 2
+     }
+    ],
+    "stats": [
+     {
+      "effect_id": "node:letools:ex4tp:31#stat#0",
+      "stat_name": "Traps Throw Traps",
+      "statNameKey": "Skills.Skill_ex4tp_31_0_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": null,
+      "value_numeric": null,
+      "value_kind": null,
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "unparsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:31#stat#1",
+      "stat_name": "Trap Throw Distance (meters)",
+      "statNameKey": "Skills.Skill_ex4tp_31_1_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "12",
+      "value_numeric": 12.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     },
+     {
+      "effect_id": "node:letools:ex4tp:31#stat#2",
+      "stat_name": "Trap Drop Distance (meters)",
+      "statNameKey": "Skills.Skill_ex4tp_31_2_Stat",
+      "property": 54,
+      "property_dataset_name": null,
+      "property_namespace_known": false,
+      "property_semantics_label": "unknown_property_54",
+      "property_note": null,
+      "value_text": "12",
+      "value_numeric": 12.0,
+      "value_kind": "flat",
+      "unit": null,
+      "tags": 0,
+      "tags_decoded": [],
+      "noScaling": false,
+      "downside": false,
+      "per_point": true,
+      "parse_status": "parsed"
+     }
+    ],
+    "config_mods": [],
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:ex4tp:31",
+    "name_key": "Skills.Skill_ex4tp_31_Name"
+   }
+  ]
+ },
+ "player_stats": {
+  "value_kind": "attributes/increased/added/crit/mana pools computed this round by running the existing generic mapping API (contribution_mapping) on the frozen calculation input; node values come from the dataset; minion/ability values are dataset raw",
+  "source_pipeline": {
+   "contributions": "<author-archive>/mech-data/25_player_rows.py (calls tools/phase3/src/le_calc/contribution_mapping.py: base_contributions / mod_contributions(map_mod) / passive_contributions)",
+   "aggregation": "tools/phase3/src/le_calc/stats.py compute_attributes/compute_mana/compute_resistances semantics reproduced for pools",
+   "why_not_build_snapshot": "le_calc.stats.build_snapshot and le_calc.inputs.load_bundle hardcode the phase-2 Black Hole case (bh2 nodes, mg-1 passives, item counts); they cannot load this case without modifying tools/, so the generic mapping layer was reused directly in .scratch"
+  },
+  "attribute_keys": "LE attribute order 0=Strength 1=Vitality 2=Intelligence 3=Dexterity 4=Attunement",
+  "attributes": {
+   "strength": 16.0,
+   "vitality": 2.0,
+   "intelligence": 14.0,
+   "dexterity": 228.0,
+   "attunement": 12.0
+  },
+  "attribute_sources": {
+   "strength": [
+    {
+     "contribution_id": "base:attribute:strength",
+     "operation": "added",
+     "value": 0.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "Rogue class base",
+     "source_path": "data.character.class",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "quest:attribute:all",
+     "operation": "added",
+     "value": 2.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "quest attribute points (campaign)",
+     "source_path": "data.quests",
+     "condition_status": "always",
+     "applied_to": "strength"
+    },
+    {
+     "contribution_id": "mod:equipment.chest#unique_mod#2",
+     "operation": "added",
+     "value": 14.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Urzil's Pride (Iron Armor)",
+     "source_path": "data.equipment.chest.ur",
+     "condition_status": "always"
+    }
+   ],
+   "vitality": [
+    {
+     "contribution_id": "base:attribute:vitality",
+     "operation": "added",
+     "value": 0.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "Rogue class base",
+     "source_path": "data.character.class",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "quest:attribute:all",
+     "operation": "added",
+     "value": 2.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "quest attribute points (campaign)",
+     "source_path": "data.quests",
+     "condition_status": "always",
+     "applied_to": "vitality"
+    }
+   ],
+   "intelligence": [
+    {
+     "contribution_id": "base:attribute:intelligence",
+     "operation": "added",
+     "value": 0.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "Rogue class base",
+     "source_path": "data.character.class",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "quest:attribute:all",
+     "operation": "added",
+     "value": 2.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "quest attribute points (campaign)",
+     "source_path": "data.quests",
+     "condition_status": "always",
+     "applied_to": "intelligence"
+    },
+    {
+     "contribution_id": "mod:equipment.head#unique_mod#2",
+     "operation": "added",
+     "value": 12.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Boneclamor Barbute (Gladiator Helmet)",
+     "source_path": "data.equipment.head.ur",
+     "condition_status": "always"
+    }
+   ],
+   "dexterity": [
+    {
+     "contribution_id": "base:attribute:dexterity",
+     "operation": "added",
+     "value": 3.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "Rogue class base",
+     "source_path": "data.character.class",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "quest:attribute:all",
+     "operation": "added",
+     "value": 2.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "quest attribute points (campaign)",
+     "source_path": "data.quests",
+     "condition_status": "always",
+     "applied_to": "dexterity"
+    },
+    {
+     "contribution_id": "mod:equipment.head#affix#normal#0.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Boneclamor Barbute (Gladiator Helmet)",
+     "source_path": "data.equipment.head.affixes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.head#unique_mod#1",
+     "operation": "added",
+     "value": 12.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Boneclamor Barbute (Gladiator Helmet)",
+     "source_path": "data.equipment.head.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.chest#affix#normal#0.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Urzil's Pride (Iron Armor)",
+     "source_path": "data.equipment.chest.affixes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.weapon1#unique_mod#4",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Hydra Arc (Serpent Bow)",
+     "source_path": "data.equipment.weapon1.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.weapon2#affix#normal#0.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Zeurial's Hunt (Skalnir Quiver)",
+     "source_path": "data.equipment.weapon2.affixes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.hands#affix#normal#0.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Blood Roost (Serrated Bracers)",
+     "source_path": "data.equipment.hands.affixes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.hands#unique_mod#3",
+     "operation": "added",
+     "value": 10.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Blood Roost (Serrated Bracers)",
+     "source_path": "data.equipment.hands.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.waist#unique_mod#1",
+     "operation": "added",
+     "value": 10.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Jungle Queen's Chaps of Holding (Leather Belt)",
+     "source_path": "data.equipment.waist.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.feet#affix#normal#1.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Mourningfrost (Leather Boots)",
+     "source_path": "data.equipment.feet.affixes.1",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.ring2#affix#normal#1.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Phantom Grip (Copper Ring)",
+     "source_path": "data.equipment.ring2.affixes.1",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.ring1#affix#normal#1.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Julra's Stardial (Sapphire Ring)",
+     "source_path": "data.equipment.ring1.affixes.1",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.ring1#affix#corrupted#0.0",
+     "operation": "added",
+     "value": 6.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Julra's Stardial (Sapphire Ring)",
+     "source_path": "data.equipment.ring1.corruptedAffix",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.relic#affix#normal#1.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Melvern's Writ (Lost Journal)",
+     "source_path": "data.equipment.relic.affixes.1",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.relic#unique_mod#4",
+     "operation": "added",
+     "value": 8.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Melvern's Writ (Lost Journal)",
+     "source_path": "data.equipment.relic.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:0:0",
+     "operation": "added",
+     "value": 8.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Steady Hand",
+     "source_path": "passive_tree.nodes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:21:0",
+     "operation": "added",
+     "value": 8.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Focus Fire",
+     "source_path": "passive_tree.nodes.21",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:50:0",
+     "operation": "added",
+     "value": 3.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Cloak of Shadows",
+     "source_path": "passive_tree.nodes.50",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:81:0",
+     "operation": "added",
+     "value": 8.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Agile Hunt",
+     "source_path": "passive_tree.nodes.81",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:92:0",
+     "operation": "added",
+     "value": 6.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Evasion Tactics",
+     "source_path": "passive_tree.nodes.92",
+     "condition_status": "always"
+    }
+   ],
+   "attunement": [
+    {
+     "contribution_id": "base:attribute:attunement",
+     "operation": "added",
+     "value": 0.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "Rogue class base",
+     "source_path": "data.character.class",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "quest:attribute:all",
+     "operation": "added",
+     "value": 2.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "quest attribute points (campaign)",
+     "source_path": "data.quests",
+     "condition_status": "always",
+     "applied_to": "attunement"
+    },
+    {
+     "contribution_id": "mod:equipment.chest#unique_mod#1",
+     "operation": "added",
+     "value": 10.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Urzil's Pride (Iron Armor)",
+     "source_path": "data.equipment.chest.ur",
+     "condition_status": "always"
+    }
+   ]
+  },
+  "dexterity": {
+   "total": 228.0,
+   "breakdown": {
+    "class_base": 3.0,
+    "quest_all_attributes": 2.0,
+    "gear_flat": 190.0,
+    "passive_flat": 33.0
+   },
+   "value_kind": "computed this round (generic mapping API)",
+   "conditional_not_included": {
+    "mod_id": "equipment.chest#affix#corrupted#0.0",
+    "readable_text": "+8 to All Attributes with at least 7 Corrupted non-Idol Items equipped",
+    "property": 98,
+    "observed_evidence": "12 non-idol item instances carry corrupted affixes in the frozen export; 1 is equipment.idol_altar",
+    "dexterity_if_applied": 236.0,
+    "status": "unresolved (property 98 rule missing); candidate assumption for the Lead"
+   },
+   "sources": [
+    {
+     "contribution_id": "base:attribute:dexterity",
+     "operation": "added",
+     "value": 3.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "Rogue class base",
+     "source_path": "data.character.class",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "quest:attribute:all",
+     "operation": "added",
+     "value": 2.0,
+     "damage_tags": [],
+     "source_kind": "base_character",
+     "source_label": "quest attribute points (campaign)",
+     "source_path": "data.quests",
+     "condition_status": "always",
+     "applied_to": "dexterity"
+    },
+    {
+     "contribution_id": "mod:equipment.head#affix#normal#0.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Boneclamor Barbute (Gladiator Helmet)",
+     "source_path": "data.equipment.head.affixes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.head#unique_mod#1",
+     "operation": "added",
+     "value": 12.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Boneclamor Barbute (Gladiator Helmet)",
+     "source_path": "data.equipment.head.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.chest#affix#normal#0.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Urzil's Pride (Iron Armor)",
+     "source_path": "data.equipment.chest.affixes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.weapon1#unique_mod#4",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Hydra Arc (Serpent Bow)",
+     "source_path": "data.equipment.weapon1.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.weapon2#affix#normal#0.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Zeurial's Hunt (Skalnir Quiver)",
+     "source_path": "data.equipment.weapon2.affixes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.hands#affix#normal#0.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Blood Roost (Serrated Bracers)",
+     "source_path": "data.equipment.hands.affixes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.hands#unique_mod#3",
+     "operation": "added",
+     "value": 10.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Blood Roost (Serrated Bracers)",
+     "source_path": "data.equipment.hands.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.waist#unique_mod#1",
+     "operation": "added",
+     "value": 10.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Jungle Queen's Chaps of Holding (Leather Belt)",
+     "source_path": "data.equipment.waist.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.feet#affix#normal#1.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Mourningfrost (Leather Boots)",
+     "source_path": "data.equipment.feet.affixes.1",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.ring2#affix#normal#1.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Phantom Grip (Copper Ring)",
+     "source_path": "data.equipment.ring2.affixes.1",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.ring1#affix#normal#1.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Julra's Stardial (Sapphire Ring)",
+     "source_path": "data.equipment.ring1.affixes.1",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.ring1#affix#corrupted#0.0",
+     "operation": "added",
+     "value": 6.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Julra's Stardial (Sapphire Ring)",
+     "source_path": "data.equipment.ring1.corruptedAffix",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.relic#affix#normal#1.0",
+     "operation": "added",
+     "value": 16.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Melvern's Writ (Lost Journal)",
+     "source_path": "data.equipment.relic.affixes.1",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.relic#unique_mod#4",
+     "operation": "added",
+     "value": 8.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Melvern's Writ (Lost Journal)",
+     "source_path": "data.equipment.relic.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:0:0",
+     "operation": "added",
+     "value": 8.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Steady Hand",
+     "source_path": "passive_tree.nodes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:21:0",
+     "operation": "added",
+     "value": 8.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Focus Fire",
+     "source_path": "passive_tree.nodes.21",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:50:0",
+     "operation": "added",
+     "value": 3.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Cloak of Shadows",
+     "source_path": "passive_tree.nodes.50",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:81:0",
+     "operation": "added",
+     "value": 8.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Agile Hunt",
+     "source_path": "passive_tree.nodes.81",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:92:0",
+     "operation": "added",
+     "value": 6.0,
+     "damage_tags": [],
+     "source_kind": "passive_node",
+     "source_label": "Evasion Tactics",
+     "source_path": "passive_tree.nodes.92",
+     "condition_status": "always"
+    }
+   ]
+  },
+  "crit": {
+   "formula": {
+    "crit_chance": "(0.05 + Σ added) * (1 + Σ increased) * Π(1 + more), cap 1.0",
+    "crit_multiplier": "(2.0 + Σ added) * (1 + Σ increased) * Π(1 + more)",
+    "evidence": "tools/phase3/rules/fr-hit-facts-v1.json#critical; ability_gen327 baseDamageStats critChance=0.05 critMultiplier=2"
+   },
+   "player_pools": {
+    "increased_crit_chance_untagged": 1.55,
+    "increased_crit_chance_bow": 0.95,
+    "added_crit_chance_untagged": 0.02,
+    "added_crit_chance_bow": 0.02,
+    "added_crit_multiplier_untagged": 3.12,
+    "added_crit_multiplier_bow": 0.35,
+    "crit_chance_estimate_bow_attack": 0.315,
+    "crit_multiplier_estimate_bow_attack": 5.47,
+    "rows": {
+     "increased_crit_chance": [
+      {
+       "contribution_id": "mod:equipment.ring2#implicit#0",
+       "operation": "increased",
+       "value": 0.5,
+       "damage_tags": [],
+       "source_kind": "equipment",
+       "source_label": "Phantom Grip (Copper Ring)",
+       "source_path": "data.equipment.ring2.ir",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.0#affix#normal#1.0",
+       "operation": "increased",
+       "value": 0.45,
+       "damage_tags": [
+        "Bow"
+       ],
+       "source_kind": "idol",
+       "source_label": "Large Umbral Omen Idol",
+       "source_path": "data.idols.0.affixes.1",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.2#affix#normal#2.0",
+       "operation": "increased",
+       "value": 0.09,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.2.affixes.2",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.3#affix#normal#2.0",
+       "operation": "increased",
+       "value": 0.06,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.3.affixes.2",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.4#affix#normal#1.0",
+       "operation": "increased",
+       "value": 0.5,
+       "damage_tags": [
+        "Bow"
+       ],
+       "source_kind": "idol",
+       "source_label": "Large Umbral Omen Idol",
+       "source_path": "data.idols.4.affixes.1",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.7#affix#normal#1.1",
+       "operation": "increased",
+       "value": 0.14,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Small Eterran Idol",
+       "source_path": "data.idols.7.affixes.1",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "passive:20:1",
+       "operation": "increased",
+       "value": 0.4,
+       "damage_tags": [],
+       "source_kind": "passive_node",
+       "source_label": "Assassin's Quiver",
+       "source_path": "passive_tree.nodes.20",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "passive:100:0",
+       "operation": "increased",
+       "value": 0.36,
+       "damage_tags": [],
+       "source_kind": "passive_node",
+       "source_label": "Needle Like Precision",
+       "source_path": "passive_tree.nodes.100",
+       "condition_status": "always"
+      }
+     ],
+     "added_crit_chance": [
+      {
+       "contribution_id": "mod:equipment.ring2#unique_mod#1",
+       "operation": "added",
+       "value": 0.02,
+       "damage_tags": [],
+       "source_kind": "equipment",
+       "source_label": "Phantom Grip (Copper Ring)",
+       "source_path": "data.equipment.ring2.ur",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "passive:20:2",
+       "operation": "added",
+       "value": 0.02,
+       "damage_tags": [
+        "Bow"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Assassin's Quiver",
+       "source_path": "passive_tree.nodes.20",
+       "condition_status": "always"
+      }
+     ],
+     "added_crit_multiplier": [
+      {
+       "contribution_id": "mod:equipment.weapon1#affix#normal#0.0",
+       "operation": "added",
+       "value": 0.46,
+       "damage_tags": [],
+       "source_kind": "equipment",
+       "source_label": "Hydra Arc (Serpent Bow)",
+       "source_path": "data.equipment.weapon1.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:equipment.weapon2#implicit#0",
+       "operation": "added",
+       "value": 0.35,
+       "damage_tags": [
+        "Bow"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Zeurial's Hunt (Skalnir Quiver)",
+       "source_path": "data.equipment.weapon2.ir",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:equipment.ring2#affix#corrupted#0.0",
+       "operation": "added",
+       "value": 0.17,
+       "damage_tags": [],
+       "source_kind": "equipment",
+       "source_label": "Phantom Grip (Copper Ring)",
+       "source_path": "data.equipment.ring2.corruptedAffix",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:equipment.amulet#affix#normal#0.0",
+       "operation": "added",
+       "value": 0.5,
+       "damage_tags": [],
+       "source_kind": "equipment",
+       "source_label": "Eternal Font (Astrology Amulet)",
+       "source_path": "data.equipment.amulet.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.0#affix#normal#0.0",
+       "operation": "added",
+       "value": 0.25,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Large Umbral Omen Idol",
+       "source_path": "data.idols.0.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.1#affix#normal#0.0",
+       "operation": "added",
+       "value": 0.22,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Large Umbral Omen Idol",
+       "source_path": "data.idols.1.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.2#affix#normal#0.0",
+       "operation": "added",
+       "value": 0.26,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.2.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.2#affix#normal#2.1",
+       "operation": "added",
+       "value": 0.05,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.2.affixes.2",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.3#affix#normal#0.0",
+       "operation": "added",
+       "value": 0.23,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.3.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.3#affix#normal#2.1",
+       "operation": "added",
+       "value": 0.03,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.3.affixes.2",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.4#affix#normal#0.0",
+       "operation": "added",
+       "value": 0.19,
+       "damage_tags": [],
+       "source_kind": "idol",
+       "source_label": "Large Umbral Omen Idol",
+       "source_path": "data.idols.4.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:blessings.3#implicit#0",
+       "operation": "added",
+       "value": 0.4,
+       "damage_tags": [],
+       "source_kind": "blessing",
+       "source_label": "Grand Emptiness of Ash",
+       "source_path": "data.blessings.3.ir",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "passive:100:2",
+       "operation": "added",
+       "value": 0.36,
+       "damage_tags": [],
+       "source_kind": "passive_node",
+       "source_label": "Needle Like Precision",
+       "source_path": "passive_tree.nodes.100",
+       "condition_status": "always"
+      }
+     ]
+    }
+   },
+   "minion_direct_pools": {
+    "explosion_base_crit_chance": 0.05,
+    "explosion_base_crit_multiplier": 2.0,
+    "node26_sharpened_tips_base_crit_added": 0.03,
+    "increased_crit_chance": 0.36,
+    "added_crit_chance": 0.09,
+    "added_crit_multiplier": 1.51,
+    "rows": {
+     "increased_crit_chance": [
+      {
+       "contribution_id": "passive:100:1",
+       "operation": "increased",
+       "value": 0.36,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Needle Like Precision",
+       "source_path": "passive_tree.nodes.100",
+       "condition_status": "always"
+      }
+     ],
+     "added_crit_chance": [
+      {
+       "contribution_id": "mod:equipment.ring2#unique_mod#2",
+       "operation": "added",
+       "value": 0.04,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Phantom Grip (Copper Ring)",
+       "source_path": "data.equipment.ring2.ur",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:equipment.relic#unique_mod#2",
+       "operation": "added",
+       "value": 0.03,
+       "damage_tags": [
+        "Bow",
+        "Minion"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Melvern's Writ (Lost Journal)",
+       "source_path": "data.equipment.relic.ur",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.3#affix#corrupted#0.0",
+       "operation": "added",
+       "value": 0.02,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.3.corruptedAffix",
+       "condition_status": "always"
+      }
+     ],
+     "added_crit_multiplier": [
+      {
+       "contribution_id": "mod:idols.0#affix#normal#0.1",
+       "operation": "added",
+       "value": 0.25,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "idol",
+       "source_label": "Large Umbral Omen Idol",
+       "source_path": "data.idols.0.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.1#affix#normal#0.1",
+       "operation": "added",
+       "value": 0.22,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "idol",
+       "source_label": "Large Umbral Omen Idol",
+       "source_path": "data.idols.1.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.2#affix#normal#0.1",
+       "operation": "added",
+       "value": 0.26,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.2.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.3#affix#normal#0.1",
+       "operation": "added",
+       "value": 0.23,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.3.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.4#affix#normal#0.1",
+       "operation": "added",
+       "value": 0.19,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "idol",
+       "source_label": "Large Umbral Omen Idol",
+       "source_path": "data.idols.4.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "passive:100:3",
+       "operation": "added",
+       "value": 0.36,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Needle Like Precision",
+       "source_path": "passive_tree.nodes.100",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "candidate_ballista_crit_chance_without_transfer": 0.2312,
+    "candidate_ballista_crit_multiplier_without_transfer": 3.51
+   },
+   "unmapped_damage_relevant": [
+    {
+     "mod_id": "equipment.ring2#affix#corrupted#0.1",
+     "readable_text": "1% Increased Critical Strike Chance per Dexterity",
+     "property": 98,
+     "value_numeric": 0.01,
+     "tags_raw": 427,
+     "candidate_if_per_point": 2.28,
+     "status": "unresolved: per-Dex conversion property not mapped"
+    }
+   ]
+  },
+  "player_increased_damage_pools": {
+   "note": "player-side 'increased damage' rows (Minion-tagged rows excluded); tag subset = the damage tags the modifier applies to. Ballista explosion tags are Bow+Fire, so the tag-applicable player pool is the Bow group; node 22 transfer scope is unresolved.",
+   "by_tag": {
+    "Bow": {
+     "total": 0.08,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.chest#affix#normal#1.1",
+       "operation": "increased",
+       "value": 0.08,
+       "damage_tags": [
+        "Bow"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Urzil's Pride (Iron Armor)",
+       "source_path": "data.equipment.chest.affixes.1",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "DoT": {
+     "total": 0.09,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.weapon2#affix#corrupted#0.0",
+       "operation": "increased",
+       "value": 0.07,
+       "damage_tags": [
+        "DoT"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Zeurial's Hunt (Skalnir Quiver)",
+       "source_path": "data.equipment.weapon2.corruptedAffix",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:idols.3#affix#normal#3.0",
+       "operation": "increased",
+       "value": 0.02,
+       "damage_tags": [
+        "DoT"
+       ],
+       "source_kind": "idol",
+       "source_label": "Heretical Adorned Majasan Idol",
+       "source_path": "data.idols.3.affixes.3",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Melee": {
+     "total": 0.3,
+     "rows": [
+      {
+       "contribution_id": "passive:49:1",
+       "operation": "increased",
+       "value": 0.3,
+       "damage_tags": [
+        "Melee"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Pursuit",
+       "source_path": "passive_tree.nodes.49",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Physical": {
+     "total": 0.26,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.waist#unique_mod#2",
+       "operation": "increased",
+       "value": 0.26,
+       "damage_tags": [
+        "Physical"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Jungle Queen's Chaps of Holding (Leather Belt)",
+       "source_path": "data.equipment.waist.ur",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Spell": {
+     "total": 0.72,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.ring1#unique_mod#1",
+       "operation": "increased",
+       "value": 0.72,
+       "damage_tags": [
+        "Spell"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Julra's Stardial (Sapphire Ring)",
+       "source_path": "data.equipment.ring1.ur",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Throwing": {
+     "total": 0.3,
+     "rows": [
+      {
+       "contribution_id": "passive:49:2",
+       "operation": "increased",
+       "value": 0.3,
+       "damage_tags": [
+        "Throwing"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Pursuit",
+       "source_path": "passive_tree.nodes.49",
+       "condition_status": "always"
+      }
+     ]
+    }
+   },
+   "tag_applicable_bow": 0.08,
+   "all_non_minion_rows_total": 1.75
+  },
+  "minion_direct_increased_damage": {
+   "note": "Minion-tagged 'increased damage' rows apply to the Ballista directly (the Ballista is a minion); explosion is Bow+Fire, so {Minion} and {Minion,Bow} apply, {Minion,Physical} does not",
+   "by_tag": {
+    "Bow+Minion": {
+     "total": 0.87,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.relic#unique_mod#1",
+       "operation": "increased",
+       "value": 0.87,
+       "damage_tags": [
+        "Bow",
+        "Minion"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Melvern's Writ (Lost Journal)",
+       "source_path": "data.equipment.relic.ur",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Minion": {
+     "total": 4.55,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.head#affix#normal#1.1",
+       "operation": "increased",
+       "value": 0.85,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Boneclamor Barbute (Gladiator Helmet)",
+       "source_path": "data.equipment.head.affixes.1",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:equipment.hands#affix#normal#1.1",
+       "operation": "increased",
+       "value": 0.98,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Blood Roost (Serrated Bracers)",
+       "source_path": "data.equipment.hands.affixes.1",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:equipment.ring1#affix#normal#0.0",
+       "operation": "increased",
+       "value": 1.16,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Julra's Stardial (Sapphire Ring)",
+       "source_path": "data.equipment.ring1.affixes.0",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:blessings.10#implicit#0",
+       "operation": "increased",
+       "value": 1.0,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "blessing",
+       "source_label": "Grand Spirit of Command",
+       "source_path": "data.blessings.10.ir",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "passive:48:0",
+       "operation": "increased",
+       "value": 0.56,
+       "damage_tags": [
+        "Minion"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Handler",
+       "source_path": "passive_tree.nodes.48",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Minion+Physical": {
+     "total": 0.26,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.waist#unique_mod#3",
+       "operation": "increased",
+       "value": 0.26,
+       "damage_tags": [
+        "Minion",
+        "Physical"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Jungle Queen's Chaps of Holding (Leather Belt)",
+       "source_path": "data.equipment.waist.ur",
+       "condition_status": "always"
+      }
+     ]
+    }
+   },
+   "fire_bow_applicable_total": 5.42
+  },
+  "player_added_damage_pools": {
+   "note": "player-side added flat damage by tag subset (bow attack); no node states that the Ballista inherits player added damage, so this is a player-only reference pool for now",
+   "by_tag": {
+    "Bow": {
+     "total": 47.0,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.weapon1#implicit#0",
+       "operation": "added",
+       "value": 42.0,
+       "damage_tags": [
+        "Bow"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Hydra Arc (Serpent Bow)",
+       "source_path": "data.equipment.weapon1.ir",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "passive:20:0",
+       "operation": "added",
+       "value": 5.0,
+       "damage_tags": [
+        "Bow"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Assassin's Quiver",
+       "source_path": "passive_tree.nodes.20",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Bow+Cold": {
+     "total": 58.0,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.weapon1#unique_mod#1",
+       "operation": "added",
+       "value": 32.0,
+       "damage_tags": [
+        "Bow",
+        "Cold"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Hydra Arc (Serpent Bow)",
+       "source_path": "data.equipment.weapon1.ur",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:equipment.weapon2#affix#normal#1.0",
+       "operation": "added",
+       "value": 26.0,
+       "damage_tags": [
+        "Bow",
+        "Cold"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Zeurial's Hunt (Skalnir Quiver)",
+       "source_path": "data.equipment.weapon2.affixes.1",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Bow+Fire": {
+     "total": 14.0,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.weapon1#unique_mod#0",
+       "operation": "added",
+       "value": 14.0,
+       "damage_tags": [
+        "Bow",
+        "Fire"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Hydra Arc (Serpent Bow)",
+       "source_path": "data.equipment.weapon1.ur",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Bow+Lightning": {
+     "total": 43.0,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.weapon1#unique_mod#2",
+       "operation": "added",
+       "value": 20.0,
+       "damage_tags": [
+        "Bow",
+        "Lightning"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Hydra Arc (Serpent Bow)",
+       "source_path": "data.equipment.weapon1.ur",
+       "condition_status": "always"
+      },
+      {
+       "contribution_id": "mod:equipment.weapon2#unique_mod#0",
+       "operation": "added",
+       "value": 23.0,
+       "damage_tags": [
+        "Bow",
+        "Lightning"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Zeurial's Hunt (Skalnir Quiver)",
+       "source_path": "data.equipment.weapon2.ur",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Bow+Physical": {
+     "total": 1.0,
+     "rows": [
+      {
+       "contribution_id": "passive:6:4",
+       "operation": "added",
+       "value": 1.0,
+       "damage_tags": [
+        "Bow",
+        "Physical"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Swift Assassin",
+       "source_path": "passive_tree.nodes.6",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Lightning+Throwing": {
+     "total": 14.0,
+     "rows": [
+      {
+       "contribution_id": "mod:equipment.weapon2#unique_mod#1",
+       "operation": "added",
+       "value": 14.0,
+       "damage_tags": [
+        "Lightning",
+        "Throwing"
+       ],
+       "source_kind": "equipment",
+       "source_label": "Zeurial's Hunt (Skalnir Quiver)",
+       "source_path": "data.equipment.weapon2.ur",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Melee+Physical": {
+     "total": 1.0,
+     "rows": [
+      {
+       "contribution_id": "passive:6:3",
+       "operation": "added",
+       "value": 1.0,
+       "damage_tags": [
+        "Melee",
+        "Physical"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Swift Assassin",
+       "source_path": "passive_tree.nodes.6",
+       "condition_status": "always"
+      }
+     ]
+    },
+    "Physical+Throwing": {
+     "total": 1.0,
+     "rows": [
+      {
+       "contribution_id": "passive:6:5",
+       "operation": "added",
+       "value": 1.0,
+       "damage_tags": [
+        "Physical",
+        "Throwing"
+       ],
+       "source_kind": "passive_node",
+       "source_label": "Swift Assassin",
+       "source_path": "passive_tree.nodes.6",
+       "condition_status": "always"
+      }
+     ]
+    }
+   },
+   "added_bow_total": 163.0,
+   "added_fire_total": 14.0
+  },
+  "more_damage": {
+   "player_rows": [],
+   "unmapped_damage_relevant": [
+    {
+     "mod_id": "equipment.weapon1#affix#corrupted#0.1",
+     "readable_text": "4% more Global Conditional Damage",
+     "property": 117,
+     "modifier_type": 2,
+     "value_numeric": 0.04,
+     "status": "unresolved: property 117 semantics/condition unknown"
+    }
+   ],
+   "node_more_candidates": {
+    "5_armed_construction": {
+     "points": 4,
+     "per_point_percent_more_per_dex": 1.0,
+     "candidate_multiplier": 10.12
+    },
+    "14_practical_build": {
+     "points": 1,
+     "candidate_multiplier": 1.4
+    },
+    "23_heavy_bolts": {
+     "points": 3,
+     "candidate_multiplier": 1.36
+    },
+    "25_elixir_of_construction": {
+     "points": 3,
+     "candidate_multiplier": 1.45,
+     "condition": "potion used within 4s of construction; 100% coverage assumed by user"
+    }
+   },
+   "minion_native_more_candidates": {
+    "minion_100053_property_0_moreValues": [
+     0.5
+    ],
+    "candidate_reading": "+50% more damage (actor base stat; re-gamecode to confirm)"
+   }
+  },
+  "attack_speed": {
+   "player_increased_attack_speed_rows": [
+    {
+     "contribution_id": "passive:6:0",
+     "operation": "increased",
+     "value": 0.03,
+     "damage_tags": [
+      "Melee"
+     ],
+     "source_kind": "passive_node",
+     "source_label": "Swift Assassin",
+     "source_path": "passive_tree.nodes.6",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:6:1",
+     "operation": "increased",
+     "value": 0.03,
+     "damage_tags": [
+      "Bow"
+     ],
+     "source_kind": "passive_node",
+     "source_label": "Swift Assassin",
+     "source_path": "passive_tree.nodes.6",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "passive:6:2",
+     "operation": "increased",
+     "value": 0.03,
+     "damage_tags": [
+      "Throwing"
+     ],
+     "source_kind": "passive_node",
+     "source_label": "Swift Assassin",
+     "source_path": "passive_tree.nodes.6",
+     "condition_status": "always"
+    }
+   ],
+   "player_bow_attack_speed_increased": 0.03,
+   "ballista_targeted_unmapped": [
+    {
+     "mod_id": "equipment.relic#affix#normal#0.1",
+     "readable_text": "30% increased Ballista Attack Speed",
+     "property": 58,
+     "value_numeric": 0.3,
+     "status": "damage relevant; generic mapper classifies it as state_marker (unmapped)"
+    }
+   ],
+   "minion_native": {
+    "minion_100053_property_2_increased": 0.2,
+    "entity_bbl7_57_attributeScaling_per_dex": 0.05,
+    "ba1574_attributeScaling_per_dex": 0.01,
+    "candidate_if_ba1574_scaling_applies": 2.28
+   },
+   "ballista_node_attack_speed": {
+    "11_rapid_fire_increased": {
+     "points": 1,
+     "per_point": 0.06,
+     "total": 0.06
+    },
+    "14_practical_build_percent_more": {
+     "points": 1,
+     "candidate_multiplier": 1.4
+    },
+    "23_heavy_bolts_less": {
+     "points": 3,
+     "per_point": -0.05,
+     "candidate_total": -0.15
+    },
+    "12_explosive_delivery_less": {
+     "points": 1,
+     "candidate_total": -0.4
+    },
+    "18_agile_engineering_per_5_dex": {
+     "points": 1,
+     "per_5_dex_percent": 1.0,
+     "candidate_total": 0.456
+    }
+   }
+  },
+  "mana": {
+   "class_base_mana": 50.0,
+   "mana_per_level": 0.50506,
+   "level": 100,
+   "base_mana_engine_convention_level_minus_1": 100.00094,
+   "base_mana_reference_convention_level": 100.506,
+   "flat_added": 20.0,
+   "increased": 0.05,
+   "attunement": 12.0,
+   "attunement_mana_bonus_candidate": 24.0,
+   "total_engine_without_attunement": 126.000987,
+   "total_with_attunement": 151.200987,
+   "rows": [
+    {
+     "contribution_id": "mod:equipment.ring2#unique_mod#3",
+     "operation": "increased",
+     "value": 0.05,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Phantom Grip (Copper Ring)",
+     "source_path": "data.equipment.ring2.ur",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.ring1#implicit#0",
+     "operation": "added",
+     "value": 20.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Julra's Stardial (Sapphire Ring)",
+     "source_path": "data.equipment.ring1.ir",
+     "condition_status": "always"
+    }
+   ],
+   "note": "reference planner formula adds +2 mana per Attunement point (coreDB.coreAttributes); engine compute_mana does not"
+  },
+  "mana_regen": {
+   "base_class_regen": 8.0,
+   "increased_total_mapped": 1.7,
+   "rows": [
+    {
+     "contribution_id": "mod:equipment.waist#affix#normal#0.1",
+     "operation": "increased",
+     "value": 1.0,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Jungle Queen's Chaps of Holding (Leather Belt)",
+     "source_path": "data.equipment.waist.affixes.0",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.waist#affix#normal#1.0",
+     "operation": "increased",
+     "value": 0.58,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Jungle Queen's Chaps of Holding (Leather Belt)",
+     "source_path": "data.equipment.waist.affixes.1",
+     "condition_status": "always"
+    },
+    {
+     "contribution_id": "mod:equipment.ring1#implicit#1",
+     "operation": "increased",
+     "value": 0.12,
+     "damage_tags": [],
+     "source_kind": "equipment",
+     "source_label": "Julra's Stardial (Sapphire Ring)",
+     "source_path": "data.equipment.ring1.ir",
+     "condition_status": "always"
+    }
+   ],
+   "estimate_before_description_lines": 21.6,
+   "unmapped_mana_regen_effect": {
+    "mod_id": "equipment.chest#unique_description#0",
+    "readable_text": "1% increased mana regeneration per 2% uncapped Lightning Resistance",
+    "uncapped_lightning_resistance_percent": 274.0,
+    "candidate_increased_mana_regen": 1.37,
+    "status": "description line only (kind=description); not mapped by the generic pipeline"
+   }
+  },
+  "resistances": {
+   "fire": {
+    "uncapped_percent": 59.0,
+    "capped_percent": 59.0,
+    "overcapped_percent": 0.0
+   },
+   "cold": {
+    "uncapped_percent": 40.0,
+    "capped_percent": 40.0,
+    "overcapped_percent": 0.0
+   },
+   "lightning": {
+    "uncapped_percent": 274.0,
+    "capped_percent": 75.0,
+    "overcapped_percent": 199.0
+   },
+   "physical": {
+    "uncapped_percent": 49.0,
+    "capped_percent": 49.0,
+    "overcapped_percent": 0.0
+   },
+   "void": {
+    "uncapped_percent": 0.0,
+    "capped_percent": 0.0,
+    "overcapped_percent": 0.0
+   },
+   "necrotic": {
+    "uncapped_percent": 98.0,
+    "capped_percent": 75.0,
+    "overcapped_percent": 23.0
+   },
+   "poison": {
+    "uncapped_percent": 33.0,
+    "capped_percent": 33.0,
+    "overcapped_percent": 0.0
+   }
+  },
+  "potions_elixir": {
+   "node": "node:letools:ba1574:25",
+   "node_points": 3,
+   "per_point_more": 0.15,
+   "total_more_at_current_points": 0.45,
+   "coverage_assumption": "100% (user-confirmed for this model)",
+   "potion_support": [
+    {
+     "mod_id": "equipment.waist#implicit#0",
+     "readable_text": "+4 Potion Slots"
+    },
+    {
+     "mod_id": "equipment.waist#affix#normal#0.0",
+     "readable_text": "35 Mana Gained on Potion Use"
+    },
+    {
+     "mod_id": "equipment.waist#affix#corrupted#0.0",
+     "readable_text": "88 Ward Gained on Potion Use"
+    },
+    {
+     "mod_id": "equipment.waist#unique_mod#0",
+     "readable_text": "+12 Potion Slots"
+    },
+    {
+     "mod_id": "equipment.waist#unique_mod#5",
+     "readable_text": "10% More Dodge Rating for 4 seconds when you use a Potion"
+    },
+    {
+     "mod_id": "equipment.ring2#affix#normal#0.0",
+     "readable_text": "97% of Potion Health Converted to Ward"
+    },
+    {
+     "mod_id": "equipment.amulet#unique_mod#0",
+     "readable_text": "You use a potion every second, even if you have no potions"
+    },
+    {
+     "mod_id": "equipment.amulet#unique_mod#1",
+     "readable_text": "+13% Chance to not consume a Potion on Potion use"
+    },
+    {
+     "mod_id": "equipment.amulet#unique_mod#2",
+     "readable_text": "4% of Current Health lost on potion use for every potion used recently"
+    },
+    {
+     "mod_id": "equipment.relic#unique_mod#3",
+     "readable_text": "30% Increased Chance To Find Potions"
+    }
+   ]
+  },
+  "excluded_defensive_count": 107,
+  "node_derived_duration": {
+   "base_summon_duration_s": 10.0,
+   "node2_efficient_construction": {
+    "points": 2,
+    "max": 2,
+    "per_point": -0.2,
+    "total_candidate": -0.4
+   },
+   "node14_practical_build": {
+    "points": 1,
+    "max": 1,
+    "per_point": -0.25,
+    "total_candidate": -0.25
+   },
+   "node15_sturdy_foundation": {
+    "points": 2,
+    "max": 3,
+    "per_point": 0.15,
+    "total_candidate": 0.3
+   },
+   "candidate_additive_s": 6.5,
+   "candidate_multiplicative_s": 6.348
+  },
+  "node_derived_mana_and_potions": {
+   "node2_mana_cost_percent": -0.5,
+   "node31_potion_drop_chance_per_second": 0.1,
+   "node22_damage_modifier_ratio": 0.75,
+   "node27_crit_chance_ratio": 1.0,
+   "node27_crit_multi_ratio": 1.0,
+   "node5_more_damage_per_dex_per_point": 0.01,
+   "node5_total_more_damage_per_dex": 0.04,
+   "node5_increased_area_per_dex_per_point": 0.01
+  },
+  "transfer_candidates": {
+   "shared_enhancements_22": {
+    "points": 3,
+    "ratio": 0.75,
+    "player_source_pools": {
+     "bow_tagged_changed_damage_rows_total": 0.08,
+     "all_player_damage_modifier_rows_total": 1.75
+    },
+    "candidate_transferred_increased_damage": {
+     "tag_filtered": 0.06,
+     "all_rows": 1.3125
+    },
+    "unknown": "scope of 'your damage modifiers' (increased only / added / more, tag filter)"
+   },
+   "perfect_aim_27": {
+    "points": 4,
+    "ratio": 1.0,
+    "player_crit_chance": 0.315,
+    "player_crit_multiplier": 5.47,
+    "unknown": "how player crit chance / multiplier composes into the minion value"
+   }
+  }
+ },
+ "explosive_trap_chain": {
+  "direct_cast": {
+   "skill": "ex4tp",
+   "cast_time_ms": 1350,
+   "as": 0.81481665,
+   "useDuration": null,
+   "useDelay": 0.4,
+   "base_mana_cost": 8.0,
+   "tags_decoded": [
+    "Fire",
+    "Throwing"
+   ],
+   "components": [
+    {
+     "component_index": 0,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.3
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "CreateAbilityObjectOnDeath",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "CreateAbilityObjectOnDeath",
+      "abilityToInstantiate": "ex4tp_fi9_1",
+      "aimingMethod": 2,
+      "aimingDistance": 0,
+      "createAtTarget": false,
+      "createAtStartLocation": false,
+      "createAtCastLocation": false,
+      "failsIfFailedAbility": false,
+      "additionalCasts": 0,
+      "randomExtraCasts": 0,
+      "fireInCircle": false,
+      "fireInLine": false,
+      "alsoCastAfterDelay": false,
+      "delay": 0,
+      "failsIfAbilityFailsToHit": false,
+      "chanceToCast": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ex4tp']"
+    }
+   ]
+  },
+  "trap_entity": {
+   "ability": "ex4tp_fi9_1",
+   "duration_s": 30,
+   "trigger": {
+    "component": "MineTrigger",
+    "ability": "ex4tp_fi9_1_detex_1",
+    "triggerType": 0,
+    "castDelay": 0
+   },
+   "detonation": {
+    "ability": "ex4tp_fi9_1_detex_1",
+    "damage_type": "Fire",
+    "base_damage": 30.0,
+    "added_damage_effectiveness_percent": 150.0,
+    "crit_chance": 0.05,
+    "crit_multiplier": 2.0,
+    "damageTags_raw": 1024,
+    "damageTags_decoded": [
+     "Throwing"
+    ]
+   },
+   "arming_time": "not present in dataset/letools prefab (MineTrigger has triggerType/castDelay only) -> UNKNOWN",
+   "base_max_active_traps": "not present in dataset/letools -> UNKNOWN"
+  },
+  "blast_rain_delivery": {
+   "enabled_by_node": "26",
+   "starter_ability": "ability_gen408",
+   "starter_components": [
+    {
+     "component_index": 0,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.3
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "CastAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "CastAfterDuration",
+      "ability": "ability_gen408_ex4tp_1",
+      "abilitiesSequence": [],
+      "randomAbilitiesToCast": [],
+      "preventDuplicateAbilitiesInARow": false,
+      "interval": 1,
+      "castOnStartAsWell": true,
+      "limitCasts": true,
+      "remainingCasts": 1,
+      "randomExtraCasts": 0,
+      "castRemainingExtrasAllOnDeath": 0,
+      "castChance": 1,
+      "manaToPayOnCast": 0,
+      "alternateAbility": "",
+      "chanceToUseAlternateAbility": 0,
+      "playerCanCastOnlyInCombat": false
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408']"
+    },
+    {
+     "component_index": 2,
+     "component_type": "CastAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "CastAfterDuration",
+      "ability": "ability_gen408_ex4tp_1",
+      "abilitiesSequence": [],
+      "randomAbilitiesToCast": [],
+      "preventDuplicateAbilitiesInARow": false,
+      "interval": 0.05,
+      "castOnStartAsWell": false,
+      "limitCasts": true,
+      "remainingCasts": 2,
+      "randomExtraCasts": 0,
+      "castRemainingExtrasAllOnDeath": 0,
+      "castChance": 1,
+      "manaToPayOnCast": 0,
+      "alternateAbility": "",
+      "chanceToUseAlternateAbility": 0,
+      "playerCanCastOnlyInCombat": false
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408']"
+    }
+   ],
+   "projectile_ability": "ability_gen408_ex4tp_1",
+   "projectile_components": [
+    {
+     "component_index": 0,
+     "component_type": "DestroyAfterDuration",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "DestroyAfterDuration",
+      "duration": 0.5
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408_ex4tp_1']"
+    },
+    {
+     "component_index": 1,
+     "component_type": "CreateAbilityObjectOnDeath",
+     "damage_type": null,
+     "base_damage": null,
+     "added_damage_effectiveness": null,
+     "config": {
+      "type": "CreateAbilityObjectOnDeath",
+      "abilityToInstantiate": "ex4tp_fi9_1",
+      "aimingMethod": 2,
+      "aimingDistance": 0,
+      "createAtTarget": false,
+      "createAtStartLocation": false,
+      "createAtCastLocation": false,
+      "failsIfFailedAbility": false,
+      "additionalCasts": 0,
+      "randomExtraCasts": 0,
+      "fireInCircle": false,
+      "fireInLine": false,
+      "alsoCastAfterDelay": false,
+      "delay": 0,
+      "failsIfAbilityFailsToHit": false,
+      "chanceToCast": 0
+     },
+     "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen408_ex4tp_1']"
+    }
+   ],
+   "projectiles_per_cast_candidate": 3,
+   "projectile_detail": "CastAfterDuration interval=1 castOnStartAsWell=true remainingCasts=1, plus interval=0.05 remainingCasts=2 => 1+2 = 3 projectiles; each projectile (duration 0.5s) creates 1 ex4tp_fi9_1 trap on death"
+  },
+  "count_modifiers": {
+   "24_clustered_explosives": {
+    "points": 2,
+    "additional_traps_per_point": 1.0,
+    "total_additional": 2.0,
+    "mana_cost_per_point": 6.0
+   },
+   "23_minefield": {
+    "points": 1,
+    "max_traps_per_point": 1.0,
+    "total": 1.0
+   },
+   "9_trapas": {
+    "points": 1,
+    "flag": "throwsTrapOfEachConversion"
+   },
+   "7_static_mines": {
+    "points": 1,
+    "flag": "convertToLightning"
+   },
+   "10_coldsnap_mines": {
+    "points": 1,
+    "flag": "convertToCold"
+   },
+   "28_trap_sprinkler": {
+    "points": 3,
+    "drop_chance_per_point": 0.1,
+    "total_drop_chance": 0.3,
+    "distance_m": 6.0,
+    "mana_cost_flat": 1.0
+   },
+   "29_automated_bombardment": {
+    "points": 1,
+    "additional_drop_chance": 0.7,
+    "mana_cost_flat": 11.0,
+    "note": "traps dropped this way cannot drop more additional traps"
+   },
+   "31_trapuchet": {
+    "points": 1,
+    "fling_range_m": 12,
+    "drop_range_m": 12
+   },
+   "27_impact_trigger": {
+    "points": 1,
+    "note": "arrows detonate traps instantly on ground hit (arming time ignored)",
+    "increased_stun_chance": 0.75
+   },
+   "26_blast_rain": {
+    "points": 1,
+    "requires_bow": true,
+    "castingBow": true
+   },
+   "30_siege_engineering": {
+    "points": 2,
+    "ballista_summon_chance_per_point": 0.1,
+    "total_chance_per_detonation": 0.2,
+    "ballista_mana_consumption_percent": 0.5,
+    "related_ability": "ba1574"
+   },
+   "2_ash_compartment": {
+    "points": 1,
+    "increased_damage_per_point": 0.05
+   }
+  },
+  "trap_drop_chance_candidate": {
+   "trap_sprinkler": 0.3,
+   "automated_bombardment": 0.7,
+   "total_candidate_additive": 1.0,
+   "status": "additive reading of '+' drop chance stats; game-code confirmation required"
+  },
+  "mana_cost_candidates": {
+   "base": 8.0,
+   "flat_adds": {
+    "24_clustered_explosives": 12.0,
+    "28_trap_sprinkler": 3.0,
+    "29_automated_bombardment": 11.0,
+    "9_trapas": 3.0
+   },
+   "reductions": {
+    "25_subtle_sabotage_percent_per_point": -0.12,
+    "25_total": -0.24,
+    "19_mana_efficiency_percent_per_point": 0.08,
+    "19_total": 0.16
+   },
+   "status": "additive vs multiplicative application of mana efficiency/reduced cost unresolved"
+  },
+  "ballista_summon_rate_parameters": {
+   "trigger": "each Explosive Trap detonation (ex4tp_fi9_1_detex_1)",
+   "chance_per_detonation": 0.2,
+   "ballista_mana_cost_per_summon_candidates": {
+    "from_base_ba1574_cost_44": 22.0,
+    "from_node2_reduced_cost_22": 11.0,
+    "status": "which Ballista mana cost the 50% applies to is unresolved"
+   },
+   "events_per_direct_cast": {
+    "traps_per_delivery_candidate": "1 base trap; +2 from Clustered Explosives 2/2 (whether additions multiply by the 3 Blast Rain projectiles is unresolved)",
+    "deliveries_per_cast": 3,
+    "trapas_variants": "base + unconverted + one per conversion node (Static Mines, Coldsnap Mines) => up to 3 damage-type variants",
+    "detonations_per_trap": "1 arming/detonation trigger; Trap Sprinkler chain may add 1 more (100% candidate chance) but dropped traps cannot drop more"
+   }
+  }
+ },
+ "ballista_duration": {
+  "base_summon_duration_s": 10.0,
+  "prefab": "SummonEntityOnDeath.duration=10, limit=2, numberToSummon=1",
+  "modifiers": [
+   {
+    "node_id": "2",
+    "name": "Efficient Construction",
+    "points": 2,
+    "max_points": 2,
+    "per_point_percent": -20,
+    "stat_property": 5093,
+    "stat_name": "Duration (seconds)",
+    "at_current_points_percent": -40
+   },
+   {
+    "node_id": "14",
+    "name": "Practical Build",
+    "points": 1,
+    "max_points": 1,
+    "per_point_percent": -25,
+    "stat_property": 5093,
+    "stat_name": "Duration (seconds)",
+    "at_current_points_percent": -25
+   },
+   {
+    "node_id": "15",
+    "name": "Sturdy Foundation",
+    "points": 2,
+    "max_points": 3,
+    "per_point_percent": 15,
+    "stat_property": 5093,
+    "stat_name": "Duration",
+    "at_current_points_percent": 30
+   }
+  ],
+  "candidates": {
+   "A_additive": 6.5,
+   "B_multiplicative": 6.348
+  },
+  "status": "candidate formula; re-gamecode to decide additive vs multiplicative"
+ },
+ "explosion_model_inputs": {
+  "ability": "ability_gen327",
+  "tag_decoded": [
+   "Bow",
+   "Fire"
+  ],
+  "base_damage": {
+   "Fire": 50.0,
+   "damage_array": [
+    0,
+    50,
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  "added_damage_effectiveness_percent": 250.0,
+  "crit": {
+   "chance": 0.05,
+   "multiplier": 2.0
+  },
+  "damageTags_raw": 2048,
+  "damageTags_decoded": [
+   "Bow"
+  ],
+  "trigger_nodes": {
+   "5": "Armed Construction (expiry/destroy)",
+   "12": "Explosive Delivery (bolt hit explosion, same ability id reference)"
+  },
+  "more_multiplier_candidates": {
+   "armed_construction_node5": {
+    "points": 4,
+    "per_point_percent_more_per_dex": 1.0,
+    "formula_candidate": 10.120000000000001,
+    "note": "dataset stat property 0 value +1% 'More Damage per Dexterity' per point; same-node multi-point values summed per project convention"
+   },
+   "practical_build_node14": {
+    "points": 1,
+    "percent_more": 40.0
+   },
+   "heavy_bolts_node23": {
+    "points": 3,
+    "per_point_percent_more": 12.0,
+    "total_candidate": 1.3599999999999999
+   },
+   "elixir_of_construction_node25": {
+    "points": 3,
+    "per_point_percent_more": 15.0,
+    "total_candidate": 1.45,
+    "condition": "potion used within 4s of construction; model assumes 100% coverage"
+   }
+  },
+  "transfer_candidates": {
+   "shared_enhancements_node22": {
+    "points": 3,
+    "ratio_candidate": 0.75,
+    "candidate_player_increased_damage_pool_applicable_by_tag": {
+     "Bow_only": 0.08,
+     "all_non_minion_player_damage_rows": 1.75
+    },
+    "unknown": "which player modifiers count as 'your damage modifiers' (increased only? added? more? tag filter?)"
+   },
+   "perfect_aim_node27": {
+    "points": 4,
+    "ratio_candidate": 1.0,
+    "player_crit_chance_pool": 0.534,
+    "player_crit_multi_pool": 5.47,
+    "unknown": "composition of the ratio transfer (base value vs modifiers; cap etc.)"
+   }
+  },
+  "attribute_scaling_candidates": {
+   "ba1574_attributeScaling": {
+    "attribute": "Dexterity",
+    "per_dex": {
+     "increased_damage": 0.04,
+     "increased_attack_speed": 0.01
+    },
+    "tags": 8192,
+    "tags_decoded": [
+     "Minion"
+    ]
+   },
+   "entity_bbl7_57_attributeScaling": {
+    "attribute": "Dexterity",
+    "per_dex": {
+     "increased_attack_speed": 0.05
+    },
+    "tags": 0
+   },
+   "candidate_if_applies_to_minion": {
+    "dexterity": 228.0,
+    "increased_damage": 9.12,
+    "increased_attack_speed": 2.28
+   },
+   "status": "unresolved: user rule says minions do not inherit attributes; the ability data carries attributeScaling with Minion tag"
+  }
+ },
+ "evidence_locators": {
+  "dataset": {
+   "database": "data/releases/phase1-dataset-003/data.sqlite",
+   "dataset_id": "phase1-dataset-003",
+   "tables": {
+    "skills": "skill rows: extensions (as/useDelay/manaCost/attributeScaling/levelScaling), tags_raw",
+    "skill_components": "prefab components (SummonEntityOnDeath/DamageEnemyOnHit/DestroyAfterDuration/MineTrigger/CreateAbilityObjectOnDeath/CastAfterDuration)",
+    "minions": "entity 100053 base_stats/inherits/extensions",
+    "nodes": "node rows: max_points/description/extensions (relatedAbilities, nodeNameKey)",
+    "effects": "node stat_mod/config_mod rows with extensions.stat property/tags/noScaling",
+    "effect_values": "value_numeric/value_kind/unit per effect",
+    "translations": "Skills.Skill_<tree>_<node>_Name/_Description (en)",
+    "stats": "coreDB.propertyList property id -> stat name",
+    "tags": "AT bitmask tag table",
+    "classes": "characterClass base attributes/baseMana/manaPerLevel/manaRegen",
+    "source_records": "attributePointsFromQuests; passive_bonus payloads"
+   }
+  },
+  "letools_raw_js": {
+   "path": "letools 原始程序数据（外部资产，登记见 archive://docs/assets-external.json；本次使用 version150/planner/js/517be1eca36fc17ea39ea512e30f4499.js）",
+   "version152_locator_prefix": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js",
+   "window_paths": [
+    "window.LEAbilities.abilityList['ba1574']",
+    "window.LEAbilities.abilityList['entity_bbl7_57']",
+    "window.LEAbilities.abilityList['ability_gen327']",
+    "window.LEAbilities.entityList[100053]",
+    "window.LESkillTrees['ba1574']",
+    "window.LESkillTrees['ex4tp']",
+    "window.partialSkillBonuses['ba1574']",
+    "window.partialSkillBonuses['ex4tp']"
+   ],
+   "note": "local letools build is version150; dataset locators reference version152 planner js; the checked entities match between the two"
+  },
+  "project_files": {
+   "calculation_input": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json",
+   "build_spec": "archive://data/builds/letools/ballista-beta5-native-20261112/revisions/rev-c83726fd2c25625d/build.json",
+   "prepare_run": "archive://reports/ballista-beta5-native-20261112/ballista-beta5-prepare-1/",
+   "generic_mapping_api": "tools/phase3/src/le_calc/contribution_mapping.py",
+   "aggregation_api": "tools/phase3/src/le_calc/stats.py (compute_attributes/compute_mana/compute_resistances)",
+   "crit_formula_reference": "tools/phase3/rules/fr-hit-facts-v1.json#critical",
+   "scratch_pipeline": "<author-archive>/mech-data/25_player_rows.py, <author-archive>/mech-data/40_build_package.py"
+  }
+ },
+ "unknowns": [
+  {
+   "id": "unknown:property-id-context-reuse",
+   "question": "Dataset coreDB.propertyList ids 8 and 49 are reused with different node-context meanings: property 8 = dataset 'Mana' but node 2 'Mana Cost' (-25%/pt); property 49 = dataset 'Potion Slots' but node 31 'Potion Drop Chance Per Second' (10%). Other 5xxx/1xxxx ids (5015/5037/5078/5093/5099 etc.) are not in the dataset stats table at all.",
+   "needed": "dataset normalizer / re-gamecode: do not resolve node stats via coreDB.propertyList alone"
+  },
+  {
+   "id": "unknown:ba1574-attribute-scaling-minion",
+   "question": "Does ba1574.attributeScaling (Dex -> +4% increased damage / +1% increased attack speed, tags=8192 Minion) apply to the summoned Ballista, or is it dead data given the user rule that minions do not inherit attributes?",
+   "impact": "Dex 228 -> +912% increased damage and +228% increased attack speed if it applies",
+   "needed": "re-gamecode: summon/attributeScaling application path"
+  },
+  {
+   "id": "unknown:minion-base-stats",
+   "question": "Interpretation of minion 100053 base_stats stats: property 0 moreValues[0.5] and property 2 increasedValue 0.2.",
+   "impact": "candidate +50% more damage / +20% increased attack speed on the Ballista's abilities",
+   "needed": "re-gamecode: actor base stat application"
+  },
+  {
+   "id": "unknown:node-stat-operation",
+   "question": "Which skill-node stats are 'more' vs 'increased' (e.g. node 5/14/23 wording says more; dataset property 0 does not encode operation).",
+   "impact": "more multipliers for the explosion",
+   "needed": "re-gamecode: skill node stat application (modType)"
+  },
+  {
+   "id": "unknown:explosion-duration-convention",
+   "question": "Additive vs multiplicative combination of duration nodes 2 (-20%/pt), 14 (-25%), 15 (+15%/pt).",
+   "candidates": {
+    "A_additive": 6.5,
+    "B_multiplicative": 6.348
+   },
+   "needed": "re-gamecode: duration stat pool"
+  },
+  {
+   "id": "unknown:shared-enhancements-scope",
+   "question": "Which player modifiers node 22 transfers (increased only? added flat? more? tag filter?) and how the ratio composes.",
+   "needed": "re-gamecode: node 22 implementation"
+  },
+  {
+   "id": "unknown:perfect-aim-composition",
+   "question": "How node 27 composes player crit chance / crit multiplier into the minion (base included? ratio applied to final?).",
+   "needed": "re-gamecode: node 27 implementation"
+  },
+  {
+   "id": "unknown:property-98-117-58",
+   "question": "Unmapped damage-relevant properties: 98 (+8 all attributes conditional; 1% increased crit per Dex; hidden unique mods), 117 (4% more Global Conditional Damage), 58 (30% increased Ballista Attack Speed).",
+   "needed": "dataset normalizer / re-gamecode property semantics"
+  },
+  {
+   "id": "unknown:trap-arming-limit",
+   "question": "Explosive Trap arming time, base max active traps, MineTrigger triggerType 0 semantics.",
+   "impact": "trap detonation timing and trap count for the Ballista summon chain",
+   "needed": "re-gamecode / game observation"
+  },
+  {
+   "id": "unknown:trap-count-composition",
+   "question": "How Blast Rain (3 projectiles), Clustered Explosives (+2 traps per direct use), Trapas (conversion variants) and Trap Sprinkler chain compose into traps/detonations per cast.",
+   "needed": "re-gamecode"
+  },
+  {
+   "id": "unknown:trap-drop-chance-additive",
+   "question": "Whether Trap Sprinkler (+30%) and Automated Bombardment (+70%) drop chances are additive (100% candidate).",
+   "needed": "re-gamecode"
+  },
+  {
+   "id": "unknown:ballista-mana-consumption-target",
+   "question": "Node 30 '50% of Ballista mana cost' uses base 44 or node-2-reduced value.",
+   "needed": "re-gamecode"
+  },
+  {
+   "id": "unknown:mana-efficiency-semantics",
+   "question": "Mana Efficiency (node 19) and -% mana cost (node 25) combine additively or multiplicatively.",
+   "needed": "re-gamecode"
+  },
+  {
+   "id": "unknown:added-damage-transfer",
+   "question": "Whether any Ballista node transfers player added flat damage to the minion (none is stated in the 14 alloc).",
+   "needed": "re-gamecode"
+  },
+  {
+   "id": "unknown:node26-crit-scope",
+   "question": "Whether Sharpened Tips +3% base crit applies to the explosion ability (gen327) as well as the bolt.",
+   "needed": "re-gamecode"
+  },
+  {
+   "id": "unknown:elixir-coverage",
+   "question": "Elixir of Construction uptime: user model assumes 100%; Eternal Font (potion every second) supports it but construction timing is player-driven.",
+   "needed": "scenario assumption"
+  }
+ ]
+}

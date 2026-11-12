@@ -1,0 +1,109 @@
+{
+ "source": "local game 1.5.3 GameAssembly.dll + game bundles (read-only)",
+ "game_version": "1.5.3",
+ "unity": "6000.4.8f1",
+ "buildid": "26087601",
+ "method_addressing": "RVA/Offset taken from <author-archive>/rev/il2cppdump-v39/dump.cs; native disassembly with capstone 5.0.7; annotated dumps in <author-archive>/rev/asm (regenerable)",
+ "findings": {
+  "body_tick": {
+   "class": "RepeatedlyDamageEnemiesWithinRadius (TypeDefIndex 628)",
+   "component_instance": {
+    "gameobject": "BlackHoleSpell",
+    "path_id": "2064363195564901928",
+    "damageInterval": 0.3,
+    "damageAtStart": true,
+    "radius": 3.0,
+    "delay": 0.0
+   },
+   "methods": {
+    "OnFirstTick": {
+     "offset": "0x1013d10",
+     "rva": "0x1015310",
+     "behavior": "if damageAtStart: index (accumulator @0x158) = damageInterval (@0x128) -> immediate first application at spawn"
+    },
+    "OnUpdateTick": {
+     "offset": "0x1013e30",
+     "rva": "0x1015430",
+     "behavior": "index += deltaTime; while index > damageInterval: index -= damageInterval and applyDamage(Actor) to targets in radius (2 branches: normal / undodgeable). No pro-rata partial application code found in the tail."
+    },
+    "OnDestroy": {
+     "offset": "0x1013be0",
+     "rva": "0x10151e0",
+     "behavior": "only unregisters/clears references; does NOT call DealAllRemainingDamage"
+    },
+    "DealAllRemainingDamage": {
+     "offset": "0x10133a0",
+     "rva": "0x10149a0",
+     "behavior": "N = floor(remainingDuration / damageInterval); if N<=0 return; damageModifier += (N-1); applyDamage; (only used on explicit/early end callers, not on normal expiry)"
+    },
+    "getApplicationsPerSecond": {
+     "offset": "0x1014870",
+     "rva": "0x1015e70",
+     "behavior": "return 1.0 / damageInterval (=> baseDamage is per-application, not per-second)"
+    }
+   },
+   "conclusion": "Applications happen at spawn (damageAtStart) and every 0.3s while alive; count = ceil(duration/0.3) for this component. For BH duration 7.15s -> 24 applications, i.e. the game charges the final partial interval as a full tick (rather than dropping it). v1 rate x duration = 23.833 tick-equivalents -> v1 undervalues body by ~0.7%.",
+   "confidence": "high (code + prefab data); exact object-lifetime boundary/edge frame still to be double-checked"
+  },
+  "heat_wave": {
+   "class": "BlackHoleMutator",
+   "field": "chanceToIgnitePerUncappedFireRes (offset 0x140)",
+   "method": "BlackHoleMutator.Mutate (offset 0x182e0e0)",
+   "code_sites": [
+    "0x18183024c",
+    "0x18183028f",
+    "0x181830306",
+    "0x181830328"
+   ],
+   "behavior": "if field > 0: gets player PrecalculatedStatsHolder.uncappedFireResistance (offset 0x24), multiplies: chance = uncappedFireResistance * field * 0.5; gets Ailment Ignite (id 1); calls RepeatedlyApplyAilmentsInRadius.addChance(ailment, chance, 0, 0, false, 0). After that it sets on that aura component: radius (+0x90)=xmm10, applicationInterval (+0x98)=0.5f, applyOnStart (+0xb4)=true.",
+   "addChance_signature": "addChance(Ailment ailment, float chance, float increasedDuration=0, float increasedEffect=0, bool rolledSeparately=false, float moreDamage=0)",
+   "conclusion": "Heat Wave aura rolls every 0.5s (not 1s as tooltip abstraction), first roll at spawn; per-roll chance = 0.5 * uncappedFireRes * field. Effective expected stacks/second = uncappedFireRes * field, which for 5 points (+10%) and 856% uncapped fire res = 85.6%/s, matching v1 expected value 85.6 stacks/roll-equivalent. Timing model in v1 (1s rolls at 85.6%) differs in variance/timing but not expectation.",
+   "open": "1.5.3 node stat value must be extracted to confirm field=0.10; aura prefab instantiation source still to be identified.",
+   "confidence": "high for formula/interval constants; node value medium (1.5.2 evidence assumed)"
+  },
+  "binary_system_red_giant": {
+   "classes": [
+    "BlackHoleMutator (binaryStar @0x184, convertToFireDamage @0x13c)",
+    "BlackHoleEndMutator (binaryStar @0x138, convertToFireDamage @0x12c)"
+   ],
+   "method": "BlackHoleMutator.Mutate (offset 0x182e0e0)",
+   "code_sites": [
+    "0x181830127 (branch: convertToFireDamage || binaryStar)",
+    "0x18183018d (getBaseDamage(COLD))",
+    "0x18183019f (addBaseDamage(FIRE, coldAmount))",
+    "0x1818301a4 (if !binaryStar): 0x1818301ad..0x1818301c9 remove COLD amount (add negative COLD)",
+    "0x1818301e5 (if binaryStar: keeps COLD)"
+   ],
+   "damage_stats_holder_signatures": [
+    "float getBaseDamage(DamageType)",
+    "void addBaseDamage(DamageType, float)"
+   ],
+   "constants": {
+    "r12b=1": "DamageType.FIRE",
+    "xmm9=-0.0": "sign-flip mask used for negative COLD addition"
+   },
+   "conclusion": "Red Giant conversion is implemented by adding the COLD base damage to FIRE (and, when Binary is not active, subtracting the COLD original => cold->fire conversion). With Binary System active the COLD original is kept, so the object ends up with one fire component (converted copy) + one cold component (original) = structural doubling (one fire + one cold). This is not a generic +100% more stat and therefore is unlikely to be inherited by Ignite damage (Ignite base is the ailment asset 40 fire, not the ability base damage).",
+   "open": "final confirmation of Ignite inheritance code path; two-star object/component layout and whether each star independently applies ailments; 1.5.3 node values.",
+   "confidence": "high for conversion/doubling implementation; medium for Ignite non-inheritance (consistent with v1, pending code path check)"
+  },
+  "black_hole_casts": {
+   "fields_in_blackhole_mutator": {
+    "forceSingleBlackHole": "0x17c",
+    "extraBlackHoles": "0x180",
+    "addedCooldownLength": "0x1a4",
+    "activeHoles": "0x1f0"
+   },
+   "note": "fields confirm Singularity/extra-hole/cooldown node mappings; forceSingleBlackHole/extraBlackHoles runtime semantics still being analyzed (whether a new cast destroys existing holes or only changes recast/end behavior)."
+  },
+  "ignite_ailment_effect": {
+   "data": "Ailment Ignite: effectOfIncreasedEffectiveness=1 (AdditionalPenetration), additionalPenetrationDamageType=1 (FIRE); enum definitions confirmed in dump.cs",
+   "conclusion": "For Ignite, \"increased effect of ailments\" is an additional fire penetration, matching item line \"Fire Penetration with Ignite\". Scaling coefficient code path still to be located (AilmentReceiver/ActiveAilment damage source)",
+   "confidence": "high (data/enums); scaling formula pending code"
+  }
+ },
+ "regeneration": {
+  "symbol_index": "python <author-archive>/rev/analyze.py info  (~244k methods, 33k classes)",
+  "disassembly": "python <author-archive>/rev/analyze.py fn <Class> <offset>",
+  "callers": "python <author-archive>/rev/find_callers.py (direct call scan)"
+ }
+}

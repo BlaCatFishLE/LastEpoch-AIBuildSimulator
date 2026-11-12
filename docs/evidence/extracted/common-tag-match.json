@@ -1,0 +1,76 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "common-tag-match",
+  "kind": "mechanism",
+  "title": {
+    "zh": "伤害标签适用性匹配",
+    "en": "Damage tag applicability matching (type/category gating)"
+  },
+  "source_path": "knowledge/mechanisms/common-tag-match.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "标签适用性是共享判据，没有单条规则 ID：具体规则的标签写在 ruleset 各节点/词条 damage_tags 与 dataset stats 的 tags 位图中。",
+    "verification": {
+      "status": "declared_none",
+      "checked_against": null,
+      "note": "条目声明该机制没有可引用的游戏规则 ID（ref 内写明原因）"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "伤害标签适用性匹配",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、dot、tick、ignite、ailment、body；伤害标签：Fire、Cold、Lightning、Physical、Void、Necrotic、Poison、Spell、DoT、Hit、Melee、Ailment、Elemental；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "决定一条来源贡献是否作用于某伤害组件：伤害类型标签要求组件含该类型，类别标签要求组件含该类别；Elemental 匹配任一元素；未知标签当前忽略（实现策略，见 open_questions）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "组件标签白名单在 damage.py（DAMAGE_TYPE_TAGS / ELEMENT_TYPE_TAGS / CATEGORY_TAGS / IGNORED_TAGS）；调用方 collect_modifier_rows / compute_body / _ignite_scaling。",
+      "source": "$.handler_ref.note（le_calc.damage.tags_match）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：contribution.damage_tags、component.types/categories",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "未知/元数据标签（Elemental、LowLife 等）当前按忽略处理；这是实现策略，若未来出现带条件的标签（如 LowLife）必须改为显式条件而非忽略。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "FR hit 模型有独立的标签匹配实现（hit_damage/hit_inputs），尚未收敛到同一算子；跨模型复用前需比对两套 constants 是否一致。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

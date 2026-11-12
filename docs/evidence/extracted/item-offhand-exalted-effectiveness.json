@@ -1,0 +1,74 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "item-offhand-exalted-effectiveness",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Whetstone Gavel：副手 Exalted 时全部副手 stats 获得 +97% effectiveness",
+    "en": "Whetstone Gavel: offhand Exalted stats gain 97% increased effectiveness"
+  },
+  "source_path": "knowledge/mechanisms/item-offhand-exalted-effectiveness.json",
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 hit_inputs 专用分支保留为只读迁移证据；新路径由 plan-v2 item_effectiveness 规则产生同一数值"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "plan-v2 rules.item_effectiveness（迁移规则数据；旧 hit_inputs._apply_offhand_exalted_effect 退役）",
+    "path": "knowledge/definitions/fr-flame-reave-v3.json",
+    "locator": "#/definition/rules/item_effectiveness",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/fr-flame-reave-v3.json#definition.rules",
+      "note": "kind=none，但 ref 指向的定义规则段 'item_effectiveness' 已在文件中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Whetstone Gavel：副手 Exalted 时全部副手 stats 获得 +97% effectiveness",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire、Melee；条件 code：offhand_display_rarity:exalted",
+      "source": "$.applicability"
+    },
+    {
+      "text": "仅当副手槽位按 T6+ 词缀规则显示为 Exalted 时，对副手来源的全部贡献乘 (1+实际 roll)。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "聚合操作=multiplier；叠层策略=multiplicative_per_stack；顺序/汇总=副手全部来源贡献先按 effectiveness 放大，再进入命中乘区；more 分组依据=n/a（effectiveness 是对来源数值的乘数，不是独立 more 组）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "编译期由真实计算输入判定显示稀有度并缩放副手来源贡献；不读取旧 hit_inputs",
+      "source": "$.handler_ref.note（le_calc.plan_compiler._display_item_rarity）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：effectiveness roll、offhand display rarity、target slot",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/items instance_id=equipment.weapon1 unique_mod#2"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "显示稀有度判定来源：离线存档 raw rarity 字节与显示稀有度不同；以词缀 tier 规则判定（迁移 build_mappings 规则），换副手/换词缀后需重新绑定。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

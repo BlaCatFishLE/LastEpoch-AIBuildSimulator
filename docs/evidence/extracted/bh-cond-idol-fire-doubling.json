@@ -1,0 +1,97 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-idol-fire-doubling",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Grand Arcane Omen Idol · 最大法力门槛火伤翻倍（idols.2 + idols.3，合并登记）",
+    "en": "Grand Arcane Omen Idol fire damage doubling (idols.2 + idols.3, merged entry)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-idol-fire-doubling.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "case_bound",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "idol.fire_damage_mana_threshold",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=idol.fire_damage_mana_threshold]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+      "note": "conditional_effect:idol.fire_damage_mana_threshold 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Grand Arcane Omen Idol · 最大法力门槛火伤翻倍（idols.2 + idols.3，合并登记）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body_fire、ignite；伤害标签：Fire；条件 code：auto.max_mana_gte_300",
+      "source": "$.applicability"
+    },
+    {
+      "text": "两枚神像词条机制相同（基础 increased fire damage + 最大法力 ≥ 300 时翻倍），仅实例不同，故合并为一条机制登记；两个 effect_id 均映射到本条目（merge 说明见 research_notes）。门槛由 snapshot.derived.mana_max 自动判定；当前 230.28 < 300，翻倍不生效，只有基础行计入。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "_SnapshotBuilder.resolve_doubled_fire 在快照阶段判定门槛并拆分基础行/翻倍行（condition_status=not_satisfied）；条件求值侧 control.kind=none（只读自动判定）。",
+      "source": "$.handler_ref.note（le_calc.stats.build_snapshot）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：idols.2 mod、idols.3 mod、effect values、idols.3 values、mana threshold",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/parameter_bindings/0/source",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/114"
+    },
+    {
+      "pointer": "$/parameter_bindings/1/source",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/118"
+    },
+    {
+      "pointer": "$/parameter_bindings/4/source",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/mana_max"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/10"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/11"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/idol.fire_damage_mana_threshold"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/mana_max"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/mana_max"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "门槛严格性（over 300 vs ≥300）：当前 230.28 远低于门槛，不影响本案例；换装跨 300 时需确认。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

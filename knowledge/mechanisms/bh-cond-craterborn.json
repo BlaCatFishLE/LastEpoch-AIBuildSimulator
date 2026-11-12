@@ -1,0 +1,157 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cond-craterborn",
+  "revision": 3,
+  "title": {
+    "zh": "Craterborn（Meteor 后：火穿 + 施法速度）",
+    "en": "Craterborn (Meteor buff: fire penetration + cast speed)"
+  },
+  "aliases": [
+    "Craterborn",
+    "Meteor",
+    "陨石",
+    "火穿 Buff",
+    "cast speed buff",
+    "meteor.craterborn"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "me27:25"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body_fire",
+      "ignite",
+      "cast",
+      "cooldown",
+      "penetration"
+    ],
+    "tags": [
+      "Fire"
+    ],
+    "conditions": [
+      "player.craterborn_active"
+    ],
+    "notes": "施放 Meteor 后获得单层 Buff（有限时长、不叠层）；固定条件模式假设观察期持续有效，不模拟施放 Meteor 的操作成本与刷新。效果：玩家火焰穿透（body/ignite 目标侧）+ 施法速度（只影响施法时间，不改变单次总伤害）。",
+    "required_nodes": [
+      "node:me27:25"
+    ]
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "meteor.craterborn",
+    "path": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+    "locator": "effects[id=meteor.craterborn]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "current:matched_instances",
+      "unit": "points",
+      "note": "按 tree/node 匹配当前点数，不使用历史案例索引或总值。"
+    },
+    {
+      "parameter": "effect values",
+      "source": "tools/phase3/rules/shared-conditional-node-buffs-v1.json#effects[id=meteor.craterborn]",
+      "note": "per_point × 当前点数，constant 不乘点数；来源证据沿用原条目。"
+    },
+    {
+      "parameter": "state",
+      "source": "current:scenario#/states",
+      "note": "临时 Buff 默认关闭，目标条件单独声明；单次就绪不等于循环常驻。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional_node_buffs",
+    "symbol": "bind / contributions",
+    "note": "按当前树/节点稳定 ID 和点数绑定；统一条件程序执行。Preparation 只进入独立单次评估，不传播到循环。当前接入 charge_dot 执行链，其它执行驱动未签收。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/7",
+      "note": "注册表条目：条件、数值、support=needs_rule_mapping、research=confirmed。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/7",
+      "note": "当前 run 求值：未激活（默认关闭）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/meteor.craterborn",
+      "note": "条件重算通道状态与支持级别。"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs buff:letools:UIBuffs:14",
+      "note": "Buff 资产：duration/max_stacks。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "条件 Buff 支持级别分类表。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/1/nodes/6/points",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.craterborn_active",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeEffectDirectionTests::test_craterborn_penetration_and_cast_speed",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeChannelSupportTests::test_covers_every_registered_effect",
+    "tools/phase3/tests/test_conditional.py::RegistryTests::test_key_effects_present",
+    "archive://docs/reviews/unified-report-buff-restore-20261112.zh-CN.md"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-cast-time",
+      "requirement": "cast_speed 行进入施法时间 inc 池；只改频率不改单次伤害。",
+      "evidence_locator": "tools/phase3/src/le_calc/conditional/recompute.py#_build_proposal_specs"
+    },
+    {
+      "with": "bh-target-side-settlement",
+      "requirement": "火焰穿透进入 body/ignite 目标侧；不作用于 Heat Wave 的未封顶火抗判定。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/7/research/open_questions"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/7",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/meteor.craterborn",
+      "tools/phase3/tests/test_conditional_recompute.py",
+      "docs/mechanisms.md#35-机制条目总表"
+    ],
+    "open_questions": [
+      "重复施放 Meteor 是否刷新 Craterborn 持续时间未确认（catalog newStacksRefreshDuration=false 只说明新层不刷新）。",
+      "Craterborn 火穿是否提高 Heat Wave 的点燃施加：理论不影响（Heat Wave 读未封顶火抗），未实测。",
+      "固定条件模式不模拟 Meteor 施放本身的操作成本/占用的施法时间。"
+    ],
+    "requery_when": [
+      "游戏内验证刷新语义后",
+      "Heat Wave 与穿透交互有争议时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared"
+}

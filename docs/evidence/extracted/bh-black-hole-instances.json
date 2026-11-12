@@ -1,0 +1,81 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-black-hole-instances",
+  "kind": "mechanism",
+  "title": {
+    "zh": "黑洞实例：每次施放 1 个、多次施放并存",
+    "en": "Black Hole instances: one per cast, multiple casts coexist"
+  },
+  "source_path": "knowledge/mechanisms/bh-black-hole-instances.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-black-hole-count-limit",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-black-hole-count-limit]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-black-hole-count-limit 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "黑洞实例：每次施放 1 个、多次施放并存",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency、loop、body、ignite；条件 code：none；必要节点：node:bh2:28",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Singularity 的「一次只能创造 1 个黑洞」限制的是单次施放（双星算 1 个）；不同施放创建的黑洞可以同时存在、各自独立结算本体与 Ignite。没有全局数量上限，也没有「新施放摧毁旧黑洞」逻辑。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "eager：有充能且动作空闲即施放，多个黑洞重叠；patient：等所有黑洞消失再施放；单次口径见 run_single_cast。",
+      "source": "$.handler_ref.note（le_calc.simulate.run_loop）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：black_holes_per_cast、concurrent_instances、cast_count",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops/0/totals/max_concurrent_black_holes"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops/0/casts"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[consistency.all_pass]"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "recast-on-end 分支（chanceToRecastOnEnd）可在黑洞结束时机率再生成一个，证据为 partially_confirmed；本构筑未选该节点，模型未实现。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "extraBlackHoles（Scattered/Armageddon 家族）在未选 Singularity 时增加每施放黑洞数；本构筑选 Singularity，模型按每次施放 1 个。若换 Build 需新增机制/规则。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

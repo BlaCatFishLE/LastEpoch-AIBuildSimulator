@@ -1,0 +1,100 @@
+{
+  "schema": "le-skill-template-v3",
+  "template_id": "syn-dot-poison",
+  "ability_id": "syn-dot-poison",
+  "binding_version": "definitions_v3.selector-v1",
+  "title": "Synthetic Poison DoT",
+  "definition": {
+    "plan_version": "le-calculation-plan-v4",
+    "skill": {},
+    "controls": [],
+    "state_sources": {},
+    "effects": [],
+    "node_bindings": [],
+    "rules": {},
+    "attribute_conversion": {},
+    "ailments": [],
+    "coverage": {},
+    "limitations": [],
+    "evidence": [],
+    "components": [
+      {
+        "component_id": "syn-body-dot",
+        "kind": "dot",
+        "damage_type": "Cold",
+        "base_damage": 10,
+        "tick_interval_s": 0.5,
+        "tick_count": 4,
+        "duration_s": 2,
+        "tags": [
+          "DoT"
+        ],
+        "presentation_label": "Synthetic Body DoT"
+      }
+    ],
+    "applications": [
+      {
+        "application_id": "syn-poison",
+        "ailment_id": "Poison",
+        "damage_type": "Poison",
+        "base_damage": 10,
+        "duration_s": 2,
+        "tick_interval_s": 0.5,
+        "clock": {
+          "first_at_s": 0.0,
+          "interval_s": 0.5,
+          "count": 4
+        },
+        "amount": {
+          "rule": "fixed_expected_stacks",
+          "stacks_per_roll": 0.5
+        },
+        "scaling_tags": [
+          "Poison"
+        ],
+        "source": {
+          "kind": "data_fixture"
+        },
+        "presentation_label": "Synthetic Poison Application"
+      }
+    ],
+    "schedule": {
+      "kind": "single_cast",
+      "horizon_s": 3,
+      "windows_s": [
+        2,
+        3
+      ],
+      "cast_time_s": 0.0
+    },
+    "evaluations": [
+      {
+        "evaluation_id": "default",
+        "primary": true,
+        "label": "default"
+      }
+    ],
+    "capabilities": [
+      "dot_components",
+      "applications",
+      "presentation"
+    ],
+    "target_side": {
+      "strategy": "separate_multiplier"
+    },
+    "presentation": {
+      "title": "Synthetic Poison DoT",
+      "labels": {
+        "components": {
+          "syn-body-dot": "Synthetic Body DoT"
+        },
+        "applications": {
+          "syn-poison": "Synthetic Poison Application"
+        }
+      },
+      "notes": [
+        "uniform application ticks; no legacy-specific defaults"
+      ]
+    }
+  }
+}

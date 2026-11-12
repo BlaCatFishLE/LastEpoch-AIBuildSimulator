@@ -1,0 +1,112 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "ballista-projectile-explosion",
+  "revision": 2,
+  "title": {
+    "zh": "Ballista 命中爆炸与火伤/点燃"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "Ballista 命中爆炸与火伤/点燃"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "ba1574:10",
+        "ba1574:12"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "minion_hit",
+      "explosion",
+      "ailment"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Flaming Shots 提供每点3 Fire附加与10% Ignite chance；Explosive Delivery 的 explodeFire 改变箭矢行为，并有40% less攻速。目录 Explosives 子组件须与触发事件显式绑定。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "本轮 DPS 口径不含 bolt 命中爆炸（用户指定只算 Armed Construction 的 Explodes）",
+    "path": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+    "locator": "11-其它条件问题-13-q13"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "draft",
+  "parameter_bindings": [
+    {
+      "parameter": "current_points_and_mods",
+      "source": "current:calculation_input.skills.specializations/ba1574 + current:mods",
+      "unit": "current",
+      "note": "只从本次输入绑定；不保存当前31点合计倍率。"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "IL 级逆向证据（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "IL 级中文结论（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json",
+      "note": "冻结 dataset 1.5.2 原值；节点含义对照官方资料，不用新版本文案替换旧数据。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/ballista/ballista-mechanism-review-20261112.zh-CN.md"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前构筑数值包（本轮）"
+    },
+    {
+      "kind": "reverse_engineering",
+      "detail": "Explosive Delivery 只改 bolt/shot（arrowsFireExplodeOnEnd=true + more AS -0.40），不改变 Armed Construction 爆炸的伤害或触发；故本轮不建模 bolt 直击与命中爆炸。",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#11-其它条件问题-13-q13"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "若后续需要全口径，需建模 bolt 命中/爆炸与点燃。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": [],
+  "limitations": [
+    {
+      "item": "bolt 命中爆炸 DPS",
+      "reason": "用户口径排除；证据已备，可后续按需加入。",
+      "blocks_full_dps": false
+    }
+  ]
+}

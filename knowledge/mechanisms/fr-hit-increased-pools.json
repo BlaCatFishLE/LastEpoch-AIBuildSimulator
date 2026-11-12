@@ -1,0 +1,213 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-increased-pools",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave increased 加算池（damage / attack speed / 属性缩放）",
+    "en": "Flame Reave increased additive pools (damage, attack speed, attribute scaling)"
+  },
+  "aliases": [
+    "increased",
+    "加算池",
+    "attribute scaling",
+    "Int/Dex 4%",
+    "increased damage"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "damage",
+        "attack_speed"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "intelligence",
+        "dexterity"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Hit"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "increased damage rows",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "increased_total",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "attribute scaling",
+      "source": "current:matched_instances",
+      "note": "Int/Dex per-point increased Damage（dataset attributeScaling）"
+    },
+    {
+      "parameter": "attributes",
+      "source": "current:matched_instances",
+      "unit": "points"
+    },
+    {
+      "parameter": "increased attack speed rows",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R9",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/damage_model/increased_additive；#/attack_model/attack_speed_pool；#/damage_model/attribute_scaling；#/rules id=R9（注意 R 条目 title/statement 漂移，见 research_notes）"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "compute_single_hit",
+    "note": "increased 池在 compute_single_hit 内按 tags_apply 求和；attack speed 池在 hit_simulate._attack_speed_pools"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/increased_additive",
+      "note": "increased 加算口径"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#A.attributes",
+      "note": "属性表与 Int/Dex ×4% increased Damage"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#9 A 属性派生"
+    },
+    {
+      "kind": "planner_runtime",
+      "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 436600-439200",
+      "note": "第三方 rrl8o 聚合（参考）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=damage and operation=increased]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/totals/increased_total",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/attribute_scaling",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/attributes",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=attack_speed and operation=increased]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-increased-aggregate",
+      "requirement": "increased 行统一加算；单位/标签/来源实例去重由共享账本保证",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/increased_additive"
+    },
+    {
+      "with": "fr-hit-attack-speed",
+      "requirement": "攻速的 increased 行与伤害的分开聚合（attack_speed 池）",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/attack_model/attack_speed_pool"
+    },
+    {
+      "with": "fr-hit-single-hit-chain",
+      "requirement": "共享算子作为乘区链的一环",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "任务 +2 全属性是否计入（OQ6，当前含任务版 347 点表）",
+      "Prodigy / Defender of Welryn 的 per-attribute 公式未验证（R25 用快照归一值）",
+      "ruleset 的规则以 title/statement 与 JSON 结构定位为准（fr-hit-stage1-v2 已统一文案）"
+    ],
+    "requery_when": [
+      "属性表/任务点口径变化",
+      "ruleset 修 R 条目漂移后重新核对"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "increased",
+    "stacking_policy": "additive",
+    "order_policy": "multiplier = 1 + sum(increased rows)；同一效果不能同时进静态快照与 ruleset 两次"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

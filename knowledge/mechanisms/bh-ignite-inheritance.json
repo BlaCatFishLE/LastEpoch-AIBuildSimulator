@@ -1,0 +1,161 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-ignite-inheritance",
+  "revision": 2,
+  "title": {
+    "zh": "Ignite 继承 Black Hole 技能树 more",
+    "en": "Ignite inherits Black Hole skill-tree more multipliers"
+  },
+  "aliases": [
+    "ignite inheritance",
+    "继承",
+    "inherit_from_tree_nodes",
+    "exclude_tree_nodes",
+    "Binary more inherited"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:2",
+        "bh2:7",
+        "bh2:9",
+        "bh2:10",
+        "bh2:23",
+        "bh2:27",
+        "bh2:28"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ignite"
+    ],
+    "tags": [
+      "Fire",
+      "DoT",
+      "Ailment"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:bh2:9"
+    ],
+    "notes": "Ignite 继承 BH 技能树中适合异常的 more 节点（2/7/10/23/28 与 Binary 9）；不继承 Weakened Reality（27，游戏文本明确不影响异常）。是否继承由 ruleset.ignite.inheritance 显式列出，不能从节点文本推定。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-inheritance",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-inheritance]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "inherit_from_tree_nodes",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/inheritance/inherit_from_tree_nodes",
+      "note": "允许进入 Ignite more 池的节点 ID 列表。"
+    },
+    {
+      "parameter": "exclude_tree_nodes",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/inheritance/exclude_tree_nodes",
+      "note": "显式排除节点（27）；排除原因写在同一块 excluded_reasons。"
+    },
+    {
+      "parameter": "ignite more groups",
+      "source": "current:matched_instances",
+      "note": "运行产物：实际进入 Ignite 的 more 组，可用于审计继承集合。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ignite",
+    "symbol": "_ignite_scaling",
+    "note": "按 ruleset.ignite.inheritance 过滤 tree_more_effects：节点在 inherit 集合且标签匹配 Ignite 才计入。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-inheritance]",
+      "note": "用户规则 5：Ignite 继承技能树增伤（除非明确 hit 限定）。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json#/B_binary",
+      "note": "实测 Binary more 被 Ignite 继承（总 DPS 翻倍且主要为点燃）。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/reproduction-1.5.3.zh-CN.md",
+      "note": "AilmentReceiver.ApplyAilment 使用施加技能的 stats。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12].alt_text",
+      "note": "Weakened Reality 不影响 Black Hole 施加的异常。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups",
+      "note": "当前 run 的 Ignite more 组与排除项。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_weakened_reality_not_inherited",
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_single_stack_core",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-binary-system",
+      "requirement": "node 9 的 more 必须出现在 Ignite 池（同时结构上双星本体翻倍）。",
+      "evidence_locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json#/B_binary"
+    },
+    {
+      "with": "bh-weakened-reality",
+      "requirement": "27 显式排除；不能因是技能树 more 就默认继承。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/inheritance/exclude_tree_nodes"
+    },
+    {
+      "with": "common-more-groups",
+      "requirement": "进入 Ignite 的节点 more 仍按各自 group 相乘，且与玩家 more 分组隔离。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_scaling"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/inheritance",
+      "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json",
+      "docs/evidence/reverse-engineering/reproduction-1.5.3.zh-CN.md",
+      "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12]",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups"
+    ],
+    "open_questions": [
+      "继承集合当前是按用户规则 + 个别实测确定的白名单；新节点/新 BD 必须逐项判断，不能假定『技能树全部增伤都继承』。",
+      "AilmentReceiver 的 stats 继承路径在 1.5.3 已读代码，但未做寄存器级的逐 stat 追踪；Binary more 的继承有实测支撑，其余节点的继承是白名单 + 用户规则。"
+    ],
+    "requery_when": [
+      "新 BD 使用新的 BH 增伤节点时",
+      "出现 hit 限定/条件限定节点时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

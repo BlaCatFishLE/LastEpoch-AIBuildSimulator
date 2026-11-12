@@ -1,0 +1,198 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-firebrand-scope",
+  "revision": 2,
+  "title": {
+    "zh": "Firebrand 层数/OQ7：只作用于 Firebrand 自身（FR 不消耗），仍存 +5 melee fire 的开放问题",
+    "en": "Firebrand stacks scope: Firebrand-only by user ruling; the +5 melee fire per stack question remains open"
+  },
+  "aliases": [
+    "Firebrand",
+    "f1b4d",
+    "Incineration",
+    "stacks",
+    "OQ7",
+    "Flame Caller"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "f1b4d"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "f1b4d:7",
+        "f1b4d:8",
+        "f1b4d:9",
+        "f1b4d:18",
+        "f1b4d:23",
+        "f1b4d:27"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "consume_firebrand"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "consume_firebrand"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effect definition",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=firebrand_incineration",
+      "note": "status confirmed；coverage not_modeled；include_in 空"
+    },
+    {
+      "parameter": "Firebrand tree params",
+      "source": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=f1b4d；#nodes node:letools:f1b4d:7/8/9/18/23/27",
+      "note": "Incineration/Illuminating Fire/Wildfire/Ardent Branding/Flare/Conflagrate"
+    },
+    {
+      "parameter": "buff",
+      "source": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:24",
+      "note": "Firebrand buff（层数作用于 Firebrand 自身）"
+    },
+    {
+      "parameter": "scenario state",
+      "source": "current:matched_instances",
+      "unit": "stacks/bool"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "firebrand_incineration",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=firebrand_incineration；#/rules id=R7（unique 条件范围）/R10（Firebrand 层数只作用于自身）；#/effects id=dragons_ambition_cold_armor"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_buffs",
+    "symbol": "screen_buffs",
+    "note": "仅做候选筛查；FR 不消耗 Firebrand 层数（用户裁决 2026-11-07）"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "not_implemented",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=firebrand_incineration",
+      "note": "ruleset 条件效果声明（status confirmed；not_modeled）"
+    },
+    {
+      "kind": "user_rule",
+      "locator": "user_conversation#2026-11-07",
+      "note": "Firebrand 层数只对 Firebrand 自身生效，不作用于 Flame Reave"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=f1b4d",
+      "note": "Firebrand 树与节点"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:24",
+      "note": "Firebrand buff"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#R4.firebrand",
+      "note": "facts 的 Firebrand 参数（含 OQ7）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/not_modeled_effects[id=firebrand_incineration]",
+      "note": "本次 run 明确列为 not_modeled"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/firebrand_stacks；consume_firebrand",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "firebrand_stacks/consume_firebrand 作为 scenario 输入但不影响 FR",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/states"
+    },
+    {
+      "with": "fr-effect-ignite-sources",
+      "requirement": "Firebrand Flare 的 ignite chance 是 ignited 可达性来源之一",
+      "evidence_locator": "data/releases/phase1-dataset-003/data.sqlite#source_records skill_tree_node f1b4d source_id=23"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "OQ7：Firebrand 每层 +5 melee fire damage 是否作用于 FR（buff 描述未明确限定 Firebrand）；当前按用户裁决『只对 Firebrand 自身』不建模",
+      "层数获取（Conflagrate 2 层/击）/4s 持续时间/刷新规则未建模",
+      "若 Lead 改判 +5 melee fire 作用于 FR，每层会改变 added 池（约 ×4 scaling），需要新 run 与 expected"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "none",
+    "stacking_policy": "none",
+    "order_policy": "不进入 FR 伤害：层数只影响 Firebrand 自身（Incineration/Illuminating Fire）",
+    "more_group_source": "ruleset effect 标注 not_modeled；不登记为 FR 的 more 组"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "f1b4d"
+  ]
+}

@@ -1,0 +1,855 @@
+{
+  "schema": "le-extracted-evidence-index-v1",
+  "generated_at": "2026-11-12T21:40:46Z",
+  "note": "由 knowledge 条目生成的可复用结论 + 作者本地归档定位清单；不复制条目数值。",
+  "entries": [
+    {
+      "entry_id": "attribute-strength-to-brutality",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/attribute-strength-to-brutality.json",
+      "author_ref_count": 1,
+      "conclusion_count": 4,
+      "limitation_count": 0
+    },
+    {
+      "entry_id": "bh-attribute-scaling",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-attribute-scaling.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-baseline-profiles",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-baseline-profiles.json",
+      "author_ref_count": 15,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-binary-system",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-binary-system.json",
+      "author_ref_count": 3,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-black-hole-instances",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-black-hole-instances.json",
+      "author_ref_count": 3,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-body-component",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-body-component.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-body-tick-model",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-body-tick-model.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-cast-time",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cast-time.json",
+      "author_ref_count": 5,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-charge-schedule-multi-instance",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-charge-schedule-multi-instance.json",
+      "author_ref_count": 1,
+      "conclusion_count": 6,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-cond-apex-glyph-conversion",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-apex-glyph-conversion.json",
+      "author_ref_count": 11,
+      "conclusion_count": 5,
+      "limitation_count": 4
+    },
+    {
+      "entry_id": "bh-cond-chilled-touch",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-chilled-touch.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-cond-conflagrate",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-conflagrate.json",
+      "author_ref_count": 4,
+      "conclusion_count": 5,
+      "limitation_count": 4
+    },
+    {
+      "entry_id": "bh-cond-craterborn",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-craterborn.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-cond-crescendoing-rage",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-crescendoing-rage.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-cond-eternal-flames-active",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-eternal-flames-active.json",
+      "author_ref_count": 5,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-cond-eternal-flames-passive",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-eternal-flames-passive.json",
+      "author_ref_count": 9,
+      "conclusion_count": 5,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-cond-flame-ward-fire-aura",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-flame-ward-fire-aura.json",
+      "author_ref_count": 5,
+      "conclusion_count": 5,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-cond-frozen-steel",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-frozen-steel.json",
+      "author_ref_count": 5,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-cond-idol-altar-layout-cdr",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-idol-altar-layout-cdr.json",
+      "author_ref_count": 9,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-cond-idol-fire-doubling",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-idol-fire-doubling.json",
+      "author_ref_count": 8,
+      "conclusion_count": 5,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-cond-infusion",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-infusion.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-cond-preparation",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-preparation.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-cond-throne-of-ambition",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cond-throne-of-ambition.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-cooldown-cdr-icr",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cooldown-cdr-icr.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-cooldown-charges",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-cooldown-charges.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-dot-tick-model",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-dot-tick-model.json",
+      "author_ref_count": 1,
+      "conclusion_count": 6,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-duration",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-duration.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-heat-wave-ignite-clock",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-heat-wave-ignite-clock.json",
+      "author_ref_count": 1,
+      "conclusion_count": 6,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-ignite-attribute-scaling",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-ignite-attribute-scaling.json",
+      "author_ref_count": 4,
+      "conclusion_count": 5,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-ignite-core",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-ignite-core.json",
+      "author_ref_count": 4,
+      "conclusion_count": 5,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-ignite-damage-flow",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-ignite-damage-flow.json",
+      "author_ref_count": 9,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-ignite-duration-sources",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-ignite-duration-sources.json",
+      "author_ref_count": 10,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-ignite-heat-wave",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-ignite-heat-wave.json",
+      "author_ref_count": 4,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-ignite-inheritance",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-ignite-inheritance.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-ignite-penetration",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-ignite-penetration.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-ignite-scaling-pool",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-ignite-scaling-pool.json",
+      "author_ref_count": 5,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-loop-action-policies",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-loop-action-policies.json",
+      "author_ref_count": 9,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-monster-dr-integration",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-monster-dr-integration.json",
+      "author_ref_count": 8,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-node-more-10",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-node-more-10.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 0
+    },
+    {
+      "entry_id": "bh-node-more-2",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-node-more-2.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 0
+    },
+    {
+      "entry_id": "bh-node-more-28",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-node-more-28.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 0
+    },
+    {
+      "entry_id": "bh-node-more-7",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-node-more-7.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 0
+    },
+    {
+      "entry_id": "bh-red-giant",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-red-giant.json",
+      "author_ref_count": 3,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-skill-tree-more-nodes",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-skill-tree-more-nodes.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-supermassive",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-supermassive.json",
+      "author_ref_count": 8,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-target-scenario-conditions",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-target-scenario-conditions.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-target-side-settlement",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-target-side-settlement.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "bh-weakened-reality",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/bh-weakened-reality.json",
+      "author_ref_count": 9,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "common-conditional-state-eval",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/common-conditional-state-eval.json",
+      "author_ref_count": 10,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "common-frequency-cooldown",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/common-frequency-cooldown.json",
+      "author_ref_count": 9,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "common-increased-aggregate",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/common-increased-aggregate.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "common-ledger",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/common-ledger.json",
+      "author_ref_count": 12,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "common-monster-dr",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/common-monster-dr.json",
+      "author_ref_count": 5,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "common-more-groups",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/common-more-groups.json",
+      "author_ref_count": 3,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "common-tag-match",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/common-tag-match.json",
+      "author_ref_count": 2,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "common-target-resistance-penetration",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/common-target-resistance-penetration.json",
+      "author_ref_count": 8,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-ambition-gain-source",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-ambition-gain-source.json",
+      "author_ref_count": 16,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-army-of-skin-high-health",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-army-of-skin-high-health.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-blade-weaving-consume",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-blade-weaving-consume.json",
+      "author_ref_count": 15,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-chaos-flare-ignited-crit",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-chaos-flare-ignited-crit.json",
+      "author_ref_count": 14,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-enchant-weapon",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-enchant-weapon.json",
+      "author_ref_count": 16,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-firebrand-scope",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-firebrand-scope.json",
+      "author_ref_count": 14,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-frenzy-active",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-frenzy-active.json",
+      "author_ref_count": 16,
+      "conclusion_count": 5,
+      "limitation_count": 4
+    },
+    {
+      "entry_id": "fr-effect-ignite-sources",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-ignite-sources.json",
+      "author_ref_count": 15,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-mana-300-idols",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-mana-300-idols.json",
+      "author_ref_count": 19,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-rhythm-of-fire-consume",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-rhythm-of-fire-consume.json",
+      "author_ref_count": 14,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-scorching-tide-ignited",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-scorching-tide-ignited.json",
+      "author_ref_count": 14,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-effect-surge-pyroclasm",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-effect-surge-pyroclasm.json",
+      "author_ref_count": 14,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-hit-added-scaling",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-added-scaling.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-hit-attack-speed",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-attack-speed.json",
+      "author_ref_count": 18,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-hit-conditional-state-eval",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-conditional-state-eval.json",
+      "author_ref_count": 18,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-hit-cooldown-icr",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-cooldown-icr.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-hit-critical-expected",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-critical-expected.json",
+      "author_ref_count": 15,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-hit-dual-wield-added",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-dual-wield-added.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-hit-events-weights",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-events-weights.json",
+      "author_ref_count": 14,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-hit-increased-pools",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-increased-pools.json",
+      "author_ref_count": 18,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-hit-more-groups",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-more-groups.json",
+      "author_ref_count": 16,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-hit-offhand-exalted",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-offhand-exalted.json",
+      "author_ref_count": 19,
+      "conclusion_count": 6,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-hit-rhythm-rotation",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-rhythm-rotation.json",
+      "author_ref_count": 16,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-hit-single-hit-chain",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-single-hit-chain.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-hit-tag-matching",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-tag-matching.json",
+      "author_ref_count": 14,
+      "conclusion_count": 5,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "fr-hit-target-side",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-hit-target-side.json",
+      "author_ref_count": 16,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-multi-hit-return-hits",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-multi-hit-return-hits.json",
+      "author_ref_count": 1,
+      "conclusion_count": 6,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-node-arcane-severance",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-arcane-severance.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-node-dancing-flames",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-dancing-flames.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-node-ember-infusion",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-ember-infusion.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-node-flame-caller",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-flame-caller.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-node-frenzied-flame",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-frenzied-flame.json",
+      "author_ref_count": 17,
+      "conclusion_count": 6,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-node-heat-wave",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-heat-wave.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-node-precise-destruction",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-precise-destruction.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-node-reflash",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-reflash.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-node-rolling-flames",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-rolling-flames.json",
+      "author_ref_count": 17,
+      "conclusion_count": 6,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "fr-node-versatility",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-node-versatility.json",
+      "author_ref_count": 17,
+      "conclusion_count": 5,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "fr-skill-level-scaling",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/fr-skill-level-scaling.json",
+      "author_ref_count": 18,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
+      "entry_id": "item-offhand-exalted-effectiveness",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/item-offhand-exalted-effectiveness.json",
+      "author_ref_count": 1,
+      "conclusion_count": 6,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "skill-added-damage-spell-to-melee",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/skill-added-damage-spell-to-melee.json",
+      "author_ref_count": 1,
+      "conclusion_count": 6,
+      "limitation_count": 1
+    },
+    {
+      "entry_id": "bh-black-hole",
+      "kind": "skill",
+      "source_path": "knowledge/skills/bh-black-hole.json",
+      "author_ref_count": 24,
+      "conclusion_count": 24,
+      "limitation_count": 12
+    },
+    {
+      "entry_id": "fr-flame-reave",
+      "kind": "skill",
+      "source_path": "knowledge/skills/fr-flame-reave.json",
+      "author_ref_count": 34,
+      "conclusion_count": 26,
+      "limitation_count": 16
+    },
+    {
+      "entry_id": "void-cleave-fire-main",
+      "kind": "skill",
+      "source_path": "knowledge/skills/void-cleave-fire-main.json",
+      "author_ref_count": 1,
+      "conclusion_count": 17,
+      "limitation_count": 2
+    },
+    {
+      "entry_id": "ballista-armed-construction-v4",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/ballista-armed-construction-v4.json",
+      "author_ref_count": 1,
+      "conclusion_count": 6,
+      "limitation_count": 14
+    },
+    {
+      "entry_id": "bh-black-hole-v3",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/black-hole-v3.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 4
+    },
+    {
+      "entry_id": "black-hole-v4",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/black-hole-v4.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 4
+    },
+    {
+      "entry_id": "fr-flame-reave-v3",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/fr-flame-reave-v3.json",
+      "author_ref_count": 10,
+      "conclusion_count": 6,
+      "limitation_count": 10
+    },
+    {
+      "entry_id": "fr-flame-reave-v4",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/fr-flame-reave-v4.json",
+      "author_ref_count": 9,
+      "conclusion_count": 6,
+      "limitation_count": 10
+    },
+    {
+      "entry_id": "void-cleave-fire-main-v3",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/void-cleave-fire-main-v3.json",
+      "author_ref_count": 25,
+      "conclusion_count": 6,
+      "limitation_count": 14
+    },
+    {
+      "entry_id": "void-cleave-fire-main-v4",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/void-cleave-fire-main-v4.json",
+      "author_ref_count": 24,
+      "conclusion_count": 6,
+      "limitation_count": 14
+    }
+  ]
+}

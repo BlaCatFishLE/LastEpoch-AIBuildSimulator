@@ -1,0 +1,2033 @@
+{
+  "schema_version": "le-report-config-v1.examples-v1",
+  "description": "Python validate_report_config() 与页面 JS 校验器共用的对齐样例（同一 schema、同一错误码与顺序）。fixtures.capabilities 是校验所需的能力子集；fixtures.binding/current_binding 是当前页面绑定；payload=被载入配置；expected_ok/expected_codes=期望结论（expected_codes 按 issues 产生顺序含 warning）。页面 JS 可直接读取本文件逐例断言 ok/codes/legacy，避免维护简化版规则。",
+  "validation_order": [
+    "config_not_object",
+    "config_unsupported_schema",
+    "config_schema_field_legacy",
+    "config_unknown_field",
+    "legacy_config_no_binding",
+    "config_invalid_binding",
+    "config_binding_unknown_field",
+    "config_binding_not_checked",
+    "config_case_mismatch",
+    "config_model_mismatch",
+    "config_capabilities_version_mismatch",
+    "config_input_fingerprint_mismatch",
+    "config_report_ref_mismatch",
+    "config_ui_contract_mismatch",
+    "config_renderer_fingerprint_mismatch",
+    "config_missing_scenario",
+    "config_invalid_scenario",
+    "config_capabilities_unavailable"
+  ],
+  "issue_codes": [
+    "config_not_object",
+    "config_invalid_json",
+    "config_unsupported_schema",
+    "config_schema_field_legacy",
+    "config_unknown_field",
+    "config_invalid_binding",
+    "config_binding_unknown_field",
+    "config_binding_not_checked",
+    "config_case_mismatch",
+    "config_model_mismatch",
+    "config_capabilities_version_mismatch",
+    "config_input_fingerprint_mismatch",
+    "config_report_ref_mismatch",
+    "config_ui_contract_mismatch",
+    "config_renderer_fingerprint_mismatch",
+    "config_missing_scenario",
+    "config_invalid_scenario",
+    "config_capabilities_unavailable",
+    "legacy_config_no_binding",
+    "out_of_range",
+    "invalid_scenario_value",
+    "unknown_scenario_field",
+    "invalid_baseline_profile",
+    "invalid_stack_count",
+    "config_internal_error"
+  ],
+  "fixtures": {
+    "capabilities": {
+      "schema_version": "le-model-capabilities-v1",
+      "model_id": "hit",
+      "skill_id": "fr11mv",
+      "ui_contract_version": "le-player-report-ui-v1",
+      "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "hit_policy": {
+        "kind": "first_full_then_fraction",
+        "first_weight": 1.0,
+        "subsequent_weight": 0.5,
+        "hits": {
+          "min": 1,
+          "max": 8,
+          "default": 4
+        },
+        "custom_weights_supported": true,
+        "semantics": "第 1 击 1.0，后续每击 0.5；自定义 damage_weights 仅显式覆盖"
+      },
+      "pages": [
+        {
+          "id": "overview",
+          "label": "总览",
+          "kind": "generic"
+        },
+        {
+          "id": "buffs",
+          "label": "Buff 设置",
+          "kind": "generic"
+        }
+      ],
+      "target_fields": [
+        {
+          "field": "monster_level",
+          "kind": "int",
+          "min": 1,
+          "max": 100,
+          "default": 100
+        },
+        {
+          "field": "fire_resistance",
+          "kind": "float",
+          "min": -1.0,
+          "max": 1.0,
+          "default": 0.0
+        },
+        {
+          "field": "boss_or_rare",
+          "kind": "bool",
+          "default": true
+        },
+        {
+          "field": "enemy_high_health",
+          "kind": "bool",
+          "default": true
+        },
+        {
+          "field": "ignited",
+          "kind": "bool",
+          "default": false
+        }
+      ],
+      "buff_controls": [
+        {
+          "state_key": "frenzy_active",
+          "kind": "toggle",
+          "default": false
+        },
+        {
+          "state_key": "enchant_weapon_active",
+          "kind": "toggle",
+          "default": true
+        },
+        {
+          "state_key": "ambition_stacks",
+          "kind": "stacks",
+          "min": 0,
+          "max": 20,
+          "default": 0
+        },
+        {
+          "state_key": "blade_weaving_stacks",
+          "kind": "stacks",
+          "min": 0,
+          "max": 10,
+          "default": 0
+        },
+        {
+          "state_key": "enemy_high_health",
+          "kind": "toggle",
+          "default": true
+        },
+        {
+          "state_key": "ignited",
+          "kind": "toggle",
+          "default": false
+        },
+        {
+          "state_key": "dual_wield",
+          "kind": "toggle",
+          "default": true,
+          "readonly": true
+        }
+      ],
+      "windows": [
+        5.0,
+        30.0,
+        120.0
+      ],
+      "modes": [
+        "cooldown_limited",
+        "attack_speed_limited"
+      ],
+      "baseline_profiles": [
+        "legacy_single_skill",
+        "build_base"
+      ],
+      "profile_states": {
+        "legacy_single_skill": {
+          "enemy_high_health": false,
+          "enchant_weapon_active": true,
+          "frenzy_active": false
+        },
+        "build_base": {
+          "enemy_high_health": true,
+          "enchant_weapon_active": true,
+          "frenzy_active": false
+        }
+      },
+      "model_parameters": [
+        {
+          "key": "hits_per_cast",
+          "kind": "int",
+          "min": 1,
+          "max": 8,
+          "default": 4,
+          "aliases": [
+            "hit_override.hits_per_cast"
+          ]
+        }
+      ],
+      "scenario_fields": {
+        "required": [
+          "baseline_profile",
+          "target",
+          "states"
+        ],
+        "allowed": [
+          "baseline_profile",
+          "target",
+          "states",
+          "mode_policy",
+          "model_parameters",
+          "hit_override",
+          "single_cast",
+          "single_hit",
+          "dps",
+          "profiles",
+          "mode",
+          "assumptions",
+          "schema",
+          "case_id",
+          "binding"
+        ]
+      },
+      "legacy_scenario_fields": {
+        "hit_override": {
+          "kind": "hit_override"
+        },
+        "single_cast": {
+          "kind": "object"
+        },
+        "single_hit": {
+          "kind": "object"
+        },
+        "dps": {
+          "kind": "object"
+        },
+        "profiles": {
+          "kind": "object"
+        },
+        "mode": {
+          "kind": "string"
+        },
+        "assumptions": {
+          "kind": "list"
+        },
+        "schema": {
+          "kind": "string"
+        },
+        "case_id": {
+          "kind": "string"
+        },
+        "binding": {
+          "kind": "object"
+        }
+      },
+      "recalculation": {
+        "supported": true,
+        "request_kind": "le-recalc-request-v1",
+        "response_kind": "le-recalc-response-v1",
+        "bindings_kind": "le-recalc-bindings-v1",
+        "report_config_schema": "le-report-config-v1",
+        "session_scoped_revisions": true,
+        "client_session": {
+          "field": "client_session_id",
+          "required": false,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$",
+          "generation": "per page load",
+          "legacy_policy": "isolated per-request scope"
+        },
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "binding_checks": [
+          "case_id",
+          "model_id",
+          "capabilities_version",
+          "input_fingerprints",
+          "report_ref"
+        ],
+        "commands": [
+          "prepare",
+          "compute",
+          "recompute"
+        ]
+      },
+      "informational": []
+    },
+    "binding": {
+      "schema_version": "le-recalc-bindings-v1",
+      "case_id": "flame-reave",
+      "model_id": "hit",
+      "capabilities_version": "le-model-capabilities-v1:example0000000000",
+      "ui_contract_version": "le-player-report-ui-v1",
+      "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "report_ref": {
+        "schema_version": "le-report-ref-v1",
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "run_id": "fixture-run",
+        "run_dir": "reports/<case>/fixture-run",
+        "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "canonical": true
+      },
+      "input_fingerprints": {
+        "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+    },
+    "current_binding": {
+      "case_id": "flame-reave",
+      "model_id": "hit",
+      "capabilities_version": "le-model-capabilities-v1:example0000000000",
+      "ui_contract_version": "le-player-report-ui-v1",
+      "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "report_ref": {
+        "schema_version": "le-report-ref-v1",
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "run_id": "fixture-run",
+        "run_dir": "reports/<case>/fixture-run",
+        "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "canonical": true
+      },
+      "input_fingerprints": {
+        "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+    },
+    "scenario": {
+      "baseline_profile": "build_base",
+      "target": {
+        "monster_level": 100,
+        "fire_resistance": 0.0,
+        "boss_or_rare": true
+      },
+      "states": {
+        "frenzy_active": false,
+        "enchant_weapon_active": true,
+        "ambition_stacks": 0
+      },
+      "hit_override": {
+        "hits_per_cast": 4,
+        "damage_weights": [
+          1.0,
+          0.5,
+          0.5,
+          0.5
+        ]
+      }
+    },
+    "hit_policy": {
+      "kind": "first_full_then_fraction",
+      "first_weight": 1.0,
+      "subsequent_weight": 0.5,
+      "hits": {
+        "min": 1,
+        "max": 8,
+        "default": 4
+      },
+      "custom_weights_supported": true,
+      "semantics": "第 1 击 1.0，后续每击 0.5；自定义 damage_weights 仅显式覆盖"
+    }
+  },
+  "cases": [
+    {
+      "id": "valid_complete_config",
+      "description": "完整 binding + 完整规范化场景；应可原子应用",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": true,
+      "expected_codes": [],
+      "expect": {
+        "ok": true,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": []
+      }
+    },
+    {
+      "id": "valid_roundtrip_non_control_fields",
+      "description": "F2：能力允许但暂未做成控件的 single_hit.states.frenzy_active=true + states.enchant_weapon_active=false，校验通过且完整场景必须保留（页面不得丢弃）",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": false,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          },
+          "single_hit": {
+            "states": {
+              "frenzy_active": true
+            }
+          }
+        }
+      },
+      "expected_ok": true,
+      "expected_codes": [],
+      "expect": {
+        "ok": true,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": []
+      }
+    },
+    {
+      "id": "valid_custom_weights_override",
+      "description": "F1：显式自定义 damage_weights=[1,1] 是覆盖政策，合法（仅显式配置时才覆盖默认 1/0.5 政策）",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 2,
+            "damage_weights": [
+              1.0,
+              1.0
+            ]
+          }
+        }
+      },
+      "expected_ok": true,
+      "expected_codes": [],
+      "expect": {
+        "ok": true,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": []
+      }
+    },
+    {
+      "id": "legacy_no_binding",
+      "description": "历史无 binding 配置：明确 legacy 结论并拒绝自动应用",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "legacy_config_no_binding"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": true,
+        "legacy_reason": "no_binding",
+        "binding_checked": false,
+        "error_codes": [
+          "legacy_config_no_binding"
+        ]
+      }
+    },
+    {
+      "id": "legacy_schema_alias",
+      "description": "旧字段 schema 兼容读取（warning），新文件应写 schema_version",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        },
+        "schema": "le-report-config-v1"
+      },
+      "expected_ok": true,
+      "expected_codes": [
+        "config_schema_field_legacy"
+      ],
+      "expect": {
+        "ok": true,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": []
+      }
+    },
+    {
+      "id": "foreign_case",
+      "description": "配置来自其它案例：拒绝",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "foreign-build",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "config_case_mismatch"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "config_case_mismatch"
+        ]
+      }
+    },
+    {
+      "id": "stale_ruleset_fingerprint",
+      "description": "外层 binding.input_fingerprints.ruleset 与当前不一致：拒绝",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "0000000000000000000000000000000000000000000000000000000000000000",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "config_input_fingerprint_mismatch"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "config_input_fingerprint_mismatch"
+        ]
+      }
+    },
+    {
+      "id": "nested_report_ref_fingerprint",
+      "description": "F3：仅嵌套 binding.report_ref.input_fingerprints.ruleset 为全 0（外层正确）：config_report_ref_mismatch",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "0000000000000000000000000000000000000000000000000000000000000000",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "config_report_ref_mismatch"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "config_report_ref_mismatch"
+        ]
+      }
+    },
+    {
+      "id": "wrong_report_run",
+      "description": "report_ref.run_id 指向其它 run：config_report_ref_mismatch",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "other-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "config_report_ref_mismatch"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "config_report_ref_mismatch"
+        ]
+      }
+    },
+    {
+      "id": "unknown_scenario_field",
+      "description": "未知场景字段：模型感知校验拒绝（不得静默丢弃）",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0,
+            "totally_unknown_buff": 1
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "unknown_scenario_field"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "unknown_scenario_field"
+        ]
+      }
+    },
+    {
+      "id": "unknown_config_field",
+      "description": "顶层未知字段：拒绝",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        },
+        "unknown_top": 1
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "config_unknown_field"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "config_unknown_field"
+        ]
+      }
+    },
+    {
+      "id": "missing_scenario",
+      "description": "缺少 scenario：拒绝",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "config_missing_scenario"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "config_missing_scenario"
+        ]
+      }
+    },
+    {
+      "id": "invalid_target_fire_resistance",
+      "description": "F3：target.fire_resistance=2.0 超出能力上限 1.0 → out_of_range（Python 与页面必须一致）",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 2.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "out_of_range"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "out_of_range"
+        ]
+      }
+    },
+    {
+      "id": "invalid_ambition_string",
+      "description": "F3：states.ambition_stacks='5'（字符串）→ invalid_scenario_value（不得静默转数值）",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": "5"
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "invalid_scenario_value"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "invalid_scenario_value"
+        ]
+      }
+    },
+    {
+      "id": "invalid_baseline_profile",
+      "description": "baseline_profile 不在能力声明内 → invalid_baseline_profile",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "ghost_profile",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "invalid_baseline_profile"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "invalid_baseline_profile"
+        ]
+      }
+    },
+    {
+      "id": "invalid_nested_single_hit_state",
+      "description": "F2/F3：嵌套 single_hit.states 的未知状态必须在载入前拒绝（不能接受后在保存/提交时丢弃）；合法 single_hit.states.frenzy_active 见 valid_roundtrip_non_control_fields。",
+      "current_binding": {
+        "case_id": "flame-reave",
+        "model_id": "hit",
+        "capabilities_version": "le-model-capabilities-v1:example0000000000",
+        "ui_contract_version": "le-player-report-ui-v1",
+        "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "report_ref": {
+          "schema_version": "le-report-ref-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "run_id": "fixture-run",
+          "run_dir": "reports/<case>/fixture-run",
+          "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "canonical": true
+        },
+        "input_fingerprints": {
+          "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        },
+        "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+      },
+      "payload": {
+        "schema_version": "le-report-config-v1",
+        "binding": {
+          "schema_version": "le-recalc-bindings-v1",
+          "case_id": "flame-reave",
+          "model_id": "hit",
+          "capabilities_version": "le-model-capabilities-v1:example0000000000",
+          "ui_contract_version": "le-player-report-ui-v1",
+          "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "report_ref": {
+            "schema_version": "le-report-ref-v1",
+            "case_id": "flame-reave",
+            "model_id": "hit",
+            "run_id": "fixture-run",
+            "run_dir": "reports/<case>/fixture-run",
+            "report_path": "reports/<case>/fixture-run/flame-reave-damage.html",
+            "input_fingerprints": {
+              "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "recompute_endpoint": "http://127.0.0.1:9922/recompute",
+            "ui_contract_version": "le-player-report-ui-v1",
+            "renderer_fingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "canonical": true
+          },
+          "input_fingerprints": {
+            "calc_input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "ruleset": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "snapshot": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "dataset": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+          },
+          "recompute_endpoint": "http://127.0.0.1:9922/recompute"
+        },
+        "scenario": {
+          "baseline_profile": "build_base",
+          "target": {
+            "monster_level": 100,
+            "fire_resistance": 0.0,
+            "boss_or_rare": true
+          },
+          "states": {
+            "frenzy_active": false,
+            "enchant_weapon_active": true,
+            "ambition_stacks": 0
+          },
+          "hit_override": {
+            "hits_per_cast": 4,
+            "damage_weights": [
+              1.0,
+              0.5,
+              0.5,
+              0.5
+            ]
+          },
+          "single_hit": {
+            "states": {
+              "totally_unknown_state": true
+            }
+          }
+        }
+      },
+      "expected_ok": false,
+      "expected_codes": [
+        "unknown_scenario_field"
+      ],
+      "expect": {
+        "ok": false,
+        "legacy": false,
+        "legacy_reason": null,
+        "binding_checked": true,
+        "error_codes": [
+          "unknown_scenario_field"
+        ]
+      }
+    }
+  ]
+}

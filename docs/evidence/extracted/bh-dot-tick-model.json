@@ -1,0 +1,80 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-dot-tick-model",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Black Hole 本体纯 DoT 逐跳模型（ceil_full_ticks）",
+    "en": "Black Hole body pure-DoT tick model"
+  },
+  "source_path": "knowledge/mechanisms/bh-dot-tick-model.json",
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 BH 计算器与 ruleset-bh-stage1-v4 仅作迁移证据；生产路径为 plan-v3。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "plan-v3 components[].duration_s/tick_interval_s/remainder_policy",
+    "path": "knowledge/definitions/black-hole-v3.json",
+    "locator": "#/definition/rules/dot_components",
+    "verification": {
+      "status": "verified_locator",
+      "checked_against": "knowledge/definitions/black-hole-v3.json#/definition/rules/dot_components",
+      "note": "ref 不是规则 ID（描述性引用）；已按 locator 在该候选树文件内定位"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill:letools:LEAbilities.abilityList:bh2#component#0",
+      "note": "RepeatedlyDamageEnemiesWithinRadius: 48 Cold, addedDamageScaling 2.4, damageInterval 0.3, hit=false",
+      "source": "$.evidence_refs[0]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Black Hole 本体纯 DoT 逐跳模型（ceil_full_ticks）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：dot、tick；伤害标签：Cold、Fire、Spell、DoT；条件 code：none；必要节点：bh2:4、bh2:9",
+      "source": "$.applicability"
+    },
+    {
+      "text": "base 48 Cold、addedDamageScaling 2.4、interval 0.3、damageAtStart、duration 2.75 + 树时长；Binary 双组件、Red Giant 转 Fire 并 +0.8s。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "聚合操作=none；叠层策略=additive；顺序/汇总=逐跳求和；tick 数向上取整，末跳不合并余量；more 分组依据=贡献行 group",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "逐组件执行基础/加算/更多/穿透/目标乘区并离散为 tick",
+      "source": "$.handler_ref.note（le_calc.plan_executor_v3._dot_component_result）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：base damage / added scaling / tick interval、duration、tick count",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/dps-step4-bh-2/result.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "非伤害效果：chill/shock/blind/无视/拉怪不建模。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

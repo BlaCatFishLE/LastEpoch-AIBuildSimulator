@@ -1,0 +1,148 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "common-ledger",
+  "revision": 2,
+  "title": {
+    "zh": "来源账/规则账与一致性检查",
+    "en": "Source ledger, rule ledger and consistency checks"
+  },
+  "aliases": [
+    "source ledger",
+    "rule ledger",
+    "来源账",
+    "规则账",
+    "consistency",
+    "run-manifest",
+    "贡献账本"
+  ],
+  "selectors": [
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "common-ledger"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ledger"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "每个来源实例的每条效果行都要能在 source-ledger 中定位；每条规则状态与证据进入 rule-ledger；run-manifest 汇总绑定指纹与 consistency 检查。共享的是账本结构约定，BH（report.py）与 FR（hit_report.py）分别实现。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "账本结构是输出契约（docs/architecture.md §7/§9、result-v1 schema），不是游戏机制规则。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "contribution rows",
+      "source": "current:matched_instances",
+      "note": "来源账行来源；每行含 source_kind/stat_key/operation/条件/状态/证据。"
+    },
+    {
+      "parameter": "rule rows",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules",
+      "note": "规则账行 + report.build_derived_rules 生成的 derived 行。"
+    },
+    {
+      "parameter": "consistency",
+      "source": "current:matched_instances",
+      "note": "一致性检查布尔集合；all_pass 必须全 true。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ledger",
+    "symbol": "build_source_ledger",
+    "note": "来源账主入口（ledger_document / ledger_json 为文档封装）；规则账与一致性在 le_calc.report.build_derived_rules / build_result / consistency_checks。FR 侧对应 hit_report.py。"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "docs/architecture.md#7",
+      "note": "快照与 contributions 字段契约。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/architecture.md#9",
+      "note": "result-v1 与账本契约。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/source_ledger",
+      "note": "当前 run 的 240 行来源账（产物引用）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/rule-ledger.json",
+      "note": "当前 run 的 42 行规则账（33 rules + 9 derived）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency",
+      "note": "8 项一致性检查均 true。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_ledger.py::SourceLedgerTests::test_one_row_per_contribution",
+    "tools/phase3/tests/test_ledger.py::SourceLedgerTests::test_rows_are_sorted_deterministically",
+    "tools/phase3/tests/test_report.py::BuildResultTest::test_source_ledger_matches_snapshot",
+    "tools/phase3/tests/test_report.py::BuildResultTest::test_consistency_checks_pass",
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[consistency.all_pass]",
+    "archive://reports/flame-reave/p0-baseline-fr/reproduce-report.json#/checks"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "条件重算的每条提案/跳过原因都必须落进 conditional-recompute.json 的 application_states，不能只改数值不入账。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states"
+    },
+    {
+      "with": "common-monster-dr",
+      "requirement": "目标侧因子与 monster_dr 元数据要进结果账与 run-manifest 场景块，便于跨 run 对比。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/source_ledger",
+      "archive://reports/black-hole/save-build-bh-affix-db/rule-ledger.json",
+      "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json",
+      "tools/phase3/tests/test_ledger.py",
+      "tools/phase3/tests/test_report.py"
+    ],
+    "open_questions": [
+      "统一贡献项（实施方案 §6.3）要求「来源实例 + 效果序号 + 机制 ID + …」字段，当前账本行尚未携带机制 ID/效果序号；P2 扩展账本 schema 时需同步消费者与测试。",
+      "两模型账本实现分离（report.py vs hit_report.py），字段命名尚未统一；跨模型汇总前需先定字段映射。"
+    ],
+    "requery_when": [
+      "P2 统一账本 schema 时",
+      "新增报告页/新模型时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "reuse_mode": "shared"
+}

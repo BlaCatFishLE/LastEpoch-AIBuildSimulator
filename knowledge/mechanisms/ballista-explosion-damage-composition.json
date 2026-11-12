@@ -1,0 +1,118 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "ballista-explosion-damage-composition",
+  "revision": 1,
+  "title": {
+    "zh": "Ballista 爆炸伤害构成（ability_gen327）"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "Ballista 爆炸伤害构成（ability_gen327）"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "ba1574:5",
+        "ba1574:14",
+        "ba1574:23",
+        "ba1574:25",
+        "ba1574:26"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [
+      "Minion",
+      "Fire",
+      "Bow"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "爆炸 = Fire 50 基伤、250% added effectiveness、5%/200% 暴击、tags Bow+Fire(+Minion 统计上下文)；乘区：increased(含 Dex×4%/点 attributeScaling、Minion 标签原生池、Shared Enhancements 75% 转移)、more(minion base 0.5、Heavy Bolts 0.36、Practical Build 0.40、Elixir 0.45、Armed Construction 0.04×Dex)、暴击期望（Perfect Aim 转移后 clamp 1.0）。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "base_damage",
+      "source": "docs/evidence/ballista/ballista-build-values-20261113.json#abilities.ability_gen327.components[0]",
+      "unit": "Fire 50"
+    },
+    {
+      "parameter": "per_dex_more",
+      "source": "knowledge/definitions/ballista-armed-construction-v4.json#/definition/rules/node_attribute_scaled/0",
+      "unit": "more"
+    },
+    {
+      "parameter": "node_more",
+      "source": "knowledge/definitions/ballista-armed-construction-v4.json#/definition/effects",
+      "unit": "more",
+      "per_point": true
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.skill",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.skill"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "IL 级机制与常量"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前构筑数值池"
+    },
+    {
+      "kind": "document",
+      "locator": "knowledge/definitions/ballista-armed-construction-v4.json",
+      "note": "可执行定义"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "Minion 等级伤害缩放是否作用于爆炸未确认。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "knowledge/definitions/ballista-armed-construction-v4.json"
+    ]
+  },
+  "limitations": [
+    {
+      "item": "minion base 50% more 读法",
+      "reason": "dataset minion base_stats 的 moreValues[0.5] 按 more damage 读；未实测。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "暴击期望 clamp",
+      "reason": "聚合 crit_chance 可达 1.39；执行层按 min(1) 钳制，报告投影保留未钳制值。",
+      "blocks_full_dps": false
+    }
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": []
+}

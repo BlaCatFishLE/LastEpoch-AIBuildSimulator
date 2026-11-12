@@ -1,0 +1,156 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-duration",
+  "revision": 2,
+  "title": {
+    "zh": "本体持续时间加算",
+    "en": "Black Hole duration: additive increased terms"
+  },
+  "aliases": [
+    "duration",
+    "持续时间",
+    "skill_duration",
+    "Endless Maw",
+    "Density",
+    "Time Dilation",
+    "Red Giant duration"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:4",
+        "bh2:15",
+        "bh2:24",
+        "bh2:25"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body",
+      "frequency",
+      "duration"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:bh2:4",
+      "node:bh2:15",
+      "node:bh2:24",
+      "node:bh2:25"
+    ],
+    "notes": "本体实际持续时间 = 基础寿命 × (1 + Σ increased skill_duration)，技能树节点项加算。该 duration 同时决定跳数、Heat Wave 判定次数与黑洞存续期（循环模型）。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-duration",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-duration]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "base_duration_s",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/duration/base_duration_s",
+      "unit": "seconds",
+      "note": "能力基础寿命（游戏数据冻结）。"
+    },
+    {
+      "parameter": "tree_terms",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/duration/tree_terms",
+      "note": "节点 4/15/24/25 的加算项；点数变化需重算 ruleset。"
+    },
+    {
+      "parameter": "increased skill_duration rows",
+      "source": "current:matched_instances",
+      "unit": "fraction",
+      "note": "玩家侧其他 duration 来源（当前为节点行之外的补充池）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "compute_duration",
+    "note": "基础值 + ruleset.tree_terms + 玩家 skill_duration 贡献行 → duration_s；写入 body.duration。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes",
+      "note": "节点 duration 数值（4/15/24/25）。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json#/effects/red_giant",
+      "note": "Red Giant 与 Endless Maw 的 duration 累加实现（数值见 ruleset/逆向证据）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/duration",
+      "note": "当前 run 的 duration 分项与总计。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "持续时间加算的机制索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_bh_duration_total",
+      "note": "原案例证据，参数改取当前输入"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_duration_is_additive",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_skill_node_duration_and_cooldown_rows",
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[legacy_single_skill.observation_end_s]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-body-tick-model",
+      "requirement": "duration 变化 → 跳数 ceil(duration/interval) 变化 → 本体总伤害变化。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#compute_body"
+    },
+    {
+      "with": "bh-ignite-heat-wave",
+      "requirement": "duration 变化 → Heat Wave 判定次数变化 → 点燃总层数/尾部变化。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#heat_wave_application"
+    },
+    {
+      "with": "bh-cooldown-charges",
+      "requirement": "黑洞存续期影响 patient 策略的最早再施放时刻，但不改变充能恢复。",
+      "evidence_locator": "tools/phase3/src/le_calc/simulate.py#run_loop"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes",
+      "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/duration",
+      "tools/phase3/tests/test_damage.py"
+    ],
+    "open_questions": [
+      "Endless Maw 同时给 duration 与固定秒数 cooldown；两者属于不同机制条目（本条目 vs bh-cooldown-charges），但在循环中耦合（duration 影响 patient 空窗）。",
+      "玩家侧 increased skill_duration 与技能树加算是否真为同一加法池，当前按规则包口径；未在游戏内单独构造对照。"
+    ],
+    "requery_when": [
+      "出现新的 duration 来源（技能树外）时",
+      "Endless Maw 点数变化时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

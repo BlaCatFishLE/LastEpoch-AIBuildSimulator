@@ -1,0 +1,93 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cooldown-cdr-icr",
+  "kind": "mechanism",
+  "title": {
+    "zh": "冷却公式：CDR 乘算缩减 + ICR 独立分母",
+    "en": "Cooldown formula: multiplicative CDR and separate ICR divisor"
+  },
+  "source_path": "knowledge/mechanisms/bh-cooldown-cdr-icr.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-cooldown-icr",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-cooldown-icr]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-cooldown-icr 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "冷却公式：CDR 乘算缩减 + ICR 独立分母",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency、cooldown、loop；条件 code：none；必要节点：node:bh2:17",
+      "source": "$.applicability"
+    },
+    {
+      "text": "effective_recharge = (base_recharge + Σflat) × (1 − CDR_total) / (1 + ICR_total)。Recurrence 的 CDR 是乘算冷却缩减（1−CDR），玩家/装备的 ICR 是独立分母；v1 的『把 Recurrence 并入 ICR 加算池』公式已被游戏内实测否决。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "separate_cdr=true 分支：adjusted×max(0,1-CDR)/(1+ICR)；否则回退 v1 ICR 加算池。",
+      "source": "$.handler_ref.note（le_calc.cooldown.compute_cooldown）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：cooldown_reduction、icr rows、cdr rows、effective recharge",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_cooldown_recovery_speed_total"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/cooldown_reduction_total"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown/effective_recharge_s"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[conditional_recompute.delta.single_cast_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "AbilityMutator.GetCooldown 的完整集成（base/added length/ICR/more recovery/min clamp）在 1.5.3 仅部分解码；当前公式由实测与 RE 形状共同支持，但 more cooldown recovery 等未出现的项未建模。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "v1 回退分支（把 Recurrence 并入 ICR 加算池）仍保留在代码中；规则包 cdr_applied_separately=true 时不会走。若规则包被改回 false，数值会变——属规则开关，需保持测试覆盖。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

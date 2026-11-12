@@ -1,0 +1,116 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "common-ledger",
+  "kind": "mechanism",
+  "title": {
+    "zh": "来源账/规则账与一致性检查",
+    "en": "Source ledger, rule ledger and consistency checks"
+  },
+  "source_path": "knowledge/mechanisms/common-ledger.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "账本结构是输出契约（docs/architecture.md §7/§9、result-v1 schema），不是游戏机制规则。",
+    "verification": {
+      "status": "declared_none",
+      "checked_against": null,
+      "note": "条目声明该机制没有可引用的游戏规则 ID（ref 内写明原因）"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "来源账/规则账与一致性检查",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ledger；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "每个来源实例的每条效果行都要能在 source-ledger 中定位；每条规则状态与证据进入 rule-ledger；run-manifest 汇总绑定指纹与 consistency 检查。共享的是账本结构约定，BH（report.py）与 FR（hit_report.py）分别实现。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "来源账主入口（ledger_document / ledger_json 为文档封装）；规则账与一致性在 le_calc.report.build_derived_rules / build_result / consistency_checks。FR 侧对应 hit_report.py。",
+      "source": "$.handler_ref.note（le_calc.ledger.build_source_ledger）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：contribution rows、rule rows、consistency",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/source_ledger"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/rule-ledger.json"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency"
+    },
+    {
+      "pointer": "$/validation_refs/4",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[consistency.all_pass]"
+    },
+    {
+      "pointer": "$/validation_refs/5",
+      "original": "archive://reports/flame-reave/p0-baseline-fr/reproduce-report.json#/checks"
+    },
+    {
+      "pointer": "$/interaction_requirements/0/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states"
+    },
+    {
+      "pointer": "$/interaction_requirements/1/evidence_locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/0",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/source_ledger"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "统一贡献项（实施方案 §6.3）要求「来源实例 + 效果序号 + 机制 ID + …」字段，当前账本行尚未携带机制 ID/效果序号；P2 扩展账本 schema 时需同步消费者与测试。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "两模型账本实现分离（report.py vs hit_report.py），字段命名尚未统一；跨模型汇总前需先定字段映射。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

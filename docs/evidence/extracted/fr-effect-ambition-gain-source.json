@@ -1,0 +1,143 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-effect-ambition-gain-source",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Ambition 层数获取来源（idols.2：命中 boss/rare 得层，1s 冷却）",
+    "en": "Ambition stack gain source (idol unique)"
+  },
+  "source_path": "knowledge/mechanisms/fr-effect-ambition-gain-source.json",
+  "evidence_state": "unresolved",
+  "implementation_state": "not_implemented",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "ambition_gain_source",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=ambition_gain_source",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_effect:ambition_gain_source 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs entity_id=buff:letools:UIBuffs:79",
+      "note": "Ambition buff：max_stacks（UIBuffs:79）",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Ambition 层数获取来源（idols.2：命中 boss/rare 得层，1s 冷却）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire；条件 code：boss_or_rare",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=none；叠层策略=unknown；顺序/汇总=层数获取速率/上限/过期不做时间模拟；DPS 用固定层数（默认 0）；more 分组依据=n/a（层数来源；每层 2% more Fire 见 fr-effect-ambition-stacks）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "只做候选筛查（not_modeled）；层数获取/维持未实现，ambition_stacks 作为 scenario 输入",
+      "source": "$.handler_ref.note（le_calc.hit_buffs.screen_buffs）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：effect definition、unique descriptions、ambition stacks state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods idols.2#unique_description#0..#5"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods idols.2#unique_description#0..#5"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/ambition_stacks"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/interaction_requirements/1/evidence_locator",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods idols.2#unique_description#1"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "R4：1 层/秒获取、4 秒不获得清空层数的实际覆盖率未验证（无法从 dataset 得到 uptime）",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "Ambition 的 1 秒冷却与 FR 冷却/攻速的关系未做时间模拟",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "当前默认层数=0；敏感性分析用 20 层上限示意，不是实战持续 DPS",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

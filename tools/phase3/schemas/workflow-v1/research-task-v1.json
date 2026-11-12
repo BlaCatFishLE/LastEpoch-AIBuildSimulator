@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/research-task-v1.json",
+  "title": "ResearchTask v1（le-research-task-v1）",
+  "description": "研究交接任务（workflow-interface §6.1）。由 make_research_task(gap) 从 analysis-plan / research-queue 的结构化缺口生成；task_id/gap_id 为确定性 ID（同内容 + 同 input_fingerprint 不重复创建）。只描述要研究什么与期望验证，不包含可执行规则，也不构成发布。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "task_id",
+    "gap_id",
+    "input_fingerprint",
+    "question",
+    "source_refs",
+    "related_mechanism_refs",
+    "researched_already",
+    "affected",
+    "deliverable_kind",
+    "verification_required"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "le-research-task-v1" },
+    "task_id": {
+      "type": "string",
+      "pattern": "^research_task-[0-9a-f]{16}$",
+      "description": "deterministic_id('research_task', {gap_id, input_fingerprint, gap})"
+    },
+    "gap_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$",
+      "description": "缺口稳定 ID；可由 deterministic_id('gap', ...) 生成，或使用 analysis-plan 中已有的 gap_id"
+    },
+    "input_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "缺口所基于的输入/规则指纹（sha256）；输入变化即产生新 task_id"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1,
+      "description": "具体缺哪条来源语义、乘区分组、节点交互或时间行为"
+    },
+    "source_refs": {
+      "type": "array",
+      "description": "稳定 ID、原始字段与原文位置（仓库根相对定位；不写机器绝对路径）",
+      "items": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "artifact_id": { "type": "string" },
+          "path": { "type": "string" },
+          "field": { "type": "string" },
+          "locator": { "type": "string", "description": "仓库相对路径 + 行/字节/JSON pointer 等定位" },
+          "quote": { "type": "string" },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "related_mechanism_refs": {
+      "type": "array",
+      "description": "最相关候选机制与证据入口（知识库 mechanism_id / 证据定位）",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "researched_already": {
+      "type": "array",
+      "description": "已查来源与为何仍未解决；相同资料条件下不重复调查",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "affected": {
+      "type": "object",
+      "description": "受影响组件与计算块；blocks_target 表示是否阻塞本次目标",
+      "required": ["components", "calculation_blocks", "blocks_target"],
+      "properties": {
+        "components": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "受影响伤害组件（hit / dot / tick / ignite / body / frequency / target_side ...）"
+        },
+        "calculation_blocks": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "受影响共享计算块（tag_match / added_scaling / increased_aggregate / more_groups / crit / target_side / frequency / ledger）"
+        },
+        "blocks_target": { "type": "boolean" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "deliverable_kind": {
+      "type": "string",
+      "enum": ["mapping", "parameter_rule", "handler", "bounded_assumption"],
+      "description": "期望交付类型；通过验证后仍需走 P4 commit_operation 发布"
+    },
+    "verification_required": {
+      "type": "array",
+      "description": "期望的验证要求（正向 + 真实边界/反向场景）",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

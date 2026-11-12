@@ -1,0 +1,166 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-ignite-core",
+  "revision": 2,
+  "title": {
+    "zh": "Ignite 基础伤害与持续时间乘区",
+    "en": "Ignite base damage and duration multiplier"
+  },
+  "aliases": [
+    "Ignite",
+    "点燃",
+    "ailment",
+    "DoT",
+    "持续时间乘区"
+  ],
+  "selectors": [
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "ailment_duration"
+      ]
+    },
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ignite",
+      "dot",
+      "duration"
+    ],
+    "tags": [
+      "Fire",
+      "DoT",
+      "Ailment"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "每层 Ignite 的基础伤害与基础持续时间来自 dataset ailment；持续时间延长按总伤害乘区处理（每层总伤害 ∝ 持续时间乘区）。层数线性叠加，期望值模型按层数累计。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-base",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-base]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "base_damage",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/base_damage",
+      "unit": "flat",
+      "note": "每层基础火焰伤害（dataset ailment 冻结值）。"
+    },
+    {
+      "parameter": "base_duration_s",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/base_duration_s",
+      "unit": "seconds"
+    },
+    {
+      "parameter": "duration rows",
+      "source": "current:matched_instances",
+      "unit": "fraction",
+      "note": "玩家侧 increased Ignite duration（目标=ignite/all）。"
+    },
+    {
+      "parameter": "ailment list",
+      "source": "data/releases/phase1-dataset-003/data.sqlite#ailments.1",
+      "note": "dataset 原始定义（只读追溯）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ignite",
+    "symbol": "compute_ignite_core",
+    "note": "单层伤害核：base_damage × duration_multiplier × (1+inc) × Πmore × target；_ignite_duration 收集 duration 行。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1",
+      "note": "Ignite 的基础伤害/持续时间/DoT 标签（数值见 dataset ailments 与 ruleset）。"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/reverse-engineering/game-data-blackhole-ignite-1.5.3.json#ignite",
+      "note": "1.5.3 游戏数据：Ignite 异常定义。"
+    },
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-duration]",
+      "note": "规则 6：点燃时间延长就是一个乘区。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/duration",
+      "note": "当前 run 的 duration 分项与乘区。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Ignite 基础结论的机制索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_total",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_single_stack_core",
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_totals_and_tail",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-ignite-duration-sources",
+      "requirement": "持续时间乘区来自多条来源（玩家 inc、Eternal Flames 等）；本条目的 duration 池必须接受条件通道追加的行（见 bh-cond-eternal-flames-*）。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_duration"
+    },
+    {
+      "with": "bh-ignite-heat-wave",
+      "requirement": "层数由 Heat Wave 期望施加模型给出；单层伤害与施加模型分离。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#build_cohorts"
+    },
+    {
+      "with": "bh-ignite-damage-flow",
+      "requirement": "每层总伤害在窗口/尾部按连续流分摊（记账口径，不改总量）。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#damage_between"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "data/releases/phase1-dataset-003/data.sqlite#ailments.1",
+      "docs/evidence/reverse-engineering/game-data-blackhole-ignite-1.5.3.json",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite",
+      "tools/phase3/tests/test_damage.py#IgniteTest"
+    ],
+    "open_questions": [
+      "Ignite 每层的持续时间乘区是否与玩家 increased Ignite Duration 完全同池（含 ailment effect 转换项）当前按规则包口径；未构造多来源叠加的对照测试。"
+    ],
+    "requery_when": [
+      "新增 ignite duration 来源时",
+      "dataset 版本变化时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

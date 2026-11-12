@@ -1,0 +1,107 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-crescendoing-rage",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Crescendoing Rage（每第三次施放 +more）",
+    "en": "Crescendoing Rage (every third ability cast: more damage)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-crescendoing-rage.json",
+  "evidence_state": "assumed",
+  "implementation_state": "draft",
+  "reuse_mode": "case_bound",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "ring.crescendoing_rage",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=ring.crescendoing_rage]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+      "note": "conditional_effect:ring.crescendoing_rage 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs buff:letools:UIBuffs:248",
+      "note": "Buff 资产与文本（每第三次施放）。",
+      "source": "$.evidence_refs[3]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Crescendoing Rage（每第三次施放 +more）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body、body_fire、body_cold、ignite、loop；条件 code：player.crescendoing_rage_third_cast",
+      "source": "$.applicability"
+    },
+    {
+      "text": "每第三次 ability 施放获得一次 +more（并提高作用范围，范围不影响单目标伤害）。单次口径可声明『本次施放是第三次』；循环口径需要带初始计数的逐施法相位模拟（未接入）。哪些动作计入『ability cast』计数未确认。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "单次口径支持 cast_state 声明的 +more；循环口径未接入（needs_action_or_time_simulation）。",
+      "source": "$.handler_ref.note（le_calc.conditional.recompute.recompute_scenario）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：mod、effect values、state、loop config",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/parameter_bindings/0/source",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/67"
+    },
+    {
+      "pointer": "$/parameter_bindings/2/source",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.crescendoing_rage_third_cast"
+    },
+    {
+      "pointer": "$/parameter_bindings/3/source",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/loop/initial_eligible_cast_count"
+    },
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/9"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/ring.crescendoing_rage"
+    },
+    {
+      "pointer": "$/interaction_requirements/0/evidence_locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/loop/initial_eligible_cast_count"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/ring.crescendoing_rage"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "哪些动作计入『ability cast』（直接施放/触发施法/移动）未确认。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "该 +more 是否被该次 Black Hole 的点燃继承未确认。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "循环初始计数（0/1/2）如何映射到第 1/3… 次施放未确认；规则包因用户决定本阶段不纳入。",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

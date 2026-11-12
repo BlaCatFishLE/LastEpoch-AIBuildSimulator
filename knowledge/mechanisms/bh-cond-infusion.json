@@ -1,0 +1,149 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cond-infusion",
+  "revision": 3,
+  "title": {
+    "zh": "Infusion（Flame Ward 生效期间 +increased 火伤）",
+    "en": "Infusion (Flame Ward active: increased fire damage)"
+  },
+  "aliases": [
+    "Infusion",
+    "Flame Ward",
+    "火焰护盾",
+    "火伤 Buff",
+    "flame_ward.infusion"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fw3d:2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body_fire",
+      "ignite"
+    ],
+    "tags": [
+      "Fire"
+    ],
+    "conditions": [
+      "player.flame_ward_active"
+    ],
+    "notes": "Flame Ward 生效期间提供 increased fire damage（进入 fire inc 加算池，作用于火焰本体与 Ignite）。本构筑 Flame Ward 已专精但不在技能栏且点了 Astonish（被击晕自动施放）；固定条件模式只声明『假设生效』，不模拟手动施放/触发。",
+    "required_nodes": [
+      "node:fw3d:2"
+    ]
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "flame_ward.infusion",
+    "path": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+    "locator": "effects[id=flame_ward.infusion]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "current:matched_instances",
+      "unit": "points",
+      "note": "按 tree/node 匹配当前点数，不使用历史案例索引或总值。"
+    },
+    {
+      "parameter": "effect values",
+      "source": "tools/phase3/rules/shared-conditional-node-buffs-v1.json#effects[id=flame_ward.infusion]",
+      "note": "per_point × 当前点数，constant 不乘点数；来源证据沿用原条目。"
+    },
+    {
+      "parameter": "state",
+      "source": "current:scenario#/states",
+      "note": "临时 Buff 默认关闭，目标条件单独声明；单次就绪不等于循环常驻。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional_node_buffs",
+    "symbol": "bind / contributions",
+    "note": "按当前树/节点稳定 ID 和点数绑定；统一条件程序执行。Preparation 只进入独立单次评估，不传播到循环。当前接入 charge_dot 执行链，其它执行驱动未签收。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/5",
+      "note": "注册表条目（support=needs_rule_mapping，research=confirmed）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/5",
+      "note": "当前 run 求值：未激活。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/flame_ward.infusion",
+      "note": "条件重算通道状态。"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:fw3d:2",
+      "note": "节点 stat 数据（increased fire damage）。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "支持级别分类表。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/2/nodes/1/points",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.flame_ward_active",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeEffectDirectionTests::test_infusion_fire_increased",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeChannelSupportTests::test_covers_every_registered_effect",
+    "archive://docs/reviews/unified-report-buff-restore-20261112.zh-CN.md"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-increased-aggregate",
+      "requirement": "increased fire damage 进 inc 加算池，不是独立乘区。",
+      "evidence_locator": "tools/phase3/src/le_calc/conditional/recompute.py#_build_proposal_specs"
+    },
+    {
+      "with": "bh-ignite-scaling-pool",
+      "requirement": "Ignite 是否吃该 increased 取决于标签口径（Fire 匹配即进入）。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_scaling"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/5",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/flame_ward.infusion",
+      "tools/phase3/tests/test_conditional_recompute.py"
+    ],
+    "open_questions": [
+      "Flame Ward 基础持续时间与 Dilation 后的最终值未实测；固定条件模式绕过时长问题。",
+      "Astonish 自动触发的 Flame Ward 是否满足『不在技能栏』的边界未确认。"
+    ],
+    "requery_when": [
+      "游戏内计时能力补全后"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared"
+}

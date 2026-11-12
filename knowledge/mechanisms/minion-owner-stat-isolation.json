@@ -1,0 +1,104 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "minion-owner-stat-isolation",
+  "revision": 2,
+  "title": {
+    "zh": "召唤物与玩家属性池隔离"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "召唤物与玩家属性池隔离"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "actor_binding",
+      "source_scope"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Player 与 Minion 必须是不同 actor；Minion 标签匹配不等于无条件继承玩家 damage/crit/weapon。当前 Ballista 的 actor.inherits 在离线目录中为空，不能解释为所有玩家属性默认生效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.actor",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.actor"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "parameter_bindings": [
+    {
+      "parameter": "current_points_and_mods",
+      "source": "current:calculation_input.skills.specializations/ba1574 + current:mods",
+      "unit": "current",
+      "note": "只从本次输入绑定；不保存当前31点合计倍率。"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "IL 级逆向证据（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "IL 级中文结论（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json",
+      "note": "冻结 dataset 1.5.2 原值；节点含义对照官方资料，不用新版本文案替换旧数据。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/ballista/ballista-mechanism-review-20261112.zh-CN.md"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前构筑数值包（本轮）"
+    },
+    {
+      "kind": "reverse_engineering",
+      "detail": "Minion 默认不继承玩家属性：玩家 Stat 只有经 GetStatsFromPlayer 显式转移（节点 22/27）或 Minion 标签原生通道才作用于 minion；actor 声明 inherits=explicit_transfers。",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "Minion 标签原生通道与显式转移的边界需更多技能对照。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "knowledge/definitions/ballista-armed-construction-v4.json"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": [],
+  "limitations": [
+    {
+      "item": "Minion 标签原生通道",
+      "reason": "玩家 Minion 标签伤害/暴击行按 100% actor 行处理；其完整代码路径未逐指令确认。",
+      "blocks_full_dps": false
+    }
+  ]
+}

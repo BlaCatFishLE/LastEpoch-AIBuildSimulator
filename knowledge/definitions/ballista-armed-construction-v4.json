@@ -1,0 +1,678 @@
+{
+  "schema": "le-skill-template-v3",
+  "template_id": "ballista-armed-construction-v4",
+  "ability_id": "ba1574",
+  "binding_version": "definitions_v3.selector-v1",
+  "title": {
+    "zh": "Ballista · Armed Construction 爆炸原生定义",
+    "en": "Ballista - Armed Construction explosion native definition"
+  },
+  "definition": {
+    "plan_version": "le-calculation-plan-v4",
+    "assembly_plan_version": "v4-actor",
+    "skill": {
+      "base_damage": {
+        "Fire": 50
+      },
+      "added_damage_scaling": 2.5,
+      "crit_chance": 0.05,
+      "crit_multiplier": 2.0,
+      "components": {
+        "hit": {
+          "tags": [
+            "Bow",
+            "Fire",
+            "Minion"
+          ],
+          "adaptive_damage_type": "Fire",
+          "crit_capable": true,
+          "scope": "actor"
+        }
+      },
+      "evidence": [
+        {
+          "kind": "game_data",
+          "detail": "dataset ability_gen327 prefab DamageEnemyOnHit：baseDamageStats.damage=[0,50,0,0,0,0,0]（Fire 50）、addedDamageScaling=2.5、critChance=0.05、critMultiplier=2.0、hit=true、damageTags=2048(Bow)；技能 tags_raw=2056(Bow+Fire)，由基础伤害类型 Fire 补足 Fire 标签。",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill:letools:LEAbilities.abilityList:ability_gen327#component#0"
+        },
+        {
+          "kind": "reverse_engineering",
+          "detail": "Armed Construction 到期/替换死亡时由 Ballista 实体上的 CreateAbilityObjectOnDeath 以 ability=626(=ability_gen327) 创建一次爆炸；每次死亡恰好 1 次。",
+          "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#3-爆炸触发与-ability_gen327"
+        }
+      ]
+    },
+    "actor": {
+      "actor_id": "minion:letools:LEAbilities.entityList:100053",
+      "kind": "summon",
+      "label": "Ballista minion 100053",
+      "source_entity": "minion:letools:LEAbilities.entityList:100053",
+      "damage_source": {
+        "kind": "dataset_skill",
+        "ability_entity": "skill:letools:LEAbilities.abilityList:ability_gen327",
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "Ballista minion（entity 100053）的 ActorData.stats 含 property 0(Max Health?) 无关条目与 property 0 moreValues；本定义只取与伤害结算相关的 base stat 声明。",
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#minions minion:letools:LEAbilities.entityList:100053"
+          }
+        ]
+      },
+      "inherits": "explicit_transfers",
+      "base_effects": [
+        {
+          "id": "minion-base-more-damage",
+          "stat": "damage",
+          "operation": "more",
+          "value": 0.5,
+          "scope": "actor",
+          "source": "dataset:minion.base_stats",
+          "evidence": [
+            {
+              "kind": "game_data",
+              "detail": "minion 100053 attributes.stats 第一条 {property:0, addedValue:0, increasedValue:0, moreValues:[0.5]}；按 actor stats 语义读作 +50% more damage（候选读法，状态 assumed）。",
+              "locator": "data/releases/phase1-dataset-003/data.sqlite#minions minion:letools:LEAbilities.entityList:100053"
+            }
+          ]
+        }
+      ],
+      "native_stats": {
+        "tags_include": [
+          "Minion"
+        ],
+        "stat_keys": [
+          "damage",
+          "added_damage",
+          "crit_chance",
+          "crit_multiplier"
+        ],
+        "evidence": [
+          {
+            "kind": "reverse_engineering",
+            "detail": "玩家带 Minion 标签的伤害/暴击 Stat 通过召唤者→minion 原生通道作用于 minion；Shared Enhancements 只复制 SP∈{0,4,5,1,42,43} 且不做 Minion 标签二次转移，故本定义把 Minion 标签行按 100% actor 原生行处理，转移规则显式排除。",
+            "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+          }
+        ]
+      }
+    },
+    "controls": [
+      {
+        "key": "elixir",
+        "label": "Elixir of Construction 窗口",
+        "source": "Ballista 节点 25（3/3）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "按 100% 覆盖假设：召唤时处于药剂后 4 秒窗口内，爆炸获得 +45% more damage（节点 3×15%）。"
+      },
+      {
+        "key": "trap_detonation_rate_per_s",
+        "label": "陷阱引爆事件率",
+        "source": "外部场景假设：Explosive Trap 投掷速率 × 每次施放引爆数（见 evidence/limitations）",
+        "type": "integer",
+        "min": 1,
+        "max": 30,
+        "effect": "每秒 Explosive Trap 引爆次数；每次引爆以 20% 概率触发 Siege Engineering 召唤 1 个 Ballista。默认 4 属于推导上界的取整值（λ_throw≈1.37/s × 每次施放引爆数上界≈2.60）。0 表示无事件，不属于可重算的构筑变体（本口径不支持零事件，界面禁止），故 min=1。"
+      }
+    ],
+    "state_sources": {},
+    "effects": [
+      {
+        "id": "heavy_bolts_more",
+        "label": "Heavy Bolts 3/3：more damage",
+        "source": {
+          "kind": "skill_node",
+          "tree": "ba1574",
+          "node": "23",
+          "stat_index": 0
+        },
+        "stat": "damage",
+        "operation": "more",
+        "value_source": "source_value",
+        "scope": "actor",
+        "source_kind": "skill_node",
+        "status": "derived",
+        "evidence": [
+          {
+            "kind": "reverse_engineering",
+            "detail": "BallistaTree.updateMutator case：Heavy Bolts 写入 Stat(SP=Damage, more=+0.12/点)；3/3 = 0.36。",
+            "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#节点映射"
+          }
+        ],
+        "required": true
+      },
+      {
+        "id": "practical_build_more",
+        "label": "Practical Build：more damage",
+        "source": {
+          "kind": "skill_node",
+          "tree": "ba1574",
+          "node": "14",
+          "stat_index": 0
+        },
+        "stat": "damage",
+        "operation": "more",
+        "value_source": "source_value",
+        "scope": "actor",
+        "source_kind": "skill_node",
+        "status": "derived",
+        "evidence": [
+          {
+            "kind": "reverse_engineering",
+            "detail": "节点 14 说明为 multiplicative more damage；节点每点 0.4、当前 1 点。",
+            "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#节点映射"
+          }
+        ],
+        "required": true
+      },
+      {
+        "id": "elixir_more",
+        "label": "Elixir of Construction 3/3：more damage",
+        "source": {
+          "kind": "skill_node",
+          "tree": "ba1574",
+          "node": "25",
+          "stat_index": 0
+        },
+        "stat": "damage",
+        "operation": "more",
+        "value_source": "source_value",
+        "scope": "actor",
+        "source_kind": "skill_node",
+        "states": [
+          "elixir"
+        ],
+        "status": "derived",
+        "evidence": [
+          {
+            "kind": "reverse_engineering",
+            "detail": "BallistaTree：moreDamageAfterPotion += 0.15/点（3/3=0.45）；召唤时若 potionUsedRecently 则挂 20s more Buff，快照语义。",
+            "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#9-elixir-of-construction-药剂窗口问题-12-q12"
+          }
+        ],
+        "required": true
+      },
+      {
+        "id": "sharpened_tips_crit",
+        "label": "Sharpened Tips 1/2：base crit chance",
+        "source": {
+          "kind": "skill_node",
+          "tree": "ba1574",
+          "node": "26",
+          "stat_index": 0
+        },
+        "stat": "crit_chance",
+        "operation": "added",
+        "value_source": "source_value",
+        "scope": "actor",
+        "source_kind": "skill_node",
+        "status": "derived",
+        "evidence": [
+          {
+            "kind": "reverse_engineering",
+            "detail": "BallistaTree 以 AddedStat(SP=4 CritChance) 写入 summon statList；节点每点 +3%、当前 1 点。",
+            "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#节点映射"
+          }
+        ],
+        "required": true
+      }
+    ],
+    "node_bindings": [
+      {
+        "node": "23",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more"
+      },
+      {
+        "node": "14",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more"
+      },
+      {
+        "node": "25",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more"
+      },
+      {
+        "node": "26",
+        "stat_index": 0,
+        "stat": "crit_chance",
+        "operation": "added"
+      }
+    ],
+    "rules": {
+      "attribute_scaling": {
+        "ratios": {
+          "dexterity": 0.04
+        },
+        "output": {
+          "stat": "damage",
+          "operation": "increased",
+          "scope": "actor"
+        },
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "dataset skill ba1574 extensions.attributeScaling：属性 3(Dexterity) 每点 +4% increased damage，tags=8192(Minion)。SummonEntityOnDeath 把 attributeScaling 收集到 Summoned，召唤者属性×比例后作为 minion stat 生效；Dex 取玩家当前值。",
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#skills skill:letools:LEAbilities.abilityList:ba1574 extensions.attributeScaling"
+          }
+        ]
+      },
+      "stat_transfer": {
+        "schema": "le-stat-transfer-v1",
+        "label": "Shared Enhancements / Perfect Aim：玩家→Ballista 显式比例转移",
+        "target_actor": "minion:letools:LEAbilities.entityList:100053",
+        "transfers": [
+          {
+            "id": "shared_enhancements_added",
+            "source": {
+              "kind": "skill_node",
+              "tree": "ba1574",
+              "node": "22",
+              "stat_index": 0
+            },
+            "ratio_per_point": 0.25,
+            "input_pool": {
+              "stat_key": "added_damage",
+              "operations": [
+                "added"
+              ],
+              "tag_policy": "none",
+              "exclude_tags": [
+                "Minion"
+              ]
+            },
+            "output": {
+              "stat": "added_damage",
+              "operation": "added",
+              "scope": "actor"
+            },
+            "evidence": [
+              {
+                "kind": "reverse_engineering",
+                "detail": "BallistaMutator.GetValueMultiplier：SP=0(Damage) 使用 playerDamageModifierEffectivenessRatio；节点 22 每点 +0.25（3/3=0.75）。GetStatsFromPlayer 逐 Stat 用 Stat.CopyFrom(stat, ratio) 复制，added/increased/moreValues 全部乘比例，保留原 tags，召唤时快照。",
+                "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+              }
+            ]
+          },
+          {
+            "id": "shared_enhancements_increased",
+            "source": {
+              "kind": "skill_node",
+              "tree": "ba1574",
+              "node": "22",
+              "stat_index": 0
+            },
+            "ratio_per_point": 0.25,
+            "input_pool": {
+              "stat_key": "damage",
+              "operations": [
+                "increased"
+              ],
+              "tag_policy": "none",
+              "exclude_tags": [
+                "Minion"
+              ]
+            },
+            "output": {
+              "stat": "damage",
+              "operation": "increased",
+              "scope": "actor"
+            },
+            "evidence": [
+              {
+                "kind": "reverse_engineering",
+                "detail": "BallistaMutator.GetValueMultiplier：SP=0(Damage) 使用 playerDamageModifierEffectivenessRatio；节点 22 每点 +0.25（3/3=0.75）。GetStatsFromPlayer 逐 Stat 用 Stat.CopyFrom(stat, ratio) 复制，added/increased/moreValues 全部乘比例，保留原 tags，召唤时快照。",
+                "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+              }
+            ]
+          },
+          {
+            "id": "shared_enhancements_more",
+            "source": {
+              "kind": "skill_node",
+              "tree": "ba1574",
+              "node": "22",
+              "stat_index": 0
+            },
+            "ratio_per_point": 0.25,
+            "input_pool": {
+              "stat_key": "damage",
+              "operations": [
+                "more"
+              ],
+              "tag_policy": "none",
+              "exclude_tags": [
+                "Minion"
+              ]
+            },
+            "output": {
+              "stat": "damage",
+              "operation": "more",
+              "scope": "actor"
+            },
+            "evidence": [
+              {
+                "kind": "reverse_engineering",
+                "detail": "BallistaMutator.GetValueMultiplier：SP=0(Damage) 使用 playerDamageModifierEffectivenessRatio；节点 22 每点 +0.25（3/3=0.75）。GetStatsFromPlayer 逐 Stat 用 Stat.CopyFrom(stat, ratio) 复制，added/increased/moreValues 全部乘比例，保留原 tags，召唤时快照。",
+                "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+              }
+            ]
+          },
+          {
+            "id": "perfect_aim_crit_chance_added",
+            "source": {
+              "kind": "skill_node",
+              "tree": "ba1574",
+              "node": "27",
+              "stat_index": 0
+            },
+            "ratio_per_point": 0.25,
+            "input_pool": {
+              "stat_key": "crit_chance",
+              "operations": [
+                "added"
+              ],
+              "tag_policy": "none",
+              "exclude_tags": [
+                "Minion"
+              ]
+            },
+            "output": {
+              "stat": "crit_chance",
+              "operation": "added",
+              "scope": "actor"
+            },
+            "evidence": [
+              {
+                "kind": "reverse_engineering",
+                "detail": "GetValueMultiplier：SP=4(CritChance) 使用 playerCritChanceEffectivenessRatio；节点 27 每点 +0.25（4/4=1.00）。",
+                "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+              }
+            ]
+          },
+          {
+            "id": "perfect_aim_crit_chance_increased",
+            "source": {
+              "kind": "skill_node",
+              "tree": "ba1574",
+              "node": "27",
+              "stat_index": 0
+            },
+            "ratio_per_point": 0.25,
+            "input_pool": {
+              "stat_key": "crit_chance",
+              "operations": [
+                "increased"
+              ],
+              "tag_policy": "none",
+              "exclude_tags": [
+                "Minion"
+              ]
+            },
+            "output": {
+              "stat": "crit_chance",
+              "operation": "increased",
+              "scope": "actor"
+            },
+            "evidence": [
+              {
+                "kind": "reverse_engineering",
+                "detail": "GetValueMultiplier：SP=4(CritChance) 使用 playerCritChanceEffectivenessRatio；节点 27 每点 +0.25（4/4=1.00）。",
+                "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+              }
+            ]
+          },
+          {
+            "id": "perfect_aim_crit_multi_added",
+            "source": {
+              "kind": "skill_node",
+              "tree": "ba1574",
+              "node": "27",
+              "stat_index": 1
+            },
+            "ratio_per_point": 0.25,
+            "input_pool": {
+              "stat_key": "crit_multiplier",
+              "operations": [
+                "added"
+              ],
+              "tag_policy": "none",
+              "exclude_tags": [
+                "Minion"
+              ]
+            },
+            "output": {
+              "stat": "crit_multiplier",
+              "operation": "added",
+              "scope": "actor"
+            },
+            "evidence": [
+              {
+                "kind": "reverse_engineering",
+                "detail": "GetValueMultiplier：SP=5(CritMultiplier) 使用 playerCritMultiEffectivenessRatio；节点 27 每点 +0.25（4/4=1.00）。",
+                "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+              }
+            ]
+          },
+          {
+            "id": "perfect_aim_crit_multi_increased",
+            "source": {
+              "kind": "skill_node",
+              "tree": "ba1574",
+              "node": "27",
+              "stat_index": 1
+            },
+            "ratio_per_point": 0.25,
+            "input_pool": {
+              "stat_key": "crit_multiplier",
+              "operations": [
+                "increased"
+              ],
+              "tag_policy": "none",
+              "exclude_tags": [
+                "Minion"
+              ]
+            },
+            "output": {
+              "stat": "crit_multiplier",
+              "operation": "increased",
+              "scope": "actor"
+            },
+            "evidence": [
+              {
+                "kind": "reverse_engineering",
+                "detail": "GetValueMultiplier：SP=5(CritMultiplier) 使用 playerCritMultiEffectivenessRatio；节点 27 每点 +0.25（4/4=1.00）。",
+                "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+              }
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "kind": "reverse_engineering",
+            "detail": "玩家 Crit 池以 Stat 行原样复制到 minion，再由 minion 命中按 tag 闭包匹配；实现为通用 owner→actor 转移，不按技能名分支。",
+            "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+          }
+        ]
+      },
+      "node_attribute_scaled": [
+        {
+          "id": "armed_construction_per_dex_more",
+          "source": {
+            "kind": "skill_node",
+            "tree": "ba1574",
+            "node": "5",
+            "stat_index": 1
+          },
+          "attribute": "dexterity",
+          "output": {
+            "stat": "damage",
+            "operation": "more",
+            "scope": "actor"
+          },
+          "evidence": [
+            {
+              "kind": "reverse_engineering",
+              "detail": "BallistaMutator.Mutate：ballistaExplosionMoreDamage = 玩家Dex × (0.01×节点5点数)=Dex×0.04；写入 BallistaExplosionMutator 后作为 SP=Damage more Stat 只在爆炸命中生效（isBallistaExplosion=true 推断）。",
+              "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#5-爆炸伤害构成"
+            }
+          ]
+        }
+      ]
+    },
+    "frequency": {
+      "driver": "derived_event_rate",
+      "derivation": {
+        "kind": "summon_lifecycle",
+        "upstream": {
+          "kind": "scenario_control",
+          "control": "trap_detonation_rate_per_s",
+          "default": 4,
+          "unit": "events/s",
+          "notes": "外部场景假设；上界推导 λ_throw≈1.37/s × 每次施放引爆数上界 2.60 ≈ 3.56/s，取下限取整 4 仅作输入控件。"
+        },
+        "gate": {
+          "kind": "chance",
+          "aggregate": "per_point_add",
+          "per_point": 0.1,
+          "source": {
+            "kind": "skill_node",
+            "tree": "ex4tp",
+            "node": "30",
+            "stat_index": 0
+          },
+          "evidence": [
+            {
+              "kind": "reverse_engineering",
+              "detail": "ExplosiveTrapTree.updateMutator case 'Explosive Trap Drops Ballistas'：chanceForBallistaOnDetonation += points×0.10；每个引爆陷阱独立 Roll 一次。当前 2/2 = 20%。",
+              "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#8-siege-engineering-触发链与频率代数问题-ef-q11"
+            }
+          ],
+          "notes": "点数只从当前输入的 ex4tp 专精节点 30 绑定；不提供场景 points 控件，禁止用场景值补回真实节点。"
+        },
+        "lifecycle": {
+          "limit": 2,
+          "duration_s": 6.5,
+          "destroy_policy": "replace_or_expire",
+          "events_per_summon": 1,
+          "notes": "duration=10×(1+0.30-0.40-0.25)=6.5s；上限 2；到期与上限替换均为死亡事件并各触发 1 次爆炸（总数守恒）。"
+        },
+        "rate_formula": "upstream_rate * gate_probability",
+        "assertions": {
+          "max_rate": "lifecycle.limit / lifecycle.duration_s",
+          "on_violation": "warn"
+        }
+      },
+      "evidence": [
+        {
+          "kind": "reverse_engineering",
+          "detail": "稳态下每个成功召唤最终对应一次死亡爆炸；替换只让死亡提前发生，不改变长期平均事件率。",
+          "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#83-事件频率代数本构筑-boss-dummy-场景"
+        }
+      ]
+    },
+    "attribute_conversion": null,
+    "ailments": [],
+    "coverage": {
+      "gaps": [
+        "陷阱引爆事件率是场景假设（上游控件），未做游戏内实测；每次施放引爆数存在 0.60–2.60×λ_throw 的未验证区间。",
+        "isBallistaExplosion=true 为 prefab 序列化推断（IL 无写点），决定 Armed Construction per-Dex more 是否生效。",
+        "minion 等级伤害缩放（+0.6 more @L100）公式已核但伤害路径无调用点，未纳入。",
+        "爆炸最终 AT tag 是否含 Hit 未确认；当前按 {Bow,Fire}+Minion 闭包处理。",
+        "玩家 added bow damage 的转移通道按 Shared Enhancements Stat 复制处理；武器基础伤害是否计入玩家 Stat 未实测。"
+      ],
+      "assumed_active_mods": [
+        {
+          "reason": "Elixir of Construction 按用户指定的 100% 窗口覆盖出理论 DPS；不模拟药剂实际使用节奏。",
+          "evidence": [
+            {
+              "kind": "user_rule",
+              "detail": "用户确认 DPS 口径按 Elixir 100% 覆盖。",
+              "locator": "docs/evidence/ballista/ballista-build-values-20261113.json#player_stats.potions_elixir"
+            }
+          ]
+        }
+      ]
+    },
+    "limitations": [
+      "只统计 Armed Construction 的到期/销毁爆炸伤害；不含 Explosive Delivery 的 bolt 命中爆炸、箭矢直击、点燃 DoT 或 Explosive Trap/Falcon 自身伤害（用户指定口径）。",
+      "陷阱引爆事件率是外部场景假设（控件 trap_detonation_rate_per_s），上界由 λ_throw×每次施放引爆数推导；未做游戏内实测。",
+      "Elixir 按 100% 覆盖；minion 等级缩放因伤害路径无调用点未纳入；isBallistaExplosion 按推断 true 建模。",
+      "暴击几率按 LE 通用口径 (base+added)×(1+increased) 聚合并钳制到 [0,1]；暴击伤害按 base+added。",
+      "目标为 100 级 Boss Dummy、0 抗性、无额外减伤；不建模敌方护甲/减抗/暴击抑制。",
+      "Shared Enhancements 转移按 Stat 行复制（added/increased/more 全部乘比例、保留 tags、召唤时快照）；tag 匹配沿用通用 subset 语义。",
+      "Minion 原生 Minion 标签伤害/暴击行按 100% actor 行处理；与转移规则显式互斥（exclude_tags=[Minion]）。",
+      {
+        "id": "limitation:controls",
+        "kind": "limitation",
+        "note": "Siege Engineering 点数来自当前输入专精绑定，不暴露为场景控件；陷阱引爆率控件 min=1（0 表示无事件，本口径不支持零事件重算）。",
+        "scope": "result",
+        "status": "assumed"
+      }
+    ],
+    "evidence": [
+      {
+        "kind": "reverse_engineering",
+        "detail": "本轮 IL 级机制结论：爆炸触发、per-Dex more、属性转移、Siege Engineering 链、duration/上限。",
+        "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md"
+      },
+      {
+        "kind": "game_data",
+        "detail": "当前构装的玩家属性/词条池与 minion/节点数值由通用映射 API 计算。",
+        "locator": "docs/evidence/ballista/ballista-build-values-20261113.json"
+      }
+    ]
+  },
+  "scenario_schema": {
+    "schema": "le-skill-scenario-v3",
+    "controls": [
+      {
+        "key": "elixir",
+        "label": "Elixir of Construction 窗口",
+        "source": "Ballista 节点 25（3/3）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "+45% more damage（100% 覆盖假设）。"
+      },
+      {
+        "key": "trap_detonation_rate_per_s",
+        "label": "陷阱引爆事件率",
+        "source": "外部场景假设：投掷速率 × 每次施放引爆数",
+        "type": "integer",
+        "min": 1,
+        "max": 30,
+        "effect": "每秒陷阱引爆次数；×20% = Ballista 召唤/爆炸事件率。0 表示无事件，不支持重算，故 min=1。"
+      }
+    ],
+    "target_required": true
+  },
+  "capabilities": [
+    "hit_components",
+    "minion_actor",
+    "explicit_stat_transfer",
+    "derived_event_rate",
+    "attribute_scaling"
+  ],
+  "applicability": {
+    "ability_id": "ba1574",
+    "required_class": "Rogue",
+    "required_facts": [
+      "main_skill.ability_id",
+      "main_skill.class"
+    ],
+    "notes": [
+      "Ballista 主技能专精；DPS 口径只含 Armed Construction 到期/销毁爆炸。其它 Minion/召唤技能不自动套用。"
+    ]
+  },
+  "migration": {
+    "from": null,
+    "policy": "首个 Ballista 原生定义；当前实例经 selector/actor 声明绑定，场景默认值在 scenario 文件，不进入共享定义。",
+    "canonical_case": "archive://examples/ballista-beta5-native-20261112/case.json",
+    "entry_policy": "canonical case.json 必须走 definitions_v3；本模板为唯一 Ballista 候选。"
+  }
+}

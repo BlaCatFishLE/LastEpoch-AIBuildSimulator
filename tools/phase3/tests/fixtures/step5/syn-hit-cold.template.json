@@ -1,0 +1,68 @@
+{
+  "schema": "le-skill-template-v3",
+  "template_id": "syn-hit-cold",
+  "ability_id": "syn-hit-cold",
+  "binding_version": "definitions_v3.selector-v1",
+  "title": "Synthetic Cold Hit",
+  "definition": {
+    "plan_version": "le-calculation-plan-v4",
+    "skill": {},
+    "controls": [],
+    "state_sources": {},
+    "effects": [],
+    "node_bindings": [],
+    "rules": {},
+    "attribute_conversion": {},
+    "ailments": [],
+    "coverage": {},
+    "limitations": [],
+    "evidence": [],
+    "components": [
+      {
+        "component_id": "syn-cold-hit",
+        "kind": "hit",
+        "damage_type": "Cold",
+        "base_damage": 100,
+        "tags": [
+          "Hit",
+          "Cold"
+        ],
+        "presentation_label": "Synthetic Cold Hit"
+      }
+    ],
+    "applications": [],
+    "schedule": {
+      "kind": "single_cast",
+      "horizon_s": 2,
+      "windows_s": [
+        2
+      ],
+      "cast_time_s": 0.0
+    },
+    "evaluations": [
+      {
+        "evaluation_id": "single_hit",
+        "primary": true,
+        "label": "single hit"
+      }
+    ],
+    "capabilities": [
+      "hit_components",
+      "presentation"
+    ],
+    "target_side": {
+      "strategy": "separate_multiplier"
+    },
+    "presentation": {
+      "title": "Synthetic Cold Hit",
+      "labels": {
+        "components": {
+          "syn-cold-hit": "Synthetic Cold Hit"
+        }
+      },
+      "notes": [
+        "data-only fixture"
+      ]
+    }
+  }
+}

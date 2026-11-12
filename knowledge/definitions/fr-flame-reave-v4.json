@@ -1,0 +1,942 @@
+{
+  "schema": "le-skill-template-v3",
+  "template_id": "fr-flame-reave-v4",
+  "ability_id": "fr11mv",
+  "binding_version": "definitions_v3.selector-v1",
+  "title": {
+    "zh": "Flame Reave · 原生多命中定义",
+    "en": "Flame Reave native multi-hit definition"
+  },
+  "definition": {
+    "plan_version": "le-calculation-plan-v4",
+    "skill": {
+      "base_damage": {
+        "Fire": 2
+      },
+      "added_damage_scaling": 4,
+      "crit_chance": 0.05,
+      "crit_multiplier": 2,
+      "cooldown_s": 3,
+      "action_s": 0.8,
+      "base_attack_rate": 1.3750031,
+      "components": {
+        "hit": {
+          "component_id": "fr11mv:fire",
+          "damage_type": "Fire",
+          "tags": [
+            "Fire",
+            "Melee",
+            "Hit"
+          ],
+          "adaptive_damage_type": "Fire",
+          "crit_capable": true
+        }
+      },
+      "evidence": [
+        {
+          "kind": "game_data",
+          "detail": "dataset skill_components fr11mv#component#0：DamageEnemyOnHit、base 2、Fire、added_damage_effectiveness 400、crit 0.05/2.0、damageTags 512(Melee)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill:letools:LEAbilities.abilityList:fr11mv#component#0"
+        },
+        {
+          "kind": "game_data",
+          "detail": "dataset skills fr11mv：cast_time_ms 800、extensions.as=1.3750031、speedMultiplier=1；base_attack_rate = as × speedMultiplier",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#skills source_skill_id=fr11mv"
+        },
+        {
+          "kind": "user_rule",
+          "detail": "迁移基线 R3：base_aps = as × speedMultiplier，武器 attackRate 不参与；action_s 仍取 dataset castTime 0.8 供目录一致性校验",
+          "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#rules.R3"
+        },
+        {
+          "kind": "derivation",
+          "detail": "cooldown 3 秒来自 FR 树节点 16 Reflash（节点已分配）：dataset effect stat_index 1 = 3.0；规则包 R13 记录同一口径",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=fr11mv node=16"
+        }
+      ]
+    },
+    "controls": [
+      {
+        "key": "ignited",
+        "label": "目标已点燃",
+        "source": "目标条件 / FR 自身点燃来源",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "Scorching Tide / Chaos Flare 条件；点燃施加过程不模拟。"
+      },
+      {
+        "key": "enchant_weapon_active",
+        "label": "Enchant Weapon 激活",
+        "source": "Enchant Weapon（Kindling Blade 自动施放）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "近战命中期间常驻（用户裁决 2026-11-07）：+50% more、攻速、附加火焰与增伤。"
+      },
+      {
+        "key": "frenzy_active",
+        "label": "Frenzy",
+        "source": "Frenzy / Frenzied Flame",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "Frenzied Flame 条件附加火焰；默认关闭。"
+      },
+      {
+        "key": "rhythm_of_fire_stacks",
+        "label": "Rhythm of Fire 层数",
+        "source": "Flame Reave 树节点 3",
+        "type": "integer",
+        "min": 0,
+        "max": 12,
+        "effect": "固定层数场景假设；不模拟获取/消耗全过程。"
+      },
+      {
+        "key": "consume_rhythm_of_fire",
+        "label": "本次施放消耗 Rhythm of Fire",
+        "source": "Flame Reave 树节点 3",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "开启时本次施放获得 +130% more（节点 3 stat_index 2）；获取/消耗全过程不模拟。"
+      },
+      {
+        "key": "firebrand_stacks",
+        "label": "Firebrand 层数",
+        "source": "Firebrand",
+        "type": "integer",
+        "min": 0,
+        "max": 9,
+        "effect": "仅登记；Firebrand 层数不作用于 Flame Reave（用户裁决）。"
+      },
+      {
+        "key": "consume_firebrand",
+        "label": "消耗 Firebrand",
+        "source": "Firebrand",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "仅登记；不进入 Flame Reave 伤害。"
+      },
+      {
+        "key": "blade_weaving_stacks",
+        "label": "Blade Weaving 层数",
+        "source": "Mage 被动 Blade Weaver",
+        "type": "integer",
+        "min": 0,
+        "max": 10,
+        "effect": "仅登记；FR 会消耗层数，默认 0。"
+      },
+      {
+        "key": "consume_blade_weaving",
+        "label": "消耗 Blade Weaving",
+        "source": "Mage 被动 Blade Weaver",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "每层 15% more 元素伤害（条件估算，不模拟获取）。"
+      },
+      {
+        "key": "ambition_stacks",
+        "label": "Ambition 层数",
+        "source": "Throne of Ambition",
+        "type": "integer",
+        "min": 0,
+        "max": 20,
+        "effect": "每层 2% more 火焰伤害；固定层数假设。"
+      },
+      {
+        "key": "mana_ge_300",
+        "label": "最大法力 ≥ 300",
+        "source": "神像词条",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前构筑法力估算 < 300，默认关闭。"
+      },
+      {
+        "key": "enemy_high_health",
+        "label": "目标高血量",
+        "source": "Army of Skin（unique 443）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "Boss/稀有起手默认高血量；低于阈值时 49% more 近战失效。"
+      },
+      {
+        "key": "boss_or_rare",
+        "label": "目标为首领或稀有",
+        "source": "场景条件",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "目标类型条件（迁移自规则包 states）。"
+      },
+      {
+        "key": "target_in_melee_range",
+        "label": "目标处于近战距离",
+        "source": "场景条件",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "距离衰减未建模；默认贴脸。"
+      },
+      {
+        "key": "dual_wield",
+        "label": "双持",
+        "source": "当前装备事实",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前装备两把武器；双持类被动条件默认成立（迁移固定条件）。"
+      },
+      {
+        "key": "melee_ability_mana_cost",
+        "label": "近战技能法力消耗 ≥ 10",
+        "source": "Flame Reave 耗蓝估算",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "Blade Weaver 条件默认成立（迁移固定条件）。"
+      }
+    ],
+    "state_sources": {},
+    "effects": [
+      {
+        "id": "enchant_weapon_active_more",
+        "label": "Enchant Weapon（active）— 近战元素 +50% more",
+        "source": {
+          "kind": "scenario_assumption",
+          "control": "enchant_weapon_active"
+        },
+        "stat": "damage",
+        "operation": "more",
+        "value": 0.5,
+        "unit": "percent",
+        "group": "effect:enchant_weapon:active_more",
+        "tags": [
+          "Elemental",
+          "Melee"
+        ],
+        "states": [
+          "enchant_weapon_active"
+        ],
+        "status": "confirmed",
+        "evidence": [
+          {
+            "kind": "reference_third_party",
+            "detail": "planner runtime class rrljt hardcoded active +0.5 more melee elemental",
+            "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 676800-682200"
+          },
+          {
+            "kind": "user_rule",
+            "detail": "用户裁决 2026-11-07：Enchant Weapon 只要有近战命中就激活",
+            "locator": "user_conversation#2026-11-07"
+          }
+        ],
+        "required": true
+      },
+      {
+        "id": "enchant_weapon_passive_more",
+        "label": "Enchant Weapon（passive）— 近战元素 +15% more",
+        "source": {
+          "kind": "scenario_assumption"
+        },
+        "stat": "damage",
+        "operation": "more",
+        "value": 0.15,
+        "unit": "percent",
+        "group": "effect:enchant_weapon:passive_more",
+        "tags": [
+          "Elemental",
+          "Melee"
+        ],
+        "states": [],
+        "status": "derived",
+        "evidence": [
+          {
+            "kind": "reference_third_party",
+            "detail": "planner runtime class rrljt hardcoded passive +0.15 more melee elemental（专精后常驻）",
+            "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 676800-682200"
+          }
+        ],
+        "required": true
+      },
+      {
+        "id": "army_of_skin_high_health",
+        "label": "Army of Skin — 高血量目标 +49% more 近战伤害",
+        "source": {
+          "kind": "equipment_mod",
+          "binding_selector": {
+            "kind": "equipment_mod",
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:443",
+            "expected_source": "unique_mod",
+            "expected_property": 117,
+            "expected_special_tag": 2,
+            "expected_unique_mod_index": 3
+          },
+          "expected_property": 117,
+          "expected_special_tag": 2,
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:443"
+        },
+        "stat": "damage",
+        "operation": "more",
+        "value_source": "source_value",
+        "unit": "percent",
+        "group": "effect:army_of_skin:high_health",
+        "tags": [
+          "Melee"
+        ],
+        "states": [
+          "enemy_high_health"
+        ],
+        "status": "assumed",
+        "evidence": [
+          {
+            "kind": "catalog",
+            "detail": "dataset unique 443 tooltip：(26-52)% more Melee Damage to High Health Enemies；当前 roll 49%（property 117 / special_tag 2）",
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#entities item:letools:uniqueList.uniques:443"
+          },
+          {
+            "kind": "reference_third_party",
+            "detail": "planner runtime rrlPo specialTag 2 -> enemyHealth high；high/full 为真",
+            "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#bytes 444900-447300"
+          }
+        ],
+        "required": true
+      }
+    ],
+    "node_bindings": [
+      {
+        "id": "dancing_flames:attack_speed",
+        "tree": "fr11mv",
+        "node": "2",
+        "stat_index": 0,
+        "stat": "attack_speed",
+        "operation": "increased"
+      },
+      {
+        "id": "rhythm_of_fire:consume_more",
+        "tree": "fr11mv",
+        "node": "3",
+        "stat_index": 2,
+        "stat": "damage",
+        "operation": "more",
+        "condition": "consume_rhythm_of_fire"
+      },
+      {
+        "id": "frenzied_flame:added_fire",
+        "tree": "fr11mv",
+        "node": "6",
+        "stat_index": 1,
+        "stat": "added_damage",
+        "operation": "added",
+        "condition": "frenzy_active",
+        "tags": [
+          "Fire"
+        ]
+      },
+      {
+        "id": "heat_wave:fire_more",
+        "tree": "fr11mv",
+        "node": "9",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "tags": [
+          "Fire"
+        ]
+      },
+      {
+        "id": "arcane_severance:melee_more",
+        "tree": "fr11mv",
+        "node": "12",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "tags": [
+          "Melee"
+        ]
+      },
+      {
+        "id": "ember_infusion:melee_more",
+        "tree": "fr11mv",
+        "node": "13",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "tags": [
+          "Melee"
+        ]
+      },
+      {
+        "id": "precise_destruction:crit",
+        "tree": "fr11mv",
+        "node": "20",
+        "stat_index": 0,
+        "stat": "crit_chance",
+        "operation": "added"
+      },
+      {
+        "id": "scorching_tide:ignited_more",
+        "tree": "fr11mv",
+        "node": "23",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "condition": "ignited",
+        "tags": [
+          "Melee"
+        ]
+      },
+      {
+        "id": "chaos_flare:ignited_crit",
+        "tree": "fr11mv",
+        "node": "24",
+        "stat_index": 0,
+        "stat": "crit_chance",
+        "operation": "more",
+        "condition": "ignited"
+      },
+      {
+        "id": "enchant_weapon:celerity_attack_speed",
+        "tree": "sb44eQ",
+        "node": "1",
+        "stat_index": 0,
+        "stat": "attack_speed",
+        "operation": "increased",
+        "condition": "enchant_weapon_active",
+        "tags": [
+          "Melee"
+        ]
+      },
+      {
+        "id": "enchant_weapon:molten_steel_added_fire",
+        "tree": "sb44eQ",
+        "node": "7",
+        "stat_index": 0,
+        "stat": "added_damage",
+        "operation": "added",
+        "condition": "enchant_weapon_active",
+        "tags": [
+          "Fire"
+        ]
+      },
+      {
+        "id": "enchant_weapon:molten_steel_increased_fire",
+        "tree": "sb44eQ",
+        "node": "7",
+        "stat_index": 1,
+        "stat": "damage",
+        "operation": "increased",
+        "condition": "enchant_weapon_active",
+        "tags": [
+          "Fire"
+        ]
+      },
+      {
+        "id": "enchant_weapon:efficacy_increased_elemental",
+        "tree": "sb44eQ",
+        "node": "16",
+        "stat_index": 1,
+        "stat": "damage",
+        "operation": "increased",
+        "condition": "enchant_weapon_active",
+        "tags": [
+          "Elemental"
+        ]
+      }
+    ],
+    "rules": {
+      "attribute_scaling": {
+        "ratios": {
+          "intelligence": 0.04,
+          "dexterity": 0.04
+        },
+        "output": {
+          "stat": "damage",
+          "operation": "increased",
+          "tags": []
+        },
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "dataset skills fr11mv extensions.attributeScaling：属性索引 2(Int)/3(Dex) 各 +4% increased damage",
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#skills source_skill_id=fr11mv extensions.attributeScaling"
+          }
+        ],
+        "notes": "属性值取当前构筑最终属性（内部/敏捷各每点 +4% 增伤）；迁移基线 R11。"
+      },
+      "hit_events": {
+        "base_hits": 1,
+        "return_sources": [
+          {
+            "tree": "fr11mv",
+            "node": "16",
+            "require_points": 1,
+            "returns": 2,
+            "evidence": [
+              {
+                "kind": "game_data",
+                "detail": "Reflash 节点 16：命中后返回两次（对同一目标额外 2 次命中）",
+                "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=fr11mv node=16"
+              }
+            ]
+          },
+          {
+            "tree": "fr11mv",
+            "node": "18",
+            "require_points": 1,
+            "returns": 1,
+            "evidence": [
+              {
+                "kind": "game_data",
+                "detail": "Flame Caller 节点 18：返回一次（额外 1 次命中）",
+                "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=fr11mv node=18"
+              }
+            ]
+          }
+        ],
+        "extra_hit_damage_multiplier": 0.5,
+        "evidence": [
+          {
+            "kind": "user_rule",
+            "detail": "用户裁决 2026-11-07：每次施放对同一目标 4 击（1 基础 + Reflash 2 返回 + Flame Caller 1 返回），额外命中 50% less；权重 [1.0,0.5,0.5,0.5]",
+            "locator": "user_conversation#2026-11-07"
+          },
+          {
+            "kind": "catalog",
+            "detail": "Reflash altText：additional hits always have the 50% less damage penalty",
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:fr11mv:16"
+          }
+        ]
+      },
+      "rotation": {
+        "policies": [
+          "cooldown_limited",
+          "attack_speed_limited"
+        ],
+        "primary_policy": "cooldown_limited",
+        "windows_s": [
+          5,
+          30,
+          120
+        ],
+        "window_semantics": "expected_casts",
+        "rhythm_cycle": {
+          "cycle_casts": 4,
+          "consume_more": {
+            "tree": "fr11mv",
+            "node": "3",
+            "stat_index": 2
+          },
+          "status": "assumed",
+          "label": "Rhythm of Fire 周期平均（纯 FR）",
+          "evidence": [
+            {
+              "kind": "game_data",
+              "detail": "FR 树节点 3：每次使用获得 4 层，12 层时消耗并获得 +130% more（目录 stat_index 2 = 1.3）",
+              "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=fr11mv node=3"
+            },
+            {
+              "kind": "user_rule",
+              "detail": "迁移基线 R22 假设：纯 FR 每 4 次施放消耗一次，DPS 用周期平均 ×1.325；其它技能补层/精确相位不模拟",
+              "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#rules.R22"
+            }
+          ],
+          "notes": "cycle_casts=4 是迁移显式假设（节点 3 每次获得 4 层、12 层消耗；规则包按 4 次施放一周期固定），不模拟叠层时间过程。"
+        },
+        "evidence": [
+          {
+            "kind": "user_rule",
+            "detail": "R13：Reflash（节点 16）给 Flame Reave 增加 3 秒冷却；冷却恢复由装备加算，持续 DPS 主约束为 cooldown_limited；攻速限制作为对照策略同时输出",
+            "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#rules.R13"
+          },
+          {
+            "kind": "third_party_reference",
+            "detail": "冷却公式 (base+flat)/(1+ΣICR) 与攻速公式同规则包 R13/R3",
+            "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 667435"
+          }
+        ],
+        "notes": "窗口使用期望施放数（非整数完整施放）；不同时把稳态 dps×T 当真实启动时序。"
+      },
+      "item_effectiveness": {
+        "label": "Whetstone Gavel · offhand Exalted 属性效率",
+        "source": {
+          "kind": "equipment_mod",
+          "binding_selector": {
+            "kind": "equipment_mod",
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:438",
+            "expected_source": "unique_mod",
+            "expected_property": 98,
+            "expected_unique_mod_index": 2
+          },
+          "expected_property": 98,
+          "expected_unique_mod_index": 2,
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:438"
+        },
+        "target_slot": "equipment.weapon2",
+        "require_display_rarity": "exalted",
+        "tier0_min": 5,
+        "excluded_base_type_ids": [
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          41
+        ],
+        "required": true,
+        "evidence": [
+          {
+            "kind": "user_rule",
+            "detail": "用户裁决 2026-11-07：Whetstone Gavel 的副手按 Exalted 处理；副手全部 stats 获得 +97% effectiveness",
+            "locator": "user_conversation#2026-11-07"
+          },
+          {
+            "kind": "catalog",
+            "detail": "weapon1 unique_mod#2（property 98 / tags 589）value_numeric 0.97；显示稀有度按 T6+ 词缀规则判定（tools/save_import/scripts/build_mappings.py display_rarity_rule）",
+            "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#mods equipment.weapon1#unique_mod#2"
+          }
+        ],
+        "notes": "对 target_slot 的全部来源贡献乘以 (1+实际 roll)；显示稀有度条件由当前副手词缀层级计算，不沿用旧数值文本。"
+      },
+      "added_damage_conversion": {
+        "label": "Arcane Severance · 附加法术伤害转附加近战",
+        "source_pool": {
+          "stat": "added_damage",
+          "operation": "added",
+          "tags": [
+            "Spell"
+          ],
+          "exclusive_tags": true
+        },
+        "divisor": 4,
+        "output": {
+          "stat": "added_damage",
+          "operation": "added",
+          "tags": [
+            "Melee"
+          ],
+          "unit": "flat"
+        },
+        "node": {
+          "tree": "fr11mv",
+          "node": "12",
+          "stat_index": 1
+        },
+        "status": "assumed",
+        "required": true,
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "FR 树节点 12：每 4 点附加法术伤害获得近战伤害；目录 stat_index 1 = 3.0",
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#trees source_tree_id=fr11mv node=12"
+          },
+          {
+            "kind": "derivation",
+            "detail": "迁移基线：转换值 = 附加法术伤害合计 / 4 × 节点值；伤害类型按无类型附加处理为 Fire（assumed）",
+            "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#rules.R17"
+          }
+        ]
+      },
+      "row_normalizations": [
+        {
+          "id": "oq6-prodigy-crit-added",
+          "label": "OQ6：Prodigy 暴击率按迁移基线快照归一值",
+          "match": {
+            "source_kind": "passive_node",
+            "node_id": "51",
+            "index": 1,
+            "stat_key": "crit_chance",
+            "operation": "added"
+          },
+          "set": {
+            "value": 0.01,
+            "note": "per-attribute 精确公式未验证（OQ6）；迁移保留快照归一 added +0.01"
+          },
+          "status": "assumed",
+          "evidence": [
+            {
+              "kind": "user_rule",
+              "detail": "规则 R25：OQ6 的暴击类被动按快照值计入暴击率（added +0.01 / increased +0.08），不再排除；per-attribute 公式仍未验证",
+              "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#rules.R25"
+            }
+          ]
+        },
+        {
+          "id": "oq6-defender-crit-increased",
+          "label": "OQ6：Defender of Welryn 暴击率按迁移基线快照归一值",
+          "match": {
+            "source_kind": "passive_node",
+            "node_id": "71",
+            "index": 1,
+            "stat_key": "crit_chance",
+            "operation": "increased"
+          },
+          "set": {
+            "value": 0.08,
+            "note": "per-attribute 精确公式未验证（OQ6）；迁移保留快照归一 increased +0.08"
+          },
+          "status": "assumed",
+          "evidence": [
+            {
+              "kind": "user_rule",
+              "detail": "规则 R25：OQ6 的暴击类被动按快照值计入暴击率（added +0.01 / increased +0.08）",
+              "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#rules.R25"
+            }
+          ]
+        },
+        {
+          "id": "flame-drinker-mana-condition",
+          "label": "Flame Drinker：迁移固定条件（近战技能耗蓝 ≥ 10）成立",
+          "match": {
+            "source_kind": "passive_node",
+            "node_id": "74",
+            "index": 0,
+            "stat_key": "damage",
+            "operation": "more"
+          },
+          "set": {
+            "included": true,
+            "condition_code": null,
+            "condition_status": "always",
+            "exclusion_reason": null,
+            "note": "mana 相关不建模（R6/R14）；迁移基线固定条件判定近战耗蓝 ≥10 成立，条件不再按未解析排除"
+          },
+          "status": "assumed",
+          "evidence": [
+            {
+              "kind": "user_rule",
+              "detail": "用户裁决 2026-11-07：mana 相关不建模，仅保留 ≥10 / ≥300 阈值判定；迁移基线 Flame Drinker 条件成立",
+              "locator": "user_conversation#2026-11-07"
+            },
+            {
+              "kind": "catalog",
+              "detail": "Mage 被动节点 74 Flame Drinker：6 点 × 3% more Elemental（meleeAbilityManaCost ≥ 10 条件）",
+              "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes tree_entity_id=tree:letools:LECharTrees.trees:mg-1 node_index=74"
+            }
+          ]
+        }
+      ],
+      "crit": {}
+    },
+    "attribute_conversion": null,
+    "ailments": [],
+    "evaluations": [
+      {
+        "evaluation_id": "single_hit",
+        "label": "单次命中（首击，不含周期平均）",
+        "metrics": [
+          "single_hit",
+          "per_cast_hit",
+          "hits_per_cast"
+        ],
+        "primary": false
+      },
+      {
+        "evaluation_id": "dps",
+        "label": "持续输出（冷却限制，含周期平均因子）",
+        "metrics": [
+          "windows",
+          "policies",
+          "rotation_more_factor"
+        ],
+        "primary": true
+      }
+    ],
+    "coverage": {
+      "confirmed_inactive": [],
+      "not_applicable_mods": [],
+      "assumed_active_mods": []
+    },
+    "limitations": [
+      "只覆盖 Flame Reave 本体直接命中：不包含 Ignite/DoT 本体伤害、其它技能伤害、召唤物与队伍 Buff。",
+      "单次命中评估与持续输出评估共享当前 states 取值，但使用独立场景文件与独立场景哈希；周期平均因子只作用于持续输出。",
+      "fire_only：只计算 Fire 组件，显式非 Fire typed added damage（Physical/Cold/Bow/Spell 等）不进入本组件；无转伤机制。",
+      "无类型 added damage 按自适应 Fire 结算；非 Fire typed added damage 保持排除。",
+      "多命中按每次施放 4 击、权重 [1.0,0.5,0.5,0.5]（额外命中 50% less）；距离衰减未建模，默认贴脸。",
+      "Rhythm of Fire 按纯 FR 每 4 次施放消耗一次的固定条件估算（×1.325），不模拟叠层获取/消耗过程与其它技能补层。",
+      "mana 相关不建模（无限法力口径）；只保留当前状态条件。",
+      "Enchant Weapon 视为近战命中期间常驻（Kindling Blade 自动施放，assumed）；Army of Skin 高血量条件默认成立。",
+      "目标火抗 0、怪物等级减伤按迁移基线口径；负抗下限与区域抗性不建模。",
+      "旧单次命中/持续输出的表头与指标不逐字沿用，差异见迁移记录（archive://docs/reviews/unified-dps-step4-fr-implementation.zh-CN.md）。"
+    ],
+    "evidence": [
+      {
+        "kind": "migration",
+        "detail": "FR 共享定义：技能/节点/装备语义与选择器；当前实例经 definitions_v3 绑定，场景默认值在独立 scenario 文件",
+        "locator": "docs/contracts/definitions-v3.md"
+      }
+    ],
+    "assembly_plan_version": "le-calculation-plan-v2"
+  },
+  "scenario_schema": {
+    "schema": "le-skill-scenario-v3",
+    "controls": [
+      {
+        "key": "ignited",
+        "label": "目标已点燃",
+        "source": "目标条件 / FR 自身点燃来源",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "Scorching Tide / Chaos Flare 条件；点燃施加过程不模拟。"
+      },
+      {
+        "key": "enchant_weapon_active",
+        "label": "Enchant Weapon 激活",
+        "source": "Enchant Weapon（Kindling Blade 自动施放）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "近战命中期间常驻（用户裁决 2026-11-07）：+50% more、攻速、附加火焰与增伤。"
+      },
+      {
+        "key": "frenzy_active",
+        "label": "Frenzy",
+        "source": "Frenzy / Frenzied Flame",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "Frenzied Flame 条件附加火焰；默认关闭。"
+      },
+      {
+        "key": "rhythm_of_fire_stacks",
+        "label": "Rhythm of Fire 层数",
+        "source": "Flame Reave 树节点 3",
+        "type": "integer",
+        "min": 0,
+        "max": 12,
+        "effect": "固定层数场景假设；不模拟获取/消耗全过程。"
+      },
+      {
+        "key": "consume_rhythm_of_fire",
+        "label": "本次施放消耗 Rhythm of Fire",
+        "source": "Flame Reave 树节点 3",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "开启时本次施放获得 +130% more（节点 3 stat_index 2）；获取/消耗全过程不模拟。"
+      },
+      {
+        "key": "firebrand_stacks",
+        "label": "Firebrand 层数",
+        "source": "Firebrand",
+        "type": "integer",
+        "min": 0,
+        "max": 9,
+        "effect": "仅登记；Firebrand 层数不作用于 Flame Reave（用户裁决）。"
+      },
+      {
+        "key": "consume_firebrand",
+        "label": "消耗 Firebrand",
+        "source": "Firebrand",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "仅登记；不进入 Flame Reave 伤害。"
+      },
+      {
+        "key": "blade_weaving_stacks",
+        "label": "Blade Weaving 层数",
+        "source": "Mage 被动 Blade Weaver",
+        "type": "integer",
+        "min": 0,
+        "max": 10,
+        "effect": "仅登记；FR 会消耗层数，默认 0。"
+      },
+      {
+        "key": "consume_blade_weaving",
+        "label": "消耗 Blade Weaving",
+        "source": "Mage 被动 Blade Weaver",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "每层 15% more 元素伤害（条件估算，不模拟获取）。"
+      },
+      {
+        "key": "ambition_stacks",
+        "label": "Ambition 层数",
+        "source": "Throne of Ambition",
+        "type": "integer",
+        "min": 0,
+        "max": 20,
+        "effect": "每层 2% more 火焰伤害；固定层数假设。"
+      },
+      {
+        "key": "mana_ge_300",
+        "label": "最大法力 ≥ 300",
+        "source": "神像词条",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前构筑法力估算 < 300，默认关闭。"
+      },
+      {
+        "key": "enemy_high_health",
+        "label": "目标高血量",
+        "source": "Army of Skin（unique 443）",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "Boss/稀有起手默认高血量；低于阈值时 49% more 近战失效。"
+      },
+      {
+        "key": "boss_or_rare",
+        "label": "目标为首领或稀有",
+        "source": "场景条件",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "目标类型条件（迁移自规则包 states）。"
+      },
+      {
+        "key": "target_in_melee_range",
+        "label": "目标处于近战距离",
+        "source": "场景条件",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "距离衰减未建模；默认贴脸。"
+      },
+      {
+        "key": "dual_wield",
+        "label": "双持",
+        "source": "当前装备事实",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前装备两把武器；双持类被动条件默认成立（迁移固定条件）。"
+      },
+      {
+        "key": "melee_ability_mana_cost",
+        "label": "近战技能法力消耗 ≥ 10",
+        "source": "Flame Reave 耗蓝估算",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "Blade Weaver 条件默认成立（迁移固定条件）。"
+      }
+    ],
+    "target_required": [
+      "monster_level",
+      "resistance"
+    ]
+  },
+  "migration": {
+    "from": "fr-flame-reave-v3",
+    "baseline": "archive://reports/flame-reave/verify-baseline-flame-reave-20261110T1245/",
+    "policy": "共享语义/节点/装备规则/证据在此；当前实例经 selector 与真实 FrozenContext 绑定；场景默认值在独立 scenario 文件，不进入共享定义；多命中/频率/周期平均使用 plan-v2/result-v4 显式契约",
+    "canonical_case": "archive://examples/flame-reave/case.json",
+    "migration_case": "archive://examples/flame-reave/case.legacy-hit.json",
+    "canonical_run_id": "dps-step5-v4-fr-18",
+    "entry_policy": "canonical case.json 必须走 definitions_v3；legacy/profile/hit 文件仅作迁移证据，不参与默认入口。"
+  }
+}

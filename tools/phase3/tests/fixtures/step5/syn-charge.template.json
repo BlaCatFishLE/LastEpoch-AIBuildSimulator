@@ -1,0 +1,104 @@
+{
+  "schema": "le-skill-template-v3",
+  "template_id": "syn-charge",
+  "ability_id": "syn-charge",
+  "binding_version": "definitions_v3.selector-v1",
+  "title": "Synthetic Charge Schedule",
+  "definition": {
+    "plan_version": "le-calculation-plan-v4",
+    "skill": {},
+    "controls": [],
+    "state_sources": {},
+    "effects": [],
+    "node_bindings": [],
+    "rules": {},
+    "attribute_conversion": {},
+    "ailments": [],
+    "coverage": {},
+    "limitations": [],
+    "evidence": [],
+    "components": [
+      {
+        "component_id": "syn-charge-hit",
+        "kind": "hit",
+        "damage_type": "Cold",
+        "base_damage": 10,
+        "tags": [
+          "Hit"
+        ],
+        "presentation_label": "Synthetic Charge Hit"
+      }
+    ],
+    "applications": [],
+    "schedule": {
+      "kind": "charge",
+      "horizon_s": 10,
+      "windows_s": [
+        10
+      ],
+      "charges": {
+        "max_charges": 2,
+        "recharge_s": 2,
+        "cast_time_s": 1,
+        "instance_duration_s": 3
+      },
+      "action_policies": [
+        {
+          "policy_id": "burst",
+          "condition": "charge_available_and_action_free"
+        },
+        {
+          "policy_id": "hold",
+          "condition": "wait_for_all_instances_expired"
+        }
+      ],
+      "evaluations": [
+        {
+          "evaluation_id": "eager",
+          "primary": true,
+          "action_policy": "burst",
+          "label": "eager"
+        },
+        {
+          "evaluation_id": "patient",
+          "primary": false,
+          "action_policy": "hold",
+          "label": "patient"
+        }
+      ]
+    },
+    "capabilities": [
+      "hit_components",
+      "charge_schedule",
+      "presentation"
+    ],
+    "target_side": {
+      "strategy": "separate_multiplier"
+    },
+    "presentation": {
+      "title": "Synthetic Charge Schedule",
+      "labels": {
+        "components": {
+          "syn-charge-hit": "Synthetic Charge Hit"
+        }
+      },
+      "notes": [
+        "policy_id is only a label; behavior comes from condition"
+      ]
+    },
+    "evaluations": [
+      {
+        "evaluation_id": "eager",
+        "primary": true,
+        "action_policy": "burst",
+        "label": "eager"
+      },
+      {
+        "evaluation_id": "patient",
+        "primary": false,
+        "action_policy": "hold",
+        "label": "patient"
+      }
+    ]
+  }
+}

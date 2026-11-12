@@ -1,0 +1,101 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-haste",
+  "revision": 3,
+  "title": {
+    "zh": "Haste 移动速度及效果缩放",
+    "en": "Haste 移动速度及效果缩放"
+  },
+  "aliases": [
+    "Haste 移动速度及效果缩放"
+  ],
+  "selectors": [
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "letools:uniqueList.uniques:413"
+      ]
+    },
+    {
+      "kind": "mechanism",
+      "namespace": "letools:LEAbilities.ailmentList",
+      "ids": [
+        "33"
+      ]
+    }
+  ],
+  "reuse_mode": "shared",
+  "applicability": {
+    "components": [
+      "derived"
+    ],
+    "tags": [],
+    "conditions": [
+      "haste"
+    ],
+    "notes": "候选命中不等于激活：先核对当前稳定定义与效果语义，再按当前条件求值。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "source_instances",
+      "source": "current:matched_instances",
+      "note": "按稳定定义 ID 和词条/节点语义绑定，不携带旧槽位。"
+    },
+    {
+      "parameter": "points_values",
+      "source": "current:matched_instances",
+      "note": "节点从当前专精取 points，装备从当前实例取 value；常量由共享规则或 dataset 提供。"
+    },
+    {
+      "parameter": "scenario",
+      "source": "current:scenario.states",
+      "note": "条件开关、层数与目标状态来自本次场景。"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "fr-effect-haste",
+    "path": "tools/phase3/rules/shared-conditional-mechanisms-v1.json",
+    "locator": "#/mechanisms/fr-effect-haste"
+  },
+  "handler_ref": {
+    "module": "le_calc.effect_binding",
+    "symbol": "bind_state_scalings"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "dataset ailmentList:33; uniqueList.uniques:413"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/void-cleave/conditional-knowledge-closeout-20261110.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "item": "移动速度不直接等于伤害",
+      "reason": "只有当前确有独立移速转伤机制时，才把其输出交给该机制；本条不重复增加伤害。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "旧实现兼容引用",
+      "reason": "rule_refs 保留旧接口来源，不作为新构筑输入；主规则入口已改为通用配方。",
+      "blocks_full_dps": false
+    }
+  ],
+  "rule_refs": [
+    {
+      "kind": "ruleset_effect",
+      "ref": "haste_active",
+      "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "locator": "#/effects id=haste_active"
+    }
+  ],
+  "case_scope": [
+    "flame-reave"
+  ]
+}

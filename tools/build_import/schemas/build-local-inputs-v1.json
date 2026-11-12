@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lastepoch-buildsimulator/schemas/build-local-inputs-v1.json",
+  "title": "Last Epoch local build inputs v1",
+  "description": "User-supplied values for roll slots the source payload does not provide (or explicit corrections). Stored at data/builds/<source>/<shareId>/inputs/local-inputs.json and applied on the next import/sync; published revisions stay immutable and record meta.local_inputs.",
+  "type": "object",
+  "required": ["version", "build_id", "entries"],
+  "properties": {
+    "version": { "const": "build-local-inputs-v1" },
+    "build_id": { "type": "string", "pattern": "^[a-z0-9_]+:[A-Za-z0-9_-]+$" },
+    "updated_at": { "type": "string" },
+    "entries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": ["input_id", "kind", "instance_path"],
+      "properties": {
+        "input_id": { "type": "string" },
+        "kind": { "type": "string", "enum": ["affix_roll", "unique_mod_roll", "implicit_roll", "explicit_value"] },
+        "instance_path": { "type": "string", "description": "BuildSpec source_path of the affix instance (affix_roll/explicit affix), the item instance (unique/implicit), or the item for explicit values." },
+        "roll": { "type": "integer", "minimum": 0, "maximum": 255, "description": "Raw roll quality 0..255; 0 is valid and never treated as missing." },
+        "roll_id": { "type": "integer", "minimum": 0 },
+        "index": { "type": "integer", "minimum": 0 },
+        "target": { "type": "string", "enum": ["affix", "unique_mod", "implicit"] },
+        "affix_value_index": { "type": "integer", "minimum": 0 },
+        "mod_index": { "type": "integer", "minimum": 0 },
+        "value_numeric": { "type": "number", "description": "Explicit normalized value for explicit_value entries; bypasses the roll formula." },
+        "display_value": { "type": ["number", "null"], "description": "Optional displayed in-game value (e.g. 35 for 35%); kept for human traceability; value_numeric is authoritative." },
+        "display_unit": { "type": ["string", "null"], "enum": ["percent", "flat", null] },
+        "note": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "additionalProperties": true,
+      "allOf": [
+        { "if": { "properties": { "kind": { "const": "affix_roll" } } }, "then": { "required": ["roll"] } },
+        { "if": { "properties": { "kind": { "const": "unique_mod_roll" } } }, "then": { "required": ["roll", "roll_id"] } },
+        { "if": { "properties": { "kind": { "const": "implicit_roll" } } }, "then": { "required": ["roll", "index"] } },
+        { "if": { "properties": { "kind": { "const": "explicit_value" } } }, "then": { "required": ["target", "value_numeric"] } }
+      ]
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lastepoch-buildsim.local/schemas/skill-template-v3.json",
+  "title": "le-skill-template-v3",
+  "description": "共享技能定义（不携带当前构筑 roll/节点总值/实例 ID/场景默认值）；当前实例由 binding_selector 在真实 FrozenContext 上解析，场景由独立 scenario 文件提供。",
+  "type": "object",
+  "required": [
+    "schema",
+    "template_id",
+    "ability_id",
+    "binding_version",
+    "definition",
+    "scenario_schema"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "le-skill-template-v3"
+    },
+    "template_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ability_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "binding_version": {
+      "const": "definitions_v3.selector-v1"
+    },
+    "title": {
+      "type": "object"
+    },
+    "migration": {
+      "type": "object"
+    },
+    "scenario_schema": {
+      "type": "object",
+      "required": [
+        "schema",
+        "controls"
+      ],
+      "properties": {
+        "schema": {
+          "const": "le-skill-scenario-v3"
+        },
+        "controls": {
+          "type": "array",
+          "minItems": 1
+        },
+        "target_required": {
+          "type": "array"
+        }
+      }
+    },
+    "definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "skill",
+        "controls",
+        "state_sources",
+        "effects",
+        "node_bindings",
+        "rules",
+        "attribute_conversion",
+        "ailments",
+        "coverage",
+        "limitations",
+        "evidence"
+      ],
+      "properties": {
+        "plan_version": {
+          "enum": [
+            "le-calculation-plan-v1",
+            "le-calculation-plan-v2",
+            "le-calculation-plan-v3"
+          ],
+          "description": "计划契约版本；缺省 le-calculation-plan-v1。plan-v2 启用多命中/具名频率/具名评估。"
+        },
+        "skill": {
+          "type": "object"
+        },
+        "controls": {
+          "type": "array",
+          "minItems": 1
+        },
+        "state_sources": {
+          "type": "object"
+        },
+        "effects": {
+          "type": "array"
+        },
+        "node_bindings": {
+          "type": "array"
+        },
+        "rules": {
+          "type": "object"
+        },
+        "attribute_conversion": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "ailments": {
+          "type": "array"
+        },
+        "evaluations": {
+          "type": "array",
+          "minItems": 1,
+          "description": "plan-v2 具名评估声明（evaluation_id/label/metrics/primary）；案例侧 scenarios 与之一一绑定。",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "evaluation_id",
+              "metrics",
+              "primary"
+            ],
+            "properties": {
+              "evaluation_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "label": {
+                "type": "string"
+              },
+              "metrics": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "primary": {
+                "type": "boolean"
+              },
+              "evidence": {
+                "type": "array"
+              },
+              "notes": {
+                "type": "string"
+              },
+              "action_policy": {
+                "enum": [
+                  "eager",
+                  "patient"
+                ]
+              }
+            }
+          }
+        },
+        "coverage": {
+          "type": "object"
+        },
+        "limitations": {
+          "type": "array"
+        },
+        "evidence": {
+          "type": "array"
+        },
+        "conditional_buff_library": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "plan_version"
+            ],
+            "properties": {
+              "plan_version": {
+                "const": "le-calculation-plan-v2"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "evaluations"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

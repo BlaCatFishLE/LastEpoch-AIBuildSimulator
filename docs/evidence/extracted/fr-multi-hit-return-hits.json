@@ -1,0 +1,85 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-multi-hit-return-hits",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 每次施放多次返回命中与 50% less 伤害权重",
+    "en": "Flame Reave multi return hits per cast with 50% less damage weights"
+  },
+  "source_path": "knowledge/mechanisms/fr-multi-hit-return-hits.json",
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 fr-hit-stage1-v2 规则包保留为迁移证据；新路径使用 plan-v2 hit_events"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "plan-v2 rules.hit_events（定义规则数据，取代旧 ruleset.hit_events）",
+    "path": "knowledge/definitions/fr-flame-reave-v3.json",
+    "locator": "#/definition/rules/hit_events",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/fr-flame-reave-v3.json#definition.rules",
+      "note": "kind=none，但 ref 指向的定义规则段 'hit_events' 已在文件中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes node:letools:fr11mv:16",
+      "note": "Reflash altText：additional hits always have the 50% less damage penalty",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 每次施放多次返回命中与 50% less 伤害权重",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、frequency；伤害标签：Fire、Melee、Hit；条件 code：none；必要节点：fr11mv:16、fr11mv:18",
+      "source": "$.applicability"
+    },
+    {
+      "text": "节点分配从当前计算输入读取；每次施放命中数 = base_hits + Σ返回次数，额外命中固定 50% less。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "聚合操作=frequency；叠层策略=additive；顺序/汇总=首击权重 1.0，其余返回命中各 50% less；每次施放伤害 = Σ(组件伤害 × 权重)；more 分组依据=n/a（权重不是 more 组）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "编译期读取当前节点分配并生成 hits_per_cast/damage_weights；执行器按权重装配每cast伤害",
+      "source": "$.handler_ref.note（le_calc.plan_compiler._resolve_hit_events_v2）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：return sources、extra hit damage multiplier、hit count",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/flame-reave/dps-step4-fr-2/result.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "距离衰减：只建模贴脸（target_in_melee_range 默认 true）；远程衰减曲线未建模（迁移基线 OQ2）。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    },
+    {
+      "text": "命中相位：按每次施放固定权重与周期平均估算；不模拟真实动作时序与打断。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

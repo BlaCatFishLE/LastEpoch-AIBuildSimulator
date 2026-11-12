@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-calc/result-v1.json",
+  "title": "Black Hole stage-1 result v1",
+  "description": "Single business data source for the offline HTML report. Produced by le_calc.report; consumed by le_calc.html. Fixture file under fixtures/ is synthetic and must not be presented as a calculation result.",
+  "type": "object",
+  "required": [
+    "schema", "run", "input", "scope", "scenario", "action_policy", "snapshot",
+    "source_ledger", "rule_ledger", "modifier_graph", "single_cast", "loops",
+    "issues", "excluded_sources"
+  ],
+  "properties": {
+    "schema": { "const": "black-hole-stage1-result-v1" },
+    "run": {
+      "type": "object",
+      "required": ["run_id", "generated_at", "engine", "ruleset", "status"],
+      "properties": {
+        "run_id": { "type": "string" },
+        "generated_at": { "type": "string" },
+        "engine": { "type": "object", "required": ["id", "version"], "properties": { "id": { "type": "string" }, "version": { "type": "string" } } },
+        "ruleset": { "type": "object", "required": ["id", "sha256", "game_version"], "properties": { "id": { "type": "string" }, "sha256": { "type": "string" }, "game_version": { "type": "string" } } },
+        "status": { "type": "string", "enum": ["complete", "assumption", "incomplete"] },
+        "status_reason": { "type": "string" },
+        "scope_note": { "type": "string" },
+        "repro_command": { "type": "string" }
+      }
+    },
+    "input": {
+      "type": "object",
+      "required": ["dataset", "build", "calc_input", "fingerprints"],
+      "properties": {
+        "dataset": { "type": "object" },
+        "build": { "type": "object" },
+        "calc_input": { "type": "object" },
+        "fingerprints": { "type": "object" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "required": ["included", "notes"],
+      "properties": {
+        "included": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["scenario_id", "name", "target", "coverage", "assumptions"],
+      "properties": {
+        "scenario_id": { "type": "string" },
+        "name": { "type": "string" },
+        "target": { "type": "object" },
+        "coverage": { "type": "object" },
+        "assumptions": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "action_policy": {
+      "type": "object",
+      "properties": {
+        "single_cast": { "type": "object" },
+        "loops": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "snapshot": {
+      "type": "object",
+      "required": ["build_meta", "character", "attributes", "resistances", "derived", "contributions", "issues"],
+      "properties": {
+        "build_meta": { "type": "object" },
+        "character": { "type": "object" },
+        "attributes": { "type": "object" },
+        "resistances": { "type": "object" },
+        "derived": { "type": "object" },
+        "contributions": { "type": "array", "items": { "type": "object" } },
+        "issues": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "source_ledger": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["contribution_id", "source_kind", "source_label", "source_path", "stat_name", "stat_key", "operation", "value", "included", "status"]
+      }
+    },
+    "rule_ledger": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "title", "statement", "status", "evidence"],
+        "properties": {
+          "rule_id": { "type": "string" },
+          "title": { "type": "string" },
+          "statement": { "type": "string" },
+          "group": { "type": "string" },
+          "status": { "type": "string", "enum": ["confirmed", "derived", "assumed", "unresolved"] },
+          "evidence": { "type": "array", "items": { "type": "object" } },
+          "affects": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "modifier_graph": {
+      "type": "object",
+      "properties": {
+        "nodes": { "type": "array", "items": { "type": "object" } },
+        "edges": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "single_cast": {
+      "type": "object",
+      "required": ["cast", "body", "ignite", "totals", "event_trace", "time_series"],
+      "properties": {
+        "cast": { "type": "object" },
+        "body": { "type": "object" },
+        "ignite": { "type": "object" },
+        "totals": { "type": "object" },
+        "event_trace": { "type": "array", "items": { "type": "object" } },
+        "time_series": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "loops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["policy_id", "action_policy", "windows", "casts", "totals", "event_trace", "time_series"],
+        "properties": {
+          "policy_id": { "type": "string" },
+          "action_policy": { "type": "object" },
+          "windows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["window_s", "total_damage", "dps", "unsettled_tail_damage"],
+              "properties": {
+                "window_s": { "type": "number" },
+                "total_damage": { "type": "number" },
+                "body_damage": { "type": "number" },
+                "ignite_damage": { "type": "number" },
+                "dps": { "type": "number" },
+                "unsettled_tail_damage": { "type": "number" },
+                "cast_count": { "type": "number" }
+              }
+            }
+          },
+          "casts": { "type": "array", "items": { "type": "object" } },
+          "resource": { "type": "object" },
+          "totals": { "type": "object" },
+          "event_trace": { "type": "array", "items": { "type": "object" } },
+          "time_series": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    },
+    "issues": { "type": "array", "items": { "type": "object" } },
+    "excluded_sources": { "type": "array", "items": { "type": "object" } },
+    "conditional": {
+      "type": "object",
+      "description": "v3 conditional-Buff context (registry/scenario/evaluation/view). Documentation-only for a later DPS re-calculation; never changes single_cast/loops.",
+      "required": ["schema", "status"],
+      "properties": {
+        "schema": { "type": "string" },
+        "status": { "type": "string", "enum": ["ready", "degraded", "unavailable"] },
+        "issues": { "type": "array", "items": { "type": "object" } },
+        "registry": { "type": "object" },
+        "input": { "type": "object" },
+        "context": { "type": "object" },
+        "catalog": { "type": "object" },
+        "scenario": { "type": "object" },
+        "evaluation": { "type": "object" },
+        "rules": { "type": "object" },
+        "view": { "type": "object" }
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,207 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "void-cleave-fire-main-v4",
+  "kind": "definition",
+  "title": {
+    "zh": "Void Cleave · Riftflame 原生定义",
+    "en": "Void Cleave native definition"
+  },
+  "source_path": "knowledge/definitions/void-cleave-fire-main-v4.json",
+  "evidence_state": null,
+  "implementation_state": null,
+  "state_note": "共享定义模板没有 evidence_state/implementation_state 字段；证据状态见定义内 limitations/coverage 与 evidence 定位，登记状态见对应机制条目",
+  "rule_ref": {
+    "kind": "definition_template",
+    "ref": "void-cleave-fire-main-v4",
+    "path": "knowledge/definitions/void-cleave-fire-main-v4.json",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/void-cleave-fire-main-v4.json",
+      "note": "共享定义模板本身是计算权威（自包含规则段），不引用外部规则 ID；规则 ID 在对应规则包/机制条目中单独登记"
+    }
+  },
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Void Cleave · Riftflame 原生定义",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "ability_id=v01cv；binding_version=definitions_v3.selector-v1；能力=hit_components、presentation",
+      "source": "$.ability_id/binding_version/capabilities"
+    },
+    {
+      "text": "定义规则段（共享计算语义的权威位置）：crit、every_nth_hit、state_scalings、movement_conversion、damage_to_penetration、cooldown_reduction、attribute_scaling",
+      "source": "$.definition.rules"
+    },
+    {
+      "text": "迁移口径：共享语义/规则/证据在此；当前实例经 selector 绑定；场景默认值在 scenario 文件，不进入共享定义",
+      "source": "$.migration.policy"
+    },
+    {
+      "text": "迁移口径：canonical case.json 必须走 definitions_v3；legacy/profile/hit 文件仅作迁移证据，不参与默认入口。",
+      "source": "$.migration.entry_policy"
+    },
+    {
+      "text": "定义声明了技能结构（组件/标签/暴击能力）；具体数值见 knowledge JSON 与 dataset",
+      "source": "$.definition.skill（仅结构字段，不复制数值）"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/definition/skill/evidence/1/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#skill.cooldown_s"
+    },
+    {
+      "pointer": "$/definition/effects/0/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.waist#unique_description#0"
+    },
+    {
+      "pointer": "$/definition/effects/0/evidence/1/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.frenzy.effect"
+    },
+    {
+      "pointer": "$/definition/effects/1/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.ring1#affix#sealed#0.0"
+    },
+    {
+      "pointer": "$/definition/effects/1/evidence/1/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.incisive.effect"
+    },
+    {
+      "pointer": "$/definition/effects/2/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods idols.3#unique_description#1"
+    },
+    {
+      "pointer": "$/definition/effects/2/evidence/1/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#limitations"
+    },
+    {
+      "pointer": "$/definition/effects/3/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/bd-tables.zh-CN.md#Void Cleave 节点 3"
+    },
+    {
+      "pointer": "$/definition/effects/4/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.weapon1#unique_mod#5"
+    },
+    {
+      "pointer": "$/definition/rules/crit/deadly/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.incisive.effect"
+    },
+    {
+      "pointer": "$/definition/rules/crit/target_stack_chance/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.vulnerability.effect"
+    },
+    {
+      "pointer": "$/definition/rules/every_nth_hit/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.crescendo.effect"
+    },
+    {
+      "pointer": "$/definition/rules/state_scalings/0/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#movement_effects"
+    },
+    {
+      "pointer": "$/definition/rules/state_scalings/1/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#rage_movement_per_buff"
+    },
+    {
+      "pointer": "$/definition/rules/state_scalings/2/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#rage_speed_per_buff"
+    },
+    {
+      "pointer": "$/definition/rules/movement_conversion/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.feet#unique_mod#1"
+    },
+    {
+      "pointer": "$/definition/rules/damage_to_penetration/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/bd-tables.zh-CN.md#Void Cleave 节点 2"
+    },
+    {
+      "pointer": "$/definition/rules/cooldown_reduction/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/bd-tables.zh-CN.md#Void Cleave 节点 17"
+    },
+    {
+      "pointer": "$/definition/attribute_conversion/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.amulet#affix#sealed#0.1"
+    },
+    {
+      "pointer": "$/definition/coverage/confirmed_inactive/0/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.waist#unique_mod#6"
+    },
+    {
+      "pointer": "$/definition/coverage/not_applicable_mods/0/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.feet#unique_mod#2"
+    },
+    {
+      "pointer": "$/definition/coverage/assumed_active_mods/0/evidence/0/locator",
+      "original": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.idol_altar#implicit#0"
+    },
+    {
+      "pointer": "$/migration/canonical_case",
+      "original": "archive://examples/void-cleave-20261110/case.json"
+    },
+    {
+      "pointer": "$/migration/migration_case",
+      "original": "archive://examples/void-cleave-20261110/case.profile-v2.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "固定条件下模拟主技能连续施放；不模拟法力维持、移动、中断及辅助技能自身伤害。",
+      "source": "$.definition.limitations[0]"
+    },
+    {
+      "text": "Time Rot、Bleed 和易伤作为用户指定的固定目标条件，不模拟获取、叠层与过期。",
+      "source": "$.definition.limitations[1]"
+    },
+    {
+      "text": "Crescendoing Rage 按主技能独立计数的每第三次命中建模；持续伤害继承尚未确认，暂不赋予这部分加成。",
+      "source": "$.definition.limitations[2]"
+    },
+    {
+      "text": "Deadly Strike 额外倍率依据本地工具提示；固定状态与目标易伤的合成仍属推导，未经游戏内实测。",
+      "source": "$.definition.limitations[3]"
+    },
+    {
+      "text": "动作时长取 dataset castTime（2.0 秒）；对装备条件与通道仍有未支持来源，全部保留在工程账本。",
+      "source": "$.definition.limitations[4]"
+    },
+    {
+      "text": "未建模敌方护甲和减抗/穿甲积累；目标面板的抗性是输入的有效抗性。",
+      "source": "$.definition.limitations[5]"
+    },
+    {
+      "text": "当前 mastery 为 Forge Guard，不加入 Void Knight 回响。",
+      "source": "$.definition.limitations[6]"
+    },
+    {
+      "text": "辅助技能 Buff 均按用户指定的已获得状态计算，不模拟动作占用或维持成本；多个下一次施放加成不能视为无条件常驻。",
+      "source": "$.definition.limitations[7]"
+    },
+    {
+      "text": "持续伤害施加概率只纳入装备/神像/祝福词条与显式节点规则；被动与其它 meta 词条的施加来源未纳入概率模型（见 coverage.gaps）。",
+      "source": "$.definition.limitations[8]"
+    },
+    {
+      "text": "Void→点燃穿透的输入池按标签闭包 ['Void'] 计算（含无标签通用增伤行），该口径未实测确认。",
+      "source": "$.definition.limitations[9]"
+    },
+    {
+      "text": "施加概率超过 100% 时当前按线性期望计入，超过 100% 是否产生额外层数未确认。",
+      "source": "$.definition.limitations[10]"
+    },
+    {
+      "text": "[coverage.confirmed_inactive] 12% increased Effect of Frenzy while Dual Wielding：当前装备为双手武器，条件确定不满足",
+      "source": "$.definition.coverage.confirmed_inactive[0]"
+    },
+    {
+      "text": "[coverage.not_applicable_mods] Vaion's Chariot：下一次移动技能 40% more 伤害，作用于移动技能而非主技能本体，不在当前计算范围",
+      "source": "$.definition.coverage.not_applicable_mods[0]"
+    },
+    {
+      "text": "[coverage.assumed_active_mods] 神像祭坛 10% 冷却恢复：'若无更大的神像位于更小神像上方' 的网格布局条件未从输入验证",
+      "source": "$.definition.coverage.assumed_active_mods[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

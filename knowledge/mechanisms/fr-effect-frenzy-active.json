@@ -1,0 +1,229 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-frenzy-active",
+  "revision": 3,
+  "title": {
+    "zh": "Frenzy（ailment 34）active：increased attack speed 与 Frenzied Flame 的 added fire",
+    "en": "Frenzy (ailment 34) active buff: increased attack speed and Frenzied Flame added fire"
+  },
+  "aliases": [
+    "Frenzy",
+    "Frenzied Flame",
+    "ailment 34",
+    "increased attack speed",
+    "Effect of Frenzy"
+  ],
+  "selectors": [
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "letools:ailmentList:34"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:6"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "attack_speed",
+        "added_damage"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "frenzy"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "frenzy_active"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effect definition",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=frenzy_active",
+      "note": "condition: frenzy_active==true；modifiers=attack speed increased + added fire"
+    },
+    {
+      "parameter": "ailment definition",
+      "source": "data/releases/phase1-dataset-003/data.sqlite#ailments entity_id=ailment:letools:LEAbilities.ailmentList:34",
+      "note": "duration/max_instances/buffs（attack & cast speed increased）"
+    },
+    {
+      "parameter": "effect of frenzy on you",
+      "source": "current:matched_instances",
+      "unit": "percent",
+      "note": "relic +100% / ring1 +28% → 攻速效果缩放"
+    },
+    {
+      "parameter": "node 6 added fire",
+      "source": "current:matched_instances",
+      "unit": "flat"
+    },
+    {
+      "parameter": "state",
+      "source": "current:scenario#/states/frenzy_active",
+      "unit": "bool"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "frenzy_active",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=frenzy_active；#/rules id=R4"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "_effect_rows",
+    "note": "条件满足时加 attack_speed increased 行与 added fire 行；攻速行由 hit_simulate._attack_speed_pools 汇总"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=frenzy_active",
+      "note": "ruleset 条件效果声明（status confirmed）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments entity_id=ailment:letools:LEAbilities.ailmentList:34",
+      "note": "Frenzy：duration/max_instances/buffs（property 2/3）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=skill_tree_node source_scope=fr11mv source_id=6",
+      "note": "Frenzied Flame：chance/duration/+8 added fire"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects+effect_values owner_entity_id=node:letools:fr11mv:6",
+      "note": "node 6 的三个 stat"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#R4.frenzy",
+      "note": "facts 的 Frenzy 参数与 +128% Effect scaling"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json#/candidates",
+      "note": "frenzy 候选的筛查状态"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods property=120 special_tag=34",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=6)/effects[stat_index=1]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/frenzy_active",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "fr-hit-increased-pools",
+      "requirement": "Frenzy 攻速进 attack_speed increased 池（冷却受限时 DPS 不变）",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/attack_model/attack_speed_pool"
+    },
+    {
+      "with": "fr-hit-added-scaling",
+      "requirement": "during Frenzy 的 +added fire 进入 Fire 组件 added 池",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model"
+    },
+    {
+      "with": "fr-node-frenzied-flame",
+      "requirement": "node 6 的触发/时长/added 与效果条目联动",
+      "evidence_locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:6"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "R4：Frenzy 由 FR 命中 10% 触发（1 点），实际 uptime 未模拟；scenario 用固定状态",
+      "Frenzy 的 +128% increased Effect of Frenzy 来自 relic/ring1 词条；换装备需重读",
+      "+8 during Frenzy 的落地形式（added flat fire vs increased）按 added 处理（assumed）"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "increased",
+    "stacking_policy": "additive",
+    "order_policy": "Frenzy 的攻速为 increased 池；Frenzied Flame 的 added fire 进 Fire added 池；两者都不改变 FR 冷却",
+    "more_group_source": "n/a（increased/added，不是 more 组）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ],
+  "limitations": [
+    {
+      "item": "复合效果边界",
+      "reason": "本条保留旧技能附加火伤组合；通用 Frenzy 攻速查 buff-frenzy-speed，Sword Catcher 条件点伤查 item-sword-catcher-frenzy-added-melee。不得向其它技能套用旧节点点伤。",
+      "blocks_full_dps": false
+    }
+  ]
+}

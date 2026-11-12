@@ -1,0 +1,915 @@
+{
+  "dataset_id": "phase1-dataset-003",
+  "run_id": null,
+  "schema_version": "1",
+  "normalizer_version": "0.1.0",
+  "mapping_revision": "2",
+  "parser_versions": {
+    "jsdata_literal_parser": "1",
+    "letools": "1",
+    "tunklab": "1"
+  },
+  "exported_at": "2026-11-04T14:35:41+00:00",
+  "generation_command": "<repo>\\tools\\ingest\\src\\le_data\\cli.py publish --dataset phase1-dataset-003 --report-key phase1-dataset-003",
+  "config_file": null,
+  "target_game_version": "1.5.2",
+  "target_season": "Season 5",
+  "dataset_status": "valid",
+  "compatibility_conclusion": "{\"target_game_version\": \"1.5.2\", \"target_season\": \"Season 5\", \"sources\": {\"letools\": \"1.5.2\", \"tunklab\": \"1.5.2\"}, \"decision\": \"compatible\", \"evidence\": \"claimed page versions equal the target; module-level version evidence is stored per source snapshot in source_snapshots.version_evidence\"}",
+  "sources": [
+    {
+      "source": "letools",
+      "source_snapshot_id": "letools-v152-20261101",
+      "entry_url": "https://www.lastepochtools.com/skills/",
+      "claimed_version": "1.5.2",
+      "version_evidence": [
+        {
+          "kind": "js_global_variable",
+          "name": "dataVersion",
+          "raw_value": "version152",
+          "locator": "window['dataVersion']",
+          "url": "https://www.lastepochtools.com/skills/",
+          "resource_name": "page_skills",
+          "sha256": "e2db73e360031dfd54749098addff4348c7a4359288cd5f9d324c9f6fb3210c0",
+          "observed_at": "2026-11-01T10:12:49+00:00"
+        },
+        {
+          "kind": "translation_endpoint",
+          "resource_name": "translations_game_full_en",
+          "namespace": "full",
+          "url": "https://www.lastepochtools.com/data/version152/i18n/full/en.json",
+          "derivation": "dataVersion directory + /i18n/full/<lang>.json",
+          "derived_from_data_version": "version152"
+        },
+        {
+          "kind": "translation_endpoint",
+          "resource_name": "translations_site_en",
+          "namespace": "site",
+          "url": "https://www.lastepochtools.com/static_data/i18n/en.json",
+          "derivation": "fixed static_data i18n path (versioned cache marker langSiteCacheMarker)",
+          "derived_from_data_version": "version152"
+        },
+        {
+          "kind": "config_claim",
+          "value": "1.5.2",
+          "source": "config (sources config claimed_version)"
+        },
+        {
+          "kind": "js_global_variable",
+          "name": "gameVersion",
+          "raw_value": "Version 1.5.2",
+          "locator": "window.gameVersion",
+          "url": "https://www.lastepochtools.com/data/version152/db/js/d510be4c0d247363d6c18be32b2074d2.js",
+          "resource_name": "db_d510be4c0d247363d6c18be32b2074d2",
+          "sha256": "5e34709fde5239ccff97759323ecd3df0e7a6b85a1dd5921e1a90f699f28ac78",
+          "observed_at": "2026-11-01T10:13:03+00:00"
+        },
+        {
+          "kind": "js_global_variable",
+          "name": "gameVersion",
+          "raw_value": "Version 1.5.2",
+          "locator": "window.gameVersion",
+          "url": "https://www.lastepochtools.com/data/version152/checklist/js/6665c2325c28c6a3a7a82fadf7d5b71d.js",
+          "resource_name": "checklist_6665c2325c28c6a3a7a82fadf7d5b71d",
+          "sha256": "c0009c3acac79aa60ee331e25ede506498056a4ec630a5e1d247c24299c46e25",
+          "observed_at": "2026-11-01T10:13:14+00:00"
+        }
+      ],
+      "fetch_mode": "auto",
+      "fetch_started_at": "2026-11-01T10:13:18+00:00",
+      "fetch_finished_at": "2026-11-01T10:13:18+00:00",
+      "status": "ok",
+      "local_game_build": null,
+      "resources": [
+        {
+          "resource_name": "checklist_6665c2325c28c6a3a7a82fadf7d5b71d",
+          "url": "https://www.lastepochtools.com/data/version152/checklist/js/6665c2325c28c6a3a7a82fadf7d5b71d.js",
+          "role": "checklist",
+          "sha256": "c0009c3acac79aa60ee331e25ede506498056a4ec630a5e1d247c24299c46e25",
+          "size_bytes": 20533,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\checklist_6665c2325c28c6a3a7a82fadf7d5b71d.body"
+        },
+        {
+          "resource_name": "db_88b267861a5e330c3054cb82da02441b",
+          "url": "https://www.lastepochtools.com/data/version152/db/js/88b267861a5e330c3054cb82da02441b.js",
+          "role": "db",
+          "sha256": "010ca66be102254accf3e49e526650a6afe83b147cf6c7a36a7dbd2a9f4ab970",
+          "size_bytes": 881743,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\db_88b267861a5e330c3054cb82da02441b.body"
+        },
+        {
+          "resource_name": "db_cd9337ad0e2da75bacdbb077ff28f1c6",
+          "url": "https://www.lastepochtools.com/data/version152/db/js/cd9337ad0e2da75bacdbb077ff28f1c6.js",
+          "role": "db",
+          "sha256": "be5b892aabc539b7a3046f98f3b48599d91eeed1fa75a5afaa199db39f34af13",
+          "size_bytes": 1049597,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\db_cd9337ad0e2da75bacdbb077ff28f1c6.body"
+        },
+        {
+          "resource_name": "db_d510be4c0d247363d6c18be32b2074d2",
+          "url": "https://www.lastepochtools.com/data/version152/db/js/d510be4c0d247363d6c18be32b2074d2.js",
+          "role": "db",
+          "sha256": "5e34709fde5239ccff97759323ecd3df0e7a6b85a1dd5921e1a90f699f28ac78",
+          "size_bytes": 3152422,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\db_d510be4c0d247363d6c18be32b2074d2.body"
+        },
+        {
+          "resource_name": "endgame_c38f41a98f2786aa657b4278cb2db36c",
+          "url": "https://www.lastepochtools.com/data/version152/endgame/js/c38f41a98f2786aa657b4278cb2db36c.js",
+          "role": "endgame",
+          "sha256": "6b1cef94180d4c00dcafc8c4197678d02aa0795d2b292bf660e1563cab0c4962",
+          "size_bytes": 592554,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\endgame_c38f41a98f2786aa657b4278cb2db36c.body"
+        },
+        {
+          "resource_name": "factions_a40604a2732ed3aaddfb55018cc51712",
+          "url": "https://www.lastepochtools.com/data/version152/factions/js/a40604a2732ed3aaddfb55018cc51712.js",
+          "role": "factions",
+          "sha256": "d0fff28ca4000dc6bb2991d399dcc48dbc2df51276bc2ef95ce906679ceeccfb",
+          "size_bytes": 9026,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\factions_a40604a2732ed3aaddfb55018cc51712.body"
+        },
+        {
+          "resource_name": "planner_3efb2055376cc1c0647de8711a4198ae",
+          "url": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js",
+          "role": "planner",
+          "sha256": "b56cc30e252857a497d8901c9d837e561fa8555d70e5c39ed8e3df9422d37959",
+          "size_bytes": 5831685,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\planner_3efb2055376cc1c0647de8711a4198ae.body"
+        },
+        {
+          "resource_name": "planner_8650cf85d128b474a6e6943ca3594127",
+          "url": "https://www.lastepochtools.com/data/version152/planner/js/8650cf85d128b474a6e6943ca3594127.js",
+          "role": "planner",
+          "sha256": "ee554cb99a730313cc21a16b7fe7d13ddadd19aa378f0f32df609a873ea16cfd",
+          "size_bytes": 2116252,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\planner_8650cf85d128b474a6e6943ca3594127.body"
+        },
+        {
+          "resource_name": "planner_ff633614744f57f936f737f438363135",
+          "url": "https://www.lastepochtools.com/data/version152/planner/js/ff633614744f57f936f737f438363135.js",
+          "role": "planner",
+          "sha256": "ddfa6dbf0b93645bba4185b32c1d6260e52ded7cd2597158eb91cf3e42175437",
+          "size_bytes": 3241060,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\planner_ff633614744f57f936f737f438363135.body"
+        },
+        {
+          "resource_name": "skills_cc7f4063859e79081c013d31aac98742",
+          "url": "https://www.lastepochtools.com/data/version152/skills/js/cc7f4063859e79081c013d31aac98742.js",
+          "role": "skills",
+          "sha256": "f325f7692cf3bf868ef477c06977a03d17b510e97b3c6da9a59cc4904b20a47d",
+          "size_bytes": 3518535,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\skills_cc7f4063859e79081c013d31aac98742.body"
+        },
+        {
+          "resource_name": "skills_fc0697b56ed93f29b7c35f812ac60b35",
+          "url": "https://www.lastepochtools.com/data/version152/skills/js/fc0697b56ed93f29b7c35f812ac60b35.js",
+          "role": "skills",
+          "sha256": "ae84adb66197cba425e09eba9d796a12caf21e500735423d694e284d2716ffb9",
+          "size_bytes": 2384236,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\skills_fc0697b56ed93f29b7c35f812ac60b35.body"
+        },
+        {
+          "resource_name": "translations_game_full_en",
+          "url": "https://www.lastepochtools.com/data/version152/i18n/full/en.json",
+          "role": "translations",
+          "sha256": "38555002a9774ba173fbea033bc6b4cef46b60509e7b45283dc20edb0d854f8a",
+          "size_bytes": 3155578,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\translations_game_full_en.body"
+        },
+        {
+          "resource_name": "translations_site_en",
+          "url": "https://www.lastepochtools.com/static_data/i18n/en.json",
+          "role": "translations",
+          "sha256": "03a65b7556708fd47e35debf0c6f9deae3b188c7dabaac8e5a61b52bca9d4fdc",
+          "size_bytes": 352099,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\letools\\letools-v152-20261101\\responses\\translations_site_en.body"
+        }
+      ],
+      "source_record_counts": {
+        "ability": 1228,
+        "ability_config": 3,
+        "ability_id_index": 2,
+        "affix": 1156,
+        "ailment": 148,
+        "buff": 264,
+        "class": 5,
+        "duplicate_window": 12,
+        "endgame_config": 8,
+        "enum": 8,
+        "faction": 4,
+        "faction_config": 2,
+        "invocation": 1,
+        "item_base": 1558,
+        "item_config": 21,
+        "item_type": 48,
+        "mastery": 20,
+        "minion_entity": 96,
+        "passive_bonus": 5,
+        "passive_node": 541,
+        "passive_tree": 5,
+        "passive_tree_ui": 5,
+        "planner_config": 1,
+        "property": 1040,
+        "property_config": 5,
+        "quest": 36,
+        "quest_config": 3,
+        "relation_candidate": 3266,
+        "set_bonus": 25,
+        "skill_bonus": 136,
+        "skill_config": 1,
+        "skill_tree": 136,
+        "skill_tree_node": 3956,
+        "skill_tree_ui": 136,
+        "translation": 39400,
+        "unique": 486,
+        "version": 1,
+        "version_history": 5,
+        "weaver_node": 80,
+        "weaver_tree": 1,
+        "weaver_tree_ui": 1
+      }
+    },
+    {
+      "source": "tunklab",
+      "source_snapshot_id": "tunklab-v152-20261101",
+      "entry_url": null,
+      "claimed_version": "1.5.2",
+      "version_evidence": {
+        "claimed_version": "1.5.2",
+        "game_version_banners": [
+          {
+            "resource_name": "page_root",
+            "page": "/",
+            "text": "1.5.2"
+          }
+        ],
+        "claimed_version_pages": {
+          "/": 1,
+          "/skillsearch": 0,
+          "/buffs": 0,
+          "/ailments": 0,
+          "/class/mage": 0
+        },
+        "site_counts": {
+          "Base Items": 698,
+          "Unique Items": 463,
+          "Affixes": 1156,
+          "Skills": 136,
+          "Skill Nodes": 3956,
+          "Quests": 87,
+          "Zones": 482
+        },
+        "module_versions": {}
+      },
+      "fetch_mode": "auto",
+      "fetch_started_at": "2026-11-01T10:13:55+00:00",
+      "fetch_finished_at": "2026-11-01T10:13:55+00:00",
+      "status": "ok",
+      "local_game_build": null,
+      "resources": [
+        {
+          "resource_name": "chunk_033tkhvb3rmkn.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/033tkhvb3rmkn.js",
+          "role": null,
+          "sha256": "552426d3874c503c2ace5bcce29e9a74cd66f91cf4ef0154fd3e9a20baf8d5d8",
+          "size_bytes": 112253,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_033tkhvb3rmkn.js.body"
+        },
+        {
+          "resource_name": "chunk_039gab1sew_mh.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/039gab1sew_mh.js",
+          "role": null,
+          "sha256": "f7a8f09bae1ff605ffd0574372a388d7ca2b53884f8fb7e83f7647811e81bd72",
+          "size_bytes": 7256,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_039gab1sew_mh.js.body"
+        },
+        {
+          "resource_name": "chunk_0430-8cl4viex.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/0430-8cl4viex.js",
+          "role": null,
+          "sha256": "90eb19cdf982d3758bb7bb68bc8ff868860594ea50eb00af0777f1eecef9bd53",
+          "size_bytes": 7963976,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_0430-8cl4viex.js.body"
+        },
+        {
+          "resource_name": "chunk_0_gctk-sux77f.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/0_gctk-sux77f.js",
+          "role": null,
+          "sha256": "e321a6714d79a5d60bd73c204a3eb28dc7862e49fffb13fbd6f9c0c77fad8a95",
+          "size_bytes": 266200,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_0_gctk-sux77f.js.body"
+        },
+        {
+          "resource_name": "chunk_0ab9re99gk0fp.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/0ab9re99gk0fp.js",
+          "role": null,
+          "sha256": "73b1249255aad88b7d405a7187cc8d6d1f0a690f3f1375f2692ad67a63b362f8",
+          "size_bytes": 184389,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_0ab9re99gk0fp.js.body"
+        },
+        {
+          "resource_name": "chunk_0ghs620fz0anl.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/0ghs620fz0anl.js",
+          "role": null,
+          "sha256": "efcb25c748bce176dd3237fee7e044344541dc564f9b79e352f2854e1266d010",
+          "size_bytes": 28508,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_0ghs620fz0anl.js.body"
+        },
+        {
+          "resource_name": "chunk_0lqh3m_ps8qh4.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/0lqh3m_ps8qh4.js",
+          "role": null,
+          "sha256": "e5ed838ab66b9d4a3d2bb39cb5f45ab91958e21623851a956af4bf06d317f92a",
+          "size_bytes": 10374,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_0lqh3m_ps8qh4.js.body"
+        },
+        {
+          "resource_name": "chunk_0pnhiam22188o.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/0pnhiam22188o.js",
+          "role": null,
+          "sha256": "f50f2a216dbbed479054d7d6c4ba4dc465b0dcec3724300730611d57cda8630a",
+          "size_bytes": 22452,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_0pnhiam22188o.js.body"
+        },
+        {
+          "resource_name": "chunk_0svsdish-g6fo.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/0svsdish-g6fo.js",
+          "role": null,
+          "sha256": "d72071362f99bb581b6b5f2c8e2caccd13d0a0b155a24f3f0b6cd41b0a24432b",
+          "size_bytes": 59817,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_0svsdish-g6fo.js.body"
+        },
+        {
+          "resource_name": "chunk_0zaj6myudbu94.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/0zaj6myudbu94.js",
+          "role": null,
+          "sha256": "7e1ca9c18ec880cb2f531b000e2d93bca6d0e0c299db0417e379a1b9be5fe202",
+          "size_bytes": 51975,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_0zaj6myudbu94.js.body"
+        },
+        {
+          "resource_name": "chunk_16hbe4-huzxfj.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/16hbe4-huzxfj.js",
+          "role": null,
+          "sha256": "8363263521532976461749841ca108131fd2408a1c8ca71b710d2d015d555f97",
+          "size_bytes": 661374,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_16hbe4-huzxfj.js.body"
+        },
+        {
+          "resource_name": "chunk_19p1h-qy5ap-3.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/19p1h-qy5ap-3.js",
+          "role": null,
+          "sha256": "f179b791243457e22aa0b1b8c8145f7ef2951b987a78934591831be9ca56f845",
+          "size_bytes": 21528,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_19p1h-qy5ap-3.js.body"
+        },
+        {
+          "resource_name": "chunk_1bjrh5wyanrxj.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/1bjrh5wyanrxj.js",
+          "role": null,
+          "sha256": "a73a5ffc24845144dd88e257f48c07846b06fced96111e60d81f82185fea20d9",
+          "size_bytes": 63409,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_1bjrh5wyanrxj.js.body"
+        },
+        {
+          "resource_name": "chunk_1if6ffrryd670.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/1if6ffrryd670.js",
+          "role": null,
+          "sha256": "42c2f39e26ee84238034f07a3c0c3f10030fe3a6523c8b66d437945729420385",
+          "size_bytes": 23197,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_1if6ffrryd670.js.body"
+        },
+        {
+          "resource_name": "chunk_1ltjauzpe4wwp.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/1ltjauzpe4wwp.js",
+          "role": null,
+          "sha256": "db0428f5d4feae3351af8df2d8204a100a8993fa8456af5c3e6f8d0b26a1028d",
+          "size_bytes": 34639,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_1ltjauzpe4wwp.js.body"
+        },
+        {
+          "resource_name": "chunk_1oc1oi3tldmxb.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/1oc1oi3tldmxb.js",
+          "role": null,
+          "sha256": "9d874867907b3cfab85954148b095a19aff5096192772f54b9cf4e801c0f767e",
+          "size_bytes": 5259,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_1oc1oi3tldmxb.js.body"
+        },
+        {
+          "resource_name": "chunk_1u2atngvw2gfo.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/1u2atngvw2gfo.js",
+          "role": null,
+          "sha256": "dd04426b5c84db3a838958fb4bf0eba2a7d16ab9b27809402f99d5d83a37a417",
+          "size_bytes": 47519,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_1u2atngvw2gfo.js.body"
+        },
+        {
+          "resource_name": "chunk_1xbwm4iifo2k2.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/1xbwm4iifo2k2.js",
+          "role": null,
+          "sha256": "78d6042d142ce0ca776776b9ffda4975137f2eea48f5613d678330e9e3f8379d",
+          "size_bytes": 1485184,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_1xbwm4iifo2k2.js.body"
+        },
+        {
+          "resource_name": "chunk_200ite7ufp2c7.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/200ite7ufp2c7.js",
+          "role": null,
+          "sha256": "17685b0ad6cba0aabe293a3434c18dd06ccce061653ec1e8dba581178748781a",
+          "size_bytes": 5650,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_200ite7ufp2c7.js.body"
+        },
+        {
+          "resource_name": "chunk_2_lyhwkj0t-bc.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/2_lyhwkj0t-bc.js",
+          "role": null,
+          "sha256": "d1fd7f1d6598666f037cc22b800b2ab667bb392bf8340e1b29602d8a0dd82532",
+          "size_bytes": 38248,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_2_lyhwkj0t-bc.js.body"
+        },
+        {
+          "resource_name": "chunk_3-fmeg0slqnz8.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3-fmeg0slqnz8.js",
+          "role": null,
+          "sha256": "82d1422441077cac675b86b994ef13ffa0e067ff6e22197182ac6430ce72a28d",
+          "size_bytes": 254894,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3-fmeg0slqnz8.js.body"
+        },
+        {
+          "resource_name": "chunk_31as05p6p507k.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/31as05p6p507k.js",
+          "role": null,
+          "sha256": "2735b1a315aa99e53f86d07c6ff9c7191284a5e4043df52e712f864e0bdfea9b",
+          "size_bytes": 26492,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_31as05p6p507k.js.body"
+        },
+        {
+          "resource_name": "chunk_3b_jwyfcvk645.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3b_jwyfcvk645.js",
+          "role": null,
+          "sha256": "8e3444d75e352217202042e034062496863ea59d2f5abc41cccdb54575f327b7",
+          "size_bytes": 23189,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3b_jwyfcvk645.js.body"
+        },
+        {
+          "resource_name": "chunk_3bled2ygns2um.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3bled2ygns2um.js",
+          "role": null,
+          "sha256": "d58f55fdaabfbca1cf66940750fc6190151dc57dd7c09aa30c62dd88425b39c6",
+          "size_bytes": 26943,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3bled2ygns2um.js.body"
+        },
+        {
+          "resource_name": "chunk_3fd2u7g61f0rn.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3fd2u7g61f0rn.js",
+          "role": null,
+          "sha256": "318b55905d828bb58d3deb1f567745dbae51fba0d3ec71910b0632c225d6be7d",
+          "size_bytes": 13528,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3fd2u7g61f0rn.js.body"
+        },
+        {
+          "resource_name": "chunk_3oj-irf_x0yk6.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3oj-irf_x0yk6.js",
+          "role": null,
+          "sha256": "f03db449989f6f87328f640a2810c735ceb599b7adc8e5108d28222b80f88a08",
+          "size_bytes": 30983,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3oj-irf_x0yk6.js.body"
+        },
+        {
+          "resource_name": "chunk_3qaoznoin54vm.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3qaoznoin54vm.js",
+          "role": null,
+          "sha256": "d1f692e45c05c38c92744dca7b55090980d60daf3b9722b009242ef1b0b8a314",
+          "size_bytes": 24617,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3qaoznoin54vm.js.body"
+        },
+        {
+          "resource_name": "chunk_3qsdjdsbamhma.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3qsdjdsbamhma.js",
+          "role": null,
+          "sha256": "4f959cd05975db319bb891e0a556c28f342c126b4030071da0a21178e2920349",
+          "size_bytes": 25544,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3qsdjdsbamhma.js.body"
+        },
+        {
+          "resource_name": "chunk_3qurytohg5ynr.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3qurytohg5ynr.js",
+          "role": null,
+          "sha256": "423b97a4e47090893d6ba9a0932ea5a548663d3fe0e4d2291d0597035be61dd8",
+          "size_bytes": 913121,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3qurytohg5ynr.js.body"
+        },
+        {
+          "resource_name": "chunk_3ta0ctplhq9ci.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3ta0ctplhq9ci.js",
+          "role": null,
+          "sha256": "2b826160b4ea556e64bfa8a0d9421f3309de51e58bae65566ebdedc1a6eb328a",
+          "size_bytes": 12757,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3ta0ctplhq9ci.js.body"
+        },
+        {
+          "resource_name": "chunk_3tosi4uul_hmj.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3tosi4uul_hmj.js",
+          "role": null,
+          "sha256": "cb7061898a3fa65649106b38cff86bbadc2c6d907d9b625ab2e24bd3a5559032",
+          "size_bytes": 31247,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3tosi4uul_hmj.js.body"
+        },
+        {
+          "resource_name": "chunk_3wqwaofwqalta.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/3wqwaofwqalta.js",
+          "role": null,
+          "sha256": "526a36bc529c0037c235f31c80dd766248c41c4224fc677481b71c04273518ce",
+          "size_bytes": 22461,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_3wqwaofwqalta.js.body"
+        },
+        {
+          "resource_name": "chunk_4558t_0mgc5j4.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/4558t_0mgc5j4.js",
+          "role": null,
+          "sha256": "edc266aa9ceef2c1e695e5760ea38f40dd3d86281ace886f8dc05de3ebee9582",
+          "size_bytes": 819,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_4558t_0mgc5j4.js.body"
+        },
+        {
+          "resource_name": "chunk_turbopack-2c3mg3r-05n1w.js",
+          "url": "https://lastepoch.tunklab.com/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+          "role": null,
+          "sha256": "b5f9b5199b99ab6c141f4540f0b7d0fe803c4ecf6956849ecb6e59d3d439272e",
+          "size_bytes": 11255,
+          "http_status": 200,
+          "fetch_status": "fetched",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\chunk_turbopack-2c3mg3r-05n1w.js.body"
+        },
+        {
+          "resource_name": "page_ailments",
+          "url": "https://lastepoch.tunklab.com/ailments",
+          "role": null,
+          "sha256": "b9a6670c61d5db3ac261e1b0f01cf9f0e48096afd4ab2b5ea16ad64b4e335a3b",
+          "size_bytes": 332036,
+          "http_status": 200,
+          "fetch_status": "cache_hit",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\page_ailments.body"
+        },
+        {
+          "resource_name": "page_buffs",
+          "url": "https://lastepoch.tunklab.com/buffs",
+          "role": null,
+          "sha256": "fd1ebf222dac1219be07dd865b7b6bb8fb6c4c8c0f84e950a092beb8431f24ff",
+          "size_bytes": 275993,
+          "http_status": 200,
+          "fetch_status": "cache_hit",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\page_buffs.body"
+        },
+        {
+          "resource_name": "page_class_mage",
+          "url": "https://lastepoch.tunklab.com/class/mage",
+          "role": null,
+          "sha256": "c003827bcc23666bb2cf5b4d37dfc7f1455bd98596249accab789e50f4bdd24e",
+          "size_bytes": 142768,
+          "http_status": 200,
+          "fetch_status": "cache_hit",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\page_class_mage.body"
+        },
+        {
+          "resource_name": "page_root",
+          "url": "https://lastepoch.tunklab.com/",
+          "role": null,
+          "sha256": "92f01fe925aad31722c2fefbf4cc5675fff82dbf465fa36401dbb8bce15b2c23",
+          "size_bytes": 82018,
+          "http_status": 200,
+          "fetch_status": "cache_hit",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\page_root.body"
+        },
+        {
+          "resource_name": "page_skillsearch",
+          "url": "https://lastepoch.tunklab.com/skillsearch",
+          "role": null,
+          "sha256": "fed90a216df434529707006c6b0bb8dcb331767941c98727de3c15e8369bb718",
+          "size_bytes": 107242,
+          "http_status": 200,
+          "fetch_status": "cache_hit",
+          "local_path": "data\\raw\\tunklab\\tunklab-v152-20261101\\responses\\page_skillsearch.body"
+        }
+      ],
+      "source_record_counts": {
+        "ability": 4350,
+        "ability_properties": 177,
+        "affix": 1156,
+        "ailment": 147,
+        "buff": 264,
+        "cache": 52,
+        "class": 5,
+        "dungeon": 3,
+        "item_set": 25,
+        "item_type": 47,
+        "loot_group": 57,
+        "mastery": 20,
+        "monolith_config": 2,
+        "monolith_mod": 290,
+        "monster": 884,
+        "passive_tree": 5,
+        "passive_tree_node": 541,
+        "property": 113,
+        "property_text": 713,
+        "quest": 139,
+        "relation": 14897,
+        "skill_tree": 137,
+        "skill_tree_node": 3956,
+        "timeline": 10,
+        "unique_item": 487,
+        "world_config": 1
+      }
+    }
+  ],
+  "database": {
+    "path": "data\\releases\\phase1-dataset-003\\data.sqlite",
+    "sha256": "afa79e9fda0023b2ed09f4cbe8e07da436e0c74c03f34f80772da471c0adb8ab",
+    "size_bytes": 263401472,
+    "logical_content_sha256": "979d18204631746e183dd533d647a8e7e8138ac96ded3b0f19324669b9f80527",
+    "logical_fingerprint": {
+      "logical_sha256": "979d18204631746e183dd533d647a8e7e8138ac96ded3b0f19324669b9f80527",
+      "tables": {
+        "source_snapshots": {
+          "rows": 2,
+          "sha256": "266c854701e6a7f0b0a3e4414167e4f55fc8bcc52537196779ca8aa9b702d507"
+        },
+        "raw_resources": {
+          "rows": 52,
+          "sha256": "db33ffd58c08b8de5f8082fcb4a65478b9157ac4f64d61806a373025a5b31bde"
+        },
+        "source_records": {
+          "rows": 82333,
+          "sha256": "ab9ed822abbee5b93ab5963ddcc2d6716beafc571cf56c37088d6773d912808d"
+        },
+        "entities": {
+          "rows": 17362,
+          "sha256": "cbd8f8371da0bb287b06983f380f13dec4c6c057e79703e5a007cb8131f7f2e0"
+        },
+        "entity_names": {
+          "rows": 18106,
+          "sha256": "a0cf6832dc0237799864ffc7da8339ca634a4ce887bbd520b3c5691223b64c70"
+        },
+        "source_id_map": {
+          "rows": 24443,
+          "sha256": "04c9429802fccdaf8a5488c250c81e3611f14368d5fb4c0ba27c525372749ecd"
+        },
+        "classes": {
+          "rows": 5,
+          "sha256": "e6abab50618143306512bc9df97670c52286f0d65ee9457972ebb0c39d763e8e"
+        },
+        "masteries": {
+          "rows": 20,
+          "sha256": "0a124e211ee2af40aef09391670ba80c9c698f5dd8578cffcb6275e290a591ac"
+        },
+        "skills": {
+          "rows": 1228,
+          "sha256": "1fcc849332db8761a183518a7aa79c26dac4902deabe4b18dcc781c4ecec423f"
+        },
+        "skill_components": {
+          "rows": 2516,
+          "sha256": "776f3266d23c72e420426f6183e16b60ca86d48ed2c2799af5f03615bb310eba"
+        },
+        "trees": {
+          "rows": 142,
+          "sha256": "69b7acbc063916d90234aa9b9668d8650529c2ac640b231a0ed20fffede8b9d5"
+        },
+        "nodes": {
+          "rows": 4577,
+          "sha256": "ff13ffdf7767a846b975b0be484061529d068c17f31e0b65dcc0beaa87ce21c8"
+        },
+        "node_edges": {
+          "rows": 4932,
+          "sha256": "b371658a744eda781e4ff56db4cc17f0d6ab1221de767a002699d174a19daf64"
+        },
+        "tags": {
+          "rows": 29,
+          "sha256": "52e8381e13451fed4f9d64701e65e4170c91b5dae861f8853c2eb25a563ee8ee"
+        },
+        "entity_tags": {
+          "rows": 2336,
+          "sha256": "9236f4725dfcbd0eb17fa4e3805c493273127c5b8d5504bea44a037d27b1296f"
+        },
+        "stats": {
+          "rows": 3320,
+          "sha256": "a1042350362565338765fd1180c1fa05c74268e7e543eac76bd5a4f5e1943ed9"
+        },
+        "effects": {
+          "rows": 18597,
+          "sha256": "e35f34e9ad66f83cc175c83530297df571ebd3e8a436ac9edb90b9161a795b07"
+        },
+        "effect_values": {
+          "rows": 16248,
+          "sha256": "aa2df2e5bfce730157caed6673465a17511943ee1226ee8476a68f9565726dba"
+        },
+        "buffs": {
+          "rows": 264,
+          "sha256": "bc8012482e39a4d50d435abf5af1b91c836c31b5465bc4a50e93c4307e8dd1a9"
+        },
+        "ailments": {
+          "rows": 148,
+          "sha256": "797b650478e9b548b45e5a8c04095d2ebc2188c828601c973ba14005a737368a"
+        },
+        "items": {
+          "rows": 1748,
+          "sha256": "ce8b535bf44345dbbf44af44f828ae69223cc34cbb48045e60374cc062b0a0ae"
+        },
+        "affixes": {
+          "rows": 1156,
+          "sha256": "1d6ed9c5a5bfff0bf0afc746a4fc20c3b131f8e3a47ca160be3c116ae052c366"
+        },
+        "affix_tiers": {
+          "rows": 6238,
+          "sha256": "a29630754fc6dadf9667bcfe309e9457d179a6e13a2dc2062c337fae432664b4"
+        },
+        "item_affixes": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "set_memberships": {
+          "rows": 61,
+          "sha256": "5821c13e7dde3c075a42abcd5b3f4130cec21446b145c0b850cfe52e5a006369"
+        },
+        "idols": {
+          "rows": 73,
+          "sha256": "63be203b7eefe3e4a75cd13ed3ee156e801a5cbc8c4f07a5e87e6c3020cca7b2"
+        },
+        "blessings": {
+          "rows": 224,
+          "sha256": "f24ac96b5b1f5f31785d3c4304e8d0b3502846f3add05ac617be05125c052fb1"
+        },
+        "season_entities": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "minions": {
+          "rows": 96,
+          "sha256": "45baf4c47780caae977e3ba3f9e03acbcd44299139dd99bd418740eda808e090"
+        },
+        "entity_relationships": {
+          "rows": 18233,
+          "sha256": "ed199203a8b9ba75d4bef1931727ef76461af4cb56f5967ce326191ddf042f84"
+        },
+        "field_evidence": {
+          "rows": 138365,
+          "sha256": "b7dfe13ccdd20d0b65b99ca08019640137b32fcc1aa23f67fe859ddd1ace2178"
+        },
+        "field_selections": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "data_issues": {
+          "rows": 1756,
+          "sha256": "294606238d254151127b694e3cc0a212198f2513c5e41b09e9c4cf3661c52afe"
+        },
+        "mapping_registry": {
+          "rows": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "translations": {
+          "rows": 39400,
+          "sha256": "cc533c1e879f9dd0530455349dec96a97fe143a92386f7120ae630b38d4c38be"
+        }
+      },
+      "generated_at": "2026-11-04T14:35:41+00:00"
+    }
+  },
+  "counts": {
+    "source_snapshots": 2,
+    "raw_resources": 52,
+    "source_records": 82333,
+    "entities": 17362,
+    "entity_names": 18106,
+    "source_id_map": 24443,
+    "classes": 5,
+    "masteries": 20,
+    "skills": 1228,
+    "skill_components": 2516,
+    "trees": 142,
+    "nodes": 4577,
+    "node_edges": 4932,
+    "tags": 29,
+    "entity_tags": 2336,
+    "stats": 3320,
+    "effects": 18597,
+    "effect_values": 16248,
+    "buffs": 264,
+    "ailments": 148,
+    "items": 1748,
+    "affixes": 1156,
+    "affix_tiers": 6238,
+    "item_affixes": 0,
+    "set_memberships": 61,
+    "idols": 73,
+    "blessings": 224,
+    "season_entities": 0,
+    "minions": 96,
+    "entity_relationships": 18233,
+    "field_evidence": 138365,
+    "field_selections": 0,
+    "data_issues": 1756,
+    "mapping_registry": 0,
+    "translations": 39400
+  },
+  "issue_counts": {
+    "info": 1630,
+    "warning": 126
+  },
+  "open_issues": 1756,
+  "unresolved_relationships": 6351,
+  "quality_state": "issues_open",
+  "limitations": []
+}

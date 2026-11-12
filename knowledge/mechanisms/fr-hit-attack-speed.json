@@ -1,0 +1,217 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-attack-speed",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave 攻速模型（技能 as × speedMultiplier 基率，increased 加算/more 分组）",
+    "en": "Flame Reave attack-speed model (skill as x speedMultiplier base rate)"
+  },
+  "aliases": [
+    "attack speed",
+    "attack rate",
+    "APS",
+    "攻速",
+    "speedScaler",
+    "attack_speed"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "attack_speed"
+      ]
+    },
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "flame-reave:attack-rate-alternatives"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "base_aps",
+      "source": "current:matched_instances",
+      "unit": "attacks_per_second"
+    },
+    {
+      "parameter": "speed_multiplier / speed_scaler",
+      "source": "current:matched_instances",
+      "unit": "mixed"
+    },
+    {
+      "parameter": "use_duration_s / use_delay_s",
+      "source": "current:matched_instances",
+      "unit": "seconds"
+    },
+    {
+      "parameter": "increased AS rows",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "final APS",
+      "source": "current:matched_instances",
+      "unit": "attacks_per_second"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R3",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/attack_model；#/rules id=R2/R3"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_simulate",
+    "symbol": "_base_attack_rate",
+    "note": "base_aps = as × speedMultiplier（= 1.1 × speedMultiplier / useDuration）；_attack_speed_pools 汇总 increased/more"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "user_conversation#2026-11-07",
+      "note": "攻速基础公式：base_aps = as × speedMultiplier；武器 attackRate 不参与；increased/more 池不变"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/attack_model",
+      "note": "ruleset 公式、alternatives 与 dual_wield 口径"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#R3.base_rate_formula",
+      "note": "facts 记录 as=1.1/useDuration 的交叉验证"
+    },
+    {
+      "kind": "planner_runtime",
+      "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 569845",
+      "note": "第三方 rrlnr 基率公式（参考）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skills entity_id=skill:letools:LEAbilities.abilityList:fr11mv",
+      "note": "as/useDuration/speedMultiplier/speedScaler/useDelay"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/attack_speed_base_planner",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/speed_multiplier；#/derived/skill/speed_scaler",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/use_duration_s；#/derived/skill/use_delay_s",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=attack_speed and operation=increased]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/attack_rate/final_aps；#/increased_attack_speed；#/alternatives",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "fr-hit-increased-pools",
+      "requirement": "攻速的 increased 池与伤害池分开；标签过滤（Melee/无标签）与伤害池一致",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/attack_model/attack_speed_pool"
+    },
+    {
+      "with": "fr-hit-cooldown-icr",
+      "requirement": "冷却与攻速共同决定实际施放速率；主口径冷却受限，备选攻速受限",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation"
+    },
+    {
+      "with": "fr-hit-dual-wield-added",
+      "requirement": "双持时攻速基率仍用技能 as，武器 attackRate 只做显示/备选",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/attack_model/dual_wield"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "OQ3/OQ4：武器 attackRate（0.94/1.2）是否参与近战技能速率；当前按第三方 runtime 口径不参与（用户已确认公式，但游戏真值未验证）",
+      "备选口径 weapon_average_attack_rate 保留在 ruleset.attack_model.alternatives，不做默认",
+      "more attack speed 分组在本 BD 无来源；换 BD 时需按 group 显式登记"
+    ],
+    "requery_when": [
+      "换武器/换 BD（武器 attackRate、more AS 来源变化）",
+      "游戏真值（1.5.x IL2CPP/实测）可用后复核"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "frequency",
+    "stacking_policy": "additive",
+    "order_policy": "final_aps = base_aps × (1+sum(increased AS)) × product(1+more AS groups)；weapon attackRate 不参与",
+    "more_group_source": "more AS 分组来自 contribution.group；本 BD 无 more AS 来源（EW 的攻速也是 increased 池）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

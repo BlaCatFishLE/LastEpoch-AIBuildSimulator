@@ -1,0 +1,88 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-node-more-28",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Black Hole 节点 28：当前点数 more 映射",
+    "en": null
+  },
+  "source_path": "knowledge/mechanisms/bh-node-more-28.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-more-aggregation",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-more-aggregation]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-bh-more-aggregation 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Black Hole 节点 28：当前点数 more 映射",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body、body_fire、ignite；伤害标签：Fire；条件 code：none；必要节点：node:bh2:28",
+      "source": "$.applicability"
+    },
+    {
+      "text": "每个节点的 more 是一个独立 group（node:bh2:<id>）；同一节点多点相加（ruleset value_total），不同节点之间相乘。节点 2/7/10/28 无条件；9 是 Binary 的独立 more（见 bh-binary-system）；23/27 带条件（见 bh-supermassive / bh-weakened-reality）。注意：节点效果引用的 rule-bh-tidal-force / -flaming / -umbral-core / -singularity / -supermassive 未注册在 ruleset.rules[] 中（见 open_questions）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "Ruleset.tree_more_effects 方法；从 ruleset.skill_tree_nodes 提取 damage more 效果；damage.tree_more_groups 按 group 聚合；计算在 damage.compute_body / ignite._ignite_scaling。",
+      "source": "$.handler_ref.note（le_calc.ruleset.Ruleset）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、effect",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/0/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/3/nodes"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups"
+    }
+  ],
+  "limitations": [],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,199 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-ignite-heat-wave",
+  "revision": 2,
+  "title": {
+    "zh": "Heat Wave：周期判定与期望层数",
+    "en": "Heat Wave: per-roll ignite application and expected stacks"
+  },
+  "aliases": [
+    "Heat Wave",
+    "heat_wave",
+    "点燃叠层",
+    "周期判定",
+    "uncapped fire resistance",
+    "期望层数",
+    "applicationInterval",
+    "applyOnStart",
+    "Pyromancer"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:6"
+      ]
+    },
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ignite",
+      "ignite_application",
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Ailment"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:bh2:6"
+    ],
+    "notes": "Heat Wave 光环每个黑洞施放一个（双星共用），按固定判定间隔重复判定、生成瞬间首判；每次判定的期望层数 = 每点系数 × 点数 × 未封顶火抗 × 判定间隔，每秒期望层数不变；判定间隔/系数见 ruleset.ignite.heat_wave。Pyromancer 的 +Ignite Chance 不参与 Heat Wave（实测确认）。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-heat-wave",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-heat-wave]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/heat_wave/points",
+      "note": "node 6 点数（当前案例冻结）。"
+    },
+    {
+      "parameter": "chance_per_point_per_uncapped_fire_res",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/heat_wave/chance_per_point_per_uncapped_fire_res",
+      "unit": "fraction/point",
+      "note": "每点每单位未封顶火抗的点燃几率（数值见 ruleset.ignite.heat_wave）。"
+    },
+    {
+      "parameter": "application_interval_s",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/heat_wave/application_interval_s",
+      "unit": "seconds",
+      "note": "1.5.3 aura applicationInterval。"
+    },
+    {
+      "parameter": "uncapped fire resistance",
+      "source": "current:matched_instances",
+      "unit": "percent",
+      "note": "未封顶火抗（不是上限后的 capped 值）。"
+    },
+    {
+      "parameter": "derived roll expectation",
+      "source": "current:matched_instances",
+      "note": "快照派生：期望层数/判定（当前案例）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ignite",
+    "symbol": "heat_wave_application",
+    "note": "expected_stacks_per_second = per_point × points × uncapped_fire；stacks_per_roll = 每秒 × interval；roll_offsets = spawn + k×interval < duration；build_cohorts 生成期望层数的 cohort。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/heat-wave-aura-1.5.3.json",
+      "note": "1.5.3：同一 aura 组件 addChance 一次、applicationInterval=0.5、applyOnStart=true；双星不额外 roll。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json#/findings/heat_wave",
+      "note": "BlackHoleMutator.Mutate 的 chance 公式与 aura 设置。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json",
+      "note": "游戏内单次施放实测的最高点燃层数与模型接近（记录见 user-heat-wave-validation 证据）；Pyromancer 移除无影响。"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#15",
+      "note": "Heat Wave 光环『每黑洞一次』逆向记录。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/application",
+      "note": "当前 run 的判定次数/间隔/期望层数。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Heat Wave confirmed 的索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/resistances/fire/total",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/heat_wave_expected_stacks_per_roll",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_heat_wave_application",
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_heat_wave_half_second_rolls_keep_same_stacks_per_second",
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_zero_fire_resistance_means_no_ignite",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.expected_total_stacks_applied]",
+    "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-duration",
+      "requirement": "判定次数 = ceil(duration/interval)（duration 内）；duration 变化直接改变层数。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#heat_wave_application"
+    },
+    {
+      "with": "bh-ignite-core",
+      "requirement": "期望层数 × 单层总伤害 = 每批 cohort 总量；施加模型与单层伤害分离。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#build_cohorts"
+    },
+    {
+      "with": "bh-ignite-damage-flow",
+      "requirement": "每个判定生成一个 cohort，cohort 之间重叠、各自到期——尾伤即由此产生。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#IgniteCohort"
+    },
+    {
+      "with": "bh-ignite-scaling-pool",
+      "requirement": "Heat Wave 读取的是未封顶火抗（penetration/更抗性削减不改变它）；与 inc 池无关。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/heat_wave/user_validation"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "docs/evidence/reverse-engineering/heat-wave-aura-1.5.3.json",
+      "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json#/findings/heat_wave",
+      "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json",
+      "docs/evidence/reverse-engineering/README.zh-CN.md#15",
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/heat_wave",
+      "tools/phase3/tests/test_damage.py"
+    ],
+    "open_questions": [
+      "规则包 assumptions 仍保留三条（first roll at spawn / 每黑洞一次而非每星 / 期望值处理需独立判定）；实测支持前两条，第三条是模型口径而非游戏事实——结果必须按期望值而非整数事件解释。",
+      "Pyromancer +Ignite Chance 不参与 Heat Wave 已由实测排除（临时高未封顶火抗下最高层数不变），但它是否参与其它点燃来源（非 BH）不在本案例范围。",
+      "Heat Wave 是否换算穿透（穿透只影响伤害，不影响未封顶火抗）已由代码/规则确认；但『Craterborn 火穿是否提高 Heat Wave 施加』仍是注册表 open question（理论不受影响，未实测）。"
+    ],
+    "requery_when": [
+      "未封顶火抗/节点系数变化时",
+      "出现新的点燃施加来源时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

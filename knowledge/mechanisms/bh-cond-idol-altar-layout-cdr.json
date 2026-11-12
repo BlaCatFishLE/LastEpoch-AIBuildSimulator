@@ -1,0 +1,145 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cond-idol-altar-layout-cdr",
+  "revision": 1,
+  "title": {
+    "zh": "Pyramidal Altar（布局条件 ICR）",
+    "en": "Pyramidal Altar (layout-conditioned increased cooldown recovery speed)"
+  },
+  "aliases": [
+    "Pyramidal Altar",
+    "祭坛",
+    "ICR",
+    "idol layout",
+    "布局条件 CDR"
+  ],
+  "selectors": [
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "equipment:idol_altar"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "player.idol_layout_condition_met"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "frequency",
+      "cooldown",
+      "conditional"
+    ],
+    "conditions": [
+      "player.idol_layout_condition_met"
+    ],
+    "notes": "布局条件：神像网格中没有『更大的神像位于更小的神像上方』。当前数据缺少神像宽高/翻转规则，无法自动判定（grid_validation=not_verified），只能人工声明；条件未判定时不计 +ICR。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "idol_altar.layout_cdr",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=idol_altar.layout_cdr]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "mod",
+      "source": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/96",
+      "note": "equipment.idol_altar implicit：布局条件满足时给 ICR（数值见词条）。"
+    },
+    {
+      "parameter": "effect values",
+      "source": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/13/values"
+    },
+    {
+      "parameter": "state",
+      "source": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.idol_layout_condition_met"
+    },
+    {
+      "parameter": "icr",
+      "source": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_cooldown_recovery_speed_total",
+      "unit": "fraction",
+      "note": "当前 ICR 池（不含该条件行）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional.recompute",
+    "symbol": "recompute_scenario",
+    "note": "可把 +ICR 作为 cooldown_recovery_speed 贡献应用；缺的是布局条件的自动判定，只能人工声明。"
+  },
+  "evidence_state": "unresolved",
+  "implementation_state": "draft",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/13",
+      "note": "注册表条目（research=unresolved；布局条件无法判定）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/13",
+      "note": "当前 run 求值：条件未判定（unknown/未满足）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/idol_altar.layout_cdr",
+      "note": "条件重算通道状态。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/idol_layout",
+      "note": "快照派生的神像布局信息（grid_validation 未验证）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/issues",
+      "note": "快照 issues 中的布局/网格诊断。"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeEffectDirectionTests::test_layout_cdr_changes_loop_dps",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_idol_altar_condition_is_unresolved_and_not_applied",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeChannelSupportTests::test_covers_every_registered_effect"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-cooldown-cdr-icr",
+      "requirement": "ICR 行进入 ICR 分母；条件未满足时不计（数值见词条）。",
+      "evidence_locator": "tools/phase3/src/le_calc/cooldown.py#compute_cooldown"
+    },
+    {
+      "with": "bh-loop-action-policies",
+      "requirement": "ICR 改变充能恢复 → 循环中施放次数变化，但不改单次伤害。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/13/relevance/path"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects/13",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/idol_altar.layout_cdr",
+      "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/idol_layout"
+    ],
+    "open_questions": [
+      "当前神像布局（Grand/Minor/Adorned 等尺寸）是否满足该条件未判定。",
+      "『larger idols above smaller ones』的 above 是网格 y 方向还是物理位置未确认。",
+      "补齐神像宽高/朝向数据后可自动判定；在那之前只能人工声明并标注假设。"
+    ],
+    "requery_when": [
+      "神像网格数据补齐后"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "case_bound"
+}

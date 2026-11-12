@@ -1,0 +1,191 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-skill-level-scaling",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave 技能等级（实际 27 级只影响节点数量，不缩放伤害）",
+    "en": "Flame Reave skill level (27 levels affect node points only, not damage)"
+  },
+  "aliases": [
+    "skill level",
+    "level scaling",
+    "27 level",
+    "R16",
+    "技能等级",
+    "levelScaling"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "flame-reave:skill-level"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "level facts",
+      "source": "current:matched_instances",
+      "unit": "mixed"
+    },
+    {
+      "parameter": "points_total",
+      "source": "current:matched_instances",
+      "unit": "points"
+    },
+    {
+      "parameter": "case structure expectation",
+      "source": "current:matched_instances",
+      "unit": "points"
+    },
+    {
+      "parameter": "levelScale",
+      "source": "data/releases/phase1-dataset-003/data.sqlite#skills entity_id=skill:letools:LEAbilities.abilityList:fr11mv（extensions.levelScaling=[]）",
+      "unit": "n/a"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R16",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/rules id=R16"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_inputs",
+    "symbol": "_skill_level_info",
+    "note": "记录 base_level/level/level_modifiers/level_note；不生成任何伤害 contribution（dataset levelScaling 为空）"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "not_implemented",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "user_conversation#2026-11-07",
+      "note": "实际 27 级；等级只影响技能节点数量、不缩放伤害；FR 已按 27 点建树"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skills entity_id=skill:letools:LEAbilities.abilityList:fr11mv",
+      "note": "extensions.levelScaling=[] → 无每级伤害系数"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/level_modifiers",
+      "note": "+Level of Skills 词条清单（仅显示/记录）"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/current-status.md#3.2 未支持",
+      "note": "current-status：技能等级缩放解释"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/README.md#3.2 技能等级 27",
+      "note": "案例 README：等级只影响节点数量"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/level；#/base_level；#/specialization_points_total；#/level_modifiers；#/level_note",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/structure_counts/fr11mv_points_total；archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/points_total",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/case.legacy-hit.json#/snapshot_expectations/fr11mv_points_total",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "fr-effect-enchant-weapon",
+      "requirement": "EW 的等级（+Level of Skills）同样只影响技能等级显示；EW 的 more 参数不随等级缩放",
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/level_modifiers"
+    },
+    {
+      "with": "fr-hit-single-hit-chain",
+      "requirement": "单次命中链不含 level scaling 乘区（dataset 无数据）",
+      "evidence_locator": "data/releases/phase1-dataset-003/data.sqlite#skills entity_id=skill:letools:LEAbilities.abilityList:fr11mv"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "离线存档显示 20 级是读取/显示 bug；用户裁决实际 27 级（R16 confirmed）",
+      "+1/+4 Level of Skills 词条在 level_modifiers 记录但无伤害路径；若未来 dataset 提供 levelScaling 需要重开条目",
+      "技能等级与 27 点建树为案例私有事实；换 BD 必须重新核 points_total 与 snapshot_expectations"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "none",
+    "stacking_policy": "none",
+    "order_policy": "无伤害路径：等级只决定可分配节点数量；+Level of Skills 词条只进 level_modifiers 显示",
+    "more_group_source": "n/a"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

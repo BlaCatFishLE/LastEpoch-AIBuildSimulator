@@ -1,0 +1,194 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-mana-300-idols",
+  "revision": 2,
+  "title": {
+    "zh": "神像词条 doubled if 300+ maximum mana（当前条件不满足，doubling 未建模）",
+    "en": "Idol affixes doubled at 300+ maximum mana (condition unmet, doubling not modeled)"
+  },
+  "aliases": [
+    "300 mana",
+    "maximum mana",
+    "idol doubled",
+    "mana_ge_300",
+    "神像翻倍"
+  ],
+  "selectors": [
+    {
+      "kind": "idol",
+      "namespace": "idol",
+      "ids": [
+        "equipment:idols.0",
+        "equipment:idols.1",
+        "equipment:idols.3",
+        "equipment:idols.4"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "mana"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "mana_ge_300"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire"
+    ],
+    "conditions": [
+      "mana_ge_300"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effect definition",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=mana_ge_300_idols",
+      "note": "condition: mana_ge_300==true；status not_modeled"
+    },
+    {
+      "parameter": "idol affixes",
+      "source": "current:matched_instances",
+      "note": "increased fire damage；doubled if 300+ maximum mana"
+    },
+    {
+      "parameter": "max mana estimate",
+      "source": "current:matched_instances",
+      "unit": "mana"
+    },
+    {
+      "parameter": "excluded doubled rows",
+      "source": "current:matched_instances",
+      "note": "4 条 #doubled contribution"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "mana_ge_300_idols",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=mana_ge_300_idols"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "evaluate_condition",
+    "note": "mana_ge_300 由快照 derived.mana 判定；不满足时 doubled contribution 进 excluded；基础倍率仍计入"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "not_implemented",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=mana_ge_300_idols",
+      "note": "ruleset 条件效果声明（status confirmed/not_modeled）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods property=98 tags=36",
+      "note": "4 条 idol affix 的基础值/doubled 条件"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#E.max_mana",
+      "note": "max mana 推导：238.51 < 300 → 不满足"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/excluded_contributions",
+      "note": "4 条 doubled 行按条件不满足排除"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods property=98 tags=36（idols.0/1/3/4）",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/mana/mana_max_estimate；#/derived/mana/mana_ge_300",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/excluded_contributions[reason=condition not satisfied]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "mana_ge_300 为快照判定状态；当前 false",
+      "evidence_locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/mana"
+    },
+    {
+      "with": "fr-effect-haste",
+      "requirement": "同为资源/非伤害候选条件，只做筛查",
+      "evidence_locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "max mana 公式来自第三方 runtime（assumed）；本 BD ≈238.5 距 300 有 61.5 余量且无 %mana 来源，结论稳健",
+      "若换 BD/加入 mana 来源，需重新判定 300 阈值并可能激活 doubling",
+      "mana 实际消耗/恢复未建模（R6/R14），本条件不影响命中判定之外的资源循环"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "increased",
+    "stacking_policy": "none",
+    "order_policy": "基础 increased fire 常驻；doubled 部分仅在 mana_ge_300=true 时追加一份同额 increased",
+    "more_group_source": "n/a（increased 池）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

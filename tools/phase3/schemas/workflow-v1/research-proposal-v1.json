@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/research-proposal-v1.json",
+  "title": "ResearchProposal v1（le-research-proposal-v1）",
+  "description": "研究提案（workflow-interface §6.2）。人工或 agent 对某个 ResearchTask 的回复，V1 通过文件交换；outcome 与证据强度分开：unresolved/needs_input 允许结束本轮，proposed_change 必须给出候选变更、证据定位与验证项。校验通过不等于发布，发布走 P4 commit_operation。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "proposal_id",
+    "task_id",
+    "based_on_fingerprint",
+    "outcome",
+    "mechanism_refs",
+    "mapping_refs",
+    "code_change_refs",
+    "evidence_refs",
+    "assumptions",
+    "verification_refs"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "le-research-proposal-v1" },
+    "proposal_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "提案稳定 ID；同 task 可有多份提案，冲突时由 P4 提交阶段按输入指纹裁决"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^research_task-[0-9a-f]{16}$",
+      "description": "必须指向存在的 ResearchTask"
+    },
+    "based_on_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "提案所基于的输入/规则指纹；与 task.input_fingerprint 或当前输入不一致时 validate_proposal 返回 stale_proposal"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["proposed_change", "unresolved", "needs_input"],
+      "description": "proposed_change 需候选 + 证据 + 验证；unresolved/needs_input 正常结束本轮研究"
+    },
+    "mechanism_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "候选机制记录引用（knowledge/mechanisms 条目 ID 或建议的新条目 ID）"
+    },
+    "mapping_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "候选 selector / 节点 / 物品 → 机制映射引用"
+    },
+    "code_change_refs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "候选代码/规则变更引用（产物或变更引用；不接受任意字符串公式）"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "description": "证据定位；证据定位必须有仓库相对 locator/path/artifact_id 之一，sha256 可作完整性声明",
+      "items": {
+        "type": "object",
+        "minProperties": 1,
+        "anyOf": [
+          { "required": ["locator"] },
+          { "required": ["path"] },
+          { "required": ["artifact_id"] }
+        ],
+        "properties": {
+          "kind": { "type": "string" },
+          "locator": { "type": "string", "description": "仓库相对路径 + 行/字节/实体定位" },
+          "path": { "type": "string" },
+          "artifact_id": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "description": "显式假设及其影响范围；status 与 knowledge evidence_state 同一词表",
+      "items": {
+        "type": "object",
+        "required": ["assumption_id"],
+        "properties": {
+          "assumption_id": { "type": "string", "minLength": 1 },
+          "status": {
+            "type": "string",
+            "enum": ["confirmed", "derived", "assumed", "unresolved"]
+          },
+          "note": { "type": "string" },
+          "impact": { "type": "string", "description": "假设成立/不成立时影响哪些组件或数值" },
+          "evidence_locator": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "verification_refs": {
+      "type": "array",
+      "description": "已验证项与待验证场景（proposed_change 必填：正向 + 边界/反向）",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

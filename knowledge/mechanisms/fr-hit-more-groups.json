@@ -1,0 +1,186 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-more-groups",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave more 乘区分组与组间相乘",
+    "en": "Flame Reave more groups (independent multipliers)"
+  },
+  "aliases": [
+    "more",
+    "more groups",
+    "乘区分组",
+    "独立乘区",
+    "multiplicative"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "damage"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Hit"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "more rows",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "more_product",
+      "source": "current:matched_instances",
+      "unit": "multiplier"
+    },
+    {
+      "parameter": "more groups",
+      "source": "current:matched_instances",
+      "note": "每个 group 的 value 与 multiplier"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R19",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/damage_model/more_per_group；#/effects 各 more 效果；#/rules id=R19（Enchant Weapon）/R20（Army of Skin）/R21（Reflash 50% less）"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "_more_groups",
+    "note": "按 group 求和后每组 (1+sum) 相乘；group 缺省时以 contribution_id 为组"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/more_per_group",
+      "note": "ruleset 的 more 分组口径"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:9; node:letools:fr11mv:12; node:letools:fr11mv:13",
+      "note": "节点 9/12/13 的 more 效果与 tags"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#items entity_id=item:letools:uniqueList.uniques:443",
+      "note": "Army of Skin 的 GlobalConditionalDamage more 行"
+    },
+    {
+      "kind": "planner_runtime",
+      "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 436600-439200",
+      "note": "第三方 rrl8o：more 各自相乘（参考）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[operation=more]；tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/totals/more_product",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/components[0]/more_groups",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-more-groups",
+      "requirement": "分组、组内相加/组间相乘由共享算子统一；新来源必须给出来源定位",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/more_per_group"
+    },
+    {
+      "with": "fr-effect-enchant-weapon",
+      "requirement": "Enchant Weapon active/passive 是两个独立 more 组",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=enchant_weapon_active / enchant_weapon_passive_more"
+    },
+    {
+      "with": "fr-hit-rhythm-rotation",
+      "requirement": "Rhythm 消耗的 +130% more 是单次乘区；循环平均由 rotation 层处理，不混入同组",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/rhythm_of_fire"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "R19（EW active/passive more）在 ruleset 为 derived：exact value 来自第三方 runtime 硬编码，缺 1.5.2 游戏真值",
+      "R20 Army of Skin 的 high/full health 阈值与平均覆盖率未验证",
+      "P0 handover §4.2 #8：若把 Rhythm 平均折进 more 组会改数；当前它属于频率/循环层"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "more",
+    "stacking_policy": "none",
+    "order_policy": "product over independent groups；组内 value 相加（同组多来源=加算）",
+    "more_group_source": "group 必须显式来自 ruleset.effects 或 snapshot contribution.group（节点/效果/装备定义），禁止仅凭词条 more 一词推定"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

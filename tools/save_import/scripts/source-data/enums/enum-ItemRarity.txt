@@ -1,0 +1,22 @@
+using Cpp2ILInjected;
+
+namespace Achievements.Conditions;
+
+[Token(Token = "0x2002201")]
+public enum ItemRarity
+{
+	[Token(Token = "0x401148B")]
+	Normal,
+	[Token(Token = "0x401148C")]
+	Magic,
+	[Token(Token = "0x401148D")]
+	Rare,
+	[Token(Token = "0x401148E")]
+	Exalted,
+	[Token(Token = "0x401148F")]
+	Unique,
+	[Token(Token = "0x4011490")]
+	Set,
+	[Token(Token = "0x4011491")]
+	Legendary
+}

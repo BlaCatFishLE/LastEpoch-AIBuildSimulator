@@ -1,0 +1,115 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "ballista-armed-construction-v4",
+  "kind": "definition",
+  "title": {
+    "zh": "Ballista · Armed Construction 爆炸原生定义",
+    "en": "Ballista - Armed Construction explosion native definition"
+  },
+  "source_path": "knowledge/definitions/ballista-armed-construction-v4.json",
+  "evidence_state": null,
+  "implementation_state": null,
+  "state_note": "共享定义模板没有 evidence_state/implementation_state 字段；证据状态见定义内 limitations/coverage 与 evidence 定位，登记状态见对应机制条目",
+  "rule_ref": {
+    "kind": "definition_template",
+    "ref": "ballista-armed-construction-v4",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/ballista-armed-construction-v4.json",
+      "note": "共享定义模板本身是计算权威（自包含规则段），不引用外部规则 ID；规则 ID 在对应规则包/机制条目中单独登记"
+    }
+  },
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Ballista · Armed Construction 爆炸原生定义",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "ability_id=ba1574；binding_version=definitions_v3.selector-v1；能力=hit_components、minion_actor、explicit_stat_transfer、derived_event_rate、attribute_scaling",
+      "source": "$.ability_id/binding_version/capabilities"
+    },
+    {
+      "text": "定义规则段（共享计算语义的权威位置）：attribute_scaling、stat_transfer、node_attribute_scaled",
+      "source": "$.definition.rules"
+    },
+    {
+      "text": "迁移口径：首个 Ballista 原生定义；当前实例经 selector/actor 声明绑定，场景默认值在 scenario 文件，不进入共享定义。",
+      "source": "$.migration.policy"
+    },
+    {
+      "text": "迁移口径：canonical case.json 必须走 definitions_v3；本模板为唯一 Ballista 候选。",
+      "source": "$.migration.entry_policy"
+    },
+    {
+      "text": "定义声明了技能结构（组件/标签/暴击能力）；具体数值见 knowledge JSON 与 dataset",
+      "source": "$.definition.skill（仅结构字段，不复制数值）"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/migration/canonical_case",
+      "original": "archive://examples/ballista-beta5-native-20261112/case.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "只统计 Armed Construction 的到期/销毁爆炸伤害；不含 Explosive Delivery 的 bolt 命中爆炸、箭矢直击、点燃 DoT 或 Explosive Trap/Falcon 自身伤害（用户指定口径）。",
+      "source": "$.definition.limitations[0]"
+    },
+    {
+      "text": "陷阱引爆事件率是外部场景假设（控件 trap_detonation_rate_per_s），上界由 λ_throw×每次施放引爆数推导；未做游戏内实测。",
+      "source": "$.definition.limitations[1]"
+    },
+    {
+      "text": "Elixir 按 100% 覆盖；minion 等级缩放因伤害路径无调用点未纳入；isBallistaExplosion 按推断 true 建模。",
+      "source": "$.definition.limitations[2]"
+    },
+    {
+      "text": "暴击几率按 LE 通用口径 (base+added)×(1+increased) 聚合并钳制到 [0,1]；暴击伤害按 base+added。",
+      "source": "$.definition.limitations[3]"
+    },
+    {
+      "text": "目标为 100 级 Boss Dummy、0 抗性、无额外减伤；不建模敌方护甲/减抗/暴击抑制。",
+      "source": "$.definition.limitations[4]"
+    },
+    {
+      "text": "Shared Enhancements 转移按 Stat 行复制（added/increased/more 全部乘比例、保留 tags、召唤时快照）；tag 匹配沿用通用 subset 语义。",
+      "source": "$.definition.limitations[5]"
+    },
+    {
+      "text": "Minion 原生 Minion 标签伤害/暴击行按 100% actor 行处理；与转移规则显式互斥（exclude_tags=[Minion]）。",
+      "source": "$.definition.limitations[6]"
+    },
+    {
+      "text": "{\"id\": \"limitation:controls\", \"kind\": \"limitation\", \"note\": \"Siege Engineering 点数来自当前输入专精绑定，不暴露为场景控件；陷阱引爆率控件 min=1（0 表示无事件，本口径不支持零事件重算）。\", \"scope\": \"result\", \"status\": \"assumed\"}",
+      "source": "$.definition.limitations[7]"
+    },
+    {
+      "text": "[coverage.gaps] 陷阱引爆事件率是场景假设（上游控件），未做游戏内实测；每次施放引爆数存在 0.60–2.60×λ_throw 的未验证区间。",
+      "source": "$.definition.coverage.gaps[0]"
+    },
+    {
+      "text": "[coverage.gaps] isBallistaExplosion=true 为 prefab 序列化推断（IL 无写点），决定 Armed Construction per-Dex more 是否生效。",
+      "source": "$.definition.coverage.gaps[1]"
+    },
+    {
+      "text": "[coverage.gaps] minion 等级伤害缩放（+0.6 more @L100）公式已核但伤害路径无调用点，未纳入。",
+      "source": "$.definition.coverage.gaps[2]"
+    },
+    {
+      "text": "[coverage.gaps] 爆炸最终 AT tag 是否含 Hit 未确认；当前按 {Bow,Fire}+Minion 闭包处理。",
+      "source": "$.definition.coverage.gaps[3]"
+    },
+    {
+      "text": "[coverage.gaps] 玩家 added bow damage 的转移通道按 Shared Enhancements Stat 复制处理；武器基础伤害是否计入玩家 Stat 未实测。",
+      "source": "$.definition.coverage.gaps[4]"
+    },
+    {
+      "text": "[coverage.assumed_active_mods] Elixir of Construction 按用户指定的 100% 窗口覆盖出理论 DPS；不模拟药剂实际使用节奏。",
+      "source": "$.definition.coverage.assumed_active_mods[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

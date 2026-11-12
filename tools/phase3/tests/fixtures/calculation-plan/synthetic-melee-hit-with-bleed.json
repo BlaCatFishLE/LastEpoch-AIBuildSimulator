@@ -1,0 +1,102 @@
+{
+  "schema": "le-skill-template-v2",
+  "template_id": "synthetic-melee-hit-with-bleed",
+  "ability_id": "synthetic:melee-bleed",
+  "title": {
+    "zh": "合成近战命中与流血",
+    "en": "Synthetic melee hit with bleed"
+  },
+  "skill": {
+    "base_damage": {
+      "Physical": 50.0
+    },
+    "added_damage_scaling": 0.0,
+    "crit_chance": 0.0,
+    "crit_multiplier": 1.0,
+    "cooldown_s": 1.0,
+    "action_s": 1.0,
+    "components": {
+      "hit": {
+        "tags": ["Melee", "Hit"],
+        "crit_capable": false
+      },
+      "dot": {
+        "tags": ["DoT"]
+      }
+    }
+  },
+  "effects": [
+    {
+      "effect_id": "synthetic-dot-increased",
+      "label": "合成 DoT 增加 20%",
+      "stat_key": "damage",
+      "operation": "increased",
+      "value": 0.2,
+      "unit": "percent",
+      "damage_tags": ["DoT"],
+      "status": "assumed",
+      "source": {
+        "kind": "template_constant",
+        "label": "合成夹具常量",
+        "path": "tools/phase3/tests/fixtures/calculation-plan/synthetic-melee-hit-with-bleed.json#effects"
+      }
+    },
+    {
+      "effect_id": "synthetic-melee-increased",
+      "label": "合成近战增加 30%",
+      "stat_key": "damage",
+      "operation": "increased",
+      "value": 0.3,
+      "unit": "percent",
+      "damage_tags": ["Melee"],
+      "status": "assumed",
+      "source": {
+        "kind": "template_constant",
+        "label": "合成夹具常量",
+        "path": "tools/phase3/tests/fixtures/calculation-plan/synthetic-melee-hit-with-bleed.json#effects"
+      }
+    }
+  ],
+  "controls": [
+    {
+      "key": "vulnerability",
+      "label": "目标易伤层数",
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "max": 10
+    }
+  ],
+  "ailments": [
+    {
+      "name": "Bleed",
+      "label_zh": "流血",
+      "ailment_id": 2,
+      "damage_type": "Physical",
+      "duration_s": 3.0,
+      "base_damage": 100.0,
+      "chance": {
+        "source_kinds": ["equipment"],
+        "excluded_tags": [],
+        "additional": []
+      }
+    }
+  ],
+  "rules": {
+    "crit": {}
+  },
+  "schedule": {
+    "windows_s": [5, 30, 120]
+  },
+  "mechanism_refs": ["target-critical-vulnerability"],
+  "assumptions": [
+    {
+      "assumption_id": "synthetic",
+      "status": "assumed",
+      "note": "合成夹具：只验证统一计划/执行器语义，不代表游戏内技能。"
+    }
+  ],
+  "limitations": [
+    "合成夹具，不是真实游戏技能数据。"
+  ]
+}

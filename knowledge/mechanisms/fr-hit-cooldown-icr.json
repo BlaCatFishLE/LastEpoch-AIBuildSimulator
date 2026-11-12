@@ -1,0 +1,201 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-cooldown-icr",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave Reflash 冷却与 ICR、cooldown_limited 主口径",
+    "en": "Flame Reave Reflash cooldown with ICR and cooldown-limited primary policy"
+  },
+  "aliases": [
+    "cooldown",
+    "ICR",
+    "冷却",
+    "cooldown_limited",
+    "Reflash cooldown",
+    "attack_speed_limited"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:16"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "cooldown_recovery_speed"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "frequency"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "cooldown_s",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/cooldown_s；archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/cooldown_s",
+      "unit": "seconds"
+    },
+    {
+      "parameter": "cooldown_formula",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/cooldown_formula",
+      "note": "(base+flat)/(1+sum(ICR))"
+    },
+    {
+      "parameter": "ICR rows",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "policy",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/policy",
+      "note": "cooldown_limited；alternate attack_speed_limited 同时输出"
+    },
+    {
+      "parameter": "effective cooldown / cast rate",
+      "source": "current:matched_instances",
+      "unit": "mixed"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R13",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/rotation；#/rules id=R13"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_simulate",
+    "symbol": "simulate",
+    "note": "_cooldown_recovery_total 求和；effective_cooldown = cooldown_s/(1+ICR)；_policy_block 取 max(attack_interval, effective_cooldown) 的约束"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation",
+      "note": "ruleset 冷却/ICR/策略声明（status assumed，rule_id R13）"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects+effect_values owner_entity_id=node:letools:fr11mv:16",
+      "note": "Reflash：Cooldown (seconds) 3，node17 未选无额外 charges"
+    },
+    {
+      "kind": "planner_runtime",
+      "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 667435",
+      "note": "第三方 cooldown=(base+flat)/(1+ΣICR)（参考）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/policy",
+      "note": "主策略与备选策略的参数块"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#7 R7 Enchant Weapon 是否常驻",
+      "note": "EW 的有效冷却计算使用同一 ICR 公式（旁证）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=cooldown_recovery_speed]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/cooldown_s；#/effective_cooldown_s；#/casts_per_second",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-frequency-cooldown",
+      "requirement": "频率/冷却共享算子需参数化 charge-based（BH）与 cooldown+ICR（FR）两种口径；不能把 BH 的 CDR/charges 语义套到 FR",
+      "evidence_locator": "docs/fr-bh-convergence-handover.zh-CN.md#4.2 表 #6"
+    },
+    {
+      "with": "fr-hit-rhythm-rotation",
+      "requirement": "循环平均 more 与施放速率分层：rotation 因子不进入冷却公式",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/rotation/rhythm_of_fire"
+    },
+    {
+      "with": "fr-hit-attack-speed",
+      "requirement": "attack_speed_limited 是备选口径：忽略冷却、按攻速施放",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/attack_model"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "R13 assumed：3s 冷却是否从返回结束才开始；ICR 公式 (base)/(1+ICR) 无游戏真值",
+      "P0 handover §4.2 #6：BH/FR 冷却模型合并会改数，共享时必须保留策略参数"
+    ],
+    "requery_when": [
+      "node16/17 选择或 ICR 来源变化",
+      "Lead 切换 rotation.policy 为 attack_speed_limited"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "frequency",
+    "stacking_policy": "additive",
+    "order_policy": "casts/second = 1/max(attack_interval, effective_cooldown)；主策略 cooldown_limited，备选 attack_speed_limited",
+    "more_group_source": "n/a（ICR 是加算池，不是 more 组）"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

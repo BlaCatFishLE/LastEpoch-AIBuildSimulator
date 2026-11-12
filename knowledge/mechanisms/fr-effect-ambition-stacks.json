@@ -1,0 +1,105 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-ambition-stacks",
+  "revision": 3,
+  "title": {
+    "zh": "Throne of Ambition 层数增伤",
+    "en": "Throne of Ambition 层数增伤"
+  },
+  "aliases": [
+    "Throne of Ambition 层数增伤"
+  ],
+  "selectors": [
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "letools:uniqueList.uniques:211"
+      ]
+    },
+    {
+      "kind": "mechanism",
+      "namespace": "letools:UIBuffs",
+      "ids": [
+        "79"
+      ]
+    }
+  ],
+  "reuse_mode": "shared",
+  "applicability": {
+    "components": [
+      "hit",
+      "dot"
+    ],
+    "tags": [
+      "Fire"
+    ],
+    "conditions": [
+      "ambition",
+      "boss"
+    ],
+    "notes": "候选命中不等于激活：先核对当前稳定定义与效果语义，再按当前条件求值。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "source_instances",
+      "source": "current:matched_instances",
+      "note": "按稳定定义 ID 和词条/节点语义绑定，不携带旧槽位。"
+    },
+    {
+      "parameter": "points_values",
+      "source": "current:matched_instances",
+      "note": "节点从当前专精取 points，装备从当前实例取 value；常量由共享规则或 dataset 提供。"
+    },
+    {
+      "parameter": "scenario",
+      "source": "current:scenario.states",
+      "note": "条件开关、层数与目标状态来自本次场景。"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "fr-effect-ambition-stacks",
+    "path": "tools/phase3/rules/shared-conditional-mechanisms-v1.json",
+    "locator": "#/mechanisms/fr-effect-ambition-stacks"
+  },
+  "handler_ref": {
+    "module": "le_calc.effect_binding",
+    "symbol": "bind_profile_effects"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "dataset uniqueList.uniques:211 / UIBuffs:79"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/void-cleave/conditional-knowledge-closeout-20261110.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "item": "固定条件估算",
+      "reason": "保存规则与假设，不自动认定 Buff 已获取或可持续维持。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "旧实现兼容引用",
+      "reason": "rule_refs 保留旧接口来源，不作为新构筑输入；主规则入口已改为通用配方。",
+      "blocks_full_dps": false
+    }
+  ],
+  "rule_refs": [
+    {
+      "kind": "ruleset_effect",
+      "ref": "ambition_stacks",
+      "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "locator": "#/effects id=ambition_stacks"
+    }
+  ],
+  "case_scope": [
+    "flame-reave"
+  ]
+}

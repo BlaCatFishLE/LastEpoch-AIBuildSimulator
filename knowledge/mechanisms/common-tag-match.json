@@ -1,0 +1,163 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "common-tag-match",
+  "revision": 2,
+  "title": {
+    "zh": "伤害标签适用性匹配",
+    "en": "Damage tag applicability matching (type/category gating)"
+  },
+  "aliases": [
+    "tag match",
+    "tags_match",
+    "标签匹配",
+    "Elemental 展开",
+    "Applicable tags",
+    "AT bitmask"
+  ],
+  "selectors": [
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "common-tag-match",
+        "bh-ignite-scaling-pool"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "damage",
+        "added_damage",
+        "penetration",
+        "ailment_duration"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "dot",
+      "tick",
+      "ignite",
+      "ailment",
+      "body"
+    ],
+    "tags": [
+      "Fire",
+      "Cold",
+      "Lightning",
+      "Physical",
+      "Void",
+      "Necrotic",
+      "Poison",
+      "Spell",
+      "DoT",
+      "Hit",
+      "Melee",
+      "Ailment",
+      "Elemental"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "决定一条来源贡献是否作用于某伤害组件：伤害类型标签要求组件含该类型，类别标签要求组件含该类别；Elemental 匹配任一元素；未知标签当前忽略（实现策略，见 open_questions）。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "标签适用性是共享判据，没有单条规则 ID：具体规则的标签写在 ruleset 各节点/词条 damage_tags 与 dataset stats 的 tags 位图中。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "contribution.damage_tags",
+      "source": "current:matched_instances",
+      "note": "每行的标签位图解码结果（AT bitmask）；逐行见 source-ledger。"
+    },
+    {
+      "parameter": "component.types/categories",
+      "source": "current:matched_instances",
+      "note": "由 Model.Contribution 与 damage.ComponentTags 常量给出，不是输入字段。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "tags_match",
+    "note": "组件标签白名单在 damage.py（DAMAGE_TYPE_TAGS / ELEMENT_TYPE_TAGS / CATEGORY_TAGS / IGNORED_TAGS）；调用方 collect_modifier_rows / compute_body / _ignite_scaling。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/elemental-tag-filtering-1.5.3.json",
+      "note": "Elemental=128 是独立 flag，Tags.Applicable / Stats.GetTotalIncreased 展开到 Fire/Cold/Lightning。"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#14",
+      "note": "Elemental 标签过滤逆向记录（1.5.3）。"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Elemental → Fire/Cold/Lightning 的 confirmed 结论。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/fr-bh-convergence-handover.zh-CN.md#3",
+      "note": "FR/BH 独有行为：两模型标签口径差异（FR 单 Fire 组件）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::TagMatchingTest::test_type_and_category_gating",
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_weakened_reality_not_inherited",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_weapon_penetration_melee_and_minion_exclusions"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-increased-aggregate",
+      "requirement": "inc 池按组件标签筛选后加算；同一条贡献若命中多个组件，各自计数一次（不跨组件去重丢失）。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#collect_modifier_rows"
+    },
+    {
+      "with": "common-more-groups",
+      "requirement": "more 分组的适用性同样先过标签匹配；禁止仅凭词条文本的 more 一词推定分组。",
+      "evidence_locator": "docs/bd-reuse-pipeline-v1-implementation.zh-CN.md#6.3"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "docs/evidence/reverse-engineering/elemental-tag-filtering-1.5.3.json",
+      "docs/evidence/reverse-engineering/README.zh-CN.md#14",
+      "tools/phase3/tests/test_damage.py#TagMatchingTest"
+    ],
+    "open_questions": [
+      "未知/元数据标签（Elemental、LowLife 等）当前按忽略处理；这是实现策略，若未来出现带条件的标签（如 LowLife）必须改为显式条件而非忽略。",
+      "FR hit 模型有独立的标签匹配实现（hit_damage/hit_inputs），尚未收敛到同一算子；跨模型复用前需比对两套 constants 是否一致。"
+    ],
+    "requery_when": [
+      "P2 共享算子合并后",
+      "新增伤害类型/标签时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "reuse_mode": "shared"
+}

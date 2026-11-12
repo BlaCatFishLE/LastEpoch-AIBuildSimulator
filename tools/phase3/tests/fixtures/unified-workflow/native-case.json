@@ -1,0 +1,24 @@
+{
+  "schema": "le-case-v1",
+  "case_id": "synthetic-unified-definition",
+  "title": "统一原生定义最小夹具",
+  "description": "第三步正式入口夹具：只用于验证 profile 与原生定义共享统一计划/执行器；不是游戏内真实技能。",
+  "model": "research",
+  "main_skill": {
+    "ability_id": "synthetic:melee-bleed"
+  },
+  "calculation": {
+    "engine": "unified_dps",
+    "source": {
+      "kind": "definitions_v2",
+      "template": "tools/phase3/tests/fixtures/calculation-plan/synthetic-melee-hit-with-bleed.json",
+      "mechanisms": [
+        "tools/phase3/rules/shared-conditional-mechanisms-v1.json"
+      ],
+      "rules": []
+    }
+  },
+  "output": {
+    "root": ".scratch/unified-dps-step3/reports"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "minion-explicit-owner-stat-transfer",
+  "revision": 2,
+  "title": {
+    "zh": "节点驱动的玩家→召唤物属性转移"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "节点驱动的玩家→召唤物属性转移"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "ba1574:22",
+        "ba1574:27"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "attribute_transfer",
+      "crit"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Shared Enhancements 的 Damage Stat Ratio 每点 25%；Perfect Aim 的暴击率/暴伤转移各每点 25%。参数来自当前节点点数，转移限定属性/操作/标签，必须保留原来源及派生所有权。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.stat_transfer",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.rules.stat_transfer"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "parameter_bindings": [
+    {
+      "parameter": "current_points_and_mods",
+      "source": "current:calculation_input.skills.specializations/ba1574 + current:mods",
+      "unit": "current",
+      "note": "只从本次输入绑定；不保存当前31点合计倍率。"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "IL 级逆向证据（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "IL 级中文结论（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json",
+      "note": "冻结 dataset 1.5.2 原值；节点含义对照官方资料，不用新版本文案替换旧数据。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/ballista/ballista-mechanism-review-20261112.zh-CN.md"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前构筑数值包（本轮）"
+    },
+    {
+      "kind": "reverse_engineering",
+      "detail": "GetValueMultiplier：SP=0→playerDamageModifierEffectivenessRatio、SP=4→critChance ratio、SP=5→critMulti ratio；GetStatsFromPlayer 对每个匹配 Stat 用 Stat.CopyFrom(stat, ratio) 复制，added/increased/moreValues 全部乘比例，保留 tags，召唤时快照进 SummonEntityOnDeath.statList。",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "玩家 weapon base damage 是否以 Stat 形式被复制未实测。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "knowledge/definitions/ballista-armed-construction-v4.json"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": [],
+  "limitations": [
+    {
+      "item": "转移行聚合",
+      "reason": "实现按输入 Contribution 逐行复制并保留 tags；同 tag 多条会分别进入 tag 匹配。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "基础暴击是否共享",
+      "reason": "玩家 Stat 不含技能自身 5% 基础暴击；本轮按只转移 Stat 行处理。",
+      "blocks_full_dps": false
+    }
+  ]
+}

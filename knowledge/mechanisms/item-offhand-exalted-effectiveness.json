@@ -1,0 +1,134 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "item-offhand-exalted-effectiveness",
+  "revision": 1,
+  "title": {
+    "zh": "Whetstone Gavel：副手 Exalted 时全部副手 stats 获得 +97% effectiveness",
+    "en": "Whetstone Gavel: offhand Exalted stats gain 97% increased effectiveness"
+  },
+  "aliases": [
+    "Whetstone Gavel",
+    "offhand Exalted",
+    "副手崇高",
+    "属性效率",
+    "stat effectiveness"
+  ],
+  "selectors": [
+    {
+      "kind": "unique",
+      "namespace": "item",
+      "ids": [
+        "item:letools:uniqueList.uniques:438"
+      ]
+    },
+    {
+      "kind": "item",
+      "namespace": "slot",
+      "ids": [
+        "equipment.weapon1",
+        "equipment.weapon2"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "added_damage",
+        "crit_multiplier",
+        "crit_chance",
+        "damage"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee"
+    ],
+    "conditions": [
+      "offhand_display_rarity:exalted"
+    ],
+    "required_nodes": [],
+    "notes": "仅当副手槽位按 T6+ 词缀规则显示为 Exalted 时，对副手来源的全部贡献乘 (1+实际 roll)。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effectiveness roll",
+      "source": "current:calculation-input#/items[instance_id=equipment.weapon1]/mods[source=unique_mod,property=98,unique_mod_index=2]/value_numeric",
+      "unit": "percent",
+      "note": "当前 roll 0.97；selector 使用稳定定义身份与序号，不写死数值文本"
+    },
+    {
+      "parameter": "offhand display rarity",
+      "source": "current:calculation-input#/items[instance_id=equipment.weapon2]/affix/tier_index",
+      "unit": "enum",
+      "note": "任一词条 tier_index >= 5（T6+）且基底不在排除列表 → Exalted（迁移 build_mappings display_rarity_rule）"
+    },
+    {
+      "parameter": "target slot",
+      "source": "knowledge/definitions/fr-flame-reave-v3.json#/definition/rules/item_effectiveness/target_slot",
+      "note": "equipment.weapon2"
+    }
+  ],
+  "rule_ref": {
+    "kind": "none",
+    "ref": "plan-v2 rules.item_effectiveness（迁移规则数据；旧 hit_inputs._apply_offhand_exalted_effect 退役）",
+    "path": "knowledge/definitions/fr-flame-reave-v3.json",
+    "locator": "#/definition/rules/item_effectiveness"
+  },
+  "handler_ref": {
+    "module": "le_calc.plan_compiler",
+    "symbol": "_display_item_rarity",
+    "note": "编译期由真实计算输入判定显示稀有度并缩放副手来源贡献；不读取旧 hit_inputs"
+  },
+  "aggregation": {
+    "operation": "multiplier",
+    "stacking_policy": "multiplicative_per_stack",
+    "order_policy": "副手全部来源贡献先按 effectiveness 放大，再进入命中乘区",
+    "more_group_source": "n/a（effectiveness 是对来源数值的乘数，不是独立 more 组）"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=offhand_exalted_effect",
+      "note": "用户裁决 2026-11-07：副手按 Exalted 处理，全部 stats +97% effectiveness"
+    },
+    {
+      "kind": "calculation_input",
+      "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/items instance_id=equipment.weapon1 unique_mod#2",
+      "note": "property 98 / tags 589 / value_numeric 0.97"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/save_import/scripts/build_mappings.py#display_rarity_rule",
+      "note": "显示稀有度规则：非 unique 装备任一 affix tier0 >= 5（T6+）时显示 Exalted"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_unified_fr_migration.py::FrV3RealBindingTest::test_current_instance_variation_rebinds_points_and_rarity"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 hit_inputs 专用分支保留为只读迁移证据；新路径由 plan-v2 item_effectiveness 规则产生同一数值"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ],
+  "limitations": [
+    {
+      "item": "显示稀有度判定来源",
+      "reason": "离线存档 raw rarity 字节与显示稀有度不同；以词缀 tier 规则判定（迁移 build_mappings 规则），换副手/换词缀后需重新绑定。",
+      "blocks_full_dps": false
+    }
+  ]
+}

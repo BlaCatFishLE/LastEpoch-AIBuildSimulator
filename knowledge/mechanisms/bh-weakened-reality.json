@@ -1,0 +1,154 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-weakened-reality",
+  "revision": 2,
+  "title": {
+    "zh": "Weakened Reality（中心范围 more，仅本体）",
+    "en": "Weakened Reality (more damage within 1m of centre, body only)"
+  },
+  "aliases": [
+    "Weakened Reality",
+    "中心1米",
+    "within center 1m",
+    "node 27",
+    "body only more",
+    "main_skill.weakened_reality"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:27"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "target.within_center_1m"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body",
+      "body_fire",
+      "body_cold"
+    ],
+    "conditions": [
+      "target.within_center_1m"
+    ],
+    "required_nodes": [
+      "node:bh2:27"
+    ],
+    "notes": "目标位于黑洞中心 1 米内时，node 27 的独立 more 只作用于本体，不作用于 BH 施加的异常（Ignite）。当前基线固定为满足（用户规则 7），已计入基线。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-weakened-reality",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-weakened-reality]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "node points",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/skill_tree_nodes",
+      "note": "node 27 点数与 value_total（冻结）。"
+    },
+    {
+      "parameter": "condition",
+      "source": "current:matched_instances",
+      "note": "场景状态；默认 true。"
+    },
+    {
+      "parameter": "exclusion evidence",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/inheritance/exclude_tree_nodes",
+      "note": "Ignite 继承列表显式排除 node 27。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "compute_body",
+    "note": "node 27 经 condition_met 过滤后进入本体 more 分组；Ignite 侧因 inheritance.exclude_tree_nodes 不含 27 而被排除。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12]",
+      "note": "Weakened Reality 节点文本：中心 1m 内 +more；不作用于 BH 施加的异常。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12].alt_text",
+      "note": "alt text 明确 does not affect ailments applied by Black Hole。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups",
+      "note": "当前 run 本体 more 组含 node:bh2:27。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups",
+      "note": "Ignite more 组不含 node:bh2:27。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Weakened Reality 仅本体的索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/target.within_center_1m",
+      "note": "原案例证据，参数改取当前输入"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_weakened_reality_not_inherited",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeTargetConditionTests::test_center_unchecked_drops_weakened_reality",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.body_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-target-scenario-conditions",
+      "requirement": "target_within_center_1m 未满足时该 more 不生效。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#condition_met"
+    },
+    {
+      "with": "bh-ignite-inheritance",
+      "requirement": "Ignite 显式排除 node 27；不能因是技能树 more 就继承。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/inheritance/exclude_tree_nodes"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12]",
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/inheritance",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/more_groups",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/more_groups",
+      "tools/phase3/tests/test_damage.py"
+    ],
+    "open_questions": [
+      "中心 1 米的几何定义（球心/距离计算方式）在双星模型下未逐帧验证；当前用单一场景布尔条件近似。",
+      "该节点 more 只作用于 body 是游戏文本明确；但『body only』是指本体命中还是包含其它技能来源（该技能 hit=false）无其它来源，当前无影响。"
+    ],
+    "requery_when": [
+      "空间/轨道建模接入时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "attribute-strength-to-brutality",
+  "kind": "mechanism",
+  "title": {
+    "zh": "力量转换为 Brutality 与按法耗独立近战增伤",
+    "en": "Strength converted to Brutality"
+  },
+  "source_path": "knowledge/mechanisms/attribute-strength-to-brutality.json",
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [],
+  "compatibility_baseline": null,
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "attribute-conversions-v1:brutality",
+    "path": "tools/phase3/rules/attribute-conversions-v1.json",
+    "locator": "#/brutality",
+    "verification": {
+      "status": "verified_locator",
+      "checked_against": "tools/phase3/rules/attribute-conversions-v1.json#/brutality",
+      "note": "ref 不是规则 ID（描述性引用）；已按 locator 在该候选树文件内定位"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "source_records translation:Properties.Property_Player_650_AltText",
+      "note": null,
+      "source": "$.evidence_refs[0]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "力量转换为 Brutality 与按法耗独立近战增伤",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Melee、Hit；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "汇总当前力量后转换；保留技能/节点/力量条件的等效力量，独立增伤不作用于 DoT。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：strength、conversion、mana_cost",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/void-cleave-20261110/brutality-fix-evidence/before-after.json"
+    }
+  ],
+  "limitations": [],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,246 @@
+{
+  "ability_gen237": [
+    {
+      "component_id": "skill:letools:LEAbilities.abilityList:ability_gen237#component#0",
+      "skill_entity_id": "skill:letools:LEAbilities.abilityList:ability_gen237",
+      "component_type": "DamageEnemyOnHit",
+      "component_index": 0,
+      "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen237']",
+      "damage_type": "Fire",
+      "base_damage": 40.0,
+      "added_damage_effectiveness": 200.0,
+      "config": "{\"type\": \"DamageEnemyOnHit\", \"baseDamageStats\": {\"damage\": [0, 40, 0, 0, 0, 0, 0], \"critChance\": 0.05, \"critMultiplier\": 2, \"critType\": 0, \"hit\": true, \"cullPercent\": 0, \"flatCull\": 0, \"increasedStunChance\": 0, \"increasedStunDuration\": 0, \"addedDamageScaling\": 2, \"additionalLeech\": 0, \"freezeRate\": 0, \"convertAllAddedDamage\": false, \"damageTypeToConvertTo\": 0, \"penetration\": []}, \"damageTags\": 1024, \"damageModifier\": 0, \"highPriorityDoT\": false, \"canDamageSameEnemyAgain\": false, \"canDamageSameEnemyAgainAfterDuration\": 0}",
+      "extensions": null
+    }
+  ],
+  "ability_gen327": [
+    {
+      "component_id": "skill:letools:LEAbilities.abilityList:ability_gen327#component#0",
+      "skill_entity_id": "skill:letools:LEAbilities.abilityList:ability_gen327",
+      "component_type": "DamageEnemyOnHit",
+      "component_index": 0,
+      "locator": "https://www.lastepochtools.com/data/version152/planner/js/3efb2055376cc1c0647de8711a4198ae.js#window.LEAbilities.abilityList['ability_gen327']",
+      "damage_type": "Fire",
+      "base_damage": 50.0,
+      "added_damage_effectiveness": 250.0,
+      "config": "{\"type\": \"DamageEnemyOnHit\", \"baseDamageStats\": {\"damage\": [0, 50, 0, 0, 0, 0, 0], \"critChance\": 0.05, \"critMultiplier\": 2, \"critType\": 0, \"hit\": true, \"cullPercent\": 0, \"flatCull\": 0, \"increasedStunChance\": 0, \"increasedStunDuration\": 0, \"addedDamageScaling\": 2.5, \"additionalLeech\": 0, \"freezeRate\": 0, \"convertAllAddedDamage\": false, \"damageTypeToConvertTo\": 0, \"penetration\": []}, \"damageTags\": 2048, \"damageModifier\": 0, \"highPriorityDoT\": false, \"canDamageSameEnemyAgain\": false, \"canDamageSameEnemyAgainAfterDuration\": 0}",
+      "extensions": null
+    }
+  ],
+  "node:letools:ex4tp:29": [
+    {
+      "effect_id": "node:letools:ex4tp:29#stat#0",
+      "owner_entity_id": "node:letools:ex4tp:29",
+      "owner_component_id": null,
+      "source_entity_id": null,
+      "effect_category": "stat_mod",
+      "raw_text": "Trap Drop Chance",
+      "parse_status": "parsed",
+      "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ex4tp_29_0_Stat\", \"value\": \"+70%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-1142\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}, \"stat_name_key\": \"Skills.Skill_ex4tp_29_0_Stat\", \"stat_name\": \"Trap Drop Chance\", \"value_text\": \"+70%\"}",
+      "effect_scope": null,
+      "values": [
+        {
+          "value_id": "node:letools:ex4tp:29#stat#0#v0",
+          "effect_id": "node:letools:ex4tp:29#stat#0",
+          "stat_id": null,
+          "value_kind": "percent_modifier",
+          "value_numeric": 0.7,
+          "value_min": null,
+          "value_max": null,
+          "per_level": null,
+          "level": null,
+          "tier": null,
+          "unit": "%",
+          "expression": null,
+          "raw": "{\"statNameKey\": \"Skills.Skill_ex4tp_29_0_Stat\", \"value\": \"+70%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-1142\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}",
+          "stat_link_status": "unknown_namespace",
+          "stat_link_evidence": "{\"effect_category\":\"stat_mod\",\"field\":\"raw.property\",\"match_rule\":\"no_stat_for_property_in_namespace\",\"namespace\":\"letools:coreDB.propertyList\",\"namespaces\":[\"letools:coreDB.propertyList\"],\"owner_kind\":\"node\",\"property\":54,\"property_key\":\"54\",\"source\":\"letools\"}"
+        }
+      ]
+    },
+    {
+      "effect_id": "node:letools:ex4tp:29#stat#1",
+      "owner_entity_id": "node:letools:ex4tp:29",
+      "owner_component_id": null,
+      "source_entity_id": null,
+      "effect_category": "stat_mod",
+      "raw_text": "Mana Cost",
+      "parse_status": "parsed",
+      "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ex4tp_29_1_Stat\", \"value\": \"+11\", \"noScaling\": false, \"downside\": true, \"sprite\": \"a-r-547\", \"property\": 66, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ex4tp_29_1_Stat\", \"stat_name\": \"Mana Cost\", \"value_text\": \"+11\"}",
+      "effect_scope": null,
+      "values": [
+        {
+          "value_id": "node:letools:ex4tp:29#stat#1#v0",
+          "effect_id": "node:letools:ex4tp:29#stat#1",
+          "stat_id": "stat:letools:coreDB.propertyList:66",
+          "value_kind": "flat",
+          "value_numeric": 11.0,
+          "value_min": null,
+          "value_max": null,
+          "per_level": null,
+          "level": null,
+          "tier": null,
+          "unit": null,
+          "expression": null,
+          "raw": "{\"statNameKey\": \"Skills.Skill_ex4tp_29_1_Stat\", \"value\": \"+11\", \"noScaling\": false, \"downside\": true, \"sprite\": \"a-r-547\", \"property\": 66, \"tags\": 0, \"overrideSprite\": false}",
+          "stat_link_status": "linked",
+          "stat_link_evidence": "{\"candidates\":[\"stat:letools:coreDB.propertyList:66\"],\"effect_category\":\"stat_mod\",\"field\":\"raw.property\",\"match_rule\":\"direct_id_unique_in_namespace\",\"namespace\":\"letools:coreDB.propertyList\",\"namespaces\":[\"letools:coreDB.propertyList\"],\"owner_kind\":\"node\",\"property\":66,\"property_key\":\"66\",\"source\":\"letools\",\"stat_id\":\"stat:letools:coreDB.propertyList:66\"}"
+        }
+      ]
+    }
+  ],
+  "node:letools:ex4tp:30": [
+    {
+      "effect_id": "node:letools:ex4tp:30#stat#0",
+      "owner_entity_id": "node:letools:ex4tp:30",
+      "owner_component_id": null,
+      "source_entity_id": null,
+      "effect_category": "stat_mod",
+      "raw_text": "Summon Ballista Chance",
+      "parse_status": "parsed",
+      "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ex4tp_30_0_Stat\", \"value\": \"10%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-351\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}, \"stat_name_key\": \"Skills.Skill_ex4tp_30_0_Stat\", \"stat_name\": \"Summon Ballista Chance\", \"value_text\": \"10%\"}",
+      "effect_scope": null,
+      "values": [
+        {
+          "value_id": "node:letools:ex4tp:30#stat#0#v0",
+          "effect_id": "node:letools:ex4tp:30#stat#0",
+          "stat_id": null,
+          "value_kind": "percent_modifier",
+          "value_numeric": 0.1,
+          "value_min": null,
+          "value_max": null,
+          "per_level": null,
+          "level": null,
+          "tier": null,
+          "unit": "%",
+          "expression": null,
+          "raw": "{\"statNameKey\": \"Skills.Skill_ex4tp_30_0_Stat\", \"value\": \"10%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-351\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}",
+          "stat_link_status": "unknown_namespace",
+          "stat_link_evidence": "{\"effect_category\":\"stat_mod\",\"field\":\"raw.property\",\"match_rule\":\"no_stat_for_property_in_namespace\",\"namespace\":\"letools:coreDB.propertyList\",\"namespaces\":[\"letools:coreDB.propertyList\"],\"owner_kind\":\"node\",\"property\":54,\"property_key\":\"54\",\"source\":\"letools\"}"
+        }
+      ]
+    },
+    {
+      "effect_id": "node:letools:ex4tp:30#stat#1",
+      "owner_entity_id": "node:letools:ex4tp:30",
+      "owner_component_id": null,
+      "source_entity_id": null,
+      "effect_category": "stat_mod",
+      "raw_text": "Ballista Mana Consumption",
+      "parse_status": "parsed",
+      "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ex4tp_30_1_Stat\", \"value\": \"50%\", \"noScaling\": true, \"downside\": true, \"sprite\": \"a-r-547\", \"property\": 66, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ex4tp_30_1_Stat\", \"stat_name\": \"Ballista Mana Consumption\", \"value_text\": \"50%\"}",
+      "effect_scope": null,
+      "values": [
+        {
+          "value_id": "node:letools:ex4tp:30#stat#1#v0",
+          "effect_id": "node:letools:ex4tp:30#stat#1",
+          "stat_id": "stat:letools:coreDB.propertyList:66",
+          "value_kind": "percent_modifier",
+          "value_numeric": 0.5,
+          "value_min": null,
+          "value_max": null,
+          "per_level": null,
+          "level": null,
+          "tier": null,
+          "unit": "%",
+          "expression": null,
+          "raw": "{\"statNameKey\": \"Skills.Skill_ex4tp_30_1_Stat\", \"value\": \"50%\", \"noScaling\": true, \"downside\": true, \"sprite\": \"a-r-547\", \"property\": 66, \"tags\": 0, \"overrideSprite\": false}",
+          "stat_link_status": "linked",
+          "stat_link_evidence": "{\"candidates\":[\"stat:letools:coreDB.propertyList:66\"],\"effect_category\":\"stat_mod\",\"field\":\"raw.property\",\"match_rule\":\"direct_id_unique_in_namespace\",\"namespace\":\"letools:coreDB.propertyList\",\"namespaces\":[\"letools:coreDB.propertyList\"],\"owner_kind\":\"node\",\"property\":66,\"property_key\":\"66\",\"source\":\"letools\",\"stat_id\":\"stat:letools:coreDB.propertyList:66\"}"
+        }
+      ]
+    }
+  ],
+  "node:letools:ex4tp:31": [
+    {
+      "effect_id": "node:letools:ex4tp:31#stat#0",
+      "owner_entity_id": "node:letools:ex4tp:31",
+      "owner_component_id": null,
+      "source_entity_id": null,
+      "effect_category": "stat_mod",
+      "raw_text": "Traps Throw Traps",
+      "parse_status": "unparsed",
+      "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ex4tp_31_0_Stat\", \"value\": null, \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-1241\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}, \"stat_name_key\": \"Skills.Skill_ex4tp_31_0_Stat\", \"stat_name\": \"Traps Throw Traps\", \"value_text\": null}",
+      "effect_scope": null,
+      "values": [
+        {
+          "value_id": "node:letools:ex4tp:31#stat#0#v0",
+          "effect_id": "node:letools:ex4tp:31#stat#0",
+          "stat_id": null,
+          "value_kind": null,
+          "value_numeric": null,
+          "value_min": null,
+          "value_max": null,
+          "per_level": null,
+          "level": null,
+          "tier": null,
+          "unit": null,
+          "expression": null,
+          "raw": "{\"statNameKey\": \"Skills.Skill_ex4tp_31_0_Stat\", \"value\": null, \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-1241\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}",
+          "stat_link_status": "unknown_namespace",
+          "stat_link_evidence": "{\"effect_category\":\"stat_mod\",\"field\":\"raw.property\",\"match_rule\":\"no_stat_for_property_in_namespace\",\"namespace\":\"letools:coreDB.propertyList\",\"namespaces\":[\"letools:coreDB.propertyList\"],\"owner_kind\":\"node\",\"property\":54,\"property_key\":\"54\",\"source\":\"letools\"}"
+        }
+      ]
+    },
+    {
+      "effect_id": "node:letools:ex4tp:31#stat#1",
+      "owner_entity_id": "node:letools:ex4tp:31",
+      "owner_component_id": null,
+      "source_entity_id": null,
+      "effect_category": "stat_mod",
+      "raw_text": "Trap Throw Distance (meters)",
+      "parse_status": "parsed",
+      "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ex4tp_31_1_Stat\", \"value\": \"12\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-1240\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}, \"stat_name_key\": \"Skills.Skill_ex4tp_31_1_Stat\", \"stat_name\": \"Trap Throw Distance (meters)\", \"value_text\": \"12\"}",
+      "effect_scope": null,
+      "values": [
+        {
+          "value_id": "node:letools:ex4tp:31#stat#1#v0",
+          "effect_id": "node:letools:ex4tp:31#stat#1",
+          "stat_id": null,
+          "value_kind": "flat",
+          "value_numeric": 12.0,
+          "value_min": null,
+          "value_max": null,
+          "per_level": null,
+          "level": null,
+          "tier": null,
+          "unit": null,
+          "expression": null,
+          "raw": "{\"statNameKey\": \"Skills.Skill_ex4tp_31_1_Stat\", \"value\": \"12\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-1240\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}",
+          "stat_link_status": "unknown_namespace",
+          "stat_link_evidence": "{\"effect_category\":\"stat_mod\",\"field\":\"raw.property\",\"match_rule\":\"no_stat_for_property_in_namespace\",\"namespace\":\"letools:coreDB.propertyList\",\"namespaces\":[\"letools:coreDB.propertyList\"],\"owner_kind\":\"node\",\"property\":54,\"property_key\":\"54\",\"source\":\"letools\"}"
+        }
+      ]
+    },
+    {
+      "effect_id": "node:letools:ex4tp:31#stat#2",
+      "owner_entity_id": "node:letools:ex4tp:31",
+      "owner_component_id": null,
+      "source_entity_id": null,
+      "effect_category": "stat_mod",
+      "raw_text": "Trap Drop Distance (meters)",
+      "parse_status": "parsed",
+      "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ex4tp_31_2_Stat\", \"value\": \"12\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-774\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}, \"stat_name_key\": \"Skills.Skill_ex4tp_31_2_Stat\", \"stat_name\": \"Trap Drop Distance (meters)\", \"value_text\": \"12\"}",
+      "effect_scope": null,
+      "values": [
+        {
+          "value_id": "node:letools:ex4tp:31#stat#2#v0",
+          "effect_id": "node:letools:ex4tp:31#stat#2",
+          "stat_id": null,
+          "value_kind": "flat",
+          "value_numeric": 12.0,
+          "value_min": null,
+          "value_max": null,
+          "per_level": null,
+          "level": null,
+          "tier": null,
+          "unit": null,
+          "expression": null,
+          "raw": "{\"statNameKey\": \"Skills.Skill_ex4tp_31_2_Stat\", \"value\": \"12\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-774\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}",
+          "stat_link_status": "unknown_namespace",
+          "stat_link_evidence": "{\"effect_category\":\"stat_mod\",\"field\":\"raw.property\",\"match_rule\":\"no_stat_for_property_in_namespace\",\"namespace\":\"letools:coreDB.propertyList\",\"namespaces\":[\"letools:coreDB.propertyList\"],\"owner_kind\":\"node\",\"property\":54,\"property_key\":\"54\",\"source\":\"letools\"}"
+        }
+      ]
+    }
+  ]
+}

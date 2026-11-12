@@ -1,0 +1,178 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "common-target-resistance-penetration",
+  "revision": 2,
+  "title": {
+    "zh": "目标抗性/穿透结算（穿透可压到 0 以下）",
+    "en": "Target resistance and penetration settlement"
+  },
+  "aliases": [
+    "target multiplier",
+    "resistance",
+    "penetration",
+    "目标侧结算",
+    "抗性穿透",
+    "negative resistance",
+    "有效抗性"
+  ],
+  "selectors": [
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "common-target-resistance-penetration"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "penetration",
+        "penetration_with_ignite",
+        "resistance"
+      ]
+    },
+    {
+      "kind": "condition",
+      "namespace": "condition",
+      "ids": [
+        "target.resistances"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "target_side",
+      "body",
+      "ignite",
+      "hit",
+      "dot"
+    ],
+    "tags": [
+      "Fire",
+      "Cold",
+      "Lightning"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "穿透按有效抗性扣减，允许把有效抗性压到负数；是否适用于某组件由 ruleset.target_side.penetration_applies_to 决定（BH：body/ignite 分流，Fire Penetration with Ignite 只作用于 Ignite）。注意：BH 与 FR 当前公式未收敛（见 open_questions 与 handover §2）。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-penetration-dot",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-penetration-dot]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "target.resistances",
+      "source": "current:matched_instances",
+      "note": "BH 场景目标抗性；默认 0 抗性合成 Boss（场景选择，属案例假设）。"
+    },
+    {
+      "parameter": "penetration rows",
+      "source": "current:matched_instances",
+      "note": "stat_key=penetration / penetration_with_ignite，按组件标签过滤。"
+    },
+    {
+      "parameter": "penetration_applies_to",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/target_side/penetration_applies_to",
+      "note": "body/ignite 分流；BH 必须读它，不能默认两组件都吃全部穿透。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "_target_multiplier",
+    "note": "body 结算：effective = res - pen（可负）→ ×(1-effective) ×(1-monster_dr)；Ignite 侧镜像实现 le_calc.ignite._ignite_target。FR 侧为独立实现 hit_damage.resolve_target/_penetration（未合并）。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/fr-bh-convergence-handover.zh-CN.md#2",
+      "note": "两处实现等价性分析：res=0 时等值；res≠0 且 pen>0 存在交叉项差（D2 未对齐）。"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:tunklab:_:59",
+      "note": "Tunklab Penetration：可把有效抗性降到零以下，作用于所有伤害（含 DoT）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/target",
+      "note": "当前 run 的目标侧乘区账（res/pen/effective/monster_dr 因子分开列示）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/target",
+      "note": "Ignite 独立目标侧账（含 Fire Penetration with Ignite 行）。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "穿透与 DoT 结算口径的机制索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/target/fire_resistance",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_single_stack_core",
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_totals_and_tail",
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[legacy_single_skill.single_cast_total]",
+    "archive://reports/flame-reave/p0-baseline-fr/reproduce-report.json（FR 独立实现，25/25 PASS）"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-monster-dr",
+      "requirement": "目标乘区 = 抗性/穿透因子 × 怪物 DR 因子；两个独立因子相乘，不合并成单一减伤。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#_target_multiplier"
+    },
+    {
+      "with": "bh-ignite-penetration",
+      "requirement": "Ignite 的火焰穿透 = 玩家火穿 + Fire Penetration with Ignite + ailment effect 折算；BH body 不吃 Ignite 专属那部分。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_scaling"
+    },
+    {
+      "with": "bh-target-scenario-conditions",
+      "requirement": "空间条件（双星/中心 1m）不改变抗性公式，只决定条件 more 是否生效；两者不能混为同一乘区。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#condition_met"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "docs/fr-bh-convergence-handover.zh-CN.md#2",
+      "data/releases/phase1-dataset-003/data.sqlite#stats stat:tunklab:_:59",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/target",
+      "archive://reports/flame-reave/p0-baseline-fr/reproduce-report.json"
+    ],
+    "open_questions": [
+      "D2 收敛未完成：BH 把穿透折进抗性 (1-(res-pen))，FR 作独立乘区 (1+Σpen)×(1-res)；res≠0 且 pen>0 时两式相差 res·pen 交叉项（数值示例见 handover §2.1）。在 P2 合并共享算子前，本条目的 handler 不能跨模型替换。",
+      "negative_resistance_allowed 钳制：BH 有该开关（可负），FR 无；同一场景跨模型对比前需裁定。",
+      "scenario 显式 DR override：BH 尊重、FR 忽略（common-monster-dr 的 open question 同源）。"
+    ],
+    "requery_when": [
+      "P2 目标侧收敛完成后",
+      "出现 res≠0 的新目标场景时（当前案例 0 抗性掩盖差异）"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "reuse_mode": "shared"
+}

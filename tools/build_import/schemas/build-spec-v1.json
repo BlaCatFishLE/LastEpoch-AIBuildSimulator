@@ -1,0 +1,640 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.lastepoch-buildsimulator/schemas/build-spec-v1.json",
+  "title": "Last Epoch BuildSpec v1 (LE Tools build import)",
+  "description": "Phase-2 offline build representation. Definitions (catalog entities) are referenced by entity_id; instances carry slot/position, affix channels, raw rolls and their restoration status. Unknown source fields must be preserved (extensions) and every unresolved fact must be recorded in issues. This schema intentionally allows additional properties so newer source fields are never silently dropped.",
+  "type": "object",
+  "required": [
+    "build_spec_version",
+    "parser_version",
+    "mapping_version",
+    "meta",
+    "catalog",
+    "scope",
+    "character",
+    "passive_tree",
+    "specializations",
+    "action_bar",
+    "equipment",
+    "idols",
+    "blessings",
+    "context",
+    "progression",
+    "readable_summary",
+    "extensions",
+    "issues",
+    "statuses"
+  ],
+  "properties": {
+    "build_spec_version": { "const": "build-spec-v1" },
+    "parser_version": { "type": "string" },
+    "mapping_version": { "type": "string" },
+    "meta": { "$ref": "#/$defs/meta" },
+    "catalog": { "$ref": "#/$defs/catalog" },
+    "scope": { "$ref": "#/$defs/scope" },
+    "character": { "$ref": "#/$defs/character" },
+    "passive_tree": { "$ref": "#/$defs/passive_tree" },
+    "specializations": { "type": "array", "items": { "$ref": "#/$defs/specialization" } },
+    "action_bar": { "$ref": "#/$defs/action_bar" },
+    "equipment": { "$ref": "#/$defs/equipment" },
+    "idols": { "$ref": "#/$defs/idols" },
+    "blessings": { "$ref": "#/$defs/blessings" },
+    "weaver": { "$ref": "#/$defs/weaver", "description": "New revisions: excluded_by_scope marker only. Historical revisions may still carry the old parsed objects." },
+    "context": { "$ref": "#/$defs/context" },
+    "progression": { "$ref": "#/$defs/progression" },
+    "readable_summary": { "$ref": "#/$defs/readable_summary" },
+    "extensions": { "type": "object" },
+    "issues": { "type": "array", "items": { "$ref": "#/$defs/issue" } },
+    "statuses": { "$ref": "#/$defs/statuses" },
+    "coverage": { "type": "object", "description": "Per-category coverage; each category keeps its own denominator." },
+    "value_resolution_notes": { "type": "object" }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "entity_ref": {
+      "type": "object",
+      "required": ["entity_id"],
+      "properties": {
+        "entity_id": { "type": "string", "description": "Catalog entity id, always taken from source_id_map (never string-concatenated)." },
+        "kind": { "type": ["string", "null"] },
+        "name": { "type": ["string", "null"] },
+        "status": { "$ref": "#/$defs/resolution_status" }
+      },
+      "additionalProperties": true
+    },
+    "resolution_status": {
+      "type": "string",
+      "enum": ["resolved", "unresolved", "ambiguous", "partial", "not_applicable", "not_run", "invalid"]
+    },
+    "nullable_ref": {
+      "anyOf": [{ "$ref": "#/$defs/entity_ref" }, { "type": "null" }]
+    },
+    "scope": {
+      "type": "object",
+      "required": ["scope_version", "included_sections", "excluded_features"],
+      "properties": {
+        "scope_version": { "const": "letools-build-scope-v2" },
+        "included_sections": { "type": "array", "items": { "type": "string" } },
+        "excluded_features": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["feature", "source_fields", "reason"],
+            "properties": {
+              "feature": { "type": "string", "examples": ["weaver_tree"] },
+              "source_fields": { "type": "array", "items": { "type": "string" } },
+              "reason": { "type": "string" },
+              "decision_date": { "type": "string" },
+              "raw_preserved": { "type": "boolean" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "readable_line": {
+      "type": "object",
+      "required": ["section", "kind", "text", "value_status"],
+      "properties": {
+        "section": {
+          "type": "string",
+          "enum": ["implicit", "affix_normal", "affix_sealed", "affix_primordial", "affix_corrupted", "unique_mod", "unique_description"]
+        },
+        "kind": { "type": "string", "enum": ["mod", "description"] },
+        "text": { "type": ["string", "null"] },
+        "tier_label": { "type": ["string", "null"] },
+        "value_status": { "type": "string", "enum": ["actual", "range", "constant", "not_provided", "unresolved"] },
+        "value_text": { "type": ["string", "null"] },
+        "range_text": { "type": ["string", "null"] },
+        "hidden": { "type": "boolean" },
+        "diagnostics": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "readable": {
+      "type": "object",
+      "required": ["version", "display_name", "lines", "completeness"],
+      "properties": {
+        "version": { "const": "letools-readable-v1" },
+        "display_name": { "type": ["string", "null"] },
+        "base_name": { "type": ["string", "null"] },
+        "item_type": { "type": ["string", "null"] },
+        "gear_category": { "type": ["string", "null"] },
+        "rarity": {
+          "type": ["object", "null"],
+          "properties": {
+            "code": { "type": "string" },
+            "label_zh": { "type": "string" },
+            "label_en": { "type": "string" },
+            "confidence": { "type": "string", "enum": ["definition", "catalog", "source"] }
+          },
+          "additionalProperties": true
+        },
+        "role": { "type": ["string", "null"] },
+        "lines": { "type": "array", "items": { "$ref": "#/$defs/readable_line" } },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "completeness": { "type": "string", "enum": ["complete", "partial", "definition_only", "unavailable"] },
+        "unique_composition": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "readable_summary": {
+      "type": "object",
+      "required": ["version", "items"],
+      "properties": {
+        "version": { "const": "letools-readable-v1" },
+        "items": { "type": "integer", "minimum": 0 },
+        "by_completeness": { "type": "object" },
+        "line_value_status": { "type": "object" },
+        "lines_without_text": { "type": "integer", "minimum": 0 },
+        "unique_composition": { "type": "object" },
+        "items_not_complete": { "type": "array", "items": { "type": "object" } }
+      },
+      "additionalProperties": true
+    },
+    "resolution": {
+      "type": "object",
+      "description": "Full resolver output kept for explain/traceability.",
+      "properties": {
+        "status": { "$ref": "#/$defs/resolution_status" },
+        "what": { "type": "string" },
+        "query": { "type": "object" },
+        "conversions": { "type": "array", "items": { "type": "string" } },
+        "candidates": { "type": "array", "items": { "type": "object" } },
+        "reason": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "meta": {
+      "type": "object",
+      "required": ["build_id", "share_id", "source", "protocol", "source_payload"],
+      "properties": {
+        "build_id": { "type": "string", "pattern": "^[a-z0-9_]+:[A-Za-z0-9_-]+$", "examples": ["letools:o3ZRm9my"] },
+        "share_id": { "type": "string" },
+        "share_url": { "type": ["string", "null"] },
+        "source": { "const": "letools" },
+        "source_endpoint": { "type": ["string", "null"] },
+        "protocol": {
+          "type": "object",
+          "properties": {
+            "protocol_version": { "type": ["string", "null"] },
+            "versions": { "type": "object", "description": "Raw + normalized source version fields; raw values are never overwritten." },
+            "version_compatibility": { "type": "object" }
+          },
+          "additionalProperties": true
+        },
+        "source_payload": {
+          "type": "object",
+          "required": ["raw_sha256"],
+          "properties": {
+            "raw_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "raw_path": { "type": ["string", "null"] },
+            "attempt_id": { "type": ["string", "null"] },
+            "fetch_mode": { "type": ["string", "null"] },
+            "fetched_at": { "type": ["string", "null"] },
+            "data_field_sha256": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "codec": {
+          "type": "object",
+          "properties": {
+            "codec_version": { "type": "string" },
+            "evidence": { "type": "object" }
+          },
+          "additionalProperties": true
+        },
+        "revision": {
+          "type": ["object", "null"],
+          "properties": {
+            "revision_id": { "type": "string" },
+            "content_sha256": { "type": "string" },
+            "revision_seq": { "type": "integer", "minimum": 1 },
+            "published_at": { "type": "string" },
+            "previous_revision_id": { "type": ["string", "null"] }
+          },
+          "additionalProperties": true
+        },
+        "import_attempt": { "type": ["object", "null"] },
+        "created_at": { "type": "string" },
+        "idempotency": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "catalog": {
+      "type": "object",
+      "required": ["dataset_id", "source_snapshot_id", "logical_content_sha256"],
+      "properties": {
+        "dataset_id": { "type": "string" },
+        "schema_version": { "type": ["string", "null"] },
+        "target_game_version": { "type": ["string", "null"] },
+        "target_season": { "type": ["string", "null"] },
+        "source_snapshot_id": { "type": "string" },
+        "logical_content_sha256": { "type": "string" },
+        "file_sha256": { "type": ["string", "null"] },
+        "database_path": { "type": "string" },
+        "verification": {
+          "type": "object",
+          "properties": {
+            "verified": { "type": "boolean" },
+            "checks": { "type": "array", "items": { "type": "object" } }
+          },
+          "additionalProperties": true
+        },
+        "compatibility": { "type": "object" },
+        "counts": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "character": {
+      "type": "object",
+      "required": ["level", "class", "mastery"],
+      "properties": {
+        "level": { "type": ["integer", "null"], "minimum": 1, "maximum": 100 },
+        "class": { "$ref": "#/$defs/character_class" },
+        "mastery": { "$ref": "#/$defs/character_mastery" }
+      },
+      "additionalProperties": true
+    },
+    "character_class": {
+      "type": "object",
+      "properties": {
+        "source_value": {},
+        "source_path": { "type": "string" },
+        "status": { "$ref": "#/$defs/resolution_status" },
+        "ref": { "$ref": "#/$defs/nullable_ref" },
+        "resolution": { "$ref": "#/$defs/resolution" }
+      },
+      "additionalProperties": true
+    },
+    "character_mastery": {
+      "type": "object",
+      "properties": {
+        "source_value": {},
+        "source_path": { "type": "string" },
+        "status": { "$ref": "#/$defs/resolution_status" },
+        "ref": { "$ref": "#/$defs/nullable_ref" },
+        "source_mastery_id": { "type": ["string", "null"] },
+        "note": { "type": "string" },
+        "resolution": { "$ref": "#/$defs/resolution" }
+      },
+      "additionalProperties": true
+    },
+    "node_entry": {
+      "type": "object",
+      "required": ["node_id", "source_path", "points", "status"],
+      "properties": {
+        "node_id": { "type": "string" },
+        "source_path": { "type": "string", "description": "Dot pointer into the archived raw payload." },
+        "points": { "type": ["integer", "null"], "minimum": 0 },
+        "explicit_zero": { "type": "boolean", "description": "True when the source explicitly records 0 points (must not be dropped)." },
+        "status": { "$ref": "#/$defs/resolution_status" },
+        "ref": { "$ref": "#/$defs/nullable_ref" },
+        "node_kind": { "type": "string" },
+        "node_type": { "type": ["string", "null"] },
+        "max_points": { "type": ["integer", "null"] },
+        "node_index": { "type": ["integer", "null"] },
+        "points_within_max": { "type": ["boolean", "null"] },
+        "conversions": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "passive_tree": {
+      "type": "object",
+      "required": ["tree", "node_entries", "points_total", "nodes"],
+      "properties": {
+        "tree": { "$ref": "#/$defs/nullable_ref" },
+        "source_tree_id": { "type": "string", "description": "Raw charTree.treeID (empty string by protocol design)." },
+        "derived_source_tree_id": { "type": ["string", "null"] },
+        "source_version": { "type": ["integer", "null"] },
+        "catalog_tree_version": { "type": ["integer", "null"] },
+        "node_entries": { "type": "integer" },
+        "points_total": { "type": "integer" },
+        "explicit_zero_entries": { "type": "integer" },
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/node_entry" } },
+        "status": { "$ref": "#/$defs/resolution_status" },
+        "resolution": { "$ref": "#/$defs/resolution" }
+      },
+      "additionalProperties": true
+    },
+    "specialization": {
+      "type": "object",
+      "required": ["slot_number", "tree", "nodes", "points_total"],
+      "properties": {
+        "slot_number": { "type": ["integer", "null"], "minimum": 0 },
+        "source_level": { "type": ["integer", "null"] },
+        "tree_version": { "type": ["integer", "null"] },
+        "tree": { "$ref": "#/$defs/nullable_ref" },
+        "tree_entity_id": { "type": ["string", "null"] },
+        "tree_source_id": { "type": ["string", "null"] },
+        "owner_skill": { "$ref": "#/$defs/nullable_ref" },
+        "node_entries": { "type": "integer" },
+        "positive_node_entries": { "type": "integer" },
+        "points_total": { "type": "integer" },
+        "explicit_zero_entries": { "type": "integer" },
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/node_entry" } },
+        "status": { "$ref": "#/$defs/resolution_status" },
+        "resolution": { "$ref": "#/$defs/resolution" }
+      },
+      "additionalProperties": true,
+      "description": "One specialization slot. The source level is NOT the allocated point total; both are stored independently. Specializations are independent from the action bar."
+    },
+    "action_bar": {
+      "type": "object",
+      "required": ["slots"],
+      "properties": {
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slot", "source_id"],
+            "properties": {
+              "slot": { "type": "integer", "minimum": 0 },
+              "source_id": { "type": "string" },
+              "source_path": { "type": "string" },
+              "ref": { "$ref": "#/$defs/nullable_ref" },
+              "specialization_slot": { "type": ["integer", "null"] },
+              "status": { "$ref": "#/$defs/resolution_status" },
+              "resolution": { "$ref": "#/$defs/resolution" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "source_ids": { "type": "array", "items": { "type": "string" } },
+        "note": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "roll_block": {
+      "type": "object",
+      "properties": {
+        "raw": { "type": ["integer", "null"], "minimum": 0, "maximum": 255 },
+        "status": { "type": "string", "enum": ["present", "absent", "null", "invalid", "local_input"] },
+        "source_status": { "type": "string", "description": "Original source field status when the roll was supplied by a local input." },
+        "source_path": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "tier_block": {
+      "type": "object",
+      "properties": {
+        "source_tier": { "type": ["integer", "null"] },
+        "tier_index": { "type": ["integer", "null"], "description": "Catalog affix_tiers.tier_index; observed mapping is source tier - 1." },
+        "status": { "$ref": "#/$defs/resolution_status" },
+        "roll_min": { "type": ["number", "null"] },
+        "roll_max": { "type": ["number", "null"] },
+        "available_tiers": { "type": ["integer", "null"] },
+        "reason": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "value_entry": {
+      "type": "object",
+      "properties": {
+        "property": { "type": ["integer", "null"] },
+        "stat_id": { "type": ["string", "null"] },
+        "stat_name": { "type": ["string", "null"] },
+        "unit": { "type": ["string", "null"] },
+        "modifier_type": { "type": ["integer", "null"] },
+        "direction": { "type": ["string", "null"], "enum": ["ascending", "inverted", "constant", null] },
+        "roll_min": { "type": ["number", "null"] },
+        "roll_max": { "type": ["number", "null"] },
+        "value_numeric": { "type": ["number", "null"], "description": "Derived numeric value; null when not provably restorable." },
+        "display_value": { "type": ["string", "null"], "description": "Display string; never reuse the numeric value as a claim of final stat." },
+        "round_added_to_int": { "type": ["integer", "null"] },
+        "derivation": { "type": ["string", "null"] },
+        "status": { "$ref": "#/$defs/resolution_status" }
+      },
+      "additionalProperties": true
+    },
+    "value_block": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string", "enum": ["resolved", "partial", "unresolved", "absent"] },
+        "roll_status": { "type": ["string", "null"] },
+        "raw_roll": { "type": ["integer", "null"] },
+        "values": { "type": "array", "items": { "$ref": "#/$defs/value_entry" } },
+        "effective_value_policy": { "type": ["object", "null"], "description": "Derived display policy (e.g. average) when the source has no roll; never overwrites the source value." },
+        "evidence": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "affix_instance": {
+      "type": "object",
+      "required": ["instance_id", "channel", "source_path", "encoded_id"],
+      "properties": {
+        "instance_id": { "type": "string" },
+        "channel": { "type": "string", "enum": ["normal", "sealed", "primordial", "corrupted"] },
+        "original_field": { "type": "string" },
+        "index": { "type": "integer" },
+        "source_path": { "type": "string" },
+        "encoded_id": { "type": ["string", "null"] },
+        "source_tier": { "type": ["integer", "null"] },
+        "codec": { "type": "object" },
+        "codec_reverse_check": { "type": ["object", "null"] },
+        "affix": { "type": "object" },
+        "tier": { "$ref": "#/$defs/tier_block" },
+        "roll": { "$ref": "#/$defs/roll_block" },
+        "value": { "$ref": "#/$defs/value_block" },
+        "status": { "type": "string" }
+      },
+      "additionalProperties": true,
+      "description": "Sealed/primordial/corrupted affixes are separate channels and must not be merged into normal affixes; the channel name is not the game mechanic."
+    },
+    "item_instance": {
+      "type": "object",
+      "required": ["instance_id", "role", "source_path"],
+      "properties": {
+        "instance_id": { "type": "string", "description": "Revision-local normalized source path; identical items at different positions keep distinct ids." },
+        "role": { "type": "string", "enum": ["equipment", "equipment_unknown_slot", "idol", "blessing", "weaver_container_content"] },
+        "slot": { "type": ["string", "null"] },
+        "position": { "type": ["object", "null"] },
+        "source_path": { "type": "string" },
+        "encoded_id": { "type": ["string", "null"] },
+        "codec": { "type": "object" },
+        "codec_class": { "type": ["string", "null"], "enum": ["affix", "unique", "base", null] },
+        "rarity": { "type": ["string", "null"] },
+        "definition": { "type": ["object", "null"], "description": "Unique/set definition reference plus definition fields." },
+        "base": { "type": ["object", "null"], "description": "Concrete base item reference." },
+        "definition_status": { "$ref": "#/$defs/resolution_status" },
+        "base_status": { "$ref": "#/$defs/resolution_status" },
+        "affixes": {
+          "type": "object",
+          "properties": {
+            "normal": { "type": "array", "items": { "$ref": "#/$defs/affix_instance" } },
+            "sealed": { "type": "array", "items": { "$ref": "#/$defs/affix_instance" } },
+            "primordial": { "type": "array", "items": { "$ref": "#/$defs/affix_instance" } },
+            "corrupted": { "type": "array", "items": { "$ref": "#/$defs/affix_instance" } }
+          },
+          "additionalProperties": true
+        },
+        "affix_counts": { "type": "object" },
+        "affix_total": { "type": "integer" },
+        "implicit_rolls": { "type": "object" },
+        "unique_rolls": { "type": "object" },
+        "faction": { "type": ["array", "null"], "description": "Preserved verbatim; no faction semantic is claimed in phase 2." },
+        "unrecognized_fields": { "type": "object" },
+        "counts_as_equipped": { "type": "boolean", "description": "False for weaver container contents (historical revisions only)." },
+        "readable": { "$ref": "#/$defs/readable", "description": "Player-readable lines generated at import time (2026-11-03 rework)." },
+        "status": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "equipment": {
+      "type": "object",
+      "required": ["slots", "absent_slots"],
+      "properties": {
+        "slot_order": { "type": "array", "items": { "type": "string" } },
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slot", "instance"],
+            "properties": {
+              "slot": { "type": "string" },
+              "instance": { "$ref": "#/$defs/item_instance" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "absent_slots": { "type": "array", "items": { "type": "string" }, "description": "Slots absent from the source; they are never filled with invented items." },
+        "note": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "idols": {
+      "type": "object",
+      "required": ["entries"],
+      "properties": {
+        "new_grid": { "type": ["boolean", "null"] },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "index": { "type": "integer" },
+              "position": {
+                "type": "object",
+                "properties": {
+                  "x": { "type": ["integer", "null"] },
+                  "y": { "type": ["integer", "null"] }
+                },
+                "additionalProperties": true
+              },
+              "instance": { "$ref": "#/$defs/item_instance" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "grid_validation": { "type": "object", "description": "Bounds/flip semantics stay unverified until the grid rule is proven." }
+      },
+      "additionalProperties": true
+    },
+    "blessings": {
+      "type": "object",
+      "required": ["entries"],
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "timeline": { "type": "string", "description": "Original timeline/slot key; never reordered by name." },
+              "instance": { "$ref": "#/$defs/item_instance" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "note": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "weaver": {
+      "type": "object",
+      "description": "New revisions only declare exclusion (2026-11-03 user scope). Historical revisions may still contain tree/nodes/containers.",
+      "properties": {
+        "status": { "type": "string", "enum": ["excluded_by_scope"] },
+        "source_fields": { "type": "array", "items": { "type": "string" } },
+        "present_in_source": { "type": "array", "items": { "type": "string" } },
+        "raw_preserved": { "type": "boolean" },
+        "note": { "type": "string" },
+        "tree": { "$ref": "#/$defs/nullable_ref" },
+        "source_tree_id": { "type": "string" },
+        "source_version": { "type": ["integer", "null"] },
+        "node_entries": { "type": "integer" },
+        "points_total": { "type": "integer" },
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/node_entry" } },
+        "containers": { "type": "array", "items": { "type": "object" } },
+        "container_status": { "type": "string" },
+        "container_note": { "type": "string" },
+        "resolution": { "$ref": "#/$defs/resolution" }
+      },
+      "additionalProperties": true
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "conditions": { "type": "object" },
+        "custom_conditions": { "type": "object" },
+        "buff_settings": { "type": "object" },
+        "active_buffs": {
+          "type": "object",
+          "properties": {
+            "raw": { "type": "object" },
+            "source_path": { "type": "string" },
+            "skills": { "type": "array", "items": { "type": "object" } },
+            "buffs": { "type": "array", "items": { "type": "object" } },
+            "ailments": { "type": "array", "items": { "type": "object" } },
+            "note": { "type": "string", "description": "Saved activation configuration; not evidence that every related buff is active or at maximum stacks." }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "progression": {
+      "type": "object",
+      "properties": {
+        "char_tree_progression": { "type": "array" },
+        "skill_trees_progression": { "type": "array" },
+        "weaver_tree_progression": { "type": "array" },
+        "completed_quests": { "type": "array" },
+        "note": { "type": "string", "description": "Preserved for traceability, never used to override current allocations." }
+      },
+      "additionalProperties": true
+    },
+    "issue": {
+      "type": "object",
+      "required": ["code", "severity", "path", "message"],
+      "properties": {
+        "code": { "type": "string" },
+        "severity": { "type": "string", "enum": ["error", "warning", "info"] },
+        "path": { "type": "string" },
+        "message": { "type": "string" },
+        "detail": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "statuses": {
+      "type": "object",
+      "required": ["fetch", "schema", "catalog_compatibility", "identity_resolution", "value_resolution", "calculation_readiness"],
+      "properties": {
+        "fetch": { "type": "string", "enum": ["ok", "failed"] },
+        "schema": { "type": "string", "enum": ["supported", "partial", "invalid"] },
+        "catalog_compatibility": { "type": "string", "enum": ["matched", "unknown", "mismatched"] },
+        "identity_resolution": { "type": "string", "enum": ["resolved", "partial", "failed"] },
+        "value_resolution": { "type": "string", "enum": ["resolved", "partial", "not_run"] },
+        "text_readiness": { "type": "string", "enum": ["complete", "partial", "unavailable"], "description": "Whether player-readable text is complete; separate from numeric value resolution and from combat implementation." },
+        "readable_completeness": { "type": "object" },
+        "scope": { "type": "string" },
+        "calculation_readiness": { "type": "string", "enum": ["not_assessed", "partial", "ready_for_scoped_engine"] },
+        "catalog_binding": { "type": "object" },
+        "identity_resolution_detail": { "type": "object" }
+      },
+      "additionalProperties": true,
+      "description": "Layered statuses. A single READY flag must never hide unresolved values or unsupported mechanics."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "dataset_id": "phase1-dataset-003",
+  "database": "data\\releases\\phase1-dataset-003\\data.sqlite",
+  "manifest": "data\\releases\\phase1-dataset-003\\manifest.json",
+  "logical_content_sha256": "979d18204631746e183dd533d647a8e7e8138ac96ded3b0f19324669b9f80527",
+  "file_sha256": "afa79e9fda0023b2ed09f4cbe8e07da436e0c74c03f34f80772da471c0adb8ab",
+  "schema_version": "1",
+  "target_game_version": "1.5.2",
+  "dataset_status": "valid",
+  "partial": false,
+  "published_at": "2026-11-04T14:35:48+00:00"
+}

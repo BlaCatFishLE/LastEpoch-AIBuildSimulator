@@ -1,0 +1,20 @@
+{
+ "date": "2026-11-05",
+ "timezone": "Asia/Shanghai",
+ "source": "user in-game controlled observation (user message)",
+ "A_cooldown": {
+  "measured": "Black Hole charge refill time = 3.6 s (current build: base recharge 14s, Endless Maw +2s, Recurrence 60%, gear/passive ICR 75.75%, 2 charges)",
+  "math_check": "(14 + 2) * (1 - 0.6) / (1 + 0.7575) = 16 * 0.4 / 1.7575 = 3.6413 s",
+  "conclusion": "Recurrence property-70 60% is a multiplicative cooldown-reduction factor (1 - CDR) applied to the adjusted cooldown, while player ICR is a separate (1 + ICR) divisor. The v1 additive ICR-pool formula (6.787s) is rejected."
+ },
+ "B_binary": {
+  "measured": "Training dummy total DPS 400k -> 800k when Black Hole Binary System is enabled; user notes the DPS is mostly Ignite",
+  "conclusion": "Binary System +100% is an independent more multiplier on total Black Hole damage (x2 total; Ignite dominates DPS and is also doubled), on top of the structural two-component (fire+cold) split. Ignite inherits the Binary +100% more (user rule 5)."
+ },
+ "code_cross_check": {
+  "binary": "BlackHoleTree.updateMutator case 'Black Hole Binary Star' sets the binary flag AND constructs Stats.Stat(property=Damage(0), tags=0, increased=0, more=points*1.0); DamageStatsHolder.addBaseDamage is a plain += so the two-star structural copy is real too (evidence: bh-tree-mutator-effects-1.5.3.json).",
+  "ignite_inheritance": "AilmentReceiver.ApplyAilment builds the ailment stats from the applying ability mutator and takes a Stats increases object (RVA 0x2832d40); the Binary more stat therefore reaches Ignite (evidence: README section 10/9).",
+  "cooldown": "BlackHoleMutator.getChargeRegen override divides the base recharge rate by (1 - blackHoleReducedCooldown); Recurrence node data property 70 Cooldown Reduction (evidence: cooldown-charge-1.5.3.json)."
+ },
+ "status": "confirmed"
+}

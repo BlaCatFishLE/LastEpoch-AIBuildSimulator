@@ -1,0 +1,201 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-node-arcane-severance",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave 树节点 12 Arcane Severance（more melee + added spell 转换）",
+    "en": "Arcane Severance (Flame Reave tree node 12)"
+  },
+  "aliases": [
+    "Arcane Severance",
+    "fr11mv:12",
+    "node:fr11mv:12"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:12"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Melee"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:fr11mv:12"
+    ]
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "points",
+      "source": "current:matched_instances",
+      "unit": "points",
+      "note": "当前 BD 已分配点数"
+    },
+    {
+      "parameter": "value_per_point",
+      "source": "current:matched_instances",
+      "unit": "按 effect unit",
+      "per_point": true
+    },
+    {
+      "parameter": "value_total",
+      "source": "current:matched_instances",
+      "unit": "按 effect unit",
+      "per_point": false
+    },
+    {
+      "parameter": "contribution rows",
+      "source": "current:matched_instances",
+      "unit": "按 stat_key",
+      "note": "role=stat 的 effect 生成 contribution；info/ignored 不生成"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "arcane_severance_melee_more",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=arcane_severance_melee_more"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_inputs",
+    "symbol": "FR_SKILL_NODE_SEMANTICS",
+    "note": "key '12'；role=stat 的 more melee 行 + role=derived 的 added_melee_per_4_added_spell；由 _added_spell_damage_total 生成 derived:fr11mv:arcane_severance_added_melee"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#nodes entity_id=node:letools:fr11mv:12",
+      "note": "Arcane Severance 节点描述/类型/上限"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:12",
+      "note": "Melee Damage +4%/点（more）；Melee Damage per 4 Spell Damage +1/点（derived added melee）"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#node:12",
+      "note": "facts 的逐节点效果聚合（per_point × points）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=12)",
+      "note": "快照冻结的节点效果（role=stat/info/ignored/derived）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "note": "FR 机制研究：节点参数与说明"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects owner_entity_id=node:letools:fr11mv:12",
+      "note": "Arcane Severance altText：all types of added spell damage count and are added as corresponding melee type"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=arcane_severance_melee_more",
+      "note": "ruleset 的该效果条目"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/skills/specializations(tree=fr11mv)/nodes(node_id=12)/points",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=12)/effects[*]/value_per_point",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=12)/effects[*]/value_total",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[contribution_id prefix=skill:fr11mv:12:]",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "fr-hit-single-hit-chain",
+      "requirement": "节点贡献作为单次命中池的来源之一",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model"
+    },
+    {
+      "with": "fr-hit-conditional-state-eval",
+      "requirement": "带 condition_code 的节点行必须按 scenario states 求值",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/states"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "OQ9：added spell → added melee 的类型未定（本模型按 Fire 处理，assumed）",
+      "转换顺序（先换算再 × added_scaling）与是否受 added_damage_scaling 影响无游戏真值",
+      "added spell 总量来自装备/被动（Infused Weapon/Burden of Knowledge），换 BD 需重读"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "more",
+    "stacking_policy": "linear_per_stack",
+    "order_policy": "more melee 组 node:fr11mv:12；另把全部 added spell damage 按每 4 点换 3 点 added melee 转为 derived contribution",
+    "more_group_source": "节点描述 multiplicative + group=node:fr11mv:12"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

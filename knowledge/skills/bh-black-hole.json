@@ -1,0 +1,664 @@
+{
+  "schema": "le-knowledge-skill-template-v1",
+  "skill_id": "bh-black-hole",
+  "revision": 2,
+  "ability_id": "bh2",
+  "title": {
+    "zh": "Black Hole（黑洞）· 本体 + 自然 Ignite 事件模型",
+    "en": "Black Hole - body + natural Ignite event model"
+  },
+  "class": "Mage",
+  "mastery": "Sorcerer",
+  "damage_tags": [
+    "Fire",
+    "Cold",
+    "Spell",
+    "DoT",
+    "Ailment"
+  ],
+  "model_id": "bh-event",
+  "components": [
+    {
+      "component_id": "bh-body-fire",
+      "damage_type": "fire",
+      "kind": "body",
+      "tags": [
+        "Spell",
+        "DoT"
+      ],
+      "added_sources": [
+        "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/flat_added_spell_damage_total",
+        "mechanism:bh-body-component"
+      ],
+      "notes": "Red Giant/Binary 条件下生成的火焰本体分量（RepeatedlyDamageEnemiesWithinRadius，hit=false、damageAtStart=true）；基础值/added scaling/interval 从 ruleset 读，不在模板中复制数值。"
+    },
+    {
+      "component_id": "bh-body-cold",
+      "damage_type": "cold",
+      "kind": "body",
+      "tags": [
+        "Spell",
+        "DoT"
+      ],
+      "added_sources": [
+        "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/flat_added_spell_damage_total",
+        "mechanism:bh-binary-system"
+      ],
+      "notes": "仅 Binary System 时存在的冷分量（第二颗星）；非 Binary 时不存在，Red Giant 下原冷伤被转换为火。"
+    },
+    {
+      "component_id": "bh-ignite",
+      "damage_type": "fire",
+      "kind": "ignite",
+      "tags": [
+        "DoT",
+        "Ailment"
+      ],
+      "added_sources": [],
+      "notes": "Heat Wave 施加的 Ignite（期望值模型）：单层伤害与期望层数分开计算；层数来自每次判定的期望值，不模拟逐次随机。"
+    }
+  ],
+  "calculation_blocks": [
+    {
+      "block": "tag_match",
+      "module": "le_calc.damage",
+      "symbol": "tags_match",
+      "note": "组件标签适用性；Elemental 展开在标签匹配阶段完成。"
+    },
+    {
+      "block": "added_scaling",
+      "module": "le_calc.damage",
+      "symbol": "compute_body",
+      "note": "每跳基础值 = base + added × addedDamageScaling；含 Red Giant/Binary 分量生成。"
+    },
+    {
+      "block": "increased_aggregate",
+      "module": "le_calc.damage",
+      "symbol": "_collect_increased",
+      "note": "inc 加算池（含 Intelligence 属性行）；Ignite 侧复用同一收集器。"
+    },
+    {
+      "block": "more_groups",
+      "module": "le_calc.damage",
+      "symbol": "group_more_rows",
+      "note": "节点 more 分组（组内相加、组间相乘）；Ignite 继承集合由 ruleset.ignite.inheritance 决定。"
+    },
+    {
+      "block": "target_side",
+      "module": "le_calc.damage",
+      "symbol": "_target_multiplier",
+      "note": "抗性 - 穿透（可负）× (1 - monster_dr)；Ignite 侧镜像另读专属火穿。"
+    },
+    {
+      "block": "frequency",
+      "module": "le_calc.cooldown",
+      "symbol": "compute_cooldown",
+      "note": "charge 基础/固定调整/CDR/ICR；施法时间由 compute_cast_time 单独计算。"
+    },
+    {
+      "block": "ledger",
+      "module": "le_calc.ledger",
+      "symbol": "build_source_ledger",
+      "note": "来源账；规则账与一致性由 le_calc.report 生成。"
+    }
+  ],
+  "mappings": [
+    {
+      "selector": "ability:bh2",
+      "mechanism_id": "bh-body-component",
+      "note": "技能本体组件与单跳伤害。"
+    },
+    {
+      "selector": "node:bh2:0",
+      "mechanism_id": "bh-body-component"
+    },
+    {
+      "selector": "node:bh2:2",
+      "mechanism_id": "bh-skill-tree-more-nodes"
+    },
+    {
+      "selector": "node:bh2:4",
+      "mechanism_id": "bh-red-giant",
+      "note": "同时贡献 duration（见 bh-duration）。"
+    },
+    {
+      "selector": "node:bh2:6",
+      "mechanism_id": "bh-ignite-heat-wave"
+    },
+    {
+      "selector": "node:bh2:7",
+      "mechanism_id": "bh-skill-tree-more-nodes"
+    },
+    {
+      "selector": "node:bh2:9",
+      "mechanism_id": "bh-binary-system",
+      "note": "结构双分量 + 独立 more + Ignite 继承。"
+    },
+    {
+      "selector": "node:bh2:10",
+      "mechanism_id": "bh-skill-tree-more-nodes"
+    },
+    {
+      "selector": "node:bh2:15",
+      "mechanism_id": "bh-duration"
+    },
+    {
+      "selector": "node:bh2:17",
+      "mechanism_id": "bh-cooldown-cdr-icr"
+    },
+    {
+      "selector": "node:bh2:23",
+      "mechanism_id": "bh-supermassive"
+    },
+    {
+      "selector": "node:bh2:24",
+      "mechanism_id": "bh-duration"
+    },
+    {
+      "selector": "node:bh2:25",
+      "mechanism_id": "bh-cooldown-charges",
+      "note": "cooldown 固定秒数由本机制；同时 +duration 见 bh-duration。"
+    },
+    {
+      "selector": "node:bh2:27",
+      "mechanism_id": "bh-weakened-reality"
+    },
+    {
+      "selector": "node:bh2:28",
+      "mechanism_id": "bh-black-hole-instances",
+      "note": "另含独立 more（见 bh-skill-tree-more-nodes）。"
+    },
+    {
+      "selector": "node:bh2:30",
+      "mechanism_id": "bh-cooldown-charges"
+    },
+    {
+      "selector": "condition:target.boss_or_rare",
+      "mechanism_id": "bh-supermassive"
+    },
+    {
+      "selector": "condition:target.within_center_1m",
+      "mechanism_id": "bh-weakened-reality"
+    },
+    {
+      "selector": "item:equipment:ring2",
+      "mechanism_id": "bh-cond-crescendoing-rage"
+    },
+    {
+      "selector": "idol:equipment:idols.2",
+      "mechanism_id": "bh-cond-idol-fire-doubling"
+    },
+    {
+      "selector": "idol:equipment:idols.3",
+      "mechanism_id": "bh-cond-idol-fire-doubling"
+    },
+    {
+      "selector": "idol:equipment:idols.4",
+      "mechanism_id": "bh-cond-throne-of-ambition"
+    },
+    {
+      "selector": "item:equipment:idol_altar",
+      "mechanism_id": "bh-cond-idol-altar-layout-cdr"
+    },
+    {
+      "selector": "item:equipment:head",
+      "mechanism_id": "bh-cond-apex-glyph-conversion"
+    },
+    {
+      "selector": "node:sb44eQ:9",
+      "mechanism_id": "bh-cond-eternal-flames-passive"
+    },
+    {
+      "selector": "node:sb44eQ:9",
+      "mechanism_id": "bh-cond-eternal-flames-active",
+      "note": "同一节点的激活形态；两机制共享点数，激活时按增量行处理。"
+    },
+    {
+      "selector": "node:sb44eQ:10",
+      "mechanism_id": "bh-cond-conflagrate"
+    },
+    {
+      "selector": "node:fw3d:2",
+      "mechanism_id": "bh-cond-infusion"
+    },
+    {
+      "selector": "node:fw3d:12",
+      "mechanism_id": "bh-cond-flame-ward-fire-aura"
+    },
+    {
+      "selector": "node:fr4wl:16",
+      "mechanism_id": "bh-cond-chilled-touch"
+    },
+    {
+      "selector": "node:me27:25",
+      "mechanism_id": "bh-cond-craterborn"
+    },
+    {
+      "selector": "node:mg-1:4",
+      "mechanism_id": "bh-cond-preparation"
+    },
+    {
+      "selector": "node:mg-1:36",
+      "mechanism_id": "bh-cond-frozen-steel"
+    }
+  ],
+  "parameter_paths": [
+    {
+      "parameter": "base_cold_damage",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/components/0/base_damage/cold",
+      "unit": "flat",
+      "required": true
+    },
+    {
+      "parameter": "added_damage_scaling",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/components/0/added_damage_scaling",
+      "required": true
+    },
+    {
+      "parameter": "damage_interval_s",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/components/0/damage_interval_s",
+      "unit": "seconds",
+      "required": true
+    },
+    {
+      "parameter": "base_duration_s",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/duration/base_duration_s",
+      "unit": "seconds",
+      "required": true
+    },
+    {
+      "parameter": "duration_tree_terms",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/duration/tree_terms",
+      "required": true
+    },
+    {
+      "parameter": "attribute_scaling",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/attribute_scaling",
+      "required": true
+    },
+    {
+      "parameter": "intelligence",
+      "from": "current:calculation_input",
+      "unit": "points",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/attributes/intelligence"
+    },
+    {
+      "parameter": "player_contributions",
+      "from": "current:calculation_input",
+      "note": "按 stat_key/operation/标签过滤；JSON Pointer 不支持谓词，逐行定位用 source-ledger 的 contribution_id。",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions"
+    },
+    {
+      "parameter": "increased_cast_speed_total",
+      "from": "current:calculation_input",
+      "unit": "fraction",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_cast_speed_total"
+    },
+    {
+      "parameter": "increased_bh_duration_total",
+      "from": "current:calculation_input",
+      "unit": "fraction",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_bh_duration_total"
+    },
+    {
+      "parameter": "ignite_base_damage",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/base_damage",
+      "unit": "flat",
+      "required": true
+    },
+    {
+      "parameter": "ignite_base_duration_s",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/base_duration_s",
+      "unit": "seconds",
+      "required": true
+    },
+    {
+      "parameter": "increased_ignite_duration_total",
+      "from": "current:calculation_input",
+      "unit": "fraction",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_duration_total"
+    },
+    {
+      "parameter": "uncapped_fire_resistance",
+      "from": "current:calculation_input",
+      "unit": "percent",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/resistances/fire/total"
+    },
+    {
+      "parameter": "heat_wave_node",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/heat_wave",
+      "required": true
+    },
+    {
+      "parameter": "penetration_applies_to",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/target_side/penetration_applies_to",
+      "required": true
+    },
+    {
+      "parameter": "target_base_resistances",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/target_side/base_resistances",
+      "required": true
+    },
+    {
+      "parameter": "fire_penetration_total",
+      "from": "current:calculation_input",
+      "unit": "fraction",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/fire_penetration_total"
+    },
+    {
+      "parameter": "penetration_with_ignite_total",
+      "from": "current:calculation_input",
+      "unit": "fraction",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/penetration_with_ignite_total"
+    },
+    {
+      "parameter": "base_recharge_s",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cooldown/base_recharge_s",
+      "unit": "seconds",
+      "required": true
+    },
+    {
+      "parameter": "cooldown_flat_total_s",
+      "from": "current:calculation_input",
+      "unit": "seconds",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/cooldown_flat_total_s"
+    },
+    {
+      "parameter": "cooldown_reduction_total",
+      "from": "current:calculation_input",
+      "unit": "fraction",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/cooldown_reduction_total"
+    },
+    {
+      "parameter": "increased_cooldown_recovery_speed_total",
+      "from": "current:calculation_input",
+      "unit": "fraction",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_cooldown_recovery_speed_total"
+    },
+    {
+      "parameter": "extra_max_charges",
+      "from": "current:calculation_input",
+      "unit": "charges",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/extra_max_charges"
+    },
+    {
+      "parameter": "cast_animation_speed",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cast/animation_speed",
+      "required": true
+    },
+    {
+      "parameter": "cast_speed_multiplier",
+      "from": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cast/speed_multiplier",
+      "required": true
+    },
+    {
+      "parameter": "monster_level",
+      "from": "current:calculation_input",
+      "unit": "level",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/target/monster_level"
+    },
+    {
+      "parameter": "monster_dr_table",
+      "from": "tools/phase3/data/monster_dr.json#/levels",
+      "required": true
+    },
+    {
+      "parameter": "target.boss_or_rare",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/target.boss_or_rare"
+    },
+    {
+      "parameter": "target.both_stars_cover",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/target.both_stars_cover"
+    },
+    {
+      "parameter": "target.within_center_1m",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/target.within_center_1m"
+    },
+    {
+      "parameter": "baseline_profile",
+      "from": "current:calculation_input",
+      "required": true,
+      "evidence_locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/baseline_profile"
+    },
+    {
+      "parameter": "skill_node_points (示例: Black Hole node 2)",
+      "from": "current:calculation_input",
+      "unit": "points",
+      "note": "节点数组索引由导入顺序决定；稳定定位用 node_id（node:bh2:2）。当前 ruleset 的 value_total 已按本案例点数冻结，引擎不读该字段。",
+      "required": false,
+      "evidence_locator": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/skills/specializations/3/nodes/1/points"
+    },
+    {
+      "parameter": "conditional_effect_values",
+      "from": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/effects",
+      "note": "条件效果数值/条件/控制类型在注册表；逐效果条目见 knowledge/mechanisms/bh-cond-*.json。",
+      "required": false
+    }
+  ],
+  "schedule": {
+    "driver": "event_simulation",
+    "cooldown_source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cooldown",
+    "recovery_stat": "cooldown_recovery_speed",
+    "hits_per_cast": 1,
+    "windows_s": [
+      5,
+      30,
+      120
+    ],
+    "fractional_casts": "floor",
+    "notes": "charge-based + cast-time 双约束的事件调度；eager/patient 两种动作策略；单次口径观察至最后一层 Ignite 到期。目标/策略均为固定条件估算，不是实战 DPS。"
+  },
+  "supported_interactions": [
+    "BH 本体组件与跳数离散化（ceil full ticks；生成即首跳）",
+    "Red Giant 冷转火（含 duration 加算）",
+    "Binary System 结构双分量 + 独立 more + Ignite 继承该 more",
+    "Singularity 单次施放 1 个黑洞；多次施放并存（eager 重叠、patient 等待）",
+    "Ignite 单层伤害、duration 乘区、Heat Wave 周期判定/期望层数/cohort 重叠与尾伤",
+    "Fire Penetration with Ignite（Ignite 专属）+ body/ignite 穿透分流",
+    "charge 冷却 / CDR / ICR / 施法时间 / eager-patient 循环与 5-30-120s 窗口",
+    "目标侧怪物等级 DR（1..100 表）与负抗性穿透",
+    "条件通道固定条件估算（注册效果的发现/求值/重算；见 docs/mechanisms.md §3.5 与条件注册表）",
+    "双基线 legacy_single_skill / build_base（不可混用或相减宣称增益）",
+    "来源账/规则账/一致性检查/离线单文件玩家报告与本地 serve 重算（BH 模型）"
+  ],
+  "unsupported": [
+    {
+      "item": "其他技能的主动/被动树效果进入主 DPS（Meteor、Enchant Weapon、Flame Ward、Frost Wall 等）",
+      "reason": "不建模跨技能自身伤害；仅作为条件 Buff 候选被发现/配置/部分重算。完整 BD DPS 需另建多技能伤害通道。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "编织者天赋树与容器",
+      "reason": "按用户决定（scope letools-build-scope-v2）不纳入 BD 导入范围；原始响应归档。其中可能含主技能增伤，因此不能据此声称完整 DPS。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "队伍/外部队友 Buff",
+      "reason": "未建模；报告只反映单人构筑。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "法力消耗与恢复",
+      "reason": "本阶段口径为无限法力；长期循环/资源受限的可持续性未建模。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "非伤害状态（Chill/Blind 等）的施加与覆盖",
+      "reason": "未建模，只作为目标/玩家条件来源；点火几率与冰缓覆盖率不精确。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "Crescendoing Rage",
+      "reason": "规则包 unresolved + 用户决定本阶段 deferred；单次口径可声明，循环相位未接入。若声称完整循环 DPS 则缺该乘区。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "Preparation（下一次元素法术）",
+      "reason": "规则包 unresolved；t=0 就绪/刷新间隔/消耗顺序未确认，v1 不默认生效。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "神像祭坛网格条件 CDR（Pyramidal Altar）",
+      "reason": "grid_validation=not_verified，布局条件无法自动判定；不计祭坛 ICR（频率影响）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "Frozen Steel / Conflagrate / Apex Glyph 转换",
+      "reason": "mechanism_unresolved / needs_action_or_time_simulation；未确认或需动作模拟，不计入基线。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "完整 BD 实战 DPS、循环操作序列、空间轨道物理",
+      "reason": "当前是限定来源（BH 本体 + 自然 Ignite）+ 限定目标场景（Boss、0 抗、双星全覆盖、中心 1m、目标不动不死）的固定条件估算；不是实战 DPS。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "未选节点的触发链（recast-on-end、extraBlackHoles 家族）",
+      "reason": "本构筑未选；若新 BD 选择，需要额外黑洞/重施语义建模（证据仅 partially_confirmed）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "hit 模型的暴击/命中口径",
+      "reason": "BH 本体 hit=false 且 crit_chance/crit_multiplier=0，不使用 hit 的暴击算子；该差异是有意为之，不是缺口。",
+      "blocks_full_dps": false
+    }
+  ],
+  "assumptions": [
+    {
+      "assumption_id": "bh-no-crit",
+      "status": "confirmed",
+      "note": "Black Hole 本体 hit=false、crit_chance=0、crit_multiplier=0；不引入暴击期望算子。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/components/0/hit"
+    },
+    {
+      "assumption_id": "fixed-conditions-estimate",
+      "status": "derived",
+      "note": "条件效果按固定条件估算：选中状态在观察期保持，不模拟获得/维持成本；结果按 assumption 标注，不是实战 DPS。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/context/disclaimer"
+    },
+    {
+      "assumption_id": "ignite-expected-value",
+      "status": "derived",
+      "note": "Heat Wave 用期望层数（不是逐次随机事件）；要求判定相互独立，结果按数学期望解释。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/ignite/heat_wave/expected_value_model"
+    },
+    {
+      "assumption_id": "ignite-scaling-pool",
+      "status": "assumed",
+      "note": "Ignite 玩家侧 inc 池构成（Fire/Elemental/DoT + Int 属性行）为规则包 assumed 口径。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-scaling-pool]"
+    },
+    {
+      "assumption_id": "ignite-damage-slices",
+      "status": "assumed",
+      "note": "Ignite 连续流积分 + 固定长度切片事件表的记账方式为 v1 实现假设；不改每层总伤害。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-damage-slices]"
+    },
+    {
+      "assumption_id": "monster-dr-application",
+      "status": "assumed",
+      "note": "怪物 DR 作为目标侧独立乘区 ×(1-DR)、与抗性因子相乘的顺序未经游戏内单独验证。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-target-monster-dr-application]"
+    },
+    {
+      "assumption_id": "cast-time-base-rate",
+      "status": "assumed",
+      "note": "施法时间公式形状已确认；基础释放速度（as × speedMultiplier）来自能力字段、未独立精确测量。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cast/base_rate_measurement_status"
+    },
+    {
+      "assumption_id": "eager-patient-policies",
+      "status": "assumed",
+      "note": "eager/patient 是计算器的动作策略（充能/施法时间/黑洞存续期驱动），不是玩家实操序列。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/action_policies"
+    },
+    {
+      "assumption_id": "target-theoretical-optimum",
+      "status": "assumed",
+      "note": "双星全覆盖 + 中心 1m 同时满足是理论最优，不代表真实轨道物理可达；目标不动不死。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/scenario/assumptions"
+    },
+    {
+      "assumption_id": "build-base-definition",
+      "status": "derived",
+      "note": "build_base = legacy 基线 + 已确认具资格的常驻自动效果（当前为 Eternal Flames 被动）；两基线不可相减当作增益。",
+      "evidence_locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/context/baseline_profiles"
+    },
+    {
+      "assumption_id": "capabilities-not-landed",
+      "status": "unresolved",
+      "note": "capability_ref 是草案声明：P3R 要求的 report-capabilities.json（ui_contract_version/renderer_fingerprint/capabilities_digest/acceptance_refs）当前不存在；本模板不声称已落地。",
+      "evidence_locator": "docs/contracts/workflow-interface.md#10.1"
+    }
+  ],
+  "capability_ref": {
+    "model_id": "bh-event",
+    "pages": [
+      "overview",
+      "composition",
+      "ignite",
+      "timeline",
+      "conditions",
+      "validation"
+    ],
+    "target_fields": [
+      "monster_level",
+      "target.resistances",
+      "target_conditions.target_is_boss_or_rare",
+      "target_conditions.target_within_center_1m",
+      "target_conditions.both_stars_cover"
+    ],
+    "buff_controls": [
+      "player.craterborn_active",
+      "player.flame_ward_active",
+      "player.frost_wall_active",
+      "player.enchant_weapon_active",
+      "player.ambition_stacks",
+      "player.crescendoing_rage_third_cast",
+      "player.preparation_ready",
+      "player.idol_layout_condition_met",
+      "player.standing_on_glyph_of_dominion",
+      "target.chilled",
+      "target.frozen",
+      "target.boss_or_rare",
+      "target.both_stars_cover",
+      "target.within_center_1m"
+    ],
+    "recalculation": "supported"
+  },
+  "validation_refs": [
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks（22/22 PASS）",
+    "archive://reports/black-hole/p0-baseline-bh/reproduce-report.json（P0 独立复现 22/22 PASS）",
+    "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency（all_pass=true）",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks",
+    "tools/phase3/tests/test_damage.py",
+    "tools/phase3/tests/test_simulate.py",
+    "tools/phase3/tests/test_monster_dr.py",
+    "tools/phase3/tests/test_conditional.py",
+    "tools/phase3/tests/test_conditional_recompute.py",
+    "tools/phase3/tests/test_report.py::BuildResultTest::test_consistency_checks_pass"
+  ],
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared"
+}

@@ -1,0 +1,445 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-knowledge/mechanism-v1.json",
+  "title": "机制元数据 v1（knowledge/mechanisms）",
+  "description": "机制复用条目的权威源（JSON）。只保存元数据、选择条件、参数绑定说明与规则/证据引用；可执行规则仍在 tools/phase3/rules/，正式证据仍在 docs/evidence/。查询索引 data/cache/knowledge.sqlite 由本文件生成、可删除重建。",
+  "type": "object",
+  "required": [
+    "schema",
+    "mechanism_id",
+    "revision",
+    "title",
+    "selectors",
+    "applicability",
+    "rule_ref",
+    "evidence_state",
+    "implementation_state"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "le-knowledge-mechanism-v1"
+    },
+    "mechanism_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+      "description": "稳定标识，小写；发布后不改名，语义变化递增 revision"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "title": {
+      "type": "object",
+      "required": [
+        "zh"
+      ],
+      "properties": {
+        "zh": {
+          "type": "string"
+        },
+        "en": {
+          "type": "string"
+        }
+      }
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "中文/英文别名、游戏内显示名、旧称；用于关键词查询"
+    },
+    "selectors": {
+      "type": "array",
+      "minItems": 1,
+      "description": "精确匹配入口。ID 必须带命名空间（ability:/node:/item:/stat:/blessing:/idol:/mechanism:）。",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "namespace",
+          "ids"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ability",
+              "node",
+              "item",
+              "stat",
+              "blessing",
+              "idol",
+              "unique",
+              "condition",
+              "mechanism"
+            ]
+          },
+          "namespace": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "applicability": {
+      "type": "object",
+      "required": [
+        "components"
+      ],
+      "properties": {
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "作用组件：hit / dot / tick / ignite / body / frequency / target_side ..."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "条件 code（与场景 states 同名空间）；none 表示常驻"
+        },
+        "required_nodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "必要节点组合（带命名空间）"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "parameter_bindings": {
+      "type": "array",
+      "description": "参数从当前输入的哪个字段读取",
+      "items": {
+        "type": "object",
+        "required": [
+          "parameter",
+          "source"
+        ],
+        "properties": {
+          "parameter": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "仓库相对输入路径 + JSON pointer 或来源字段，如 `<case-input>.json#/specializations/fr11mv/nodes/9`（`<case>` 为用户本地案例名，案例目录不随仓库分发）"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "per_point": {
+            "type": "boolean"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rule_ref": {
+      "type": "object",
+      "required": [
+        "kind",
+        "ref"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "ruleset_rule",
+            "ruleset_effect",
+            "conditional_effect",
+            "dataset_entity",
+            "none"
+          ]
+        },
+        "ref": {
+          "type": "string",
+          "description": "规则/效果 ID 或 dataset 定位；kind=none 时写原因"
+        },
+        "path": {
+          "type": "string",
+          "description": "仓库相对路径（可选）"
+        },
+        "locator": {
+          "type": "string"
+        }
+      }
+    },
+    "handler_ref": {
+      "type": "object",
+      "required": [
+        "module",
+        "symbol"
+      ],
+      "description": "实现入口（共享算子或受限 handler）",
+      "properties": {
+        "module": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "aggregation": {
+      "type": "object",
+      "description": "乘区/叠层/顺序策略；more_group 必须显式来自机制定义",
+      "properties": {
+        "operation": {
+          "type": "string",
+          "enum": [
+            "increased",
+            "more",
+            "added",
+            "flat",
+            "multiplier",
+            "crit",
+            "penetration",
+            "frequency",
+            "none"
+          ]
+        },
+        "more_group": {
+          "type": "string"
+        },
+        "stacking_policy": {
+          "type": "string",
+          "enum": [
+            "additive",
+            "multiplicative_per_stack",
+            "linear_per_stack",
+            "none",
+            "unknown"
+          ]
+        },
+        "order_policy": {
+          "type": "string"
+        },
+        "more_group_source": {
+          "type": "string",
+          "description": "more_group 的依据定位；禁止仅凭词条文本的 more 一词推定"
+        }
+      }
+    },
+    "evidence_state": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "derived",
+        "assumed",
+        "unresolved"
+      ]
+    },
+    "implementation_state": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "validated",
+        "reusable",
+        "not_implemented"
+      ]
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "locator"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "dataset",
+              "planner_runtime",
+              "reverse_engineering",
+              "user_rule",
+              "document",
+              "evidence_doc",
+              "game_data",
+              "catalog",
+              "calculation_input",
+              "snapshot",
+              "report",
+              "affix_db",
+              "validation"
+            ]
+          },
+          "locator": {
+            "type": "string",
+            "description": "仓库相对路径 + 行/字节/实体定位"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "validation_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "验证用例引用：测试 ID、expected check 名或 run 产物路径"
+    },
+    "interaction_requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "with",
+          "requirement"
+        ],
+        "properties": {
+          "with": {
+            "type": "string"
+          },
+          "requirement": {
+            "type": "string"
+          },
+          "evidence_locator": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "research_notes": {
+      "type": "object",
+      "properties": {
+        "checked_sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "open_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "requery_when": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "compatibility_baseline": {
+      "type": "object",
+      "properties": {
+        "baseline_id": {
+          "type": "string"
+        },
+        "game_version": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string",
+          "description": "人工维护的兼容基线；来源版本仅作元数据，不因小版本字符串变化自动失效"
+        }
+      }
+    },
+    "case_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "本条目的已验收案例（case_id）；空数组表示尚未在具体案例验收"
+    },
+    "rule_refs": {
+      "type": "array",
+      "description": "可选：多条规则引用（保留 rule_ref 作为主引用以兼容 v1 内容）。",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "ref"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ruleset_rule",
+              "ruleset_effect",
+              "conditional_effect",
+              "dataset_entity",
+              "none"
+            ]
+          },
+          "ref": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "locator": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "description": "可选：已知限制/未覆盖项（不替代 research_notes.open_questions）。",
+      "items": {
+        "type": "object",
+        "required": [
+          "item",
+          "reason"
+        ],
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "blocks_full_dps": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "reuse_mode": {
+      "type": "string",
+      "enum": [
+        "shared",
+        "case_bound"
+      ]
+    },
+    "required_abilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,446 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-plan-execution-v1.json",
+  "title": "LE calculation plan execution contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "source_contract",
+    "capabilities",
+    "components",
+    "applications",
+    "effects",
+    "sources",
+    "frequency",
+    "charge",
+    "coverage"
+  ],
+  "properties": {
+    "schema": {
+      "const": "le-plan-execution-v1"
+    },
+    "source_contract": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "component_id",
+          "kind",
+          "unit",
+          "damage_channel",
+          "damage_type",
+          "resistance_key",
+          "scope",
+          "duration_s",
+          "tick_interval_s",
+          "cast_ref"
+        ],
+        "properties": {
+          "component_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "hit",
+              "dot"
+            ]
+          },
+          "unit": {
+            "enum": [
+              "damage"
+            ]
+          },
+          "damage_channel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "damage_type": {
+            "type": "string"
+          },
+          "resistance_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "duration_s": {
+            "type": "number",
+            "minimum": 0
+          },
+          "tick_interval_s": {
+            "type": "number",
+            "minimum": 0
+          },
+          "cast_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "base_damage": {
+            "type": "number"
+          },
+          "added_damage_scaling": {
+            "type": "number"
+          },
+          "crit_capable": {
+            "type": "boolean"
+          },
+          "crit_chance": {
+            "type": "number"
+          },
+          "crit_multiplier": {
+            "type": "number"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "condition": {
+            "type": "object"
+          },
+          "condition_ref": {
+            "type": "string"
+          },
+          "damage_weights": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "hit_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "channel_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "added_damage": {
+            "type": "number"
+          },
+          "increased": {
+            "type": "number"
+          },
+          "more": {
+            "type": "number"
+          },
+          "actor_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "applications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "application_id",
+          "source_component",
+          "damage_channel",
+          "damage_type",
+          "resistance_key",
+          "scope",
+          "duration_s",
+          "max_stacks",
+          "condition",
+          "cohort_policy",
+          "window_policy",
+          "tail_policy"
+        ],
+        "properties": {
+          "application_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_component": {
+            "type": "string",
+            "minLength": 1
+          },
+          "damage_channel": {
+            "type": "string",
+            "minLength": 1
+          },
+          "damage_type": {
+            "type": "string"
+          },
+          "resistance_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "duration_s": {
+            "type": "number",
+            "minimum": 0
+          },
+          "max_stacks": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "condition": {
+            "type": "string"
+          },
+          "cohort_policy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "window_policy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tail_policy": {
+            "type": "string",
+            "minLength": 1
+          },
+          "damage_per_tick": {
+            "type": "number",
+            "minimum": 0
+          },
+          "ailment_id": {
+            "type": "string"
+          },
+          "application_unit": {
+            "type": "string"
+          },
+          "condition_ref": {
+            "type": "string"
+          },
+          "chance": {
+            "type": "number"
+          },
+          "tick_interval_s": {
+            "type": "number"
+          },
+          "expected_stacks": {
+            "type": "number"
+          },
+          "ownership": {
+            "type": "object"
+          },
+          "ledger_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "condition_ref": {
+            "type": "string"
+          },
+          "ownership": {
+            "type": "object"
+          },
+          "ledger_ref": {
+            "type": "string"
+          },
+          "source_id": {
+            "type": "string"
+          },
+          "scope": {
+            "enum": [
+              "owner",
+              "actor",
+              "all"
+            ]
+          },
+          "actor_id": {
+            "type": "string"
+          },
+          "transfer_ref": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "frequency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "driver",
+        "horizon_s",
+        "windows_s",
+        "policies",
+        "rotation",
+        "tail_policy"
+      ],
+      "properties": {
+        "driver": {
+          "type": "string",
+          "minLength": 1
+        },
+        "horizon_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "windows_s": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "policy_id",
+              "condition",
+              "interval_policy"
+            ],
+            "properties": {
+              "policy_id": {
+                "type": "string"
+              },
+              "condition": {
+                "type": "string"
+              },
+              "interval_policy": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "rotation": {
+          "type": "object"
+        },
+        "tail_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cast_interval_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "derivation": {
+          "type": "object"
+        },
+        "event_rate_per_s": {
+          "type": "number"
+        }
+      }
+    },
+    "charge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "max_charges",
+        "recharge_s",
+        "cast_time_s",
+        "instance_duration_s",
+        "condition"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "max_charges": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "recharge_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "cast_time_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "instance_duration_s": {
+          "type": "number",
+          "minimum": 0
+        },
+        "condition": {
+          "type": "string"
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "status",
+        "gap_count",
+        "gaps"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "complete",
+            "partial",
+            "from_execution"
+          ]
+        },
+        "gap_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gaps": {
+          "type": "array"
+        }
+      }
+    },
+    "target": {
+      "type": "object"
+    },
+    "states": {
+      "type": "object"
+    },
+    "capabilities_map": {
+      "type": "object"
+    },
+    "condition_programs": {
+      "type": "object"
+    },
+    "ownership": {
+      "type": "array"
+    },
+    "ledger_refs": {
+      "type": "array"
+    },
+    "coverage_input": {
+      "type": "object"
+    },
+    "actors": {
+      "type": "array"
+    },
+    "stat_transfers": {
+      "type": "array"
+    }
+  }
+}

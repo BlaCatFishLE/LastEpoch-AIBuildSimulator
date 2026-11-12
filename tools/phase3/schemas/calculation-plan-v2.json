@@ -1,0 +1,363 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-calculation/calculation-plan-v2.json",
+  "title": "统一计算计划 v2（le-calculation-plan-v2）",
+  "description": "多命中/具名频率策略/具名评估的版本化计划契约。相对 v1 的破坏性变化：components 允许 0..N hit（含 hits_per_cast 与逐击 damage_weights）与 0..N dot；schedule 使用 le-schedule-v2（具名策略 + 期望施放数窗口 + 周期平均因子）；新增 evaluations。执行器仍为唯一公开入口 execute_plan。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "plan_id",
+    "plan_sha256",
+    "subject",
+    "compiler",
+    "executor_requirements",
+    "input_refs",
+    "sources",
+    "facts",
+    "parameters",
+    "controls",
+    "conditions",
+    "components",
+    "effects",
+    "evaluation",
+    "schedule",
+    "evaluations",
+    "diagnostics",
+    "assumptions",
+    "scope",
+    "presentation"
+  ],
+  "properties": {
+    "schema": {
+      "const": "le-calculation-plan-v2"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^cp-[0-9a-f]{64}$"
+    },
+    "plan_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "build_id", "revision_id", "main_ability_id"],
+      "properties": {
+        "case_id": {"type": "string"},
+        "build_id": {"type": "string"},
+        "revision_id": {"type": "string"},
+        "main_ability_id": {"type": "string"}
+      }
+    },
+    "compiler": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "origin", "implementation_fingerprint", "fingerprint"],
+      "properties": {
+        "version": {"type": "string"},
+        "origin": {"enum": ["profile_v2", "native_template", "definitions_v3"]},
+        "implementation_fingerprint": {
+          "type": "object",
+          "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        },
+        "fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "executor_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handlers", "executor_fingerprint"],
+      "properties": {
+        "handlers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["handler_id", "version"],
+            "properties": {
+              "handler_id": {"type": "string"},
+              "version": {"type": "string"}
+            }
+          }
+        },
+        "executor_fingerprint": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "input_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "path", "sha256"],
+        "properties": {
+          "role": {
+            "enum": [
+              "case",
+              "profile",
+              "profile_content",
+              "calculation_input",
+              "build_spec",
+              "dataset_pointer",
+              "dataset_content",
+              "attribute_conversion_rules",
+              "compiler_source",
+              "template",
+              "scenario",
+              "mechanism_library",
+              "rule_file"
+            ]
+          },
+          "path": {"type": ["string", "null"]},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {"type": "object"}
+    },
+    "facts": {"type": "object"},
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skill", "crit", "ailments", "additional_chance", "damage_to_penetration", "cooldown_reduction"],
+      "properties": {
+        "skill": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "base_damage",
+            "added_damage_scaling",
+            "crit_chance",
+            "crit_multiplier",
+            "cooldown_s",
+            "action_s",
+            "base_attack_rate",
+            "skill_name"
+          ],
+          "properties": {
+            "base_damage": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": {"type": "number", "minimum": 0}
+            },
+            "added_damage_scaling": {"type": "number", "minimum": 0},
+            "crit_chance": {"type": "number", "minimum": 0, "maximum": 1},
+            "crit_multiplier": {"type": "number", "minimum": 0},
+            "cooldown_s": {"type": "number", "minimum": 0},
+            "action_s": {"type": "number", "minimum": 0},
+            "base_attack_rate": {"type": "number", "exclusiveMinimum": 0},
+            "skill_name": {"type": "string", "minLength": 1}
+          }
+        },
+        "crit": {"type": "object"},
+        "ailments": {"type": "array", "maxItems": 0},
+        "additional_chance": {"type": "object"},
+        "damage_to_penetration": {"type": ["object", "null"]},
+        "cooldown_reduction": {"type": "number"},
+        "attribute_ratios": {"type": "object"},
+        "attribute_conversion": {"type": ["object", "null"]}
+      }
+    },
+    "controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["control_id", "namespace", "key", "type", "default"],
+        "properties": {
+          "control_id": {"type": "string"},
+          "namespace": {"enum": ["state", "target"]},
+          "key": {"type": "string"},
+          "label": {"type": ["string", "null"]},
+          "source": {"type": ["string", "null"]},
+          "type": {"enum": ["boolean", "integer", "number"]},
+          "default": {"type": ["boolean", "integer", "number", "null"]},
+          "min": {"type": ["integer", "number", "null"]},
+          "max": {"type": ["integer", "number", "null"]},
+          "readonly": {"type": "boolean"},
+          "effect": {"type": ["string", "null"]},
+          "requires_target": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["condition_id", "op", "terms"],
+        "properties": {
+          "condition_id": {"type": "string"},
+          "op": {"enum": ["always", "all"]},
+          "terms": {"type": "array"}
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "description": "当前 v2 执行器只实现 hit 组件（含 hits_per_cast/damage_weights）；dot 组件与 parameters.ailments 由结构校验入口明确拒绝，BH 切片实现后需要扩展契约版本。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["component_id", "kind", "tags", "crit_capable", "hits_per_cast", "damage_weights"],
+        "properties": {
+          "component_id": {"type": "string", "minLength": 1},
+          "kind": {"const": "hit"},
+          "tags": {"type": "array", "items": {"type": "string"}},
+          "crit_capable": {"type": "boolean"},
+          "adaptive_damage_type": {"type": ["string", "null"]},
+          "damage_type": {"type": ["string", "null"]},
+          "hits_per_cast": {"type": "integer", "minimum": 1},
+          "damage_weights": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "number", "minimum": 0}
+          }
+        }
+      }
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["effect_id", "category", "stage", "handler_id", "handler_version", "stat_key", "operation", "unit", "included_static", "required", "emits_contribution", "value_mode", "value_params", "source_refs", "ownership_key", "support_status"],
+        "properties": {
+          "effect_id": {"type": "string", "minLength": 1},
+          "category": {
+            "enum": ["base", "mod", "passive", "node_binding", "attribute_conversion", "attribute_scaling", "effect", "state_scaling", "movement_conversion", "cooldown_reduction"]
+          },
+          "stage": {
+            "enum": ["baseline", "pre_attribute", "pre_attribute_effects", "attribute_conversion", "attribute_scaling", "derived_pools", "damage_components", "frequency", "projection"]
+          },
+          "handler_id": {"type": "string"},
+          "handler_version": {"type": "string"},
+          "stat_key": {"type": "string"},
+          "operation": {"enum": ["added", "increased", "more", "base", "flag"]},
+          "unit": {"enum": ["flat", "percent", "seconds", "flag"]},
+          "included_static": {"type": "boolean"},
+          "required": {"type": "boolean"},
+          "emits_contribution": {"type": "boolean"},
+          "value_mode": {"enum": ["static", "condition", "condition_code", "state_count", "stack_scale", "movement_conversion"]},
+          "value_params": {"type": "object"},
+          "source_refs": {"type": "array", "items": {"type": "string"}},
+          "ownership_key": {"type": ["object", "null"]},
+          "support_status": {"type": "string"}
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage_order", "effect_stage", "dependencies", "ownership"],
+      "properties": {
+        "stage_order": {
+          "const": ["baseline", "pre_attribute", "pre_attribute_effects", "attribute_conversion", "attribute_scaling", "derived_pools", "damage_components", "frequency", "projection"]
+        },
+        "effect_stage": {"type": "object"},
+        "dependencies": {"type": "array"},
+        "ownership": {"const": "unique_by_ownership_key"}
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "driver", "first_cast_s", "windows_s", "window_semantics", "policies", "primary_policy", "rotation"],
+      "description": "当前执行器只实现 steady_state 驱动、first_cast_s=0、无 every_nth_hit；这些未实现语义在结构校验入口拒绝（schema 同步收窄）。",
+      "properties": {
+        "schema": {"const": "le-schedule-v2"},
+        "driver": {"const": "steady_state"},
+        "first_cast_s": {"const": 0},
+        "windows_s": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "number", "exclusiveMinimum": 0}
+        },
+        "window_semantics": {"enum": ["expected_casts", "complete_casts"]},
+        "policies": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["policy_id", "binding_constraint", "interval_policy"],
+            "properties": {
+              "policy_id": {"enum": ["cooldown_limited", "attack_speed_limited"]},
+              "binding_constraint": {"enum": ["cooldown", "attack_speed"]},
+              "interval_policy": {"enum": ["max(action_time, cooldown)", "action_time"]}
+            },
+            "allOf": [
+              {
+                "if": {"properties": {"policy_id": {"const": "cooldown_limited"}}},
+                "then": {
+                  "properties": {
+                    "binding_constraint": {"const": "cooldown"},
+                    "interval_policy": {"const": "max(action_time, cooldown)"}
+                  }
+                }
+              },
+              {
+                "if": {"properties": {"policy_id": {"const": "attack_speed_limited"}}},
+                "then": {
+                  "properties": {
+                    "binding_constraint": {"const": "attack_speed"},
+                    "interval_policy": {"const": "action_time"}
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "primary_policy": {"enum": ["cooldown_limited", "attack_speed_limited"]},
+        "rotation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "factor", "applies_to", "status"],
+          "properties": {
+            "kind": {"const": "fixed_more_factor"},
+            "factor": {"type": "number", "exclusiveMinimum": 0},
+            "applies_to": {"type": "array", "items": {"const": "direct_hit_dps"}},
+            "status": {"enum": ["confirmed", "derived", "assumed", "unresolved"]},
+            "label": {"type": ["string", "null"]},
+            "evidence": {"type": "array"}
+          }
+        },
+        "every_nth_hit": {"type": "null"}
+      }
+    },
+    "evaluations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evaluation_id", "metrics", "primary", "scenario_path", "scenario_sha256"],
+        "properties": {
+          "evaluation_id": {"type": "string", "minLength": 1},
+          "label": {"type": ["string", "null"]},
+          "metrics": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "primary": {"type": "boolean"},
+          "scenario_path": {"type": "string", "minLength": 1},
+          "scenario_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "diagnostics": {"type": "array"},
+    "assumptions": {"type": "array"},
+    "scope": {
+      "type": "object",
+      "required": ["skill", "ailment_labels", "limitations"],
+      "properties": {
+        "skill": {"type": "string"},
+        "ailment_labels": {"type": "array"},
+        "limitations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "presentation": {"type": "object"}
+  }
+}

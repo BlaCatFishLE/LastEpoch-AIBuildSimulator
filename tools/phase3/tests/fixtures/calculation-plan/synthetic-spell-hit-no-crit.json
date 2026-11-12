@@ -1,0 +1,61 @@
+{
+  "schema": "le-skill-template-v2",
+  "template_id": "synthetic-spell-hit-no-crit",
+  "ability_id": "synthetic:spell-hit",
+  "title": {
+    "zh": "合成不可暴击法术命中",
+    "en": "Synthetic non-crit spell hit"
+  },
+  "skill": {
+    "base_damage": {
+      "Fire": 100.0
+    },
+    "added_damage_scaling": 0.0,
+    "crit_chance": 0.0,
+    "crit_multiplier": 1.0,
+    "cooldown_s": 1.0,
+    "action_s": 1.0,
+    "components": {
+      "hit": {
+        "tags": ["Spell", "Hit"],
+        "crit_capable": false
+      },
+      "dot": {
+        "tags": ["DoT"]
+      }
+    }
+  },
+  "effects": [
+    {
+      "effect_id": "synthetic-crit-chance",
+      "label": "合成暴击率 +50%",
+      "stat_key": "crit_chance",
+      "operation": "added",
+      "value": 0.5,
+      "unit": "flat",
+      "damage_tags": [],
+      "status": "assumed",
+      "source": {
+        "kind": "template_constant",
+        "label": "合成夹具常量",
+        "path": "tools/phase3/tests/fixtures/calculation-plan/synthetic-spell-hit-no-crit.json#effects"
+      }
+    }
+  ],
+  "controls": [],
+  "ailments": [],
+  "rules": {},
+  "schedule": {
+    "windows_s": [5, 30, 120]
+  },
+  "assumptions": [
+    {
+      "assumption_id": "synthetic",
+      "status": "assumed",
+      "note": "合成夹具：只验证统一计划/执行器语义，不代表游戏内技能。"
+    }
+  ],
+  "limitations": [
+    "合成夹具，不是真实游戏技能数据。"
+  ]
+}

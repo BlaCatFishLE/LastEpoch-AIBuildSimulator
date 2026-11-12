@@ -1,0 +1,63 @@
+using System;
+using Cpp2ILInjected;
+
+[Token(Token = "0x20015DA")]
+public enum ContainerType
+{
+	[Token(Token = "0x400C6EC")]
+	INVENTORY,
+	[Token(Token = "0x400C6ED")]
+	EQUIPPED,
+	[Token(Token = "0x400C6EE")]
+	STASH,
+	[Token(Token = "0x400C6EF")]
+	MATERIALS,
+	[Token(Token = "0x400C6F0")]
+	CRAFTING,
+	[Token(Token = "0x400C6F1")]
+	CURSOR,
+	[Token(Token = "0x400C6F2")]
+	SWAP_BUFFER,
+	[Token(Token = "0x400C6F3")]
+	SHOP,
+	[Token(Token = "0x400C6F4")]
+	ARENA_KEY,
+	[Token(Token = "0x400C6F5")]
+	BLESSING,
+	[Token(Token = "0x400C6F6")]
+	ETERNITY_CACHE,
+	[Token(Token = "0x400C6F7")]
+	DUNGEON_KEY,
+	[Token(Token = "0x400C6F8")]
+	GIFTED_ITEMS,
+	[Token(Token = "0x400C6F9")]
+	ITEM_TO_GIFT,
+	[Token(Token = "0x400C6FA")]
+	ITEM_TO_BAZAAR_LIST,
+	[Obsolete]
+	[Token(Token = "0x400C6FB")]
+	ITEM_TO_P2P_TRADE_LEGACY_NOT_USED,
+	[Obsolete]
+	[Token(Token = "0x400C6FC")]
+	ITEM_TO_P2P_TRADE_PREVIEW_LEGACY_NOT_USED,
+	[Token(Token = "0x400C6FD")]
+	CIRCLE_OF_FORTUNE_LENSES,
+	[Token(Token = "0x400C6FE")]
+	PINNACLE_KEY,
+	[Token(Token = "0x400C6FF")]
+	NEMESIS,
+	[Token(Token = "0x400C700")]
+	NEMESIS_SWAP,
+	[Token(Token = "0x400C701")]
+	IMPRINTED_ITEM,
+	[Token(Token = "0x400C702")]
+	ECHO_WEB,
+	[Token(Token = "0x400C703")]
+	ECHO_REWARD,
+	[Token(Token = "0x400C704")]
+	DUNGEON_KEYS_TRADER,
+	[Token(Token = "0x400C705")]
+	CURRENCIES,
+	[Token(Token = "0x400C706")]
+	RAGEOFMORDITAS
+}

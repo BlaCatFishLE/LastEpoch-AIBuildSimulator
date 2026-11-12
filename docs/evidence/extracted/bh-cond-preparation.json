@@ -1,0 +1,101 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-preparation",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Preparation（下一次元素法术 +increased 伤害）",
+    "en": "Preparation (next elemental spell: increased damage)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-preparation.json",
+  "evidence_state": "assumed",
+  "implementation_state": "draft",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "passive.preparation",
+    "path": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+    "locator": "effects[id=passive.preparation]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+      "note": "conditional_effect:passive.preparation 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Preparation（下一次元素法术 +increased 伤害）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：body_fire、body_cold；伤害标签：Spell、Elemental；条件 code：player.preparation_ready；必要节点：node:mg-1:4",
+      "source": "$.applicability"
+    },
+    {
+      "text": "被动按固定刷新间隔提供一次『下一次元素法术』增益，被下一次元素法术消耗；固定条件模式只声明本次施法就绪，不模拟刷新与消耗顺序。效果只作用于本体（Spell/Elemental 标签），不进入 Ignite。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "按当前树/节点稳定 ID 和点数绑定；统一条件程序执行。Preparation 只进入独立单次评估，不传播到循环。当前接入 charge_dot 执行链，其它执行驱动未签收。",
+      "source": "$.handler_ref.note（le_calc.conditional_node_buffs.bind / contributions）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：points、effect values、state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/15"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/passive.preparation"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/passive_tree/nodes/2/points"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.preparation_ready"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/single_cast/preparation_ready"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://docs/reviews/unified-report-buff-restore-20261112.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/passive.preparation"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "单次测试开始时 Preparation 是否就绪未确认（用户 2026-11-05 确认释放 BH 会消耗它，但 t=0 状态未定）。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "刷新间隔与元素法术消耗顺序未接入；循环口径不支持。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "点燃是否继承 Preparation 的 increased damage 未确认（规则包按 Spell 标签排除）。",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

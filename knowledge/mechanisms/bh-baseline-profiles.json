@@ -1,0 +1,156 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-baseline-profiles",
+  "revision": 1,
+  "title": {
+    "zh": "双基线口径：legacy_single_skill 与 build_base",
+    "en": "Dual baseline profiles: legacy_single_skill and build_base"
+  },
+  "aliases": [
+    "baseline profile",
+    "双基线",
+    "legacy_single_skill",
+    "build_base",
+    "单次基线",
+    "conditional recompute baseline"
+  ],
+  "selectors": [
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "bh-baseline-profiles"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "loop",
+      "ledger",
+      "conditional"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "两个基线必须分开核对、不可相减当作增益：legacy_single_skill = 只含 BH 技能树 + 玩家装备/被动，不含跨技能常驻自动效果；build_base = 在其上加入已确认且具备资格的跨技能常驻被动（当前为 Eternal Flames 被动，Ignite 持续时间增量见注册表）。单次观察口径 = cast start 到最后一层 Ignite 到期。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "基线 profile 是案例/场景口径（conditional registry baseline_profiles + conditional-scenario），没有游戏规则 ID。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "baseline_profiles",
+      "source": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/context/baseline_profiles",
+      "note": "两个 profile 的定义与默认值。"
+    },
+    {
+      "parameter": "baseline_profile",
+      "source": "archive://examples/black-hole/scenario/conditional-scenario.json#/baseline_profile",
+      "note": "当前场景选择的基线。"
+    },
+    {
+      "parameter": "baseline output",
+      "source": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline",
+      "note": "重算产物中的 legacy 基线数值块。"
+    },
+    {
+      "parameter": "scenario output",
+      "source": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/scenario",
+      "note": "build_base 场景单次数值块。"
+    },
+    {
+      "parameter": "delta",
+      "source": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/delta",
+      "note": "两者差值（仅诊断，不得当增益宣称）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional.recompute",
+    "symbol": "recompute_scenario",
+    "note": "_resolve_include_auto 按 baseline_profile 决定是否纳入 auto 效果（legacy 排除 / build_base 纳入）；单次观察窗口在 le_calc.simulate.run_single_cast。"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/context/baseline_profiles",
+      "note": "两个 profile 的权威定义。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline_profile",
+      "note": "当前 run 的场景基线选择与重算结果。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.single_cast_total]",
+      "note": "build_base 单次基线被 expected 冻结。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/expected/expected-summary.json#/checks[conditional_recompute.baseline.single_cast_total]",
+      "note": "legacy 基线被 expected 冻结。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/case.legacy.json#/notes",
+      "note": "案例说明：两基线不能混用或相减。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/fr-bh-convergence-handover.zh-CN.md#0",
+      "note": "冻结基线数值记录（现有记录，非本轮实测）。"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeBaselineTests::test_baseline_single_equals_legacy_within_1e9",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeBaselineTests::test_scenario_equals_baseline_when_nothing_selected",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeReviewFixTests::test_baseline_profile_policy_frozen_numbers",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[build_base.single_cast_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-cond-eternal-flames-passive",
+      "requirement": "build_base 与 legacy 的当前差异来自该常驻被动；它由条件重算通道应用并在结果中标注 assumption。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/assumptions_applied"
+    },
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "baseline_profile 是条件场景字段；选择 legacy 时 auto 效果被排除，选择 build_base 时纳入。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline_profile"
+    },
+    {
+      "with": "bh-loop-action-policies",
+      "requirement": "循环 DPS 同样有 legacy/build_base 两套；报告必须成对保留，不能只留一个。",
+      "evidence_locator": "archive://examples/black-hole/expected/expected-summary.json#/notes"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#/context/baseline_profiles",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json",
+      "archive://examples/black-hole/expected/expected-summary.json",
+      "archive://examples/black-hole/case.legacy.json#/notes",
+      "docs/fr-bh-convergence-handover.zh-CN.md#0"
+    ],
+    "open_questions": [
+      "legacy_single_skill 的『只含 BH 技能树 + 玩家装备/被动』与 build_base 的『加常驻跨技能被动』是产品口径（用户/案例决定），不是游戏内两种模式；文档与玩家页必须保持该限定。",
+      "registry 对 build_base 的描述称『引擎没有跨技能被动输入通道…DPS 数值不变』，但条件重算通道实际通过 auto 效果应用了 Eternal Flames（conditional-recompute 的 delta 非零）。该描述与当前重算行为存在文字不一致，需 Lead 复核注册表文字（本轮不改 registry）。"
+    ],
+    "requery_when": [
+      "注册表 baseline_profiles 描述更新时",
+      "新增跨技能常驻被动时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "case_bound"
+}

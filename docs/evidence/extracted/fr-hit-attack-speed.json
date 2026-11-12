@@ -1,0 +1,151 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-hit-attack-speed",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 攻速模型（技能 as × speedMultiplier 基率，increased 加算/more 分组）",
+    "en": "Flame Reave attack-speed model (skill as x speedMultiplier base rate)"
+  },
+  "source_path": "knowledge/mechanisms/fr-hit-attack-speed.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R3",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/attack_model；#/rules id=R2/R3",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R3 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#skills entity_id=skill:letools:LEAbilities.abilityList:fr11mv",
+      "note": "as/useDuration/speedMultiplier/speedScaler/useDelay",
+      "source": "$.evidence_refs[4]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 攻速模型（技能 as × speedMultiplier 基率，increased 加算/more 分组）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency；伤害标签：Fire、Melee；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=frequency；叠层策略=additive；顺序/汇总=final_aps = base_aps × (1+sum(increased AS)) × product(1+more AS groups)；weapon attackRate 不参与；more 分组依据=more AS 分组来自 contribution.group；本 BD 无 more AS 来源（EW 的攻速也是 increased 池）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "base_aps = as × speedMultiplier（= 1.1 × speedMultiplier / useDuration）；_attack_speed_pools 汇总 increased/more",
+      "source": "$.handler_ref.note（le_calc.hit_simulate._base_attack_rate）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：base_aps、speed_multiplier / speed_scaler、use_duration_s / use_delay_s、increased AS rows、final APS",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 569845"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/attack_speed_base_planner"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/speed_multiplier；#/derived/skill/speed_scaler"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/use_duration_s；#/derived/skill/use_delay_s"
+    },
+    {
+      "pointer": "$/evidence_refs/8/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=attack_speed and operation=increased]"
+    },
+    {
+      "pointer": "$/evidence_refs/9/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/dps/attack_rate/final_aps；#/increased_attack_speed；#/alternatives"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "OQ3/OQ4：武器 attackRate（0.94/1.2）是否参与近战技能速率；当前按第三方 runtime 口径不参与（用户已确认公式，但游戏真值未验证）",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "备选口径 weapon_average_attack_rate 保留在 ruleset.attack_model.alternatives，不做默认",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "more attack speed 分组在本 BD 无来源；换 BD 时需按 group 显式登记",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

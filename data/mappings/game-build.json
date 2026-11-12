@@ -1,0 +1,129 @@
+{
+  "schema": "game-build/v1",
+  "snapshot_id": "game-build-26087601",
+  "captured_at": "2026-11-01T18:10:00+08:00",
+  "captured_by": "phase-1 teammate game-assets (read-only inventory)",
+  "game": {
+    "title": "Last Epoch",
+    "company": "Eleventh Hour Games",
+    "steam_appid": 899770,
+    "steam_buildid": "26087601",
+    "steam_last_updated_epoch": 1792670384,
+    "steam_last_updated_utc": "2026-10-22T11:59:44Z",
+    "steam_last_played_epoch": 1793459633,
+    "steam_last_played_utc": "2026-10-31T15:13:53Z",
+    "steam_size_on_disk_bytes": 24195246556,
+    "steam_state_flags": 4,
+    "steam_installed_depots": {
+      "899771": {"manifest": "2020041139763505591", "size": 198980984},
+      "899772": {"manifest": "523425997616034918", "size": 307680976},
+      "899773": {"manifest": "1341347701560670780", "size": 22170083773},
+      "899774": {"manifest": "4947862412927429421", "size": 1521105612},
+      "899775": {"manifest": "3939487470843127592", "size": 0}
+    },
+    "install_dir": "<game-install>",
+    "game_version": "1.5.3",
+    "game_version_evidence": "PlayerSettings.bundleVersion read from Last Epoch_Data/globalgamemanagers (UnityPy 1.25.4, check_read=False; strict read is 4 bytes short)",
+    "build_hash_file": "a983212251f8cf8a067c562f6366d26a71539853",
+    "build_hash_file_path": "Last Epoch_Data/build_hash.txt",
+    "build_branch_file": "Last Epoch_Data/build_branch.txt (0 bytes, empty)",
+    "build_guid": "3d821422b520452590594822f4c5f327",
+    "build_guid_source": "Last Epoch_Data/boot.config",
+    "app_info": ["Eleventh Hour Games", "Last Epoch"]
+  },
+  "unity": {
+    "engine_version": "6000.4.8f1",
+    "engine_major": "Unity 6.4",
+    "serialized_file_header_version": 22,
+    "unitypy_serialized_version_string": "6000.4f1",
+    "endianness": "little",
+    "type_tree_present_in": {
+      "globalgamemanagers": false,
+      "resources.assets": false,
+      "globalgamemanagers.assets": false,
+      "sharedassets0.assets": false,
+      "StreamingAssets/LEAssetBundles/*.bundle": true
+    },
+    "il2cpp": true
+  },
+  "key_files": [
+    {
+      "path": "GameAssembly.dll",
+      "bytes": 97256960,
+      "sha256": "323E9183F3BEE600B6C9E1C469218B9DE926E9044F2CA3D44FAE8A0EC9A91464"
+    },
+    {
+      "path": "Last Epoch_Data/il2cpp_data/Metadata/global-metadata.dat",
+      "bytes": 36457932,
+      "sha256": "2A4E8440606C420345934158B6784D8F5D8B0184F32FD91AF0E9E0903BA94F83"
+    },
+    {
+      "path": "Last Epoch_Data/resources.assets",
+      "bytes": 101962560,
+      "sha256": "F959D005A01799DB940DED3592FAF788BB1A8995A00681AE3F0D9939A914CC47"
+    }
+  ],
+  "other_files_size_only": {
+    "Last Epoch_Data/globalgamemanagers": 1444580,
+    "Last Epoch_Data/globalgamemanagers.assets": 1710480,
+    "Last Epoch_Data/globalgamemanagers.assets.resS": 7077888,
+    "Last Epoch_Data/sharedassets0.assets": 35791712,
+    "Last Epoch_Data/sharedassets0.assets.resS": 8806816,
+    "Last Epoch_Data/resources.assets.resS": 150877312,
+    "Last Epoch_Data/level0": 9628,
+    "Last Epoch_Data/RuntimeInitializeOnLoads.json": 139194,
+    "Last Epoch_Data/ScriptingAssemblies.json": 8218,
+    "StreamingAssets/LEAssetBundles/Catalog.bin": 2604789,
+    "StreamingAssets/LEAssetBundles/monoscripts.bundle": 179300,
+    "StreamingAssets/LEAssetBundles/PermaLoad.bundle": 132116289,
+    "StreamingAssets/aa/catalog.bin": 61304,
+    "StreamingAssets/aa/settings.json": 867
+  },
+  "bundle_inventory": {
+    "dir": "Last Epoch_Data/StreamingAssets/LEAssetBundles",
+    "bundle_count": 26639,
+    "total_bytes": 22152474345,
+    "file_name_prefixes": {
+      "assets_*": 25916,
+      "scene_*": 360,
+      "sceneassets_*": 360,
+      "monoscripts.bundle": 1,
+      "PermaLoad.bundle": 1,
+      "unitybuiltinassets.bundle": 1
+    },
+    "custom_catalog": {
+      "path": "Last Epoch_Data/StreamingAssets/LEAssetBundles/Catalog.bin",
+      "format": "ZIP containing one entry named 'data'",
+      "data_bytes": 4213102,
+      "magic": "LABC",
+      "version": 4,
+      "parsed": false,
+      "note": "string table contains asset/zone/UI names, no '.bundle' or 'Assets/' paths; binary bundle table not decoded in phase-1"
+    }
+  },
+  "addressables": {
+    "settings": "Last Epoch_Data/StreamingAssets/aa/settings.json",
+    "version": "2.3.16",
+    "platform_dir": "Last Epoch_Data/StreamingAssets/aa/StandaloneWindows64",
+    "bundle_count_in_platform_dir": 15,
+    "content": "localization string tables + a monoscripts bundle; gameplay data is NOT in the addressables catalog"
+  },
+  "tools": {
+    "python": "3.12.14",
+    "venv": ".venv",
+    "unitypy": "1.25.4",
+    "unitypy_deps_selected": {
+      "tpk_ar": "0.2.4",
+      "pillow": "13.0.0",
+      "astc-encoder-py": "0.1.12",
+      "lz4": "4.4.5"
+    },
+    "typetree_generator_available": false,
+    "typetree_generator_note": "UnityPy optional extra TypeTreeGeneratorAPI (0.0.10, 7.9 MB wheel) not installed; not needed for game *.bundle files because they embed type trees"
+  },
+  "channels_verified": {
+    "read_only": "game install only opened with read access; no file written under the install dir",
+    "hashed_files": ["GameAssembly.dll", "global-metadata.dat", "resources.assets"],
+    "not_done": ["full-install hash scan", "Il2CppDumper/Cpp2IL install", "catalog LABC decoding", "full 26k bundle scan (sampled)"]
+  }
+}

@@ -1,0 +1,445 @@
+{
+ "source": "local game 1.5.3 assets_5557fd063dd9c5ac.bundle (bh2 skill tree nodes; read-only)",
+ "game_version": "1.5.3",
+ "unity": "6000.4.8f1",
+ "nodes": [
+  {
+   "id": 23,
+   "nodeName": "Supermassive",
+   "maxPoints": 4,
+   "description": "Black Hole deals more damage to rare enemies and bosses (multiplicative with other modifiers), and it prioritises moving towards rare enemies and bosses.",
+   "stats": [
+    {
+     "statName": "Damage To Rares And Bosses",
+     "value": "+25%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-damage buff"
+     },
+     "property": 0,
+     "tags": 0,
+     "overrideSprite": 0
+    },
+    {
+     "statName": "Prioritises Rares And Bosses",
+     "value": "",
+     "noScaling": 1,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-red-eye"
+     },
+     "property": 54,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 4,
+   "nodeName": "Red Giant",
+   "maxPoints": 1,
+   "description": "Black Hole’s base cold damage is converted to fire damage. Consequently this damage scales with increases to fire damage, but not increases to cold damage.\n\nBlack Hole lasts much longer, but no longer pulls enemies.",
+   "stats": [
+    {
+     "statName": "Base Damage Converted to Fire",
+     "value": "",
+     "noScaling": 1,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-spreading flames"
+     },
+     "property": 5080,
+     "tags": 0,
+     "overrideSprite": 0
+    },
+    {
+     "statName": "Duration",
+     "value": "+80%",
+     "noScaling": 1,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-duration"
+     },
+     "property": 5093,
+     "tags": 0,
+     "overrideSprite": 0
+    },
+    {
+     "statName": "Does Not Pull",
+     "value": "",
+     "noScaling": 1,
+     "downside": 1,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-tornado1"
+     },
+     "property": 5073,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 25,
+   "nodeName": "Endless Maw",
+   "maxPoints": 3,
+   "description": "Black Hole has increased duration, but has additional cooldown duration.",
+   "stats": [
+    {
+     "statName": "Duration",
+     "value": "+30%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-duration"
+     },
+     "property": 5013,
+     "tags": 0,
+     "overrideSprite": 0
+    },
+    {
+     "statName": "Cooldown Duration (seconds)",
+     "value": "+2",
+     "noScaling": 0,
+     "downside": 1,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-cooldown-reduction"
+     },
+     "property": 70,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 26,
+   "nodeName": "Scattered",
+   "maxPoints": 1,
+   "description": "A second Black Hole is created 10 meters away in a random direction from the first Black Hole.",
+   "stats": [
+    {
+     "statName": "Second Black Hole",
+     "value": "",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-BlackHole"
+     },
+     "property": 54,
+     "tags": 0,
+     "overrideSprite": 1
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 9,
+   "nodeName": "Binary System",
+   "maxPoints": 1,
+   "description": "Black Hole becomes two stars which orbit each other. One deals fire damage and the other deals cold damage. \r\n\r\nBlack Hole deals significantly more damage (multiplicative with other modifiers). \r",
+   "stats": [
+    {
+     "statName": "Binary System",
+     "value": "",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-penta-swirl"
+     },
+     "property": 54,
+     "tags": 0,
+     "overrideSprite": 1
+    },
+    {
+     "statName": "Damage",
+     "value": "+100%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-damage buff"
+     },
+     "property": 0,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 28,
+   "nodeName": "Singularity",
+   "maxPoints": 1,
+   "description": "Black Hole deals significantly more damage (multiplicative with other modifiers), but only 1 Black Hole can be created at a time.",
+   "stats": [
+    {
+     "statName": "Damage",
+     "value": "+100%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-damage buff"
+     },
+     "property": 0,
+     "tags": 0,
+     "overrideSprite": 0
+    },
+    {
+     "statName": "Black Holes Per Cast ",
+     "value": "1",
+     "noScaling": 0,
+     "downside": 1,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-Black Hole Temp"
+     },
+     "property": 54,
+     "tags": 0,
+     "overrideSprite": 1
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 27,
+   "nodeName": "Weakened Reality",
+   "maxPoints": 3,
+   "description": "Black Hole deals more damage to enemies within 1 meter of its center.",
+   "stats": [
+    {
+     "statName": "Damage to Enemies at Center",
+     "value": "+30%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-damage buff"
+     },
+     "property": 0,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 5,
+   "nodeName": "Scorching",
+   "maxPoints": 5,
+   "description": "Black Hole’s damage over time penetrates enemy fire resistance.",
+   "stats": [
+    {
+     "statName": "Fire Penetration",
+     "value": "+15%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-fire-resist-debuff"
+     },
+     "property": 10042,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 30,
+   "nodeName": "Pocket Dimension",
+   "maxPoints": 1,
+   "description": "You can store an additional charge of Black Hole.",
+   "stats": [
+    {
+     "statName": "Additional Charges",
+     "value": "+1",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-light swirl"
+     },
+     "property": 5066,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 7,
+   "nodeName": "Flaming",
+   "maxPoints": 5,
+   "description": "Black Hole deals more fire damage (multiplicative with other modifiers).",
+   "stats": [
+    {
+     "statName": "Fire Damage",
+     "value": "+10%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-fire damage buff"
+     },
+     "property": 5037,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 6,
+   "nodeName": "Heat Wave",
+   "maxPoints": 5,
+   "description": "Black Hole has a chance to ignite enemies within its area of effect each second based on your uncapped fire resistance.",
+   "stats": [
+    {
+     "statName": "Ignite Chance Per Second Per 1% Uncapped Fire Res",
+     "value": "+2%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-ignite"
+     },
+     "property": 10001,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 17,
+   "nodeName": "Recurrence",
+   "maxPoints": 4,
+   "description": "Black Hole's cooldown is reduced and it costs less mana, but pulls enemies towards it slower and pulls enemies within a lesser area (both multiplicative with other modifiers).",
+   "stats": [
+    {
+     "statName": "Cooldown Reduction",
+     "value": "+15%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-cooldown-reduction"
+     },
+     "property": 70,
+     "tags": 0,
+     "overrideSprite": 0
+    },
+    {
+     "statName": "Mana Cost",
+     "value": "-10%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-Mana Regeneration Debuff (generic)"
+     },
+     "property": 66,
+     "tags": 0,
+     "overrideSprite": 0
+    },
+    {
+     "statName": "Pull Strength",
+     "value": "-25%",
+     "noScaling": 0,
+     "downside": 1,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-tornado1"
+     },
+     "property": 5073,
+     "tags": 0,
+     "overrideSprite": 0
+    },
+    {
+     "statName": "Pull Area",
+     "value": "-25%",
+     "noScaling": 0,
+     "downside": 1,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-tremor2"
+     },
+     "property": 5015,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 16,
+   "nodeName": "Cascade Fracture",
+   "maxPoints": 3,
+   "description": "Black Hole has a chance to create another Black Hole once it expires.",
+   "stats": [
+    {
+     "statName": "Black Hole Recast Chance",
+     "value": "10%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-BlackHole"
+     },
+     "property": 54,
+     "tags": 0,
+     "overrideSprite": 1
+    }
+   ],
+   "nodeStats": null
+  },
+  {
+   "id": 15,
+   "nodeName": "Time Dilation",
+   "maxPoints": 4,
+   "description": "Black Hole has increased duration and a chance to blind enemies within its area of effect each second.",
+   "stats": [
+    {
+     "statName": "Duration",
+     "value": "+10%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-duration"
+     },
+     "property": 54,
+     "tags": 0,
+     "overrideSprite": 1
+    },
+    {
+     "statName": "Blind Chance",
+     "value": "+25%",
+     "noScaling": 0,
+     "downside": 0,
+     "spriteSoftRef": {
+      "guid": {},
+      "subPath": "skillIcon-Blinding"
+     },
+     "property": 10014,
+     "tags": 0,
+     "overrideSprite": 0
+    }
+   ],
+   "nodeStats": null
+  }
+ ]
+}

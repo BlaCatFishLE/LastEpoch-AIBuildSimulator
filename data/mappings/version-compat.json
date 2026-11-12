@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-11-01",
+  "note": "Explicit compatibility approvals for the version gate. An empty approval list means every source version must equal the dataset target version; unknown or conflicting versions fail validation unless an entry here names the exact pair and evidence.",
+  "approved_pairs": []
+}

@@ -1,0 +1,464 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-knowledge/skill-template-v1.json",
+  "title": "技能模板 v1（knowledge/skills）",
+  "description": "技能复用的权威源（JSON）。保存组件定义、计算块引用、参数读取路径、调度/频率配置、支持/未支持交互、假设与验证引用。不复制规则数值；数值来自 rules/ 与 dataset，按 parameter_paths 从当前输入读取。",
+  "type": "object",
+  "required": [
+    "schema",
+    "skill_id",
+    "ability_id",
+    "model_id",
+    "components",
+    "calculation_blocks",
+    "parameter_paths",
+    "schedule",
+    "capability_ref"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "le-knowledge-skill-template-v1"
+    },
+    "skill_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_.-]*$",
+      "description": "模板稳定标识（不等于 ability_id，便于同一技能多模板/多形态）"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "ability_id": {
+      "type": "string",
+      "description": "dataset ability ID，如 fr11mv / bh2"
+    },
+    "title": {
+      "type": "object",
+      "required": [
+        "zh"
+      ],
+      "properties": {
+        "zh": {
+          "type": "string"
+        },
+        "en": {
+          "type": "string"
+        }
+      }
+    },
+    "class": {
+      "type": "string"
+    },
+    "mastery": {
+      "type": "string"
+    },
+    "damage_tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "model_id": {
+      "type": "string",
+      "description": "计算模型族；模型只是调度/聚合差异，不按模型分家（见实施方案 §6.2）"
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "component_id",
+          "damage_type",
+          "kind"
+        ],
+        "properties": {
+          "component_id": {
+            "type": "string"
+          },
+          "damage_type": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "hit",
+              "dot",
+              "tick",
+              "ignite",
+              "body",
+              "derived"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "base_damage": {
+            "type": "number"
+          },
+          "added_sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "added 值读取路径或机制 ID"
+          },
+          "scaling": {
+            "type": "number",
+            "description": "effectiveness / added 缩放"
+          },
+          "crit": {
+            "type": "object",
+            "properties": {
+              "supported": {
+                "type": "boolean"
+              },
+              "chance_source": {
+                "type": "string"
+              },
+              "multiplier_source": {
+                "type": "string"
+              }
+            }
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "calculation_blocks": {
+      "type": "array",
+      "description": "所需共享计算块（机制查询返回的 handler_ref 应落在这里）",
+      "items": {
+        "type": "object",
+        "required": [
+          "block",
+          "module"
+        ],
+        "properties": {
+          "block": {
+            "type": "string",
+            "enum": [
+              "tag_match",
+              "added_scaling",
+              "increased_aggregate",
+              "more_groups",
+              "crit",
+              "target_side",
+              "frequency",
+              "ledger",
+              "conditional_state_eval"
+            ]
+          },
+          "module": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "mappings": {
+      "type": "array",
+      "description": "节点/装备/被动效果 → 机制条目的映射引用",
+      "items": {
+        "type": "object",
+        "required": [
+          "selector",
+          "mechanism_id"
+        ],
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "带命名空间的来源 ID，如 node:fr11mv:16 / item:weapon1"
+          },
+          "mechanism_id": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "parameter_paths": {
+      "type": "array",
+      "description": "参数从当前案例读取的路径（仓库相对 + JSON pointer）",
+      "items": {
+        "type": "object",
+        "required": [
+          "parameter",
+          "from"
+        ],
+        "properties": {
+          "parameter": {
+            "type": "string"
+          },
+          "from": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "evidence_locator": {
+            "type": "string"
+          },
+          "rule_ref": {
+            "type": "string",
+            "description": "可选：该参数绑定的规则 ID"
+          }
+        }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "required": [
+        "driver"
+      ],
+      "description": "调度/频率配置：与单次伤害分开",
+      "properties": {
+        "driver": {
+          "type": "string",
+          "enum": [
+            "event_simulation",
+            "cooldown_limited",
+            "attack_speed_limited",
+            "dot_tick",
+            "fixed_static"
+          ]
+        },
+        "cooldown_s": {
+          "type": "number"
+        },
+        "cooldown_source": {
+          "type": "string"
+        },
+        "recovery_stat": {
+          "type": "string"
+        },
+        "hit_weights": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "hits_per_cast": {
+          "type": "number"
+        },
+        "windows_s": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "rotation_policy": {
+          "type": "object",
+          "properties": {
+            "policy_id": {
+              "type": "string"
+            },
+            "more_factor": {
+              "type": "number"
+            },
+            "basis": {
+              "type": "string"
+            }
+          }
+        },
+        "fractional_casts": {
+          "type": "string",
+          "enum": [
+            "allowed",
+            "floor",
+            "unknown"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        },
+        "alternative_policies": {
+          "type": "array",
+          "description": "可选：备选调度/策略口径（如 attack-speed-limited），权威性同主 driver。",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "driver"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "driver": {
+                "type": "string",
+                "enum": [
+                  "event_simulation",
+                  "cooldown_limited",
+                  "attack_speed_limited",
+                  "dot_tick",
+                  "fixed_static"
+                ]
+              },
+              "note": {
+                "type": "string"
+              },
+              "evidence_locator": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "supported_interactions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unsupported": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item",
+          "reason"
+        ],
+        "properties": {
+          "item": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "blocks_full_dps": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "assumption_id",
+          "status",
+          "note"
+        ],
+        "properties": {
+          "assumption_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "confirmed",
+              "derived",
+              "assumed",
+              "unresolved"
+            ]
+          },
+          "note": {
+            "type": "string"
+          },
+          "evidence_locator": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "capability_ref": {
+      "type": "object",
+      "required": [
+        "model_id"
+      ],
+      "description": "模型视图/重算能力描述引用（capabilities）",
+      "properties": {
+        "model_id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string",
+          "description": "能力描述文件位置（P3R 落地；可为空）"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "target_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "buff_controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recalculation": {
+          "type": "string",
+          "enum": [
+            "supported",
+            "not_supported",
+            "unknown"
+          ]
+        },
+        "acceptance_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "可选：报告/重算验收引用（3-A 落地时与 report-capabilities.json 对齐）"
+        },
+        "version": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "validation_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "case_scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reuse_mode": {
+      "type": "string",
+      "enum": [
+        "shared",
+        "case_bound"
+      ]
+    },
+    "required_abilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

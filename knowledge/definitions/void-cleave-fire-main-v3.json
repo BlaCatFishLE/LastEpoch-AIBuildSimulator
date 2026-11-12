@@ -1,0 +1,1021 @@
+{
+  "schema": "le-skill-template-v3",
+  "template_id": "void-cleave-fire-main-v3",
+  "ability_id": "v01cv",
+  "binding_version": "definitions_v3.selector-v1",
+  "title": {
+    "zh": "Void Cleave · Riftflame 原生定义",
+    "en": "Void Cleave native definition"
+  },
+  "definition": {
+    "skill": {
+      "base_damage": {
+        "Fire": 2
+      },
+      "added_damage_scaling": 4,
+      "crit_chance": 0.05,
+      "crit_multiplier": 2,
+      "cooldown_s": 4,
+      "action_s": 2,
+      "components": {
+        "hit": {
+          "tags": [
+            "Melee",
+            "Hit"
+          ],
+          "adaptive_damage_type": "Fire",
+          "crit_capable": true
+        },
+        "dot": {
+          "tags": [
+            "DoT"
+          ],
+          "crit_capable": false
+        }
+      },
+      "evidence": [
+        {
+          "kind": "game_data",
+          "detail": "dataset skill_components v01cv#component#0：base_damage 2、damage_type Void（经 Riftflame/Hellish Chasm 全额转火）、added_damage_effectiveness 400、crit 0.05/2.0、damageTags 512(Melee)",
+          "locator": "data/releases/phase1-dataset-003/data.sqlite#skill_components skill:letools:LEAbilities.abilityList:v01cv#component#0"
+        },
+        {
+          "kind": "user_rule",
+          "detail": "冷却 4 秒来自迁移基线 profile；dataset skill 无 cooldown 字段，未实测",
+          "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#skill.cooldown_s"
+        }
+      ]
+    },
+    "controls": [
+      {
+        "key": "frenzy",
+        "label": "Frenzy",
+        "source": "Fangs of the Berserker / Sword Catcher / Defender’s Rage",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前装备效果：+60% 攻击速度、Sword Catcher +30 附加近战伤害。"
+      },
+      {
+        "key": "haste",
+        "label": "Haste",
+        "source": "Shattered Worlds",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "常驻移动速度通过 Vaion’s Chariot 转为加算增伤。",
+        "readonly": true
+      },
+      {
+        "key": "incisive",
+        "label": "Incisive Rage",
+        "source": "Unsated Rage · 戒指",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "+10% 基础暴击率；暴击有 20% 概率成为 Deadly Strike（额外 +300% 暴击伤害倍率）。"
+      },
+      {
+        "key": "crescendo",
+        "label": "Crescendoing Rage",
+        "source": "Unsated Rage · 戒指",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "主技能重复施放时，每第三次本体命中额外 ×1.5；不假定其它技能的计数相位。"
+      },
+      {
+        "key": "ambition",
+        "label": "Ambition",
+        "source": "Throne of Ambition",
+        "type": "integer",
+        "min": 0,
+        "max": 20,
+        "effect": "每层 +2% 独立火焰增伤；需要目标为首领或稀有。"
+      },
+      {
+        "key": "time_rot",
+        "label": "Entropic Blows",
+        "source": "Void Cleave",
+        "type": "integer",
+        "min": 0,
+        "max": 12,
+        "effect": "每层 Time Rot 按当前 5 点：+25% 独立近战增伤；不模拟辅助投掷的获取过程。"
+      },
+      {
+        "key": "bleed",
+        "label": "Vorpal Force",
+        "source": "Void Cleave",
+        "type": "integer",
+        "min": 0,
+        "max": 15,
+        "effect": "每层 Bleed 按当前 4 点：+8% 独立近战增伤，最多 +120%。"
+      },
+      {
+        "key": "vulnerability",
+        "label": "Critical Vulnerability",
+        "source": "Rift Maker",
+        "type": "integer",
+        "min": 0,
+        "max": 10,
+        "effect": "每层增加目标 2% 被暴击率；当前场景按固定层数估算。"
+      },
+      {
+        "key": "hellish",
+        "label": "Hellish Chasm · 后续施放",
+        "source": "Void Cleave",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "后续非引导火焰攻击/法术 +30% 独立增伤；开启代表本次施放已满足条件。"
+      },
+      {
+        "key": "nether_coating",
+        "label": "Nether Coating",
+        "source": "Abyssal Echoes · Embrace the Darkness",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前 4 点：+20% 近战攻击速度；目标致盲时 +20% 独立增伤。"
+      },
+      {
+        "key": "void_supremacy",
+        "label": "Void Supremacy",
+        "source": "Abyssal Echoes",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前 4 点：后续 Void Cleave 对减速目标 +80% 独立增伤。",
+        "requires_target": "slowed"
+      },
+      {
+        "key": "dark_duellist",
+        "label": "Dark Duellist",
+        "source": "Vengeance",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前 5 点：准备反击期间 +20% 全局独立增伤。"
+      },
+      {
+        "key": "abyssal_retribution",
+        "label": "Abyssal Retribution",
+        "source": "Vengeance",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前 3 点：Vengeance 使用并命中后，下一次 Void Cleave +45% 独立增伤。"
+      }
+    ],
+    "state_sources": {
+      "frenzy": {
+        "kind": "unique_description",
+        "expected_text_contains": "You gain Frenzy for 10 Seconds when you use a Potion",
+        "expected_definition_entity_id": "item:letools:uniqueList.uniques:446",
+        "binding_selector": {
+          "item_definition_entity_id": "item:letools:uniqueList.uniques:446",
+          "kind": "unique_description",
+          "expected_description_index": 0
+        }
+      },
+      "incisive": {
+        "kind": "equipment_mod",
+        "expected_property": 58,
+        "expected_special_tag": 5,
+        "expected_readable_text_contains": "You have Incisive Rage",
+        "expected_definition_entity_id": "item:letools:uniqueList.uniques:477",
+        "binding_selector": {
+          "item_definition_entity_id": "item:letools:uniqueList.uniques:477",
+          "expected_source": "affix",
+          "expected_property": 58,
+          "expected_special_tag": 5,
+          "expected_tags": 950,
+          "expected_item_mod_index": 3,
+          "kind": "equipment_mod"
+        }
+      },
+      "crescendo": {
+        "kind": "equipment_mod",
+        "expected_property": 58,
+        "expected_special_tag": 12,
+        "expected_readable_text_contains": "You have Crescendoing Rage",
+        "expected_definition_entity_id": "item:letools:uniqueList.uniques:477",
+        "binding_selector": {
+          "item_definition_entity_id": "item:letools:uniqueList.uniques:477",
+          "expected_source": "affix",
+          "expected_property": 58,
+          "expected_special_tag": 12,
+          "expected_tags": 950,
+          "expected_item_mod_index": 3,
+          "kind": "equipment_mod"
+        }
+      },
+      "haste": {
+        "kind": "equipment_mod",
+        "expected_property": 98,
+        "expected_stat_name_contains": "You have Haste",
+        "expected_definition_entity_id": "item:letools:uniqueList.uniques:413",
+        "binding_selector": {
+          "item_definition_entity_id": "item:letools:uniqueList.uniques:413",
+          "expected_source": "unique_mod",
+          "expected_property": 98,
+          "expected_special_tag": 0,
+          "expected_tags": 519,
+          "expected_unique_mod_index": 5,
+          "expected_item_mod_index": 8,
+          "kind": "equipment_mod"
+        }
+      }
+    },
+    "effects": [
+      {
+        "id": "frenzy",
+        "label": "Frenzy",
+        "source": {
+          "kind": "state_source",
+          "control": "frenzy"
+        },
+        "stat": "attack_speed",
+        "operation": "increased",
+        "value": 0.2,
+        "scaling": {
+          "stat": "effect_of",
+          "target": "34"
+        },
+        "states": [
+          "frenzy"
+        ],
+        "status": "assumed",
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "Shattered Worlds / Fangs of the Berserker 说明行：You gain Frenzy；Frenzy 基础效果按迁移基线 20% 攻速",
+            "locator": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.waist#unique_description#0"
+          },
+          {
+            "kind": "user_rule",
+            "detail": "Frenzy 基础 +20% 攻击速度、并按 increased Effect of Frenzy 缩放：迁移基线固定条件",
+            "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.frenzy.effect"
+          }
+        ],
+        "required": true
+      },
+      {
+        "id": "incisive:crit",
+        "label": "Incisive Rage",
+        "source": {
+          "kind": "state_source",
+          "control": "incisive"
+        },
+        "stat": "crit_chance",
+        "operation": "added",
+        "value": 0.1,
+        "states": [
+          "incisive"
+        ],
+        "status": "assumed",
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "Unsated Rage sealed affix 只提供 state marker：You have Incisive Rage（property 58/special_tag 5/value 1.0），不携带暴击数值",
+            "locator": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.ring1#affix#sealed#0.0"
+          },
+          {
+            "kind": "user_rule",
+            "detail": "+10% 基础暴击率来自用户指定的 Buff 效果说明，不是该词条数值",
+            "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.incisive.effect"
+          }
+        ],
+        "required": true
+      },
+      {
+        "id": "ambition",
+        "label": "Throne of Ambition",
+        "source": {
+          "kind": "unique_description",
+          "expected_text_contains": "2% more Fire Damage per stack of Ambition",
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:211",
+          "binding_selector": {
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:211",
+            "kind": "unique_description",
+            "expected_description_index": 1
+          }
+        },
+        "stat": "damage",
+        "operation": "more",
+        "value": 0.02,
+        "stack_control": "ambition",
+        "requires_target": "boss",
+        "tags": [
+          "Fire"
+        ],
+        "status": "assumed",
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "Throne of Ambition 说明行：2% more Fire Damage per stack of Ambition",
+            "locator": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods idols.3#unique_description#1"
+          },
+          {
+            "kind": "user_rule",
+            "detail": "叠层获取与过期不模拟，按固定层数计算（迁移基线 limitations）",
+            "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#limitations"
+          }
+        ],
+        "required": true
+      },
+      {
+        "id": "hellish",
+        "label": "Hellish Chasm",
+        "source": {
+          "kind": "skill_node",
+          "tree": "v01cv",
+          "node": "3",
+          "stat_index": 2
+        },
+        "stat": "damage",
+        "operation": "more",
+        "value_source": "source_value",
+        "states": [
+          "hellish"
+        ],
+        "tags": [
+          "Fire"
+        ],
+        "source_kind": "skill_node",
+        "status": "derived",
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "节点 Hellish Chasm 说明：下一发非引导火焰攻击/法术造成 more 伤害；目录 stat_index 2 = 0.3/点",
+            "locator": "archive://examples/void-cleave-20261110/inputs/bd-tables.zh-CN.md#Void Cleave 节点 3"
+          }
+        ],
+        "required": true
+      },
+      {
+        "id": "sword_catcher:frenzy",
+        "label": "Sword Catcher · Frenzy",
+        "source": {
+          "kind": "equipment_mod",
+          "expected_property": 98,
+          "expected_readable_text_contains": "Melee Damage while you have Frenzy",
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:338",
+          "binding_selector": {
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:338",
+            "expected_source": "unique_mod",
+            "expected_property": 98,
+            "expected_special_tag": 0,
+            "expected_tags": 411,
+            "expected_unique_mod_index": 5,
+            "expected_item_mod_index": 9,
+            "kind": "equipment_mod"
+          }
+        },
+        "stat": "added_damage",
+        "operation": "added",
+        "value_source": "source_value",
+        "states": [
+          "frenzy"
+        ],
+        "tags": [
+          "Melee"
+        ],
+        "status": "derived",
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "Sword Catcher 詞条：+30 Melee Damage while you have Frenzy（当前 roll 30）",
+            "locator": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.weapon1#unique_mod#5"
+          }
+        ],
+        "required": true
+      }
+    ],
+    "node_bindings": [
+      {
+        "node": "6",
+        "stat_index": 1,
+        "stat": "damage",
+        "operation": "more"
+      },
+      {
+        "node": "8",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more"
+      },
+      {
+        "node": "9",
+        "stat_index": 1,
+        "stat": "crit_chance",
+        "operation": "added"
+      },
+      {
+        "node": "10",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "condition": "high_health",
+        "tags": [
+          "Melee"
+        ]
+      },
+      {
+        "node": "11",
+        "stat_index": 1,
+        "stat": "crit_chance",
+        "operation": "increased"
+      },
+      {
+        "node": "12",
+        "stat_index": 0,
+        "stat": "crit_multiplier",
+        "operation": "added"
+      },
+      {
+        "node": "25",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "per_stack": "time_rot",
+        "tags": [
+          "Melee"
+        ]
+      },
+      {
+        "node": "29",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "per_stack": "bleed",
+        "cap_per_point": 0.3,
+        "tags": [
+          "Melee"
+        ]
+      },
+      {
+        "tree": "ab0lh",
+        "node": "14",
+        "stat_index": 1,
+        "stat": "attack_speed",
+        "operation": "increased",
+        "condition": "nether_coating",
+        "requires_states": [],
+        "tags": [
+          "Melee"
+        ]
+      },
+      {
+        "tree": "ab0lh",
+        "node": "14",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "condition": "nether_coating",
+        "requires_states": [
+          "blinded"
+        ],
+        "tags": []
+      },
+      {
+        "tree": "ab0lh",
+        "node": "19",
+        "stat_index": 1,
+        "stat": "damage",
+        "operation": "more",
+        "condition": "void_supremacy",
+        "requires_states": [
+          "slowed"
+        ],
+        "tags": []
+      },
+      {
+        "tree": "gs15de",
+        "node": "3",
+        "stat_index": 0,
+        "stat": "damage",
+        "operation": "more",
+        "condition": "dark_duellist",
+        "requires_states": [],
+        "tags": []
+      },
+      {
+        "tree": "gs15de",
+        "node": "21",
+        "stat_index": 1,
+        "stat": "damage",
+        "operation": "more",
+        "condition": "abyssal_retribution",
+        "requires_states": [],
+        "tags": []
+      }
+    ],
+    "rules": {
+      "crit": {
+        "deadly": {
+          "control": "incisive",
+          "chance": 0.2,
+          "added_multiplier": 3,
+          "evidence": [
+            {
+              "kind": "user_rule",
+              "detail": "Deadly Strike：暴击有 20% 概率额外 +300% 暴击伤害倍率（迁移基线，未游戏内实测）",
+              "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.incisive.effect"
+            }
+          ]
+        },
+        "target_stack_chance": {
+          "control": "vulnerability",
+          "per_stack": 0.02,
+          "evidence": [
+            {
+              "kind": "user_rule",
+              "detail": "Critical Vulnerability 每层 +2% 目标被暴击率（迁移基线固定条件）",
+              "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.vulnerability.effect"
+            }
+          ]
+        }
+      },
+      "every_nth_hit": {
+        "n": 3,
+        "extra_more": 0.5,
+        "counting": "hit",
+        "evidence": [
+          {
+            "kind": "user_rule",
+            "detail": "Crescendoing Rage 按主技能每第三次本体命中建模（迁移基线）",
+            "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#controls.crescendo.effect"
+          }
+        ]
+      },
+      "state_scalings": [
+        {
+          "id": "haste_movement",
+          "label": "Haste",
+          "states": [
+            "haste"
+          ],
+          "per_state": 0.3,
+          "scaling": {
+            "stat": "effect_of",
+            "target": "33"
+          },
+          "output": {
+            "stat": "movement_speed",
+            "operation": "increased"
+          },
+          "evidence": [
+            {
+              "kind": "user_rule",
+              "detail": "Haste 提供 30% 增加移速（迁移基线固定条件）",
+              "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#movement_effects"
+            }
+          ]
+        },
+        {
+          "id": "rage_movement",
+          "label": "Rage 移速",
+          "states": [
+            "incisive",
+            "crescendo"
+          ],
+          "per_state": 0.03,
+          "output": {
+            "stat": "movement_speed",
+            "operation": "increased"
+          },
+          "evidence": [
+            {
+              "kind": "user_rule",
+              "detail": "每个 rage 状态 +3% 移速（迁移基线 rage_movement_per_buff）",
+              "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#rage_movement_per_buff"
+            }
+          ]
+        },
+        {
+          "id": "blood_rage",
+          "label": "Blood Rage",
+          "states": [
+            "incisive",
+            "crescendo"
+          ],
+          "per_state": 0.05,
+          "output": {
+            "stat": "attack_speed",
+            "operation": "increased"
+          },
+          "evidence": [
+            {
+              "kind": "user_rule",
+              "detail": "每个 rage 状态 +5% 攻击速度（迁移基线 rage_speed_per_buff，未游戏内实测）",
+              "locator": "archive://examples/void-cleave-20261110/inputs/dps-profile.json#rage_speed_per_buff"
+            }
+          ]
+        }
+      ],
+      "movement_conversion": {
+        "label": "Vaion's Chariot",
+        "source": {
+          "kind": "equipment_mod",
+          "expected_property": 98,
+          "expected_stat_name_contains": "Increased Damage per 100% Increased Movement Speed",
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:264",
+          "binding_selector": {
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:264",
+            "expected_source": "unique_mod",
+            "expected_property": 98,
+            "expected_special_tag": 0,
+            "expected_tags": 93,
+            "expected_unique_mod_index": 1,
+            "expected_item_mod_index": 5,
+            "kind": "equipment_mod"
+          }
+        },
+        "input_stat": "movement_speed",
+        "ratio": 1.0,
+        "output": {
+          "stat": "damage",
+          "operation": "increased",
+          "tags": []
+        },
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "Vaion's Chariot 转换效果行：Increased Damage per 100% Increased Movement Speed（value 1.0，即 1% 伤害 / 1% 移速）；对应说明行 1% Increased Damage per 1% Increased Movement Speed",
+            "locator": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.feet#unique_mod#1"
+          }
+        ],
+        "required": true
+      },
+      "damage_to_penetration": {
+        "target": "Ignite",
+        "source": {
+          "kind": "skill_node",
+          "tree": "v01cv",
+          "node": "2",
+          "stat_index": 1
+        },
+        "input": {
+          "stat": "damage",
+          "operation": "increased",
+          "tags": [
+            "Void"
+          ]
+        },
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "Riftflame：Ignite inflicted by Void Cleave gains additional fire penetration based on your increased void damage；目录 stat_index 1 = 0.01/点",
+            "locator": "archive://examples/void-cleave-20261110/inputs/bd-tables.zh-CN.md#Void Cleave 节点 2"
+          }
+        ]
+      },
+      "cooldown_reduction": {
+        "label": "Dark Pathway",
+        "source": {
+          "kind": "skill_node",
+          "tree": "v01cv",
+          "node": "17",
+          "stat_index": 0
+        },
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "节点 Dark Pathway：Void Cleave has a shorter cooldown；目录 stat_index 0 = 0.1/点",
+            "locator": "archive://examples/void-cleave-20261110/inputs/bd-tables.zh-CN.md#Void Cleave 节点 17"
+          }
+        ]
+      },
+      "attribute_scaling": {
+        "ratios": {
+          "strength": 0.04,
+          "vitality": 0.04
+        },
+        "output": {
+          "stat": "damage",
+          "operation": "increased"
+        },
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "dataset skill extensions.attributeScaling：属性索引 0(Str) / 1(Vit) 各增加 4% 伤害",
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#entities skill:letools:LEAbilities.abilityList:v01cv extensions.attributeScaling"
+          }
+        ]
+      }
+    },
+    "attribute_conversion": {
+      "rules": "tools/phase3/rules/attribute-conversions-v1.json",
+      "status": "derived",
+      "evidence": [
+        {
+          "kind": "user_rule",
+          "detail": "Exulis sealed affix：100% of Strength Converted to Brutality（property 98 / tags 650），转换公式由既有属性转换算子给出",
+          "locator": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.amulet#affix#sealed#0.1"
+        }
+      ],
+      "expected": {
+        "definition_entity_id": "item:letools:uniqueList.uniques:469",
+        "item_definition_entity_id": "item:letools:uniqueList.uniques:469"
+      }
+    },
+    "ailments": [
+      {
+        "name": "Ignite",
+        "label_zh": "点燃",
+        "ailment_id": 1,
+        "damage_type": "Fire",
+        "duration_s": 2.5,
+        "base_damage": 40,
+        "chance": {
+          "source_kinds": [
+            "equipment",
+            "idol",
+            "idol_altar",
+            "blessing"
+          ],
+          "excluded_tags": [
+            "Spell",
+            "Bow",
+            "Throwing",
+            "Minion"
+          ],
+          "additional": [
+            {
+              "kind": "skill_node",
+              "tree": "v01cv",
+              "node": "2",
+              "stat_index": 0
+            }
+          ],
+          "unmodeled_reason": "该施加概率来源（被动/装备 meta 词条等）未纳入当前概率模型"
+        },
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "dataset ailmentList:1 Ignite：Fire、base 40、duration 2500ms",
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments ailment:letools:LEAbilities.ailmentList:1"
+          }
+        ]
+      },
+      {
+        "name": "Bleed",
+        "label_zh": "流血",
+        "ailment_id": 2,
+        "damage_type": "Physical",
+        "duration_s": 3,
+        "base_damage": 53,
+        "chance": {
+          "source_kinds": [
+            "equipment",
+            "idol",
+            "idol_altar",
+            "blessing"
+          ],
+          "excluded_tags": [
+            "Spell",
+            "Bow",
+            "Throwing",
+            "Minion"
+          ],
+          "additional": [],
+          "unmodeled_reason": "该施加概率来源（被动/装备 meta 词条等）未纳入当前概率模型"
+        },
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "dataset ailmentList:2 Bleed：Physical、base 53、duration 3000ms",
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments ailment:letools:LEAbilities.ailmentList:2"
+          }
+        ]
+      }
+    ],
+    "coverage": {
+      "confirmed_inactive": [
+        {
+          "require": {
+            "dual_wield": false
+          },
+          "reason": "12% increased Effect of Frenzy while Dual Wielding：当前装备为双手武器，条件确定不满足",
+          "evidence": [
+            {
+              "kind": "game_data",
+              "detail": "词条说明含 while Dual Wielding；当前 weapon1=Two-Handed Axe 且无 weapon2",
+              "locator": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.waist#unique_mod#6"
+            }
+          ],
+          "binding_selector": {
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:446",
+            "expected_source": "unique_mod",
+            "expected_property": 98,
+            "expected_special_tag": 0,
+            "expected_tags": 605,
+            "expected_unique_mod_index": 6,
+            "expected_item_mod_index": 8,
+            "kind": "equipment_mod"
+          }
+        }
+      ],
+      "not_applicable_mods": [
+        {
+          "reason": "Vaion's Chariot：下一次移动技能 40% more 伤害，作用于移动技能而非主技能本体，不在当前计算范围",
+          "evidence": [
+            {
+              "kind": "game_data",
+              "detail": "More Damage with your next Movement Skill Every 3 Seconds",
+              "locator": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.feet#unique_mod#2"
+            }
+          ],
+          "binding_selector": {
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:264",
+            "expected_source": "unique_mod",
+            "expected_property": 98,
+            "expected_special_tag": 0,
+            "expected_tags": 228,
+            "expected_unique_mod_index": 2,
+            "expected_item_mod_index": 6,
+            "kind": "equipment_mod"
+          }
+        }
+      ],
+      "assumed_active_mods": [
+        {
+          "reason": "神像祭坛 10% 冷却恢复：'若无更大的神像位于更小神像上方' 的网格布局条件未从输入验证",
+          "evidence": [
+            {
+              "kind": "game_data",
+              "detail": "10% Increased Cooldown Recovery Speed if there are no larger idols above smaller ones in the grid",
+              "locator": "archive://examples/void-cleave-20261110/inputs/calculation-input.corrected.json#mods equipment.idol_altar#implicit#0"
+            }
+          ],
+          "binding_selector": {
+            "item_base_entity_id": "item:letools:itemList.equippable_41:11",
+            "expected_source": "implicit",
+            "expected_property": 130,
+            "expected_special_tag": 0,
+            "expected_tags": 21,
+            "expected_item_mod_index": 0,
+            "kind": "equipment_mod"
+          }
+        }
+      ]
+    },
+    "limitations": [
+      "固定条件下模拟主技能连续施放；不模拟法力维持、移动、中断及辅助技能自身伤害。",
+      "Time Rot、Bleed 和易伤作为用户指定的固定目标条件，不模拟获取、叠层与过期。",
+      "Crescendoing Rage 按主技能独立计数的每第三次命中建模；持续伤害继承尚未确认，暂不赋予这部分加成。",
+      "Deadly Strike 额外倍率依据本地工具提示；固定状态与目标易伤的合成仍属推导，未经游戏内实测。",
+      "动作时长取 dataset castTime（2.0 秒）；对装备条件与通道仍有未支持来源，全部保留在工程账本。",
+      "未建模敌方护甲和减抗/穿甲积累；目标面板的抗性是输入的有效抗性。",
+      "当前 mastery 为 Forge Guard，不加入 Void Knight 回响。",
+      "辅助技能 Buff 均按用户指定的已获得状态计算，不模拟动作占用或维持成本；多个下一次施放加成不能视为无条件常驻。",
+      "持续伤害施加概率只纳入装备/神像/祝福词条与显式节点规则；被动与其它 meta 词条的施加来源未纳入概率模型（见 coverage.gaps）。",
+      "Void→点燃穿透的输入池按标签闭包 ['Void'] 计算（含无标签通用增伤行），该口径未实测确认。",
+      "施加概率超过 100% 时当前按线性期望计入，超过 100% 是否产生额外层数未确认。"
+    ],
+    "evidence": [
+      {
+        "kind": "migration",
+        "detail": "VC 共享定义；实例经 selector 绑定",
+        "locator": "docs/contracts/definitions-v3.md"
+      }
+    ]
+  },
+  "scenario_schema": {
+    "schema": "le-skill-scenario-v3",
+    "controls": [
+      {
+        "key": "frenzy",
+        "label": "Frenzy",
+        "source": "Fangs of the Berserker / Sword Catcher / Defender’s Rage",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前装备效果：+60% 攻击速度、Sword Catcher +30 附加近战伤害。"
+      },
+      {
+        "key": "haste",
+        "label": "Haste",
+        "source": "Shattered Worlds",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "常驻移动速度通过 Vaion’s Chariot 转为加算增伤。",
+        "readonly": true
+      },
+      {
+        "key": "incisive",
+        "label": "Incisive Rage",
+        "source": "Unsated Rage · 戒指",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "+10% 基础暴击率；暴击有 20% 概率成为 Deadly Strike（额外 +300% 暴击伤害倍率）。"
+      },
+      {
+        "key": "crescendo",
+        "label": "Crescendoing Rage",
+        "source": "Unsated Rage · 戒指",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "主技能重复施放时，每第三次本体命中额外 ×1.5；不假定其它技能的计数相位。"
+      },
+      {
+        "key": "ambition",
+        "label": "Ambition",
+        "source": "Throne of Ambition",
+        "type": "integer",
+        "min": 0,
+        "max": 20,
+        "effect": "每层 +2% 独立火焰增伤；需要目标为首领或稀有。"
+      },
+      {
+        "key": "time_rot",
+        "label": "Entropic Blows",
+        "source": "Void Cleave",
+        "type": "integer",
+        "min": 0,
+        "max": 12,
+        "effect": "每层 Time Rot 按当前 5 点：+25% 独立近战增伤；不模拟辅助投掷的获取过程。"
+      },
+      {
+        "key": "bleed",
+        "label": "Vorpal Force",
+        "source": "Void Cleave",
+        "type": "integer",
+        "min": 0,
+        "max": 15,
+        "effect": "每层 Bleed 按当前 4 点：+8% 独立近战增伤，最多 +120%。"
+      },
+      {
+        "key": "vulnerability",
+        "label": "Critical Vulnerability",
+        "source": "Rift Maker",
+        "type": "integer",
+        "min": 0,
+        "max": 10,
+        "effect": "每层增加目标 2% 被暴击率；当前场景按固定层数估算。"
+      },
+      {
+        "key": "hellish",
+        "label": "Hellish Chasm · 后续施放",
+        "source": "Void Cleave",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "后续非引导火焰攻击/法术 +30% 独立增伤；开启代表本次施放已满足条件。"
+      },
+      {
+        "key": "nether_coating",
+        "label": "Nether Coating",
+        "source": "Abyssal Echoes · Embrace the Darkness",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前 4 点：+20% 近战攻击速度；目标致盲时 +20% 独立增伤。"
+      },
+      {
+        "key": "void_supremacy",
+        "label": "Void Supremacy",
+        "source": "Abyssal Echoes",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前 4 点：后续 Void Cleave 对减速目标 +80% 独立增伤。",
+        "requires_target": "slowed"
+      },
+      {
+        "key": "dark_duellist",
+        "label": "Dark Duellist",
+        "source": "Vengeance",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前 5 点：准备反击期间 +20% 全局独立增伤。"
+      },
+      {
+        "key": "abyssal_retribution",
+        "label": "Abyssal Retribution",
+        "source": "Vengeance",
+        "type": "boolean",
+        "min": 0,
+        "max": 1,
+        "effect": "当前 3 点：Vengeance 使用并命中后，下一次 Void Cleave +45% 独立增伤。"
+      }
+    ],
+    "target_required": [
+      "monster_level",
+      "resistance"
+    ]
+  },
+  "migration": {
+    "from": "archive://examples/void-cleave-20261110/inputs/dps-profile-v2.json",
+    "policy": "共享语义/规则/证据在此；当前实例经 selector 绑定；场景默认值在 scenario 文件，不进入共享定义",
+    "canonical_case": "archive://examples/void-cleave-20261110/case.json",
+    "migration_case": "archive://examples/void-cleave-20261110/case.profile-v2.json",
+    "canonical_run_id": "dps-step5-p1-vc-1",
+    "entry_policy": "canonical case.json 必须走 definitions_v3；legacy/profile/hit 文件仅作迁移证据，不参与默认入口。"
+  }
+}

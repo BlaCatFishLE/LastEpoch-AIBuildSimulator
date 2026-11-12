@@ -1,0 +1,181 @@
+{
+  "schema": "le-conditional-node-buffs-v1",
+  "effects": [
+    {
+      "id": "meteor.craterborn",
+      "label": "Craterborn",
+      "tree": "me27",
+      "node": "25",
+      "source_kind": "skill_node",
+      "min_points": 1,
+      "control": "craterborn_active",
+      "single_cast_only": false,
+      "status": "confirmed",
+      "modifiers": [
+        {
+          "stat": "penetration",
+          "operation": "added",
+          "tags": [
+            "Fire"
+          ],
+          "target": "fire",
+          "per_point": 0.15,
+          "constant": null,
+          "unit": "percent"
+        },
+        {
+          "stat": "cast_speed",
+          "operation": "increased",
+          "tags": [],
+          "target": null,
+          "per_point": null,
+          "constant": 0.15,
+          "unit": "percent"
+        }
+      ],
+      "requires": [],
+      "any": [],
+      "evidence": [
+        {
+          "kind": "document",
+          "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#effects/meteor.craterborn"
+        }
+      ],
+      "note": "固定条件估算：假设 Buff 在观察期内维持；不模拟 Meteor 施放成本与刷新。"
+    },
+    {
+      "id": "flame_ward.infusion",
+      "label": "Infusion",
+      "tree": "fw3d",
+      "node": "2",
+      "source_kind": "skill_node",
+      "min_points": 1,
+      "control": "infusion_active",
+      "single_cast_only": false,
+      "status": "confirmed",
+      "modifiers": [
+        {
+          "stat": "damage",
+          "operation": "increased",
+          "tags": [
+            "Fire"
+          ],
+          "target": "fire",
+          "per_point": 0.5,
+          "constant": null,
+          "unit": "percent"
+        }
+      ],
+      "requires": [],
+      "any": [],
+      "evidence": [
+        {
+          "kind": "document",
+          "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#effects/flame_ward.infusion"
+        }
+      ],
+      "note": "假设 Flame Ward 当前生效；不模拟它的触发、刷新或施放成本。"
+    },
+    {
+      "id": "frost_wall.chilled_touch",
+      "label": "Chilled Touch",
+      "tree": "fr4wl",
+      "node": "16",
+      "source_kind": "skill_node",
+      "min_points": 1,
+      "control": "chilled_touch_active",
+      "single_cast_only": false,
+      "status": "confirmed",
+      "modifiers": [
+        {
+          "stat": "damage",
+          "operation": "more",
+          "tags": [],
+          "target": null,
+          "per_point": 0.07,
+          "constant": null,
+          "unit": "percent"
+        }
+      ],
+      "requires": [
+        "enemy_chilled"
+      ],
+      "any": [],
+      "evidence": [
+        {
+          "kind": "document",
+          "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#effects/frost_wall.chilled_touch"
+        }
+      ],
+      "note": "需要 Frost Wall 存续且目标冰缓；目标条件在“目标设置”中声明。"
+    },
+    {
+      "id": "passive.frozen_steel",
+      "label": "Frozen Steel",
+      "tree": "mg-1",
+      "node": "36",
+      "source_kind": "passive_node",
+      "min_points": 4,
+      "control": "frozen_steel_enabled",
+      "single_cast_only": false,
+      "status": "confirmed",
+      "modifiers": [
+        {
+          "stat": "damage",
+          "operation": "more",
+          "tags": [],
+          "target": null,
+          "per_point": null,
+          "constant": 0.06,
+          "unit": "percent"
+        }
+      ],
+      "requires": [],
+      "any": [
+        "enemy_chilled",
+        "enemy_frozen"
+      ],
+      "evidence": [
+        {
+          "kind": "document",
+          "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#effects/passive.frozen_steel"
+        }
+      ],
+      "note": "达到节点点数门槛后，目标冰缓或冻结时生效；两条件同时成立也只计算一次。"
+    },
+    {
+      "id": "passive.preparation",
+      "label": "Preparation",
+      "tree": "mg-1",
+      "node": "4",
+      "source_kind": "passive_node",
+      "min_points": 1,
+      "control": "preparation_ready",
+      "single_cast_only": true,
+      "status": "assumed",
+      "modifiers": [
+        {
+          "stat": "damage",
+          "operation": "increased",
+          "tags": [
+            "Elemental",
+            "Spell"
+          ],
+          "target": null,
+          "per_point": 0.2,
+          "constant": null,
+          "unit": "percent"
+        }
+      ],
+      "requires": [],
+      "any": [],
+      "evidence": [
+        {
+          "kind": "document",
+          "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#effects/passive.preparation"
+        }
+      ],
+      "note": "仅本次施法就绪：提高下一次元素法术的本体伤害，不提高持续循环 DPS；不模拟刷新与其它法术消耗顺序。"
+    }
+  ]
+}

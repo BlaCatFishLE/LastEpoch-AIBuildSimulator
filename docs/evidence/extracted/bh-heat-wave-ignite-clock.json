@@ -1,0 +1,80 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-heat-wave-ignite-clock",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Black Hole Ignite：Heat Wave 独立施加时钟与期望层数",
+    "en": "Black Hole Ignite independent Heat Wave application clock"
+  },
+  "source_path": "knowledge/mechanisms/bh-heat-wave-ignite-clock.json",
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 BH 计算器与 ruleset-bh-stage1-v4 仅作迁移证据；生产路径为 plan-v3。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "plan-v3 schedule.ignite",
+    "path": "knowledge/definitions/black-hole-v3.json",
+    "locator": "#/definition/rules/ignite_model",
+    "verification": {
+      "status": "verified_locator",
+      "checked_against": "knowledge/definitions/black-hole-v3.json#/definition/rules/ignite_model",
+      "note": "ref 不是规则 ID（描述性引用）；已按 locator 在该候选树文件内定位"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1",
+      "note": "Ignite base 40 Fire / 2.5s",
+      "source": "$.evidence_refs[0]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Black Hole Ignite：Heat Wave 独立施加时钟与期望层数",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：dot、ailment；伤害标签：Fire、DoT、Ailment；条件 code：none；必要节点：bh2:6",
+      "source": "$.applicability"
+    },
+    {
+      "text": "base 40 Fire / 2.5s；每次施放 spawn + k*0.5s 判定，偏移 < duration；每判定期望层数 = 机会×未封顶火抗×0.5。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "聚合操作=none；叠层策略=additive；顺序/汇总=每批判定独立，到期即结束；不延长既有层数；more 分组依据=贡献行 group（节点 2/7/10/23/28/9 继承，27 排除）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "每批判定独立计时并各自到期；期望值模型",
+      "source": "$.handler_ref.note（le_calc.plan_executor_v3._ignite_core/_ignite_application）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：chance per point、uncapped fire resistance、ignite duration",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/dps-step4-bh-2/result.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "整数事件抽样：使用期望层数而非整数 roll 抽样；上限/非独立假设未建模。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

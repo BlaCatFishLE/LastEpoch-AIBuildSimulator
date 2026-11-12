@@ -1,0 +1,153 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-body-tick-model",
+  "revision": 2,
+  "title": {
+    "zh": "本体跳数离散化与总伤害口径",
+    "en": "Body tick discretisation and total-damage convention"
+  },
+  "aliases": [
+    "tick model",
+    "跳数",
+    "ceil_full_ticks",
+    "damageAtStart",
+    "本体总伤害",
+    "remainder policy",
+    "余量合并"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "body",
+      "tick",
+      "frequency"
+    ],
+    "tags": [
+      "DoT"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:bh2:0"
+    ],
+    "notes": "1.5.3 代码：生成即首跳（damageAtStart），此后每 interval 跳一次；销毁时不结算余量，因此跳数 = ceil(duration/interval)，最后一跳按满额结算。注意：规则包内 rule-bh-total-damage 的 v1 文字（余量合并进最后一跳）与 v3 tick_model 冲突，当前实现按 tick_model（ceil_full_ticks），见 open_questions。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-bh-tick-schedule",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-bh-tick-schedule]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "remainder_policy",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/black_hole/tick_model/remainder_policy",
+      "note": "当前值 ceil_full_ticks；规则包决定实现走哪条分支。"
+    },
+    {
+      "parameter": "duration_s",
+      "source": "current:matched_instances",
+      "unit": "seconds",
+      "note": "跳数由实际持续时间与 interval 决定。"
+    },
+    {
+      "parameter": "ticks",
+      "source": "current:matched_instances",
+      "note": "运行产物逐跳列表（offset/coverage/damage）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "_ticks_for_duration",
+    "note": "跳数离散化：ceil(duration/interval)，ceil_full_ticks 时每跳满额；compute_body 调用并写入 tick 行。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json#/findings/body_tick",
+      "note": "1.5.3 OnFirstTick/OnUpdateTick/OnDestroy/DealAllRemainingDamage 行为与结论。"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#7.1",
+      "note": "本体跳数（高置信度）逆向记录。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "跳数 = ceil(duration/interval) 的机制索引结论。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/tick_model",
+      "note": "当前 run 的 tick_model 与 tick_count。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/duration/duration_s",
+      "note": "历史输出仅作验证证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/ticks",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_tick_schedule_merges_remainder_into_last_tick",
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_tick_model_ceil_full_ticks_matches_1_5_3_re",
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[legacy_single_skill.body_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-duration",
+      "requirement": "跳数随实际持续时间变化；duration 改变会改变跳数（ceil）。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#compute_body"
+    },
+    {
+      "with": "common-ledger",
+      "requirement": "跳事件之和必须等于分量总伤害（run-manifest consistency）。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency/body_ticks_sum_equals_component_total"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json#/findings/body_tick",
+      "docs/evidence/reverse-engineering/README.zh-CN.md#7.1",
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules",
+      "tools/phase3/tests/test_damage.py",
+      "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency"
+    ],
+    "open_questions": [
+      "规则包同时保留 rule-bh-total-damage（confirmed，v1 文字：不足一周期余量合并进最后一跳）与 rule-bh-tick-schedule（confirmed，v3：ceil 满跳）。当前实现取 tick_model=ceil_full_ticks，两条规则文字并未同时成立（数值上有可见差异）。需 Lead 裁定：把 rule-bh-total-damage 降级/改写为「名义速率 × 持续时间」的目标口径，或明确其仅指 v1 记账。",
+      "对象寿命边界/最后一帧是否可能与下一次施放重叠（多黑洞并存）尚未逐帧实测；当前以 duration 精确边界建模。"
+    ],
+    "requery_when": [
+      "Lead 裁定 rule-bh-total-damage 状态后",
+      "若 game tick 边界实测出现偏差时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

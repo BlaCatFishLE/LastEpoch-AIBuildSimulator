@@ -1,0 +1,2136 @@
+{
+ "schema_note": "Ruleset consumed by le_calc.damage / cooldown / simulate. Every tunable value carries an evidence status. status vocabulary: confirmed (game data or user-confirmed), derived (arithmetic over confirmed inputs), assumed (explicit v1 assumption, needs review), unresolved (unknown, must not be silently defaulted). This file is the authoritative source for Black Hole skill-tree modifiers; player-side sources come from the input snapshot.",
+ "ruleset_id": "bh-stage1-v4",
+ "game_version": "1.5.2",
+ "created": "2026-11-05",
+ "source_refs": {
+  "execution_plan": "archive://docs/history/phase-3-black-hole-stage1-execution.zh-CN.md",
+  "planning_evidence": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json",
+  "dataset": "phase1-dataset-003",
+  "build_revision": "rev-c746411ccebee9c0",
+  "user_rules": "user message 2026-11-04 (7 confirmed rules)",
+  "build_revision_seq": 8,
+  "build_content_sha256": "c746411ccebee9c04b67da4a40cfc21d1e6770530e284bd2de8160ed0199932b",
+  "calc_input": "archive://reports/phase-2/o3ZRm9my/calculation-input.json",
+  "calc_input_sha256": "531f7a50ec338cf0765bf0008a05098f044e38f5e134420241f149ef4f9aa561",
+  "calc_input_mod_count": 148,
+  "note": "输入以 2026-11-04 第二阶段数据修正后的 revision 为准（rev-c7464, seq 8；148 mods，5 条 non-DPS 掉落率词条已从计算器输入排除，不影响伤害）；phase-1 dataset 升级到 phase1-dataset-003（新增 specialTag 显示映射：property 43 + specialTag 1 = \"Fire Penetration with Ignite\"）；旧 rev-be27/rev-5e0e 保留为历史只读。 1.5.3 local-game read-only RE added: body tick integer full ticks, Heat Wave 0.5s aura rolls, Red Giant/multi-hole code confirmation; Binary +100% (independent more plus structural two-component split, inherited by Ignite) and the Recurrence/ICR cooldown formula were subsequently confirmed by the 2026-11-05 in-game measurements recorded in docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json.",
+  "reverse_engineering": "docs/evidence/reverse-engineering/README.zh-CN.md",
+  "reverse_engineering_evidence": [
+   "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json",
+   "docs/evidence/reverse-engineering/bh2-ability-and-charge-1.5.3.json",
+   "docs/evidence/reverse-engineering/bh2-skilltree-nodes-1.5.3.json",
+   "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json",
+   "docs/evidence/reverse-engineering/cooldown-charge-1.5.3.json",
+   "docs/evidence/reverse-engineering/multi-black-hole-lifecycle-1.5.3.json",
+   "docs/evidence/reverse-engineering/v2-candidate-impact-1.5.3.json",
+   "docs/evidence/reverse-engineering/elemental-tag-filtering-1.5.3.json",
+   "docs/evidence/reverse-engineering/heat-wave-aura-1.5.3.json",
+   "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json",
+   "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json",
+   "tools/phase3/data/monster_dr.json"
+  ],
+  "monster_dr": "tools/phase3/data/monster_dr.json",
+  "monster_dr_source": "https://lastepoch.tunklab.com/mobdr"
+ },
+ "black_hole": {
+  "ability_id": "bh2",
+  "name": "Black Hole",
+  "components": [
+   {
+    "component_id": "bh-body-core",
+    "kind": "repeatedly_damage_enemies_within_radius",
+    "base_damage": {
+     "cold": 48.0
+    },
+    "added_damage_scaling": 2.4,
+    "damage_interval_s": 0.3,
+    "damage_at_start": true,
+    "hit": false,
+    "crit_chance": 0.0,
+    "crit_multiplier": 0.0,
+    "base_duration_s": 2.75,
+    "damage_tags": [
+     "Spell",
+     "DoT"
+    ],
+    "evidence": [
+     {
+      "kind": "game_data",
+      "detail": "bh2 prefab component RepeatedlyDamageEnemiesWithinRadius: damage[2]=48 cold, addedDamageScaling=2.4, damageInterval=0.3, damageAtStart=true, hit=false, DestroyAfterDuration.duration=2.75",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0].raw_payload.prefab.components[3]"
+     },
+     {
+      "kind": "game_data",
+      "detail": "tooltip alt text: added spell damage applied at 800% effectiveness per second; persists 2.75s by default",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#translation_evidence.Abilities.Ability_BlackHole_AltText"
+     }
+    ],
+    "status": "confirmed"
+   }
+  ],
+  "structural": {
+   "red_giant": {
+    "node_id": "4",
+    "convert": {
+     "from": "cold",
+     "to": "fire"
+    },
+    "applies_to": [
+     "base_damage",
+     "added_damage"
+    ],
+    "status": "confirmed",
+    "evidence": [
+     {
+      "kind": "user_rule",
+      "detail": "规则 2：先执行 Red Giant 冷转火",
+      "locator": "user message 2026-11-04"
+     },
+     {
+      "kind": "game_data",
+      "detail": "Red Giant: Black Hole base cold damage is converted to fire damage; lasts much longer; no longer pulls",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[14]"
+     },
+     {
+      "kind": "reverse_engineering",
+      "detail": "BlackHoleMutator.Mutate: getBaseDamage(COLD) -> addBaseDamage(FIRE, cold); if binaryStar==false subtract COLD again (pure conversion). BlackHoleTree.updateMutator Convert To Fire sets flags and duration += 0.8.",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#7.3"
+     }
+    ],
+    "note": "The node text says 'base' cold damage; whether added spell damage is converted as well is treated as an explicit v1 assumption (apply conversion to added damage too)."
+   },
+   "binary_system": {
+    "node_id": "9",
+    "model": "two_components",
+    "components": [
+     {
+      "component_id": "bh-binary-fire",
+      "damage_type": "fire",
+      "source": "converted_base",
+      "base_fraction": 1.0
+     },
+     {
+      "component_id": "bh-binary-cold",
+      "damage_type": "cold",
+      "source": "original_base",
+      "base_fraction": 1.0
+     }
+    ],
+    "total_multiplier_structural": 2.0,
+    "extra_more": 1.0,
+    "counts_as_one_black_hole": true,
+    "status": "confirmed",
+    "evidence": [
+     {
+      "kind": "user_rule",
+      "detail": "规则 2：先转火，然后双星相当于伤害翻倍但另一半造成冰霜伤害；双星视作一个黑洞，满足 1 个黑洞数量上限",
+      "locator": "user message 2026-11-04"
+     },
+     {
+      "kind": "game_data",
+      "detail": "Binary System: two stars orbit each other, one fire one cold; Black Hole deals significantly more damage",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[15]"
+     },
+     {
+      "kind": "reverse_engineering",
+      "detail": "Stats.Stat(Damage, more=points*1.0) added by BlackHoleTree.updateMutator; DamageStatsHolder.addBaseDamage is plain addition (structural copy is a second component).",
+      "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json"
+     },
+     {
+      "kind": "user_in_game_measurement",
+      "detail": "Binary on/off total DPS 400k -> 800k; DPS mostly Ignite => Ignite doubles too.",
+      "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+     }
+    ],
+    "note": "v2: Binary System = structural two components (fire+cold) AND an independent +100% more (Stats.Stat property Damage, more=1.0). In-game Binary on/off doubled total DPS (400k->800k, mostly Ignite), and Ignite inherits the more (user rule 5).",
+    "extra_more_inherited_by_ignite": true,
+    "extra_more_model": "node:bh2:9 damage more effect (applies to body components and Ignite inheritance)"
+   },
+   "singularity": {
+    "node_id": "28",
+    "more_group": "node:bh2:28",
+    "more_value": 1.0,
+    "status": "confirmed",
+    "evidence": [
+     {
+      "kind": "user_rule",
+      "detail": "用户 2026-11-04 第 6 条：黑洞的单次上限是对一次释放的；释放 2 次场上已有 2 个黑洞，分别独立",
+      "locator": "user message 2026-11-04 (round 3)"
+     },
+     {
+      "kind": "game_data",
+      "detail": "Singularity: Black Holes Per Cast = 1; only 1 Black Hole can be created at a time",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[13]"
+     },
+     {
+      "kind": "reverse_engineering",
+      "detail": "forceSingleBlackHole is only read in Mutate to gate extraBlackHoles spawn; activeHoles is a live-hole registry across casts and no global cap/destroy-existing logic exists. Multiple casts coexist; Singularity caps holes per cast to 1.",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#12 / docs/evidence/reverse-engineering/multi-black-hole-lifecycle-1.5.3.json"
+     }
+    ],
+    "black_holes_per_cast": 1,
+    "counts_as_one_black_hole": true,
+    "binary_counts_as_one": true,
+    "concurrent_instances": "unlimited",
+    "current_v1_decision": "每次施放只创建 1 个黑洞（双星算 1 个）；不同施放创建的黑洞可以同时存在，各自独立结算（本体与 Ignite 都叠加）。旧的『同时只允许 1 个存续』已废弃。"
+   },
+   "weakened_reality": {
+    "node_id": "27",
+    "more_group": "node:bh2:27",
+    "more_value": 0.6,
+    "applies_to": "body_only",
+    "condition_code": "target_within_center_1m",
+    "status": "confirmed",
+    "evidence": [
+     {
+      "kind": "game_data",
+      "detail": "Weakened Reality: +60% damage to enemies within 1 meter of centre; multiplicative; does not affect ailments applied by Black Hole",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12]"
+     }
+    ]
+   }
+  },
+  "tick_model": {
+   "first_tick_offset_s": 0.0,
+   "tick_interval_s": 0.3,
+   "remainder_policy": "ceil_full_ticks",
+   "total_damage_formula": "ceil(actual_duration_s / tick_interval_s) * per_tick_damage",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 1：结算周期不足一个 interval 的剩余伤害合并到最后一跳",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "game_data",
+     "detail": "damageAtStart=true, damageInterval=0.3, DestroyAfterDuration=2.75",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "1.5.3 RepeatedlyDamageEnemiesWithinRadius OnUpdateTick applies damage while elapsed > interval and OnDestroy does not settle remainder -> tick count = ceil(duration/0.3) and every tick is full damage (24 ticks for 7.15s).",
+     "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#7 / docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json"
+    }
+   ],
+   "note": "v2: integer tick count with full damage on final tick (game code RE). v1 merged the fractional remainder (nominal rate x duration)."
+  },
+  "added_damage": {
+   "stat_key": "added_damage",
+   "required_tags": [
+    "Spell"
+   ],
+   "per_tick_scale": 2.4,
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "addedDamageScaling=2.4, damageInterval=0.3 => 800% per second as tooltip states",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    }
+   ]
+  },
+  "attribute_scaling": {
+   "attribute": "intelligence",
+   "property": "damage",
+   "increased_per_point": 0.04,
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "bh2 attributeScaling {'2': [{property:0, increasedValue:0.04}]}",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0].raw_payload.attributeScaling"
+    },
+    {
+     "kind": "public_doc",
+     "detail": "Attribute order (0 Strength, 1 Vitality, 2 Intelligence, 3 Dexterity, 4 Attunement) and per-point base benefits",
+     "locator": "https://support.lastepoch.com/hc/en-us/articles/46361892354843-Attributes"
+    }
+   ]
+  }
+ },
+ "skill_tree_nodes": [
+  {
+   "node_id": "2",
+   "name": "Tidal Force",
+   "points": 4,
+   "effects": [
+    {
+     "group": "node:bh2:2",
+     "stat_key": "damage",
+     "operation": "more",
+     "value_per_point": 0.15,
+     "value_total": 0.6,
+     "damage_tags": [],
+     "applies_to": [
+      "body",
+      "ignite"
+     ],
+     "rule_id": "rule-bh-tidal-force"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Tidal Force 4 points, +15% damage per point, 'multiplicative with other modifiers'",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[1]"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "规则 3：同一节点相加，不同节点独立乘区",
+     "locator": "user message 2026-11-04"
+    }
+   ]
+  },
+  {
+   "node_id": "3",
+   "name": "Absolute Zero",
+   "points": 1,
+   "effects": [
+    {
+     "stat_key": "unsupported",
+     "operation": "flag",
+     "note": "chill application only; no damage consumer inside stage-1 scope",
+     "applies_to": []
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Absolute Zero: 25% chill chance per second",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[2]"
+    }
+   ]
+  },
+  {
+   "node_id": "4",
+   "name": "Red Giant",
+   "points": 1,
+   "effects": [
+    {
+     "group": "node:bh2:4",
+     "stat_key": "skill_duration",
+     "operation": "increased",
+     "value_total": 0.8,
+     "rule_id": "rule-bh-duration"
+    }
+   ],
+   "structural": {
+    "convert": {
+     "from": "cold",
+     "to": "fire"
+    },
+    "no_pull": true
+   },
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Red Giant: base cold converted to fire; +80% duration; does not pull",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[14]"
+    }
+   ]
+  },
+  {
+   "node_id": "6",
+   "name": "Heat Wave",
+   "points": 5,
+   "effects": [
+    {
+     "stat_key": "ailment_chance",
+     "operation": "flag",
+     "target": "ignite",
+     "chance_per_point_per_fire_res": 0.02,
+     "rule_id": "rule-ignite-heat-wave"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Heat Wave: +2% per point per 1% uncapped fire resistance, per second; alt text example 200% at 100% fire res with 1 point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[3]"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "规则 4：每秒一次点燃几率判定",
+     "locator": "user message 2026-11-04"
+    }
+   ]
+  },
+  {
+   "node_id": "7",
+   "name": "Flaming",
+   "points": 3,
+   "effects": [
+    {
+     "group": "node:bh2:7",
+     "stat_key": "damage",
+     "operation": "more",
+     "value_per_point": 0.1,
+     "value_total": 0.3,
+     "damage_tags": [
+      "Fire"
+     ],
+     "applies_to": [
+      "body_fire",
+      "ignite"
+     ],
+     "rule_id": "rule-bh-flaming"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Flaming 3 points: +10% more fire damage per point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[4]"
+    }
+   ]
+  },
+  {
+   "node_id": "9",
+   "name": "Binary System",
+   "points": 1,
+   "effects": [
+    {
+     "stat_key": "unsupported",
+     "operation": "flag",
+     "note": "structural two-component doubling (cold -> fire copy, cold kept)",
+     "applies_to": []
+    },
+    {
+     "group": "node:bh2:9",
+     "stat_key": "damage",
+     "operation": "more",
+     "value_per_point": 1.0,
+     "value_total": 1.0,
+     "damage_tags": [],
+     "applies_to": [
+      "body",
+      "body_fire",
+      "body_cold",
+      "ignite"
+     ],
+     "rule_id": "rule-bh-binary-system"
+    }
+   ],
+   "structural": {
+    "binary_system": true
+   },
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 2：双星 = 伤害翻倍，另一半冰霜；视作一个黑洞",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "BlackHoleTree.updateMutator case 'Black Hole Binary Star' sets binary flag + Stats.Stat(property=Damage(0), tags=0, more=points*1.0) => independent +100% more on top of the structural two-component copy.",
+     "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Binary on/off: training dummy total DPS 400k -> 800k (mostly Ignite); total damage x2 and Ignite inherits the more.",
+     "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+    }
+   ]
+  },
+  {
+   "node_id": "10",
+   "name": "Umbral Core",
+   "points": 3,
+   "effects": [
+    {
+     "group": "node:bh2:10",
+     "stat_key": "damage",
+     "operation": "more",
+     "value_per_point": 0.1,
+     "value_total": 0.3,
+     "damage_tags": [],
+     "applies_to": [
+      "body",
+      "ignite"
+     ],
+     "rule_id": "rule-bh-umbral-core"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Umbral Core 3 points: +10% more damage per point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[5]"
+    }
+   ]
+  },
+  {
+   "node_id": "15",
+   "name": "Time Dilation",
+   "points": 1,
+   "effects": [
+    {
+     "group": "node:bh2:15",
+     "stat_key": "skill_duration",
+     "operation": "increased",
+     "value_total": 0.1,
+     "rule_id": "rule-bh-duration"
+    },
+    {
+     "stat_key": "unsupported",
+     "operation": "flag",
+     "note": "blind chance only",
+     "applies_to": []
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Time Dilation: +10% duration, 25% blind chance per second",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[6]"
+    }
+   ]
+  },
+  {
+   "node_id": "17",
+   "name": "Recurrence",
+   "points": 4,
+   "effects": [
+    {
+     "group": "node:bh2:17",
+     "stat_key": "cooldown_reduction",
+     "operation": "increased",
+     "value_per_point": 0.15,
+     "value_total": 0.6,
+     "rule_id": "rule-cooldown"
+    },
+    {
+     "stat_key": "unsupported",
+     "operation": "increased",
+     "note": "mana cost reduction -40% (mana not modelled in v1)",
+     "applies_to": []
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Recurrence 4 points: +15% cooldown reduction and -10% mana cost per point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[7]"
+    }
+   ]
+  },
+  {
+   "node_id": "20",
+   "name": "Drifting Singularity",
+   "points": 1,
+   "effects": [
+    {
+     "stat_key": "unsupported",
+     "operation": "flag",
+     "note": "movement behaviour only",
+     "applies_to": []
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Black Hole seeks enemies",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[16]"
+    }
+   ]
+  },
+  {
+   "node_id": "21",
+   "name": "Spacial Dilation",
+   "points": 1,
+   "effects": [
+    {
+     "stat_key": "unsupported",
+     "operation": "flag",
+     "note": "projectile speed only",
+     "applies_to": []
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "+10% projectile speed",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[8]"
+    }
+   ]
+  },
+  {
+   "node_id": "23",
+   "name": "Supermassive",
+   "points": 4,
+   "effects": [
+    {
+     "group": "node:bh2:23",
+     "stat_key": "damage",
+     "operation": "more",
+     "value_per_point": 0.25,
+     "value_total": 1.0,
+     "damage_tags": [],
+     "condition_code": "target_is_boss_or_rare",
+     "applies_to": [
+      "body",
+      "ignite"
+     ],
+     "rule_id": "rule-bh-supermassive"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Supermassive 4 points: +25% more damage to rare enemies and bosses per point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[9]"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "规则 7：目标场景按最优（Boss）",
+     "locator": "user message 2026-11-04"
+    }
+   ]
+  },
+  {
+   "node_id": "24",
+   "name": "Density",
+   "points": 2,
+   "effects": [
+    {
+     "group": "node:bh2:24",
+     "stat_key": "skill_duration",
+     "operation": "increased",
+     "value_per_point": 0.2,
+     "value_total": 0.4,
+     "rule_id": "rule-bh-duration"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Density 2 points: +20% duration per point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[10]"
+    }
+   ]
+  },
+  {
+   "node_id": "25",
+   "name": "Endless Maw",
+   "points": 1,
+   "effects": [
+    {
+     "group": "node:bh2:25",
+     "stat_key": "skill_duration",
+     "operation": "increased",
+     "value_total": 0.3,
+     "rule_id": "rule-bh-duration"
+    },
+    {
+     "group": "node:bh2:25",
+     "stat_key": "cooldown_flat",
+     "operation": "added",
+     "value_total": 2.0,
+     "unit": "seconds",
+     "rule_id": "rule-cooldown"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Endless Maw: +30% duration, +2 seconds cooldown duration",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[11]"
+    }
+   ]
+  },
+  {
+   "node_id": "27",
+   "name": "Weakened Reality",
+   "points": 2,
+   "effects": [
+    {
+     "group": "node:bh2:27",
+     "stat_key": "damage",
+     "operation": "more",
+     "value_per_point": 0.3,
+     "value_total": 0.6,
+     "damage_tags": [],
+     "condition_code": "target_within_center_1m",
+     "applies_to": [
+      "body"
+     ],
+     "rule_id": "rule-bh-weakened-reality"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Weakened Reality 2 points: +30% per point to enemies within 1 meter of centre; does not affect ailments",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12]"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "规则 7：中心条件按最优满足",
+     "locator": "user message 2026-11-04"
+    }
+   ]
+  },
+  {
+   "node_id": "28",
+   "name": "Singularity",
+   "points": 1,
+   "effects": [
+    {
+     "group": "node:bh2:28",
+     "stat_key": "damage",
+     "operation": "more",
+     "value_total": 1.0,
+     "damage_tags": [],
+     "applies_to": [
+      "body",
+      "ignite"
+     ],
+     "rule_id": "rule-bh-singularity"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Singularity: +100% damage; only 1 Black Hole can be created at a time",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[13]"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "规则 2 + 规则 3",
+     "locator": "user message 2026-11-04"
+    }
+   ]
+  },
+  {
+   "node_id": "30",
+   "name": "Pocket Dimension",
+   "points": 1,
+   "effects": [
+    {
+     "group": "node:bh2:30",
+     "stat_key": "charges",
+     "operation": "added",
+     "value_total": 1,
+     "rule_id": "rule-cooldown"
+    }
+   ],
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Pocket Dimension: +1 additional charge",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[17]"
+    }
+   ]
+  }
+ ],
+ "duration": {
+  "base_duration_s": 2.75,
+  "increased_floor": 0.0,
+  "formula": "base_duration_s * (1 + sum(increased skill_duration contributions + skill-tree duration terms))",
+  "tree_terms": [
+   {
+    "node_id": "4",
+    "value": 0.8
+   },
+   {
+    "node_id": "15",
+    "value": 0.1
+   },
+   {
+    "node_id": "24",
+    "value": 0.4
+   },
+   {
+    "node_id": "25",
+    "value": 0.3
+   }
+  ],
+  "status": "confirmed",
+  "evidence": [
+   {
+    "kind": "user_rule",
+    "detail": "规则 6：duration 加算理解正确",
+    "locator": "user message 2026-11-04"
+   }
+  ]
+ },
+ "ignite": {
+  "ailment_id": "1",
+  "name": "Ignite",
+  "damage_type": "Fire",
+  "base_damage": 40.0,
+  "base_duration_s": 2.5,
+  "scaling_tags": [
+   "Fire",
+   "DoT",
+   "Ailment"
+  ],
+  "duration": {
+   "formula": "base_duration_s * (1 + sum(increased Ignite duration))",
+   "total_damage_multiplier_equals_duration_multiplier": true,
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 6：点燃时间延长就是一个乘区",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Ignite ailment: base 40 fire damage over 2.5s, DoT tag",
+     "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Single-cast @949%: ~710 max stacks requires the 7.025s ignite duration (a 6.025s duration would cap near 617; 1s rolls would predict 759).",
+     "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json"
+    }
+   ]
+  },
+  "inheritance": {
+   "inherit_from_tree_nodes": [
+    "2",
+    "7",
+    "10",
+    "23",
+    "28",
+    "9"
+   ],
+   "exclude_tree_nodes": [
+    "27"
+   ],
+   "excluded_reasons": {
+    "27": "game data explicitly states Weakened Reality does not affect ailments applied by Black Hole"
+   },
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 5：Ignite 继承 Black Hole 技能树所有增伤节点（除非明确 hit 等与点燃无关）",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Weakened Reality alt text: does not affect ailments applied by Black Hole",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12].alt_text"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Binary on/off total DPS 400k -> 800k with DPS mostly Ignite => Binary +100% more is inherited by Ignite.",
+     "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "AilmentReceiver.ApplyAilment obtains the applying ability's mutator/stats (RVA 0x2832d40) so the Binary damage-more stat is part of the Ignite scaling stats.",
+     "locator": "docs/evidence/reverse-engineering/reproduction-1.5.3.zh-CN.md"
+    }
+   ],
+   "note": "v2: Ignite inherits nodes 2/7/10/23/28 and Binary System node 9 (+100% more). Weakened Reality (27) remains excluded because the game text says it does not affect ailments applied by Black Hole."
+  },
+  "heat_wave": {
+   "node_id": "6",
+   "name": "Heat Wave",
+   "points": 5,
+   "chance_per_point_per_uncapped_fire_res": 0.02,
+   "rolls_per_second": 2,
+   "first_roll_at": "spawn",
+   "roll_times_formula": "spawn + k * 0.5 for k=0.. while offset < black hole duration (1.5.3 aura applicationInterval=0.5s, applyOnStart=true)",
+   "expected_value_model": true,
+   "stack_count_rule": "expected_stacks_per_second = chance_per_point * points * uncapped_fire_resistance_percent; expected_stacks_per_roll = expected_stacks_per_second * 0.5",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 4：未封顶火抗转变成每秒一次点燃几率判定",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Heat Wave: +2% per point per 1% uncapped fire resistance per second",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[3]"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "BlackHoleMutator.Mutate sets aura applicationInterval=0.5f and applyOnStart=true; chance per roll = uncappedFireRes * chanceToIgnitePerUncappedFireRes * 0.5. Expected stacks/s unchanged, rolls every 0.5s (15 rolls for 7.15s -> 642 expected stacks vs v1 684.8).",
+     "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#7.2"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "BlackHoleMutator.Mutate calls addChance(Ignite) once per cast (0x1830333) on the single aura component, then sets applicationInterval=0.5f [aura+0x98] and applyOnStart=true [aura+0xb4]. The code is not inside a per-star/per-damage-component loop.",
+     "locator": "docs/evidence/reverse-engineering/heat-wave-aura-1.5.3.json"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Single-cast @949% uncapped fire (temporary): max ignite stacks ~710 vs model 711.75 (0.5s rolls x 15, one aura).",
+     "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json"
+    }
+   ],
+   "assumptions": [
+    "first roll at spawn is an assumption",
+    "one roll per Black Hole per second (not per star) is an assumption",
+    "expected-value treatment requires independent rolls; reported as expectation, not integer event count"
+   ],
+   "aura_scope": "one RepeatedlyApplyAilmentsInRadius instance per Black Hole cast; Binary two stars share the same aura (no per-star extra rolls)",
+   "application_interval_s": 0.5,
+   "user_validation": {
+    "date": "2026-11-05",
+    "test_config": "temporary 949% uncapped fire resistance (NOT build snapshot 856%); nodes identical to build; single Black Hole cast",
+    "observed_max_ignite_stacks_approx": 710,
+    "model_max_concurrent_stacks": 711.75,
+    "conclusion": "single-cast maximum ≈710 vs model 711.75; confirms 0.5s roll interval, applyOnStart, 15 rolls, one aura per Black Hole, expected-stacks formula and 7.025s ignite duration"
+   }
+  },
+  "scaling_pools": {
+   "increased_stats_from_player": [
+    "damage:increased matching {Fire, Elemental, DoT, Ailment}（Elemental 展开为 fire/cold/lightning，用户 2026-11-04 确认）",
+    "Black Hole attribute scaling: Intelligence x 4% increased damage（先作用于 BH，再传给其 Ignite；用户 2026-11-04 确认）"
+   ],
+   "excluded_player_stats": {
+    "spell": "Ignite is not a Spell; increased Spell Damage does not apply"
+   },
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 1、8 条",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Ignite ailment base 40 Fire / 2.5s, tags=['DoT']",
+     "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1"
+    }
+   ],
+   "penetration_with_ignite_handling": {
+    "treatment": "ignite_only_fire_penetration",
+    "display_name": "Fire Penetration with Ignite",
+    "value_source": "Fiery Dragon Shoes unique mod (property 43 + specialTag 1, 35%)",
+    "evidence": "phase1-dataset-003 specialTag display mapping derived from single-property affixes 182/467/468; user confirmed the item line (2026-11-04)",
+    "status": "confirmed"
+   }
+  },
+  "penetration": {
+   "applies": true,
+   "sources": [
+    "player fire penetration contributions (stat_key=penetration, tags Fire)",
+    "increased Ignite Effect contributions converted to additional fire penetration (ailment effect)"
+   ],
+   "formula": "effective_resistance = target_fire_resistance - penetration_total ; damage_multiplier = 1 - effective_resistance",
+   "negative_resistance_allowed": true,
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "public_doc",
+     "detail": "tunklab Penetration stat description: 'can reduce effective resistance below 0% ... applies to all damage, including damage over time'",
+     "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:tunklab:_:59"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Ignite additionalPenetrationDamageType=1 (Fire)",
+     "locator": "archive://data/raw/letools/letools-v152-20261101/responses/planner_3efb2055376cc1c0647de8711a4198ae.body#LEAbilities.ailmentList[1]"
+    }
+   ]
+  }
+ },
+ "target_side": {
+  "scenario_id": "boss-0res-center-fullcover",
+  "target_label": "synthetic boss (0 resistance)",
+  "boss_tag": true,
+  "rare_tag": true,
+  "base_resistances": {
+   "fire": 0.0,
+   "cold": 0.0,
+   "lightning": 0.0,
+   "physical": 0.0,
+   "void": 0.0,
+   "necrotic": 0.0,
+   "poison": 0.0
+  },
+  "negative_resistance_allowed": true,
+  "penetration_applies_to": [
+   "body",
+   "ignite"
+  ],
+  "penetration_applies_to_ignite": true,
+  "damage_formula": "damage * (1 - (target_resistance - penetration))",
+  "status": "confirmed",
+  "evidence": [
+   {
+    "kind": "user_rule",
+    "detail": "规则 7：目标场景按最优，Boss、0 抗性",
+    "locator": "user message 2026-11-04"
+   },
+   {
+    "kind": "third_party_reference",
+    "detail": "Planner reference: negative resistance / penetration handling (to be confirmed by planner-reference)",
+    "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json"
+   },
+   {
+    "kind": "public_doc",
+    "detail": "tunklab Penetration: reduces effective resistance below 0%, applies to all damage including damage over time",
+    "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:tunklab:_:59"
+   }
+  ],
+  "assumptions": [
+   "目标为 0 抗性合成 Boss；训练目标无减伤与额外受到伤害修饰",
+   "穿透按有效抗性扣减处理（0 - pen），与参考模型 (1+pen) 在 0 抗性时数值等价"
+  ],
+  "monster_dr": {
+   "source": "https://lastepoch.tunklab.com/mobdr",
+   "source_title": "Tunklab: Monster Damage Reduction",
+   "source_retrieved": "2026-11-05",
+   "data_file": "tools/phase3/data/monster_dr.json",
+   "data_sha256": "699ecc39efba5094e4b6770583e047c7faf11010cc7c9219673afd68253a6d4d",
+   "level_range": [
+    1,
+    100
+   ],
+   "default_level": 100,
+   "application": "separate multiplicative target-side factor: final = model * (1 - effective_resistance) * (1 - monster_dr); level 0 disables",
+   "status": "assumed"
+  }
+ },
+ "cooldown": {
+  "charge_based": true,
+  "base_charges_gained_per_second": 0.07143,
+  "base_recharge_s": 13.99972,
+  "base_max_charges": 1,
+  "extra_max_charges": [
+   {
+    "node_id": "30",
+    "value": 1
+   }
+  ],
+  "flat_adjustment_s": [
+   {
+    "node_id": "25",
+    "value": 2.0
+   }
+  ],
+  "cooldown_reduction": [
+   {
+    "node_id": "17",
+    "value": 0.6
+   }
+  ],
+  "cooldown_recovery_speed_from_snapshot": true,
+  "formula": "effective_recharge_s = (base_recharge_s + sum(flat_adjustment_s)) * (1 - CDR_total) / (1 + ICR_total)",
+  "status": "confirmed",
+  "evidence": [
+   {
+    "kind": "user_rule",
+    "detail": "规则 6：冷却先做加减（固定秒数），再应用冷却恢复速度",
+    "locator": "user message 2026-11-04"
+   },
+   {
+    "kind": "game_data",
+    "detail": "bh2 maxCharges=1, chargesGainedPerSecond=0.07143; Recurrence +15%/pt cooldown reduction; Endless Maw +2s",
+    "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+   },
+   {
+    "kind": "third_party_reference",
+    "detail": "planner runtime: rate = 1/(cooldown/(1+ICR)); no standalone percent cooldown-reduction pool; bh2 has no va() override",
+    "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q5_cooldown_charges"
+   },
+   {
+    "kind": "reverse_engineering",
+    "detail": "BlackHoleMutator.getChargeRegen override: rate = baseRate / (1 - blackHoleReducedCooldown); Recurrence node stats property 70 = Cooldown Reduction 60%.",
+    "locator": "docs/evidence/reverse-engineering/cooldown-charge-1.5.3.json"
+   },
+   {
+    "kind": "user_in_game_measurement",
+    "detail": "Measured charge refill 3.6 s matches (14+2)*(1-0.6)/(1+0.7575)=3.6413 s.",
+    "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+   }
+  ],
+  "assumptions": [],
+  "icr_pool": {
+   "definition": "ICR_total = sum(player increased cooldown recovery speed) only",
+   "recurrence_treated_as": "multiplicative cooldown reduction (1 - CDR) applied to the adjusted cooldown before ICR",
+   "recurrence_mapping_status": "confirmed",
+   "note": "User 2026-11-05 in-game measurement: charge refill = 3.6 s with base 14s + Endless Maw 2s, Recurrence 60%, ICR 75.75%. Math check: (14+2)*(1-0.6)/(1+0.7575)=3.6413 s; the v1 additive ICR-pool formula (6.787s) is rejected."
+  },
+  "cdr_applied_separately": true
+ },
+ "cast": {
+  "use_duration_s": 0.6,
+  "use_delay_s": 0.2,
+  "speed_scaler": 3,
+  "speed_multiplier": 0.8,
+  "animation_speed": 1.8333375,
+  "formula": "release_rate_per_s = base_release_rate_per_s * (1 + sum(increased cast speed)); base_release_rate_per_s = animation_speed * speed_multiplier; cast_time_s = 1 / release_rate_per_s",
+  "status": "confirmed",
+  "evidence": [
+   {
+    "kind": "game_data",
+    "detail": "bh2 useDuration=0.6, useDelay=0.2, speedScaler=3, speedMultiplier=0.8, as=1.8333375; cast_time_ms=600 in catalog",
+    "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+   },
+   {
+    "kind": "third_party_reference",
+    "detail": "planner runtime: base_rate=(0.75/useDuration)*speedMultiplier*1.46667 == 1.1*speedMultiplier/useDuration; useDelay/as not used in timing; bh2 -> 0.6818s base, 0.505s at +35.2% cast speed",
+    "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q4_cast_time"
+   },
+   {
+    "kind": "user_rule",
+    "detail": "User 2026-11-05: release speed = base release speed * (1 + increased cast speed); formula shape confirmed, exact base release speed not precisely tested.",
+    "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json"
+   }
+  ],
+  "assumptions": [
+   "exact cast-time formula is an explicit v1 assumption pending planner-reference evidence",
+   "cast finished -> Black Hole spawns; useDelay not modelled as extra gap in v1"
+  ],
+  "base_rate_per_s": 1.4666700000000001,
+  "base_cast_time_s": 0.6818166322349267,
+  "alternative_v1": {
+   "formula": "use_duration_s / (1 + increased_cast_speed)",
+   "cast_time_s": 0.44378698224852065,
+   "delta_note": "旧 v1 口径；与参考差约 12%，对 120s 循环 DPS 影响约 -0.8%"
+  },
+  "formula_shape_confirmed_by_user": true,
+  "base_rate_measurement_status": "not_precisely_measured"
+ },
+ "action_policies": [
+  {
+   "policy_id": "eager",
+   "label": "可用即施放",
+   "description": "有充能且施法动作空闲时立即施放；多个黑洞可同时存在并独立结算（用户 2026-11-04 确认）。",
+   "cast_condition": "charge_available_and_cast_action_free"
+  },
+  {
+   "policy_id": "patient",
+   "label": "尽量保留当前黑洞",
+   "description": "等待所有已存在的黑洞消失后再施放；期间充能可回满（不超过 2 层）。用于对比不重叠的施放方式。",
+   "cast_condition": "no_active_black_hole_and_charge_available"
+  }
+ ],
+ "single_cast_observation": {
+  "window_s": null,
+  "observe_until": "last_ignite_expiry",
+  "description": "单次施放从 cast start 观察至最后一层 Ignite 自然到期。"
+ },
+ "scenario": {
+  "scenario_id": "boss-0res-center-fullcover",
+  "target_conditions": {
+   "target_is_boss_or_rare": true,
+   "target_within_center_1m": true,
+   "both_stars_cover": true
+  },
+  "assumptions": [
+   "双星全覆盖与中心 1 米条件同时满足是最优理论场景，不代表真实轨道物理可达",
+   "目标不移动、不死亡",
+   "t=0 无存续黑洞、无预存 Ignite、无外部增益"
+  ]
+ },
+ "rules": [
+  {
+   "rule_id": "rule-bh-component",
+   "title": "Black Hole 本体组件与单位",
+   "statement": "本体为 RepeatedlyDamageEnemiesWithinRadius：48 冷伤/周期、addedDamageScaling 2.4、周期 0.3s、damageAtStart=true、hit=false、基础寿命 2.75s；每秒名义速率 = (48 + 2.4 × 附加法术伤害) / 0.3。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "bh2 prefab 组件字段与 tooltip 800%/s 一致",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    }
+   ],
+   "affects": [
+    "single_cast.body"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-total-damage",
+   "title": "本体总伤害口径（与 tick 模型一致）",
+   "statement": "单次本体总伤害 = 跳数 × 每跳伤害。跳数 = ceil(实际持续时间 / damageInterval)（damageAtStart=true，生成即首跳）；最后一跳按完整一跳伤害结算，不把不足一个周期的余量按比例摊薄（1.5.3 RepeatedlyDamageEnemiesWithinRadius：OnDestroy 不结算余量）。该口径与 rule-bh-tick-schedule 及 tick_model.remainder_policy=ceil_full_ticks 一致；v1 的『余量合并进最后一跳』事件形态描述已废止（用户规则 1 的总伤害口径仍成立，但事件形态以 tick 模型为准）。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户规则 1（2026-11-04）：单次本体总伤害的口径；其『余量合并进最后一跳』的事件形态描述已被 1.5.3 逆向的 ceil 满跳模型取代（见 rule-bh-tick-schedule）",
+     "locator": "user message 2026-11-04"
+    }
+   ],
+   "affects": [
+    "single_cast.body"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-tick-schedule",
+   "title": "本体事件离散化（ceil 满跳；与参考模型的差异见 evidence）",
+   "statement": "本体每 0.3s 一跳（生成即首跳），跳数 = ceil(duration/0.3)；最后一跳按满额伤害结算（游戏不在销毁时补余量）。7.15s -> 24 跳。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户规则 1（总伤害口径）；事件形态（首跳在生成时刻、ceil 满跳、销毁不补余量）已由 1.5.3 反编译确认（见第 3 条 evidence）",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "planner runtime ticks = floor(D/interval) + damageAtStart; remainder dropped (bh2 base 2.75s -> 10 ticks)",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q6_dot_repeated"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "1.5.3 RepeatedlyDamageEnemiesWithinRadius tick loop RE; last tick full damage.",
+     "locator": "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json"
+    }
+   ],
+   "affects": [
+    "single_cast.body.event_trace"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-duration",
+   "title": "本体持续时间加算",
+   "statement": "duration = 2.75 × (1 + 0.80 Red Giant + 0.10 Time Dilation + 0.40 Density + 0.30 Endless Maw) = 7.15s。",
+   "group": "duration",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 6：duration 加算理解正确",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "game_data",
+     "detail": "各节点 duration 数值",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-red-giant",
+   "title": "Red Giant 冷转火",
+   "statement": "Red Giant：prefab base cold 转换为 fire（加火、抵消冷）；duration +80%，不再拉怪。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 2：先转火",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Red Giant 描述：base cold damage converted to fire",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[14]"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "planner 只有 tag 层面的 convertToFire（class rrlDt），未建模 base damage conversion",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q7_black_hole_specific"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "BlackHoleMutator.Mutate conversion branch; BlackHoleTree.updateMutator duration += 0.8.",
+     "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json"
+    }
+   ],
+   "affects": [
+    "single_cast.body.components"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-binary-system",
+   "title": "Binary System 双星模型",
+   "statement": "双星 = 两个结构分量（转火后的火焰分量 + 原始冷伤分量，各按完整基础值+附加伤害），并且 Binary System 额外提供一个独立 +100% more（Stats.Stat Damage more=1.0）；该 more 作用于本体两个分量并被 Ignite 继承。用户 2026-11-05 实测：Binary 开/关总 DPS 400k→800k（DPS 主要为点燃）→ 总伤害 ×2。双星算作 1 个黑洞。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 2：双星 = 伤害翻倍，另一半冰霜；视作一个黑洞（用户第 7 条补充：+100% 的含义不确定，待逆向）",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Binary System 节点文本",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[15]"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Binary on/off total DPS 400k -> 800k (mostly Ignite) => total x2, Ignite inherits.",
+     "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "node 9 adds Stats.Stat(Damage, more=1.0) in BlackHoleTree.updateMutator; addBaseDamage structural copy is plain addition.",
+     "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json"
+    }
+   ],
+   "affects": [
+    "single_cast.body.components",
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-binary-more-interpretation",
+   "title": "Binary System 的 +100% 是额外独立 more（已确认）",
+   "statement": "已确认：Binary System 的 +100% 是独立 more 乘区（除结构双分量外再 ×2）。代码：BlackHoleTree.updateMutator 为 Binary 节点构造 Stats.Stat(Damage, more=points×1.0)；用户 2026-11-05 实测 Binary 开/关总 DPS 400k→800k、且 DPS 主要为点燃 → 总伤害 ×2 且该 more 被 Ignite 继承。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 7 条：不确定，在文档中记录，后续逆向挖掘",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Binary System: +100% Damage, two stars one fire one cold",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[15]"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "planner 只建模 tag 层（binarySystem 追加 Fire），未建模翻倍结构",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q7_black_hole_specific"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Binary on/off total DPS 400k -> 800k, mostly Ignite.",
+     "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite",
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-more-aggregation",
+   "title": "more 聚合规则",
+   "statement": "同一节点多点相加；不同节点的 more 各自独立相乘（参考模型也确认：increased 加算池、每个 more 条目各自为独立因子）。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 3",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "planner: increased sum into one pool, every more entry is its own factor",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q8_more_increased_pooling"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-attribute-scaling",
+   "title": "Intelligence 属性缩放（本体）",
+   "statement": "Black Hole 每点 Intelligence 获得 +4% increased damage（属性缩放，进入本体 inc 加算池）。v1 也将其纳入 Ignite inc 池（见 rule-ignite-attribute-scaling）。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "bh2 attributeScaling {'2':[{property:0,increasedValue:0.04}]}；属性索引 2=Intelligence",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "attribute order + tags=0 additive pool",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q1_attribute_model"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-weakened-reality",
+   "title": "Weakened Reality 仅本体",
+   "statement": "中心 1 米内 +60% more，只作用于本体，不继承给 Black Hole 施加的异常。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "alt text：does not affect ailments applied by Black Hole",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12]"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite.exclusions"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-base",
+   "title": "Ignite 基础伤害与持续时间",
+   "statement": "Ignite：每层 40 火焰伤害 / 2.5s（DoT 标签），伤害类型为火焰；层数线性叠加。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "ailmentList[1] Ignite base_damage=40, duration=2500ms, tags=['DoT']",
+     "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-inheritance",
+   "title": "Ignite 继承 Black Hole 技能树增伤",
+   "statement": "Ignite 继承 Tidal Force / Flaming / Umbral Core / Supermassive / Singularity 的 more 乘区（用户规则 5）；不继承 Weakened Reality（游戏文本明确）。参考模型的通用异常过滤（tags 为 {DoT,Fire} 子集或 tags=0）与用户规则一致，但 bh2 数字节点表缺失、且 BH hit=false，无法独立验证这 5 个节点。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 5",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Weakened Reality alt text 不作用于异常",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[12].alt_text"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "generic ailment filter and tag semantics",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q9_ailment_inheritance"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-binary-excluded",
+   "title": "Ignite 继承 Binary System 的 +100% more（已确认）",
+   "statement": "已确认：Binary System 的 +100% more 被 Ignite 继承（用户 2026-11-05 实测：Binary 开/关总 DPS 400k→800k，DPS 主要为点燃；对应 Ignite 伤害翻倍）。代码侧 ApplyAilment 使用施加技能的 stats。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 7 条：不确定，记录，后续逆向挖掘",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "derivation",
+     "detail": "v1 对用户规则 2 的解释：双星结构翻倍与 +100% 为同一机制",
+     "locator": "tools/phase3/rules/ruleset-bh-stage1-v1.json#black_hole.structural.binary_system"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Binary on/off total DPS 400k -> 800k with DPS mostly Ignite.",
+     "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "AilmentReceiver.ApplyAilment inherits the applying ability's Stats; Binary node 9 adds a Damage more stat.",
+     "locator": "docs/evidence/reverse-engineering/reproduction-1.5.3.zh-CN.md"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-duration",
+   "title": "Ignite 持续时间乘区",
+   "statement": "Ignite 持续时间 = 2.5 × (1 + Increased Ignite Duration 总和)；持续时间延长按总伤害乘区处理（每层总伤害 = 40 × 持续时间乘区 × inc × more × 目标侧）。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 6：点燃时间延长就是一个乘区",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "generic ailment model: w=(ailBase/baseDur)*(1+sum inc duration)*...",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q9_ailment_inheritance"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-heat-wave",
+   "title": "Heat Wave 每次判定的期望层数",
+   "statement": "每次判定期望层数 = 2%/点 × 点数 × 未封顶火抗% × 0.5s；每秒期望 = 2%/点 × 点数 × 未封顶火抗%。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 4：未封顶火抗转变成点燃几率（每秒期望口径；1.5.3 判定间隔见 rule-ignite-heat-wave-timing）",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Heat Wave +2%/点/1% uncapped fire res per second",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[3]"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Single BH @949%: ~710 max stacks; model 711.75 (15 rolls x 47.45).",
+     "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite.application"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-heat-wave-timing",
+   "title": "Heat Wave 判定时序（用户确认）",
+   "statement": "Heat Wave 光环每 0.5s 判定一次，生成瞬间首判（applyOnStart）；每个 Black Hole 施放只有一个光环（双星共用），期望层数/秒不变，每次判定 = 每秒期望 × 0.5。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 4 条：细节正确",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Heat Wave +2%/点/1% uncapped fire res per second",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[3]"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "BlackHoleMutator.Mutate: aura applicationInterval=0.5f, applyOnStart=true.",
+     "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Single-cast observation consistent with 15 rolls over 7.15s and all 15 cohorts alive at t=7.0s (7.025s duration).",
+     "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite.application",
+    "single_cast.event_trace"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-scaling-pool",
+   "title": "Ignite 玩家侧 inc 池",
+   "statement": "Ignite 的 increased 池 = 适用 {Fire, Elemental, DoT} 的 increased damage（用户确认 Elemental 展开为 fire/cold/lightning）+ Intelligence 属性缩放（+4%/点；用户确认先作用于 Black Hole 再传给 Ignite）；不包含 increased Spell Damage（点燃不是法术）；'Fire Penetration with Ignite' 不进入 inc 池，而是仅作用于点燃的火焰穿透（rule-fire-penetration-with-ignite）。",
+   "group": "ignite",
+   "status": "assumed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 1、8 条（Elemental 进入 Ignite；Intelligence 经 BH 传给 Ignite）",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Ignite scaling_tags=['DoT'], damage type Fire",
+     "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-elemental-tag",
+   "title": "Elemental 标签增伤进入 Ignite（用户确认）",
+   "statement": "用户 2026-11-04 确认：Elemental 标签等价于 Fire/Cold/Lightning，因此 increased Elemental Damage 进入 Ignite 的 inc 池（火焰属于元素）。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 1 条：elemental 标签相当于 fire/cold/lightning，所以进入 ignite",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Ignite damage type = Fire, tags DoT",
+     "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "AT.Elemental=128 is a separate flag; Tags.Applicable (RVA 0x16abe60) and Stats.GetTotalIncreased (RVA 0x16a9ba0) explicitly expand Elemental stats onto Fire/Cold/Lightning situations; Ignite (Fire+DoT/Ailment) therefore receives Elemental increased/more but not Spell.",
+     "locator": "docs/evidence/reverse-engineering/elemental-tag-filtering-1.5.3.json"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-attribute-scaling",
+   "title": "Intelligence 属性缩放传递给 Ignite（用户确认）",
+   "statement": "用户 2026-11-04 确认：Intelligence 带来的 increased damage 先作用于 Black Hole（技能属性缩放），再传递给 Black Hole 造成的 Ignite。v1 已将其（+4%/点，tags=0）计入 Ignite inc 池。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 8 条：intelligence 的 inc 先传给 black hole，再传递给 black hole 造成的点燃",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "game_data",
+     "detail": "bh2 attributeScaling {'2':[{property:0,increasedValue:0.04}]}（Intelligence）",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-fire-penetration-with-ignite",
+   "title": "Fire Penetration with Ignite（装备来源；用户确认 + 数据集 003 修正）",
+   "statement": "Fiery Dragon Shoes 的 35% 词条实际是 'Fire Penetration with Ignite'（点燃专属火焰穿透），不是 'Increased Ignite Effect'。v1 将其作为仅作用于 Ignite 的 +35% 火焰穿透，与玩家 41% 火焰穿透合并为 76%（目标 0 抗 → 有效抗性 -76%，×1.76）；Black Hole 本体不吃这 35%（它只作用于点燃）。依据：phase-1 数据集 003 的 specialTag 显示映射（属性 43 + specialTag 1 = 'Fire Penetration with Ignite'，由单属性词缀 182/467/468 的显示名推导），用户 2026-11-04 确认物品行。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04：该词条是 'Fire Penetration with Ignite'，此前装备导入有误，要求先修数据库与本地 BD 导入",
+     "locator": "user message 2026-11-04 (round 4)"
+    },
+    {
+     "kind": "catalog",
+     "detail": "phase1-dataset-003 stats propertyList:43 special_tag_display = {'1': 'Fire Penetration with Ignite', ...}，来源为单属性词缀 182/467/468 的 modDisplayNameKey",
+     "locator": "data/releases/phase1-dataset-003/data.sqlite#stats/propertyList:43"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Ignite ailment: effectOfIncreasedEffectiveness=1, additionalPenetrationDamageType=1(Fire)",
+     "locator": "archive://data/raw/letools/letools-v152-20261101/responses/planner_3efb2055376cc1c0647de8711a4198ae.body#LEAbilities.ailmentList[1]"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite",
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-penetration-dot",
+   "title": "穿透作用于持续伤害且可压到 0 以下",
+   "statement": "穿透按有效抗性扣减处理，可把目标有效抗性降到 0% 以下，且作用于所有伤害（含持续伤害）：本体火焰分量与 Ignite 都享受火焰穿透。本构筑火焰穿透 = 武器 22% + 神像 4% + Lavamancer 15% = 41%；Ignite 另加 ailment effect 35% 穿透。",
+   "group": "target",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "public_doc",
+     "detail": "tunklab Penetration: 'can reduce effective resistance below 0%, increasing damage even against enemies with no resistance. It applies to all damage, including damage over time.'",
+     "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:tunklab:_:59"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "planner offense applies (1+sum penetration) as a multiplier",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q2_resistance_model"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-target-scenario",
+   "title": "目标场景（用户规则 7）",
+   "statement": "目标为 Boss/稀有标签、0 抗性的合成靶；双星全覆盖、目标在中心 1 米内；目标不移动不死亡。这是理论最优场景，不代表真实轨道物理或实战可达。",
+   "group": "target",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 7：目标场景按最优，Boss、0 抗",
+     "locator": "user message 2026-11-04"
+    }
+   ],
+   "affects": [
+    "single_cast",
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-cooldown-base",
+   "title": "充能基础值与固定调整",
+   "statement": "充能型技能：基础充能恢复 = round2(1/chargesGainedPerSecond) = 14.0s/层；maxCharges 1 + Pocket Dimension 1 = 2 层；Endless Maw 增加固定 +2s。",
+   "group": "cooldown",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "bh2 chargesGainedPerSecond=0.07143 => 14.0s; Endless Maw +2s; Pocket Dimension +1 charge",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "base cooldown = round2(1/chargesGainedPerSecond)",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q5_cooldown_charges"
+    }
+   ],
+   "affects": [
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-cooldown-icr",
+   "title": "冷却公式与 Recurrence 映射（已确认）",
+   "statement": "已确认：effective_recharge = (base_recharge + flat_adjustment) × (1 − CDR) / (1 + ICR)。Recurrence 的 60% 是乘算冷却缩减（1−CDR）；装备/被动的 ICR 75.75% 是独立分母。用户 2026-11-05 实测充能回满 3.6s，与 (14+2)×0.4/1.7575=3.6413s 一致。v1 的 ICR 加算池公式（6.787s）被否定。",
+   "group": "cooldown",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "规则 6：冷却先加减（固定秒数）、再应用冷却恢复速度",
+     "locator": "user message 2026-11-04"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "generic runtime has only SP.IncreasedCooldownRecoverySpeed (additive); no standalone CDR% pool; bh2 mapping unconfirmed",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q5_cooldown_charges"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Measured charge refill 3.6s (current build).",
+     "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "BlackHoleMutator.getChargeRegen divides base rate by (1 - blackHoleReducedCooldown); node 17 property 70 Cooldown Reduction 60%.",
+     "locator": "docs/evidence/reverse-engineering/cooldown-charge-1.5.3.json"
+    }
+   ],
+   "affects": [
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-cast-time",
+   "title": "施法时间公式（公式形状已确认，基础常数来自游戏数据）",
+   "statement": "用户 2026-11-05 确认公式形状：释放速度 = 基础释放速度 × (1 + 施法速度 inc)。当前模型：base_release_rate = animation_speed(1.8333375) × speedMultiplier(0.8) = 1.46667/s，cast_time = 1/(base_release_rate × (1+inc))；本构筑 +35.2% → 0.5043s。基础释放速度的精确数值本轮未独立测量，来自游戏能力字段（as/speedMultiplier）。",
+   "group": "cast",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "bh2 useDuration=0.6, speedMultiplier=0.8, as=1.8333375, useDelay=0.2",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    },
+    {
+     "kind": "third_party_reference",
+     "detail": "base_rate=(0.75/useDuration)*speedMultiplier*1.46667; useDelay/as not used in timing",
+     "locator": "archive://reports/phase-3/black-hole-stage1/reference/planner-model.json#findings.q4_cast_time"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "User 2026-11-05: release speed = base release speed * (1 + increased cast speed); base value not precisely measured.",
+     "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json"
+    }
+   ],
+   "affects": [
+    "single_cast.cast",
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-black-hole-count-limit",
+   "title": "每次施放 1 个黑洞；不同施放可并存（用户确认）",
+   "statement": "用户 2026-11-04 确认：Singularity 的『一次只能创造 1 个黑洞』限制的是**单次施放**（双星算 1 个）；多次施放在场上可以同时存在多个黑洞，各自独立结算本体与 Ignite。v1 循环模型按此实现（允许重叠）。",
+   "group": "cooldown",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 6 条：上限是对一次释放的，释放 2 次场上就会有 2 个黑洞，分别独立",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Singularity: Black Holes Per Cast = 1",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[13]"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "activeHoles live registry across casts; forceSingleBlackHole only gates per-cast extra holes; no global cap/destroy on new cast.",
+     "locator": "docs/evidence/reverse-engineering/multi-black-hole-lifecycle-1.5.3.json"
+    }
+   ],
+   "affects": [
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-black-hole-recast",
+   "title": "重施行为：每次施放创建独立黑洞（用户确认并存）",
+   "statement": "用户 2026-11-04 确认多次施放的黑洞可以并存且独立结算；因此 v1 中重施不会替换/刷新旧黑洞（旧黑洞继续按自身时间线结算），也不会被数量上限拒绝。充能不足或施法动作未结束时才无法施放；是否消耗充能在拒绝时另有说明由充能规则处理。",
+   "group": "cooldown",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 6 条：释放 2 次场上就会有 2 个黑洞，分别独立",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "No destroy-existing logic in Mutate/onStartedAbility; old holes remain tracked in activeHoles.",
+     "locator": "docs/evidence/reverse-engineering/multi-black-hole-lifecycle-1.5.3.json"
+    }
+   ],
+   "affects": [
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-pyromancer-ignite-chance",
+   "title": "Pyromancer 的 Ignite Chance 不参与 Heat Wave（已确认）",
+   "statement": "游戏内测试：取消 Pyromancer 加点后最高点燃层数不变（949% 临时测试下仍约 710 层）。若 +40% Ignite Chance 参与 Heat Wave，层数应提高约 40%（~996）；因此该点火几率是 hit 相关，不参与 Heat Wave。",
+   "group": "ignite",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 3 条：不确定，先按不计入，点燃几率应该和 hit 有关",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "catalog",
+     "detail": "Pyromancer（mg-1 node 18，8 点）+40% Ignite Chance（snapshot derived.ailment_chance_ignite_total=0.40）",
+     "locator": "tools/phase3/work/snapshot.json#derived"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "Removing Pyromancer points leaves max ignite stacks unchanged (~710 @949%).",
+     "locator": "docs/evidence/reverse-engineering/user-heat-wave-validation-2026-11-05.json"
+    }
+   ],
+   "affects": [
+    "single_cast.ignite.application"
+   ]
+  },
+  {
+   "rule_id": "rule-crescendoing-rage",
+   "title": "Crescendoing Rage（本阶段不纳入，后续阶段处理）",
+   "statement": "用户 2026-11-04 决定：本阶段暂不考虑 Crescendoing Rage，放到后续阶段处理。v1 不应用（不影响本 run 数值）；规则保留供后续阶段接入。",
+   "group": "cooldown",
+   "status": "unresolved",
+   "evidence": [
+    {
+     "kind": "user_rule",
+     "detail": "用户 2026-11-04 第 2 条：暂不考虑，放在后面阶段处理",
+     "locator": "user message 2026-11-04 (round 3)"
+    },
+    {
+     "kind": "catalog",
+     "detail": "ring2 sealed affix 1124 / UIBuffs:248『每第 3 次 ability cast 50% more damage』",
+     "locator": "tools/phase3/work/snapshot.json#derived"
+    }
+   ],
+   "affects": [
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-preparation",
+   "title": "Preparation 下一次施法状态（未确认）",
+   "statement": "Preparation（mg-1 node 4，4 点）的『下一次元素法术』增益在 t=0 是否就绪、循环中的消耗与刷新时序未确认；v1 不默认生效（snapshot 对应行 condition_status=unknown）。",
+   "group": "cast",
+   "status": "unresolved",
+   "evidence": [
+    {
+     "kind": "catalog",
+     "detail": "snapshot passive:mg-1:4:buff-damage (included=True, condition=unknown, inactive)",
+     "locator": "tools/phase3/work/snapshot.json"
+    }
+   ],
+   "affects": [
+    "single_cast",
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-ignite-damage-slices",
+   "title": "Ignite 伤害的连续流记账与切片事件（v1）",
+   "statement": "v1 把每层 Ignite 视为恒定速率的持续伤害流：窗口、累计曲线、尾部与单层总伤害都用连续积分（精确分摊），不因切片时点产生偏置。事件表把每个批次离散为 1 秒切片并按切片结束时刻记录（各切片金额之和严格等于该批次层数总伤害），因此事件表是应用/结算台账，曲线与窗口是连续流积分；两者在观测结束时点与总量上严格对上。这是记账实现假设，不改变每层总伤害。",
+   "group": "ignite",
+   "status": "assumed",
+   "evidence": [
+    {
+     "kind": "derivation",
+     "detail": "事件表/连续流双口径：总量与观测末端严格一致，中间时点曲线按连续流",
+     "locator": "tools/phase3/src/le_calc/ignite.py#damage_between"
+    },
+    {
+     "kind": "derivation",
+     "detail": "早期版本按切片结束时刻归属窗口/尾部会使 unsettled_tail 在 30s 窗高估约 15%，已改为连续积分",
+     "locator": "tools/phase3/src/le_calc/simulate.py#window_metrics"
+    }
+   ],
+   "affects": [
+    "single_cast.event_trace",
+    "single_cast.time_series",
+    "loops.windows"
+   ]
+  },
+  {
+   "rule_id": "rule-target-monster-dr-table",
+   "title": "怪物等级减伤表（tunklab）",
+   "statement": "怪物随等级有 Enemy Damage Reduction：等级 1-6 为 0%，等级 7 起递增，等级 100 为 87%。表值来自 tunklab /mobdr（页面 JS 数据 n.k[level]），已本地保存并记录 sha256；等级 0 表示关闭怪物 DR（用于与旧口径对比）。",
+   "group": "target",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "public_doc",
+     "detail": "Tunklab Monster DR: level 1-6 = 0%, level 100 = 87%; table covers levels 1-100.",
+     "locator": "https://lastepoch.tunklab.com/mobdr"
+    },
+    {
+     "kind": "data",
+     "detail": "Extracted from page JS chunk 1ujt3xs36b3ws.js module 673465 export k (101 values); saved as tools/phase3/data/monster_dr.json.",
+     "locator": "tools/phase3/data/monster_dr.json"
+    }
+   ],
+   "affects": [
+    "scenario.target",
+    "single_cast",
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-target-monster-dr-application",
+   "title": "怪物减伤应用方式（目标侧独立乘区）",
+   "statement": "怪物等级减伤作为目标侧独立乘区：最终伤害 = 模型伤害 × (1 - 有效抗性) × (1 - monster_dr)。该应用顺序/乘法形式尚未经游戏内单独验证，属于集成假设；结果会显式标注所选怪物等级。",
+   "group": "target",
+   "status": "assumed",
+   "evidence": [
+    {
+     "kind": "public_doc",
+     "detail": "Enemy Damage Reduction behaves as a reduction of damage dealt to monsters; implementation as a separate multiplicative factor is the calculator's integration assumption.",
+     "locator": "https://lastepoch.tunklab.com/mobdr"
+    }
+   ],
+   "affects": [
+    "single_cast",
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-tidal-force",
+   "title": "Tidal Force（本体与 Ignite 的独立 more 乘区）",
+   "statement": "Tidal Force（node 2，本构筑 4 点）每点提供 +15% more damage；同一节点内各点相加成一个独立乘区（group node:bh2:2），不同节点之间相乘。该 more 作用于 Black Hole 本体（body）与 Black Hole 施加的 Ignite（applies_to body/ignite；不限于火焰或冰霜分量），与 rule-bh-more-aggregation 的分组口径一致。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Tidal Force 4 points, +15% damage per point, 'multiplicative with other modifiers'",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[1]"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "BlackHoleTree.updateMutator 'Black Hole Damage and Less Pull'：Stats.Stat(property=Damage(0), tags=0, more=points×0.15)（Tidal Force）；pull 强度同步 -points×0.15",
+     "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json#/effects/tidal_force"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "规则 3：同一节点相加，不同节点独立乘区",
+     "locator": "user message 2026-11-04"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-flaming",
+   "title": "Flaming（火焰分量的独立 more）",
+   "statement": "Flaming（node 7，本构筑 3 点）每点提供 +10% more fire damage（Fire 标签）；同一节点内各点相加成一个独立乘区（group node:bh2:7），不同节点之间相乘。仅作用于火焰分量（body_fire）与 Ignite；Binary System 的冰霜分量不吃该 more。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Flaming 3 points: +10% more fire damage per point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[4]"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "BlackHoleTree.updateMutator 'Black Hole Increased Fire Damage'：Stats.Stat(property=Damage(0), tags=8(Fire), more=points×0.10)",
+     "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json#/effects/flaming"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-singularity",
+   "title": "Singularity（+100% more；单次施放 1 个黑洞）",
+   "statement": "Singularity（node 28，1 点）提供 +100% more damage（独立乘区 group node:bh2:28，作用于 body 与 Ignite），同时把每次施放创建的黑洞数限制为 1（Black Holes Per Cast=1；双星算 1 个）。『每次施放 1 个』与多次施放并存的完整语义由 rule-black-hole-count-limit / rule-black-hole-recast 约束；该 more 与结构双分量（Binary System）无关。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Singularity: +100% damage; only 1 Black Hole can be created at a time",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[13]"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "BlackHoleTree.updateMutator 'Black Hole One Hole Only'：置 one-hole-per-cast flag + Stats.Stat(property=Damage(0), tags=0, more=points×1.0)",
+     "locator": "docs/evidence/reverse-engineering/bh-tree-mutator-effects-1.5.3.json#/effects/singularity"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "规则 2 + 规则 3",
+     "locator": "user message 2026-11-04"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite",
+    "loops"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-supermassive",
+   "title": "Supermassive（Boss/稀有目标的独立 more）",
+   "statement": "Supermassive（node 23，本构筑 4 点）每点提供 +25% more damage to rare enemies and bosses；同一节点内各点相加成一个独立乘区（group node:bh2:23）。该 more 仅在目标带 Boss/稀有标签时生效（condition_code=target_is_boss_or_rare），作用于 body 与 Ignite。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Supermassive 4 points: +25% more damage to rare enemies and bosses per point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[9]"
+    },
+    {
+     "kind": "game_data",
+     "detail": "1.5.3 节点数据：node 23 Supermassive 有 'Damage To Rares And Bosses' +25% 与 'Prioritises Rares And Bosses' 两个 stat",
+     "locator": "docs/evidence/reverse-engineering/bh2-skilltree-nodes-1.5.3.json"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "规则 7：目标场景按最优（Boss/稀有）",
+     "locator": "user message 2026-11-04"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite",
+    "scenario.target"
+   ]
+  },
+  {
+   "rule_id": "rule-bh-umbral-core",
+   "title": "Umbral Core（本体与 Ignite 的独立 more）",
+   "statement": "Umbral Core（node 10，本构筑 3 点）每点提供 +10% more damage；同一节点内各点相加成一个独立乘区（group node:bh2:10），不同节点之间相乘。作用于本体 body 与 Ignite（applies_to body/ignite），不带元素标签限制（Binary System 的火焰与冰霜分量都吃该 more）。",
+   "group": "body",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Umbral Core 3 points: +10% more damage per point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[5]"
+    },
+    {
+     "kind": "user_rule",
+     "detail": "规则 3：同一节点相加，不同节点独立乘区",
+     "locator": "user message 2026-11-04"
+    }
+   ],
+   "affects": [
+    "single_cast.body",
+    "single_cast.ignite"
+   ]
+  },
+  {
+   "rule_id": "rule-cooldown",
+   "title": "技能树冷却/充能节点（Recurrence / Endless Maw / Pocket Dimension）",
+   "statement": "冷却/充能相关技能树节点的统一规则：Recurrence（node 17）提供 Cooldown Reduction（property 70，每点 +15%，本构筑 4 点 = 60%），按乘算冷却缩减 (1−CDR) 作用于调整后的冷却；Endless Maw（node 25）在基础充能上增加固定 +2s 冷却长度（与它同时提供的 duration 加算分开处理）；Pocket Dimension（node 30）增加 +1 最大充能层数。三者与 rule-cooldown-base（基础充能/固定调整/额外充能的汇总口径）和 rule-cooldown-icr（effective_recharge = (base_recharge + flat)×(1−CDR)/(1+ICR)）共同构成冷却模型；具体数值由本文件 cooldown 块给出，本规则不复述为第二权威源。",
+   "group": "cooldown",
+   "status": "confirmed",
+   "evidence": [
+    {
+     "kind": "game_data",
+     "detail": "Recurrence 4 points: +15% cooldown reduction and -10% mana cost per point",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[7]"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Endless Maw: +30% duration, +2 seconds cooldown duration",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[11]"
+    },
+    {
+     "kind": "game_data",
+     "detail": "Pocket Dimension: +1 additional charge",
+     "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#selected_nodes[17]"
+    },
+    {
+     "kind": "reverse_engineering",
+     "detail": "1.5.3 节点数据/能力数据：Recurrence=property 70 Cooldown Reduction +15%/点（4 点=60%）、Pocket Dimension=+1 charge；BlackHoleMutator.getChargeRegen 以 (1−blackHoleReducedCooldown) 缩减基础充能速率",
+     "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#10"
+    },
+    {
+     "kind": "user_in_game_measurement",
+     "detail": "游戏内实测充能回满 3.6s，与 (14+2)×(1−0.6)/(1+0.7575)=3.641s 一致；否定 v1 的 ICR 加算池公式",
+     "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json"
+    }
+   ],
+   "affects": [
+    "loops"
+   ]
+  }
+ ],
+ "reverse_engineering": {
+  "game_version": "1.5.3",
+  "steam_buildid": "26087601",
+  "unity_version": "6000.4.8f1",
+  "checked_at": "2026-11-05",
+  "scope": "mechanics verification only (tick/Heat Wave/Red Giant/multi-hole/Elemental/cooldowns); the build data model remains phase1-dataset-003 / game version 1.5.2 as declared in source_refs",
+  "document": "docs/evidence/reverse-engineering/README.zh-CN.md",
+  "evidence_dir": "docs/evidence/reverse-engineering/",
+  "in_game_verification": "2026-11-05: recharge 3.6s; Binary on/off total DPS 400k->800k (mostly Ignite). Evidence: docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json | 2026-11-05 single-cast Heat Wave validation: temporary 949% uncapped fire -> ~710 max stacks vs model 711.75; Pyromancer removal no effect; cast formula shape confirmed."
+ },
+ "scope_note_extra": "怪物等级减伤（Enemy Damage Reduction）作为目标侧独立乘区加入；KPI 为按所选怪物等级换算后的游戏内实际伤害（0=关闭）。不是完整实战 DPS。"
+}

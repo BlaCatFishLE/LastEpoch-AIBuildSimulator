@@ -1,0 +1,173 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-loop-action-policies",
+  "revision": 2,
+  "title": {
+    "zh": "eager/patient 循环动作策略与窗口",
+    "en": "Eager/patient loop action policies and windows"
+  },
+  "aliases": [
+    "eager",
+    "patient",
+    "action policy",
+    "循环策略",
+    "动作流",
+    "DPS窗口",
+    "5s/30s/120s",
+    "black_hole_only"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "loop",
+      "frequency",
+      "ledger"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "动作流固定为 black_hole_only（只施放黑洞）。eager：有充能且施法动作空闲即施放，多个黑洞重叠；patient：等所有存续黑洞消失后再施放。两者都是建模策略（固定条件估算），不是游戏操作序列。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "eager/patient 是 DPS 计算器的动作策略（ruleset.action_policies），没有对应游戏规则 ID；并存的合法性见 bh-black-hole-instances。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "action_policies",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/action_policies",
+      "note": "eager/patient 的 cast_condition 与描述。"
+    },
+    {
+      "parameter": "loop config",
+      "source": "current:matched_instances",
+      "note": "动作流、初始计数、Crescendoing Rage 开关。"
+    },
+    {
+      "parameter": "windows",
+      "source": "current:matched_instances",
+      "note": "5/30/120s 窗口结果与 unsettled_tail_damage。"
+    },
+    {
+      "parameter": "policy results",
+      "source": "current:matched_instances",
+      "note": "两个策略的窗口/casts/并发数。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.simulate",
+    "symbol": "run_loop",
+    "note": "充能/施法时间/黑洞存续期驱动的离散事件循环；每窗口统计 body+ignite、尾部与 cast_count；run_single_cast 为单次口径。"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/action_policies",
+      "note": "eager/patient 的策略定义与 cast_condition。"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/single_cast_observation",
+      "note": "单次观察窗口：从 cast start 到最后一层 Ignite 到期。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops",
+      "note": "当前 run 两策略的窗口/施放/并发结果。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency",
+      "note": "loop_policies_ordered / loop_windows_monotone 等一致性检查。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/fr-bh-convergence-handover.zh-CN.md#3",
+      "note": "BH 独有：eager/patient 循环与 charge replay。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/loop",
+      "note": "原案例证据，参数改取当前输入"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops/0/windows",
+      "note": "历史输出仅作验证证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_simulate.py::LoopTest::test_windows_monotone_and_dps",
+    "tools/phase3/tests/test_simulate.py::LoopTest::test_eager_higher_than_patient",
+    "tools/phase3/tests/test_simulate.py::LoopTest::test_patient_waits_for_black_hole_expiry",
+    "tools/phase3/tests/test_simulate.py::LoopTest::test_loop_event_trace_is_limited_and_traceable",
+    "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-black-hole-instances",
+      "requirement": "并存/等待的合法性前提。",
+      "evidence_locator": "tools/phase3/src/le_calc/simulate.py#run_loop"
+    },
+    {
+      "with": "bh-ignite-damage-flow",
+      "requirement": "窗口只计窗口内发生的 Ignite 伤害；之后发生的记 unsettled_tail_damage。",
+      "evidence_locator": "tools/phase3/src/le_calc/simulate.py#window_metrics"
+    },
+    {
+      "with": "bh-cooldown-cdr-icr",
+      "requirement": "施放时刻由充能恢复约束；patient 额外受黑洞存续期约束。",
+      "evidence_locator": "tools/phase3/src/le_calc/simulate.py#run_loop"
+    },
+    {
+      "with": "bh-baseline-profiles",
+      "requirement": "两策略的 DPS 与 build_base 单次基线是不同口径，不可相减/混用。",
+      "evidence_locator": "archive://examples/black-hole/case.legacy.json#/notes"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/action_policies",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops",
+      "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency",
+      "tools/phase3/tests/test_simulate.py",
+      "docs/fr-bh-convergence-handover.zh-CN.md#3"
+    ],
+    "open_questions": [
+      "eager/patient 是模型策略，不是玩家实操序列；报告必须标注固定条件估算，不得写成实战 DPS。",
+      "v1 不记录 blocked attempts（被充能/动作空闲拒绝的尝试），也未模拟真实操作延迟/走位。",
+      "窗口按连续流积分、尾部单列；跨窗口对比时只能用同一 policy 与同一观察口径。"
+    ],
+    "requery_when": [
+      "接入真实操作序列/触发链时",
+      "模板需要更多策略时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

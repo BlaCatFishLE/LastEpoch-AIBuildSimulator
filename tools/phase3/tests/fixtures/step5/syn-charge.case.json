@@ -1,0 +1,11 @@
+{
+  "schema": "le-case-v1",
+  "case_id": "syn-charge",
+  "main_skill": {
+    "ability_id": "syn-charge"
+  },
+  "build": {
+    "build_id": "syn-build",
+    "revision_id": "syn-rev-3"
+  }
+}

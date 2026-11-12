@@ -1,0 +1,132 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "common-increased-aggregate",
+  "revision": 2,
+  "title": {
+    "zh": "increased/reduced 加算池",
+    "en": "Increased/reduced additive pool"
+  },
+  "aliases": [
+    "increased aggregate",
+    "inc 池",
+    "加算池",
+    "increased_total",
+    "_collect_increased"
+  ],
+  "selectors": [
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "common-increased-aggregate"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "dot",
+      "tick",
+      "ignite",
+      "body"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "同一组件的所有适用 increased/reduced 行相加成一个池，因子 = 1 + Σinc；属性缩放（如 BH 的 Intelligence 属性系数，见 ruleset）按规则并入同一池（BH 已确认，见 bh-attribute-scaling）。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "加算是共享聚合算子，无单条规则 ID；口径由 ruleset 各规则的 stat_key/operation/标签字段驱动。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "increased rows",
+      "source": "current:matched_instances",
+      "note": "stat_key=damage、operation=increased、按组件标签过滤；逐行见 source-ledger。"
+    },
+    {
+      "parameter": "attribute_increase",
+      "source": "current:matched_instances",
+      "note": "属性值 × 每点系数；系数来自 ruleset 属性缩放（bh2 attributeScaling）。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.damage",
+    "symbol": "_collect_increased",
+    "note": "collect_modifier_rows(stat_key=damage, operation=increased) + attribute 行 → total/factor；Ignite 侧在 le_calc.ignite._ignite_scaling 复用同一收集器。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-bh-more-aggregation]",
+      "note": "规则包口径：increased 加算、more 独立相乘（用户规则 3 + 参考模型）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/increased",
+      "note": "当前 run 的 inc 行与 total（可用于核对来源与是否重复计入）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling/increased_rows",
+      "note": "Ignite 侧 inc 池行；与 body 池分开（不同组件标签）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/attributes",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_fire_component_golden_numbers",
+    "tools/phase3/tests/test_damage.py::BodyDamageTest::test_expression_tree_is_traceable",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_derived_rows_are_consistent_with_contributions",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-more-groups",
+      "requirement": "inc 与 more 是两套聚合：先 inc 加算池、再逐组 more 相乘，不可互相混入。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#compute_body"
+    },
+    {
+      "with": "bh-attribute-scaling",
+      "requirement": "BH 的 Intelligence 属性缩放是 inc 池的一条行（source_path=bh2.attributeScaling[2]），不是独立乘区；是否同样计入 Ignite 池由 bh-ignite-attribute-scaling 规定。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#_collect_increased"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/body/components/0/increased",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling",
+      "tools/phase3/tests/test_damage.py",
+      "tools/phase3/tests/test_stats.py"
+    ],
+    "open_questions": [
+      "去重身份是「来源实例 + 效果行」；当前 BH 侧 ruleset 技能树行与 snapshot 玩家行天然分离，但新来源若同时出现在 snapshot 与规则包会重复计数，需要 P2 的贡献项去重契约（实施方案 §6.3）。",
+      "FR 侧加算池在 hit_damage/hit_inputs 内独立实现，未合并；两模型对「attribute inc 是否进池」目前碰巧一致但无共享测试。"
+    ],
+    "requery_when": [
+      "P2 共享算子合并后",
+      "新增跨技能被动/多来源同 effect 时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole",
+    "flame-reave"
+  ],
+  "reuse_mode": "shared"
+}

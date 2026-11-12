@@ -1,0 +1,25 @@
+{
+  "scope": "条件机制知识收尾最小核对",
+  "index_status": "ok",
+  "indexed_entries": 109,
+  "record_rule_handler_references_checked": 16,
+  "representative_selector_matches": {
+    "node:ab0lh:14": [
+      "skill-nether-coating"
+    ],
+    "item:letools:uniqueList.uniques:211": [
+      "bh-cond-throne-of-ambition",
+      "fr-effect-ambition-stacks"
+    ],
+    "item:affix:affix:letools:affixList.singleAffixes:1117": [
+      "buff-blood-rage-common-speed",
+      "buff-incisive-rage"
+    ]
+  },
+  "simulation_rerun": false,
+  "browser_validation": false,
+  "test_suites_run": false,
+  "active_profile_changed": false,
+  "automatic_recipe_materializer_added": false,
+  "notes": "本轮核对正常知识加载、索引状态、稳定 ID 检索与规则/处理器定义引用；不代表数值实测或自动配方物化。"
+}

@@ -1,0 +1,54 @@
+{
+ "game_install": "<game-install>",
+ "game_version": "1.5.3",
+ "steam_buildid": "26087601",
+ "unity_version": "6000.4.8f1",
+ "files": {
+  "GameAssembly.dll": {
+   "bytes": 97256960,
+   "sha256": "323e9183f3bee600b6c9e1c469218b9de926e9044f2ca3d44fae8a0ec9a91464"
+  },
+  "global-metadata.dat": {
+   "bytes": 36457932,
+   "sha256": "2a4e8440606c420345934158b6784d8f5d8b0184f32fd91af0e9e0903ba94f83"
+  },
+  "globalgamemanagers": {
+   "unity_version": "6000.4.8f1"
+  }
+ },
+ "metadata_version": 39,
+ "il2cpp_metadata": {
+  "type_definitions": 40789,
+  "method_pointers": 272489,
+  "dump_cs_bytes": 56303550,
+  "script_json_bytes": 120667904,
+  "il2cpp_h_bytes": 93509189,
+  "stringliteral_json_bytes": 4550576
+ },
+ "tools": {
+  "Il2CppDumper_perfare_6.7.46": {
+   "result": "FAILED: metadata v39 unsupported",
+   "sha256_zip": "d1117d66b9f8a130fd4933ae99f8eb9a0ecbbdb79d1fc494eb738ad910ff765a"
+  },
+  "Cpp2IL_2022.1.0-pre-release.21": {
+   "result": "metadata v39 OK; dummy dll output OK; IL recovery bodies empty",
+   "sha256_exe": "663fb432433b4371fd1ee0ebc321a8fff2a9aac5ac4230c843f9e03ddee4e04c",
+   "plugin_stripped_code_reg_support_sha256": "2cc4f8c66541f18b4daed5410149ee7859c3190454d30bda5ccd0895d2989ee6"
+  },
+  "Il2CppDumper_c01ns_v108.0": {
+   "result": "OK: dump.cs + script.json + il2cpp.h + DummyDll for metadata v39",
+   "sha256_zip": "4c47399ab14ca7260418bd272b9b94af36dbaf4fee34a60bdf05bbd4fe6e7364"
+  },
+  "ILSpy_9.1.0.7988_binaries": {
+   "result": "ICSharpCode.Decompiler 9.1 loadable in pwsh 7 for C# decompile of recovered IL DLL",
+   "sha256_zip": "1e925a4ce4c79d68139a486da66c682e2191e51215188816f613866c7276fc55"
+  },
+  "capstone": {
+   "version": "5.0.7"
+  },
+  "UnityPy": {
+   "version": "1.25.4"
+  }
+ },
+ "read_only_notes": "no game file modified; tools downloaded to <author-archive>/rev (not shipped); only selected factual fields are recorded as evidence."
+}

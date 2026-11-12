@@ -1,0 +1,127 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-charge-schedule-multi-instance",
+  "revision": 2,
+  "title": {
+    "zh": "Black Hole 充能调度（charges/recharge/CDR/ICR/flat）与多实例并发",
+    "en": "Black Hole charge scheduling and concurrent instances"
+  },
+  "aliases": [
+    "charges",
+    "recharge",
+    "cooldown",
+    "eager",
+    "patient",
+    "max concurrent"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:17",
+        "bh2:25",
+        "bh2:30"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "frequency"
+    ],
+    "tags": [],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "bh2:30"
+    ],
+    "notes": "max charges 2；effective_recharge=(base+flat)*(1-CDR)/(1+ICR)；eager 允许重叠，patient 等旧黑洞消失。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "base recharge / flat",
+      "source": "knowledge/definitions/black-hole-v3.json#/definition/rules/charge_schedule",
+      "unit": "seconds",
+      "note": "13.99972 + 2.0"
+    },
+    {
+      "parameter": "CDR / ICR",
+      "source": "knowledge/definitions/black-hole-v3.json#/definition/rules/overcapped_scaling + effects",
+      "unit": "percent",
+      "note": "CDR 0.6、ICR 0.78375（含手套溢出阈值缩放）"
+    },
+    {
+      "parameter": "max charges",
+      "source": "knowledge/definitions/black-hole-v3.json#/definition/rules/charge_schedule/max_charges_source",
+      "unit": "charges",
+      "note": "base 1 + node30 1 = 2"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "plan-v3 schedule.charges/action_policies",
+    "path": "knowledge/definitions/black-hole-v3.json",
+    "locator": "#/definition/rules/charge_schedule"
+  },
+  "handler_ref": {
+    "module": "le_calc.plan_executor_v3",
+    "symbol": "_charge_loop/_charge_parameters",
+    "note": "充能顺序恢复；eager/patient 两策略；窗口与最大并发采样"
+  },
+  "aggregation": {
+    "operation": "frequency",
+    "stacking_policy": "none",
+    "order_policy": "同一时间仅一个恢复计时器；max charges 仅起手爆发",
+    "more_group_source": "n/a"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#abilities bh2",
+      "note": "maxCharges=1、chargesGainedPerSecond=0.07143；Recurrence +60%、Endless Maw +2s"
+    },
+    {
+      "kind": "validation",
+      "locator": "docs/evidence/reverse-engineering/user-in-game-measurements-2026-11-05.json",
+      "note": "实测充能恢复 3.6s 与 (14+2)*(1-0.6)/(1+0.7575) 一致"
+    },
+    {
+      "kind": "report",
+      "locator": "archive://reports/black-hole/dps-step4-bh-2/result.json",
+      "note": "eager 35 casts / max_concurrent 3 / DPS 2919759.11554595；patient 16 / 1 / 1337984.91923145（复验 P1 补修后 run）"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_unified_bh_migration.py::BhD9CapacitySchedulingTest",
+    "tools/phase3/tests/test_unified_bh_migration.py::BhD12LegacyMappingTest"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 BH 计算器与 ruleset-bh-stage1-v4 仅作迁移证据；生产路径为 plan-v3。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ],
+  "limitations": [
+    {
+      "item": "法力与整数事件",
+      "reason": "法力消耗/恢复未建模；charge 连续恢复按解析式。",
+      "blocks_full_dps": false
+    }
+  ]
+}

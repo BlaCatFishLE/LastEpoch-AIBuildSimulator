@@ -1,0 +1,101 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-monster-dr-integration",
+  "kind": "mechanism",
+  "title": {
+    "zh": "怪物 DR 接入 BH 目标侧（独立乘区）",
+    "en": "Monster DR integration into BH target side (separate multiplicative factor)"
+  },
+  "source_path": "knowledge/mechanisms/bh-monster-dr-integration.json",
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "reuse_mode": "case_bound",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-target-monster-dr-application",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-target-monster-dr-application]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-target-monster-dr-application 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "怪物 DR 接入 BH 目标侧（独立乘区）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：target_side、body、ignite；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "最终伤害 = 模型伤害 × (1 - 有效抗性) × (1 - monster_dr)；monster_dr 由怪物等级查表，作为与抗性平行的独立目标侧因子。该乘法形式/顺序是集成假设（规则包 assumed），表与取值见 common-monster-dr。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "monster_dr_factor = 1 - target.monster_damage_reduction；与 resistance_factor 相乘。注入路径：le_calc.report.build_result → monster_dr.describe(level)。",
+      "source": "$.handler_ref.note（le_calc.damage._target_multiplier）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：monster_level、monster_damage_reduction、dps_by_level",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/parameter_bindings/0/source",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/target/monster_level"
+    },
+    {
+      "pointer": "$/parameter_bindings/1/source",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/scenario/monster_damage_reduction"
+    },
+    {
+      "pointer": "$/parameter_bindings/2/source",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/monster_dr/dps_by_level"
+    },
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario/monster_damage_reduction"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/monster_dr/dps_by_level"
+    },
+    {
+      "pointer": "$/validation_refs/3",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.single_cast_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/scenario"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/monster_dr"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "『独立乘区、位于抗性之后』的乘法形式是集成假设；游戏内 DR 与抗性/穿透的交互顺序未单独实测。该假设直接影响所有 DPS 数值（等级 100 因子 0.13），需要 Lead 在报告语义中保持 assumption 标注。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "BH 尊重 scenario 显式 monster_damage_reduction，FR 忽略——跨模型对比前需裁定统一语义。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

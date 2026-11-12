@@ -1,0 +1,86 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "attribute-strength-to-brutality",
+  "revision": 1,
+  "title": {
+    "zh": "力量转换为 Brutality 与按法耗独立近战增伤",
+    "en": "Strength converted to Brutality"
+  },
+  "aliases": [
+    "Brutality",
+    "Strength Converted to Brutality",
+    "力量转残暴"
+  ],
+  "selectors": [
+    {
+      "kind": "stat",
+      "namespace": "letools:coreDB.playerPropertyList",
+      "ids": [
+        "650"
+      ]
+    },
+    {
+      "kind": "item",
+      "namespace": "affix:letools:affixList.multiAffixes",
+      "ids": [
+        "1083"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Melee",
+      "Hit"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "汇总当前力量后转换；保留技能/节点/力量条件的等效力量，独立增伤不作用于 DoT。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "attribute-conversions-v1:brutality",
+    "path": "tools/phase3/rules/attribute-conversions-v1.json",
+    "locator": "#/brutality"
+  },
+  "handler_ref": {
+    "module": "le_calc.mechanics.attribute_conversion",
+    "symbol": "resolve_brutality"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "strength",
+      "source": "current:attributes.strength_before_conversion",
+      "note": "读取当前角色、装备和被动汇总，不保存旧案例总数。"
+    },
+    {
+      "parameter": "conversion",
+      "source": "current:mods[property=98,tags=650].value_numeric"
+    },
+    {
+      "parameter": "mana_cost",
+      "source": "current:main_skill.effective_mana_cost",
+      "note": "法耗归一后使用规则上限。"
+    }
+  ],
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "source_records translation:Properties.Property_Player_650_AltText"
+    },
+    {
+      "kind": "user_rule",
+      "locator": "本轮用户完整词条引用"
+    },
+    {
+      "kind": "validation",
+      "locator": "archive://reports/void-cleave-20261110/brutality-fix-evidence/before-after.json"
+    }
+  ]
+}

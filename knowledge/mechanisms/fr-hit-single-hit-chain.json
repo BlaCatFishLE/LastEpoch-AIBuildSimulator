@@ -1,0 +1,208 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-hit-single-hit-chain",
+  "revision": 2,
+  "title": {
+    "zh": "Flame Reave 单次命中乘区链（Fire 单组件）",
+    "en": "Flame Reave single-hit damage chain (single Fire component)"
+  },
+  "aliases": [
+    "FR single hit",
+    "Flame Reave hit damage",
+    "单次命中",
+    "乘区链"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "fr11mv"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "fr11mv:2",
+        "fr11mv:3",
+        "fr11mv:6",
+        "fr11mv:9",
+        "fr11mv:12",
+        "fr11mv:13",
+        "fr11mv:16",
+        "fr11mv:18",
+        "fr11mv:20",
+        "fr11mv:23",
+        "fr11mv:24"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Fire",
+      "Melee",
+      "Hit"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "component",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/components",
+      "note": "当前只有 fr11mv:fire 一个组件；fire_only 策略"
+    },
+    {
+      "parameter": "base_damage",
+      "source": "current:matched_instances",
+      "unit": "flat"
+    },
+    {
+      "parameter": "added_damage_scaling",
+      "source": "current:matched_instances",
+      "unit": "multiplier"
+    },
+    {
+      "parameter": "single_hit_damage",
+      "source": "current:matched_instances",
+      "unit": "damage"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R4",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/damage_model；#/rules id=R4/R9/R11/R12；链式顺序见 hit_damage.compute_single_hit 的 formula 字段"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "compute_single_hit",
+    "note": "单次命中唯一入口；内部依次调用 added pool、increased 池、more 分组、crit、penetration、target 乘区"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/formula",
+      "note": "ruleset 声明的链式公式"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill",
+      "note": "分量输入与 added scaling"
+    },
+    {
+      "kind": "planner_runtime",
+      "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 574120-574580",
+      "note": "第三方 runtime 的单类型伤害公式（参考，不是游戏真值）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md#8 R8 伤害类型 / 转换 / added 标签"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/base_damage",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/skill/added_damage_scaling",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/totals/damage",
+      "note": "原案例证据；当前值由输入适配器/条件求值器提供"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "fr-hit-added-scaling",
+      "requirement": "base/added×scaling 与 fire_only 组件策略",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model"
+    },
+    {
+      "with": "fr-hit-increased-pools",
+      "requirement": "increased 加算池与标签闭包",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/tag_filter"
+    },
+    {
+      "with": "fr-hit-more-groups",
+      "requirement": "more 分组与组间相乘",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/more_per_group"
+    },
+    {
+      "with": "fr-hit-critical-expected",
+      "requirement": "avg crit 期望乘区",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/critical"
+    },
+    {
+      "with": "fr-hit-target-side",
+      "requirement": "穿透/火抗/怪物 DR 目标乘区",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/target"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "OQ2：本体第 1 击距离衰减曲线未建模（贴脸=1.0）",
+      "多组件（Cold/Physical）目前不进入本链（见 fr-hit-added-scaling 与 skill template unsupported）"
+    ],
+    "requery_when": [
+      "ruleset fr-hit-stage1-v2 或 game_version 变化",
+      "dataset 从 phase1-dataset-003 升级",
+      "换 BD（装备/技能树/副手/场景 baseline_profile）后重新绑定参数"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "multiplier",
+    "stacking_policy": "none",
+    "order_policy": "damage = (base + added*scaling) * (1+sum(increased)) * product(1+sum(more per group)) * avg_crit * (1+penetration) * (1-resistance) * (1-monster_dr)",
+    "more_group_source": "分组来自 ruleset.effects / snapshot contribution.group；禁止按词条文本的 more 一词推定"
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "fr11mv"
+  ]
+}

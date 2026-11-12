@@ -1,0 +1,173 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "fr-effect-army-of-skin-high-health",
+  "revision": 2,
+  "title": {
+    "zh": "Army of Skin：高血量敌人 +49% more Melee（条件效果）",
+    "en": "Army of Skin: more melee damage to high-health enemies"
+  },
+  "aliases": [
+    "Army of Skin",
+    "high health",
+    "49% more",
+    "GlobalConditionalDamage",
+    "条件效果"
+  ],
+  "selectors": [
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "letools:uniqueList.uniques:443"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [
+      "Melee"
+    ],
+    "conditions": [
+      "enemy_high_health"
+    ],
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "effect definition",
+      "source": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/effects id=global_conditional_damage_feet",
+      "note": "condition: enemy_high_health==true"
+    },
+    {
+      "parameter": "roll",
+      "source": "current:matched_instances",
+      "unit": "percent"
+    },
+    {
+      "parameter": "more row",
+      "source": "current:matched_instances",
+      "note": "more 行、group=effect:army_of_skin:high_health"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "global_conditional_damage_feet",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=global_conditional_damage_feet"
+  },
+  "handler_ref": {
+    "module": "le_calc.hit_damage",
+    "symbol": "_effect_rows",
+    "note": "条件满足时加 more 行（tags Melee，group=effect:army_of_skin:high_health）；ruleset.effects 的 stale notes 见 open_questions"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#entities entity_id=item:letools:uniqueList.uniques:443",
+      "note": "unique 443 tooltip:(26-52)% more Melee Damage to High Health Enemies；本 BD roll 0.49"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#items entity_id=item:letools:uniqueList.uniques:443",
+      "note": "mods[3]={property:117 GlobalConditionalDamage,specialTag:2,tags:512,type:2 More}"
+    },
+    {
+      "kind": "planner_runtime",
+      "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#byte 444900-447300",
+      "note": "第三方 rrlPo：specialTag 2 → enemyHealth:high；high|full 判真"
+    },
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/fr-hit-facts-v1.json#E.feet_unique_conditional",
+      "note": "facts 更正：该词条作用于 Flame Reave，不是仅 Flay/Harvest"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/expected/expected-summary.json",
+      "note": "build_base 与 legacy 的比值关系（本案例校验关系，不是通用换算规则）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json#/mods equipment.feet#unique_mod#3（value_numeric=0.49）",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/applied_effects[id=global_conditional_damage_feet]",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json",
+    "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json",
+    "tools/phase3/tests/test_hit_report.py::HitResultStructureTests",
+    "tools/phase3/tests/test_cli_hit.py::HitCommandDispatchTests",
+    "tools/phase3/tests/test_hit_serve.py::HitServeRecomputeTests"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-conditional-state-eval",
+      "requirement": "enemy_high_health 状态由 scenario 提供",
+      "evidence_locator": "archive://examples/flame-reave/scenario/conditional-scenario.json#/profiles/*/states/enemy_high_health"
+    },
+    {
+      "with": "common-more-groups",
+      "requirement": "该 more 为独立组，与其它 more 组相乘",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/more_per_group"
+    },
+    {
+      "with": "fr-hit-more-groups",
+      "requirement": "Melee 标签作用于 Fire 组件（闭包含 Melee）",
+      "evidence_locator": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/damage_model/tag_filter"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "tools/phase3/rules/fr-hit-facts-v1.json",
+      "archive://examples/flame-reave/snapshot/input-snapshot.hit.json",
+      "archive://examples/flame-reave/scenario/conditional-scenario.json",
+      "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json",
+      "archive://examples/flame-reave/inputs/bd.json",
+      "archive://examples/flame-reave/expected/expected-summary.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json",
+      "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md",
+      "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+      "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+      "docs/fr-bh-convergence-handover.zh-CN.md",
+      "docs/architecture.md",
+      "docs/current-status.md",
+      "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    ],
+    "open_questions": [
+      "high health 的阈值（half/full？）与实战平均覆盖率未验证（R20 assumed）；低于阈值时该 49% more 失效",
+      "ruleset.effects 该条的 notes 仍写着 not applicable（Flay/Harvest），与其 modeled status、facts 更正和 stage16 实现冲突——stale note，需 Lead 复核",
+      "本案例 legacy_single_skill = build_base / 1.49 仅因该机制 + high-health 条件；这是案例/场景校验关系，不能写成通用 legacy 换算规则（P0 独立 review 裁定 2-A）"
+    ],
+    "requery_when": [
+      "换 feet unique 或 roll",
+      "high-health 阈值有证据后"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "case_scope": [
+    "flame-reave"
+  ],
+  "aggregation": {
+    "operation": "more",
+    "stacking_policy": "none",
+    "order_policy": "单 more 组乘在 Melee 命中上；build_base 默认 high_health=true，legacy_single_skill 关闭",
+    "more_group_source": "dataset unique 443 mods[3]（GlobalConditionalDamage specialTag=2 → enemyHealth high）；不是词条文本推定"
+  },
+  "reuse_mode": "shared"
+}

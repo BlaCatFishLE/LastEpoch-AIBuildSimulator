@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "project": "LastEpoch-BuildSimulator",
+  "phase": 1,
+  "updated_at": "2026-11-01",
+  "sources": {
+    "letools": {
+      "enabled": true,
+      "kind": "web-js-data",
+      "label": "Last Epoch Tools",
+      "base_url": "https://www.lastepochtools.com",
+      "claimed_version": "1.5.2",
+      "version_probe": {
+        "url": "https://www.lastepochtools.com/skills/",
+        "pattern": "window\\['dataVersion'\\]='version(\\d+)'"
+      },
+      "entry_pages": [
+        "https://www.lastepochtools.com/skills/",
+        "https://www.lastepochtools.com/db/",
+        "https://www.lastepochtools.com/planner/"
+      ],
+      "policy": { "min_interval": 1.0, "timeout": 30.0, "max_retries": 3, "backoff_base": 1.0 },
+      "notes": [
+        "Data payload is plain JS assignments (window.coreDB / LEAbilities / itemDB / LESkillTrees) served under /data/versionNNN/.",
+        "The version directory name and script filenames must be rediscovered from the current pages; they are not a stable API.",
+        "No Cloudflare challenge observed on 2026-11-01 for static data files."
+      ]
+    },
+    "tunklab": {
+      "enabled": true,
+      "kind": "web-js-data",
+      "label": "Tunklab",
+      "base_url": "https://lastepoch.tunklab.com",
+      "claimed_version": "1.5.2",
+      "version_probe": {
+        "url": "https://lastepoch.tunklab.com/",
+        "pattern": "1\\.5\\.2"
+      },
+      "entry_pages": [
+        "https://lastepoch.tunklab.com/",
+        "https://lastepoch.tunklab.com/skillsearch",
+        "https://lastepoch.tunklab.com/buffs",
+        "https://lastepoch.tunklab.com/ailments",
+        "https://lastepoch.tunklab.com/class/mage"
+      ],
+      "policy": { "min_interval": 1.0, "timeout": 30.0, "max_retries": 3, "backoff_base": 1.0 },
+      "notes": [
+        "Next.js (Turbopack) client bundles embed literal data modules, e.g. let a={version:'1.5.2',data:{...}};e.s([...]).",
+        "No JSON API found in initial recon; data must be extracted from the referenced JS chunks without executing them.",
+        "Chunk filenames change on every deploy and must be rediscovered from the page HTML."
+      ]
+    },
+    "game": {
+      "enabled": false,
+      "kind": "local-unity-il2cpp",
+      "label": "Local Last Epoch install",
+      "install_dir": "<game-install>",
+      "read_only": true,
+      "notes": [
+        "IL2CPP build: GameAssembly.dll + Last Epoch_Data/il2cpp_data/Metadata/global-metadata.dat.",
+        "Used only to fill concrete gaps after web sources; never modifies game files.",
+        "Enabled per-task after a gap is identified and the tool compatibility is verified."
+      ]
+    }
+  }
+}

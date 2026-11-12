@@ -1,0 +1,95 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-ignite-scaling-pool",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Ignite 玩家侧 inc 池与标签口径",
+    "en": "Ignite player-side increased pool and tag semantics"
+  },
+  "source_path": "knowledge/mechanisms/bh-ignite-scaling-pool.json",
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-scaling-pool",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-scaling-pool]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-ignite-scaling-pool 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#ailments.1",
+      "note": "Ignite damage type=Fire、tags=['DoT']。",
+      "source": "$.evidence_refs[2]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Ignite 玩家侧 inc 池与标签口径",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：ignite；伤害标签：Fire、DoT、Ailment、Elemental；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Ignite 的 increased 池 = 适用 Fire/Elemental/DoT/Ailment 的 increased damage 行 + Intelligence 属性缩放（经 bh-ignite-attribute-scaling）。Elemental 展开为 Fire/Cold/Lightning，所以 Elemental 增伤进入 Ignite；Spell 增伤不进入（点燃不是 Spell）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "collect_modifier_rows(snapshot, STAT_DAMAGE, IGNITE_TAGS, increased) + attribute 行 → inc_total。",
+      "source": "$.handler_ref.note（le_calc.ignite._ignite_scaling）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：ignite inc rows、increased_ignite_effect",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling/increased_rows"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/contributions"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_ignite_effect_total"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/scaling"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "整个 inc 池构成仍是 assumed（规则包 rule-ignite-scaling-pool）：Elemental/DoT/Ailment 之外是否还有玩家侧 increased 类别进入 Ignite（如 Fire Damage over Time 的独立词条）未穷举；当前池来自 snapshot 标签过滤，等价于『凡 tags 匹配 Fire+DoT/Ailment 的行』。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "increased ailment effect 是 legacy 数据行（phase1<=002）；当前 dataset 003 已把该词条改为『Fire Penetration with Ignite』，引擎保留 effect_rows 分支以兼容旧数据，但本案例结果为空。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

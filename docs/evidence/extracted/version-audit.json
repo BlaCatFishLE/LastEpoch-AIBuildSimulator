@@ -1,0 +1,2083 @@
+{
+  "schema": "le-release-version-audit-v1",
+  "generated_at": "2026-11-12T21:55:33Z",
+  "scope": "候选树内 tools/phase3/rules/ 规则包、knowledge/definitions/ 共享定义、tools/phase3/data/ 共享数据",
+  "method": "按依赖判断而不是按版本后缀：全树扫描代码/测试/配置/知识/文档对文件名的引用，并核对配置默认值与运行时加载点；只有确认运行时不读取且仅被历史记录引用的旧版本才删除。扫描范围排除 .git/.venv/__pycache__/data 与二进制。",
+  "decision_basis": {
+    "kept": "被配置/代码默认值/CLI/测试/知识条目引用，或登记为共享定义候选",
+    "removed": "仅被历史研究记录（已用 archive:// 标记）与已删除的旧版本测试引用；运行时不读取"
+  },
+  "rulesets": [
+    {
+      "file": "tools/phase3/rules/ruleset-bh-stage1-v1.json",
+      "ruleset_id": "bh-stage1-v1",
+      "decision": "kept",
+      "role": "legacy BH 引擎默认 ruleset（le_calc.ruleset.DEFAULT_RULESET_PATH）与 legacy CLI 默认",
+      "reason": "被代码默认值引用（ruleset.py），并被 legacy 引擎 golden 测试（test_damage/test_simulate/test_report）使用；不参与 unified case 计算（case 显式绑定 v4）。改为 v4 会改变 tick/binary/cooldown 口径并破坏这些测试，故保留并标注为 legacy。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/README.md",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+            "occurrences": 1
+          }
+        ],
+        "code": [
+          {
+            "path": "tools/phase3/src/le_calc/ruleset.py",
+            "occurrences": 2
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 67994,
+      "sha256": "798fc91fa93a76642b05bd95702b3f62b53e83350c6f46b2ddd4e4544d9ff072"
+    },
+    {
+      "file": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "ruleset_id": "bh-stage1-v4",
+      "decision": "kept",
+      "role": "当前 BH 正式规则包（config/project.json ruleset、conditional 默认 ruleset、知识条目主引用）",
+      "reason": "被配置、代码默认值、测试、知识条目与提取证据引用。",
+      "referenced_by": {
+        "config": [
+          {
+            "path": "config/project.json",
+            "occurrences": 1
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/contracts/conditional-interface.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 4
+          }
+        ],
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/bh-attribute-scaling.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-binary-system.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-black-hole-instances.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-body-component.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-body-tick-model.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cast-time.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cooldown-cdr-icr.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cooldown-charges.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-duration.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-ignite-attribute-scaling.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-ignite-core.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-ignite-damage-flow.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-ignite-duration-sources.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-ignite-heat-wave.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-ignite-inheritance.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-ignite-penetration.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-ignite-scaling-pool.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-monster-dr-integration.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-node-more-10.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-node-more-2.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-node-more-28.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-node-more-7.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-red-giant.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-skill-tree-more-nodes.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-target-scenario-conditions.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-target-side-settlement.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-weakened-reality.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/common-monster-dr.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/common-more-groups.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/common-target-resistance-penetration.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 5
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/black-hole-v3.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/definitions/black-hole-v4.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/bh-attribute-scaling.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-binary-system.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/bh-black-hole-instances.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/bh-body-component.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-body-tick-model.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cast-time.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-crescendoing-rage.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-preparation.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cooldown-cdr-icr.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cooldown-charges.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/bh-duration.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-ignite-attribute-scaling.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-ignite-core.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-ignite-damage-flow.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-ignite-duration-sources.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-ignite-heat-wave.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/bh-ignite-inheritance.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/bh-ignite-penetration.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/bh-ignite-scaling-pool.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-loop-action-policies.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-monster-dr-integration.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-node-more-10.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-node-more-2.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-node-more-28.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-node-more-7.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-red-giant.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-skill-tree-more-nodes.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-supermassive.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/bh-target-scenario-conditions.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/bh-target-side-settlement.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-weakened-reality.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/common-frequency-cooldown.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/common-increased-aggregate.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/common-ledger.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/common-monster-dr.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/common-more-groups.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/common-target-resistance-penetration.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/skills/bh-black-hole.json",
+            "occurrences": 23
+          }
+        ],
+        "scripts": [
+          {
+            "path": "scripts/check_package.py",
+            "occurrences": 1
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/README.md",
+            "occurrences": 5
+          },
+          {
+            "path": "tools/phase3/fixtures/conditional-ui/fixture_view.json",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+            "occurrences": 14
+          },
+          {
+            "path": "tools/phase3/tests/test_component_knowledge.py",
+            "occurrences": 2
+          },
+          {
+            "path": "tools/phase3/tests/test_conditional.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_conditional_recompute.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_mechanics_fixtures.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_monster_dr.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_p3r_behavior_acceptance.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_serve.py",
+            "occurrences": 1
+          }
+        ],
+        "code": [
+          {
+            "path": "tools/phase3/src/le_calc/conditional/constants.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/src/le_calc/conditional/context.py",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 84225,
+      "sha256": "82d45cdc1ccf79b46a466dfab04d516bd40849fe0fa8fc0d697ae4aae2f36a21"
+    },
+    {
+      "file": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "ruleset_id": "fr-hit-stage1-v2",
+      "decision": "kept",
+      "role": "当前 FR 正式规则包（le_calc.hit_ruleset.DEFAULT_RULESET_PATH、cli、hit 模型测试）",
+      "reason": "被代码默认值、CLI、测试与知识条目引用。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/fr-effect-ambition-gain-source.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-army-of-skin-high-health.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-blade-weaving-consume.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-chaos-flare-ignited-crit.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-enchant-weapon.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-firebrand-scope.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-frenzy-active.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-ignite-sources.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-mana-300-idols.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-rhythm-of-fire-consume.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-scorching-tide-ignited.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-effect-surge-pyroclasm.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-flame-reave.json",
+            "occurrences": 4
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-added-scaling.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-attack-speed.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-conditional-state-eval.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-cooldown-icr.json",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-critical-expected.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-dual-wield-added.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-events-weights.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-increased-pools.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-more-groups.json",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-offhand-exalted.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-rhythm-rotation.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-single-hit-chain.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-tag-matching.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-hit-target-side.json",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/evidence/extracted/fr-node-arcane-severance.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-node-dancing-flames.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-node-ember-infusion.json",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/evidence/extracted/fr-node-flame-caller.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-node-frenzied-flame.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-node-heat-wave.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-node-reflash.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-node-versatility.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/fr-skill-level-scaling.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 3
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 4
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/fr-flame-reave-v3.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/definitions/fr-flame-reave-v4.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-ambition-gain-source.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-ambition-stacks.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-army-of-skin-high-health.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-blade-weaving-consume.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-chaos-flare-ignited-crit.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-enchant-weapon.json",
+            "occurrences": 8
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-firebrand-scope.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-frenzy-active.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-haste.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-ignite-sources.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-mana-300-idols.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-rhythm-of-fire-consume.json",
+            "occurrences": 7
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-scorching-tide-ignited.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-surge-pyroclasm.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-added-scaling.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-attack-speed.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-conditional-state-eval.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-cooldown-icr.json",
+            "occurrences": 8
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-critical-expected.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-dual-wield-added.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-events-weights.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-increased-pools.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-more-groups.json",
+            "occurrences": 7
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-offhand-exalted.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-rhythm-rotation.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-single-hit-chain.json",
+            "occurrences": 9
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-tag-matching.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-target-side.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-multi-hit-return-hits.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-arcane-severance.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-dancing-flames.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-ember-infusion.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-flame-caller.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-frenzied-flame.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-heat-wave.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-precise-destruction.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-reflash.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-rolling-flames.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-versatility.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/fr-skill-level-scaling.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/item-offhand-exalted-effectiveness.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/skill-added-damage-spell-to-melee.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/skills/fr-flame-reave.json",
+            "occurrences": 15
+          }
+        ],
+        "scripts": [
+          {
+            "path": "scripts/check_package.py",
+            "occurrences": 1
+          },
+          {
+            "path": "scripts/le_commands.py",
+            "occurrences": 1
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/README.md",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_cli_hit.py",
+            "occurrences": 2
+          },
+          {
+            "path": "tools/phase3/tests/test_hit_report.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_hit_serve.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_mechanics_fixtures.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_p3r_behavior_acceptance.py",
+            "occurrences": 1
+          }
+        ],
+        "code": [
+          {
+            "path": "tools/phase3/src/le_calc/hit_ruleset.py",
+            "occurrences": 3
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 65412,
+      "sha256": "2e44e3363f348cc7ba965442e43460cde8870cd44b7f929c77d9ac1b468ce0e9"
+    },
+    {
+      "file": "tools/phase3/rules/ruleset-bh-stage1-v2.json",
+      "ruleset_id": "bh-stage1-v2",
+      "decision": "removed",
+      "role": "历史 BH 规则草案（v2）",
+      "reason": "仅被已删除的 test_ruleset_v2_draft/test_ruleset_v2b 与历史研究记录引用；运行时不读取。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "evidence_docs": [
+          {
+            "path": "docs/evidence/reverse-engineering/README.zh-CN.md",
+            "occurrences": 2
+          }
+        ]
+      },
+      "present": false,
+      "removed_sha256": "90fc0de4e008343ec82e17169ba574844931a7a0510853ee48248dbb61ff8f8b",
+      "removed_bytes": 70586
+    },
+    {
+      "file": "tools/phase3/rules/ruleset-bh-stage1-v2b.json",
+      "ruleset_id": "bh-stage1-v2b",
+      "decision": "removed",
+      "role": "历史 BH 规则草案（v2b，v2 + monster DR）",
+      "reason": "仅被已删除的 test_ruleset_v2b 与历史研究记录引用；运行时不读取。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "evidence_docs": [
+          {
+            "path": "docs/evidence/reverse-engineering/README.zh-CN.md",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": false,
+      "removed_sha256": "c0da8b19c3d0097f78e0241fe0d503b93b349f218dd19405cb4b98a3ce5d2f07",
+      "removed_bytes": 73643
+    },
+    {
+      "file": "tools/phase3/rules/ruleset-bh-stage1-v3.json",
+      "ruleset_id": "bh-stage1-v3",
+      "decision": "removed",
+      "role": "历史 BH 规则草案（v3，v2b + DR 等级 100）",
+      "reason": "仅被历史研究记录引用；运行时不读取。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "evidence_docs": [
+          {
+            "path": "docs/evidence/reverse-engineering/README.zh-CN.md",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": false,
+      "removed_sha256": "5b000a276079efd87faf9fb85c432e0049a68200f5a14ba5cff1e1e988c8654f",
+      "removed_bytes": 76361
+    },
+    {
+      "file": "tools/phase3/rules/ruleset-fr-hit-stage1-v1.json",
+      "ruleset_id": "fr-hit-stage1-v1",
+      "decision": "removed",
+      "role": "历史 FR hit 规则包第一版",
+      "reason": "仅被 docs/evidence/flame-reave 的历史研究记录引用；当前 FR 计算使用 v2，运行时不读取 v1。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "evidence_docs": [
+          {
+            "path": "docs/evidence/flame-reave/BUFF-SENSITIVITY.zh-CN.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/flame-reave/README.zh-CN.md",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": false,
+      "removed_sha256": "81078d8ffc9b612e52ab89fd1cbb2ecae8aa3c0aa6b2fe165dd269e94bfd01fb",
+      "removed_bytes": 63097
+    },
+    {
+      "file": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+      "ruleset_id": "bh-conditional-effects-v1",
+      "decision": "kept",
+      "role": "当前条件效果注册表（config/project.json conditional_registry、conditional 代码默认值）",
+      "reason": "被配置、代码、测试与知识条目引用。",
+      "referenced_by": {
+        "config": [
+          {
+            "path": "config/project.json",
+            "occurrences": 1
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/contracts/conditional-interface.md",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 4
+          }
+        ],
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/bh-cond-apex-glyph-conversion.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-conflagrate.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-crescendoing-rage.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-eternal-flames-active.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-eternal-flames-passive.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-flame-ward-fire-aura.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-idol-altar-layout-cdr.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-idol-fire-doubling.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-throne-of-ambition.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-supermassive.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/common-conditional-state-eval.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/coverage-boundaries.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 3
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/INDEX.generated.md",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/bh-baseline-profiles.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cast-time.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-apex-glyph-conversion.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-chilled-touch.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-conflagrate.json",
+            "occurrences": 7
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-craterborn.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-crescendoing-rage.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-eternal-flames-active.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-eternal-flames-passive.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-flame-ward-fire-aura.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-frozen-steel.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-idol-altar-layout-cdr.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-idol-fire-doubling.json",
+            "occurrences": 8
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-infusion.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-preparation.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-throne-of-ambition.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/bh-ignite-duration-sources.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-supermassive.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-target-scenario-conditions.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/common-conditional-state-eval.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/skills/bh-black-hole.json",
+            "occurrences": 3
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/README.md",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+            "occurrences": 5
+          },
+          {
+            "path": "tools/phase3/tests/test_conditional.py",
+            "occurrences": 2
+          }
+        ],
+        "code": [
+          {
+            "path": "tools/phase3/src/le_calc/cli.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/src/le_calc/conditional/constants.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/src/le_calc/conditional/registry.py",
+            "occurrences": 2
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 272203,
+      "sha256": "a28eca3733d0b44bf7e6a5b2fea35d0dbfa571f81be1067b71ea2f93ce842459"
+    },
+    {
+      "file": "tools/phase3/rules/shared-conditional-mechanisms-v1.json",
+      "ruleset_id": "shared-conditional-mechanisms-v1",
+      "decision": "kept",
+      "role": "共享条件机制配方表",
+      "reason": "被 knowledge/mechanisms 的 14 个条目与测试引用。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "evidence_docs": [
+          {
+            "path": "docs/evidence/void-cleave/conditional-knowledge-closeout-20261110.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/void-cleave/conditional-knowledge-closeout-20261110.zh-CN.md",
+            "occurrences": 1
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/mechanisms/buff-blood-rage-common-speed.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/buff-crescendoing-rage-main-hit-cycle.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/buff-frenzy-speed.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/buff-incisive-rage.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-ambition-stacks.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-haste.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/item-sword-catcher-frenzy-added-melee.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/item-vaions-chariot-movement-to-damage.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/skill-abyssal-retribution.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/skill-dark-duellist.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/skill-entropic-blows.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/skill-hellish-chasm-next-fire.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/skill-nether-coating.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/skill-void-supremacy.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/skill-vorpal-force.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/target-critical-vulnerability.json",
+            "occurrences": 1
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/tests/fixtures/unified-workflow/native-case.json",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_calculation_plan.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_unified_workflow.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_unified_workflow_regressions.py",
+            "occurrences": 3
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 11966,
+      "sha256": "3443e2f5bdcfe7428da13d81b81128075a0858e676a203fb2745a795fdda9ac2"
+    },
+    {
+      "file": "tools/phase3/rules/shared-conditional-node-buffs-v1.json",
+      "ruleset_id": "shared-conditional-node-buffs-v1",
+      "decision": "kept",
+      "role": "共享条件节点 Buff 配方表",
+      "reason": "被 knowledge/definitions/black-hole-v4.json（conditional_buff_library）及条件节点机制条目引用。",
+      "referenced_by": {
+        "docs": [
+          {
+            "path": "docs/contracts/player-report-ui.md",
+            "occurrences": 1
+          }
+        ],
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/bh-cond-chilled-touch.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-craterborn.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-frozen-steel.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-infusion.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-cond-preparation.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 3
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/black-hole-v4.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-chilled-touch.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-craterborn.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-frozen-steel.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-infusion.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/bh-cond-preparation.json",
+            "occurrences": 2
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 5028,
+      "sha256": "869e27406de0f3e7d41301826fbd9cf03324813e75df3bc3c07a87ac6defdfef"
+    },
+    {
+      "file": "tools/phase3/rules/attribute-conversions-v1.json",
+      "ruleset_id": "attribute-conversions-v1",
+      "decision": "kept",
+      "role": "属性转换规则（Strength→Brutality）",
+      "reason": "被 VC 共享定义（definition.attribute_conversion.rules）、机制条目与测试引用。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/attribute-strength-to-brutality.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/void-cleave-fire-main-v3.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/definitions/void-cleave-fire-main-v4.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/attribute-strength-to-brutality.json",
+            "occurrences": 1
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/tests/test_dps_semantics.py",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/tests/test_unified_skill_migration.py",
+            "occurrences": 4
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 695,
+      "sha256": "f93b9476c3afb16a1cdbe160df94d522b30934e718e51d55f3a650dddce5930c"
+    },
+    {
+      "file": "tools/phase3/rules/fr-hit-facts-v1.json",
+      "ruleset_id": "fr-hit-facts-v1",
+      "decision": "kept",
+      "role": "FR hit 模型研究事实台账（45 facts）",
+      "reason": "被 knowledge/mechanisms/fr-* 条目作为证据文档引用，是 FR 机制登记的证据入口。",
+      "referenced_by": {
+        "evidence_docs": [
+          {
+            "path": "docs/evidence/ballista/ballista-build-values-20261113.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/ballista/ballista-build-values-20261113.zh-CN.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/flame-reave/FR-MECHANICS.zh-CN.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/flame-reave/README.zh-CN.md",
+            "occurrences": 2
+          }
+        ],
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/fr-flame-reave.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/mechanisms/fr-effect-ambition-gain-source.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-army-of-skin-high-health.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-blade-weaving-consume.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-chaos-flare-ignited-crit.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-enchant-weapon.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-firebrand-scope.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-frenzy-active.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-ignite-sources.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-mana-300-idols.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-rhythm-of-fire-consume.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-scorching-tide-ignited.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/fr-effect-surge-pyroclasm.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-added-scaling.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-attack-speed.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-conditional-state-eval.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-cooldown-icr.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-critical-expected.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-dual-wield-added.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-events-weights.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-increased-pools.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-more-groups.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-offhand-exalted.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-rhythm-rotation.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-single-hit-chain.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-tag-matching.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-target-side.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-arcane-severance.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-dancing-flames.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-ember-infusion.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-flame-caller.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-frenzied-flame.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-heat-wave.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-precise-destruction.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-reflash.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-rolling-flames.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-node-versatility.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/fr-skill-level-scaling.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/skills/fr-flame-reave.json",
+            "occurrences": 6
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/README.md",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 99050,
+      "sha256": "d473c6aa70391e05721f3e5bdde9d4452ef7f47aff54aad1bbe16e01f461fc04"
+    }
+  ],
+  "definitions": [
+    {
+      "file": "knowledge/definitions/black-hole-v3.json",
+      "template_id": "bh-black-hole-v3",
+      "decision": "kept",
+      "catalog_registered": true,
+      "plan_version": "le-calculation-plan-v3",
+      "preferred": false,
+      "reason": "在 knowledge/definitions/index.json 登记为共享定义候选（不是废弃版本）；v3/v4 并存是因为 plan 版本不同（v3 → plan-v1/v2/v3 执行语义，v4 → plan-v4），由 selector 按技能/职业/标签择一。v3 文件还被测试与契约显式引用，不能按后缀删除。",
+      "referenced_by": {
+        "docs": [
+          {
+            "path": "docs/contracts/calculation-plan-v3.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/contracts/definitions-v3.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 2
+          }
+        ],
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/_index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/bh-black-hole-v3.json",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/evidence/extracted/bh-charge-schedule-multi-instance.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-dot-tick-model.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/bh-heat-wave-ignite-clock.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/coverage-boundaries.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 4
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/bh-charge-schedule-multi-instance.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/bh-dot-tick-model.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/bh-heat-wave-ignite-clock.json",
+            "occurrences": 3
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/tests/test_definition_candidates.py",
+            "occurrences": 4
+          },
+          {
+            "path": "tools/phase3/tests/test_research_onboarding_projection.py",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 20177,
+      "sha256": "e221e12300635ad12c0941f694a16da8916f764a6bdf5980bf540d3c932cab19"
+    },
+    {
+      "file": "knowledge/definitions/black-hole-v4.json",
+      "template_id": "black-hole-v4",
+      "decision": "kept",
+      "catalog_registered": true,
+      "plan_version": "le-calculation-plan-v4",
+      "preferred": true,
+      "reason": "在 knowledge/definitions/index.json 登记为共享定义候选（不是废弃版本）；v3/v4 并存是因为 plan 版本不同（v3 → plan-v1/v2/v3 执行语义，v4 → plan-v4），由 selector 按技能/职业/标签择一。v3 文件还被测试与契约显式引用，不能按后缀删除。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/_index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/coverage-boundaries.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 6
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 2
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/index.json",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 20267,
+      "sha256": "e95b2fcc67cb374ec121acb6cc6b7c5b521772a6232a846ca7ecdbb2b4949447"
+    },
+    {
+      "file": "knowledge/definitions/fr-flame-reave-v3.json",
+      "template_id": "fr-flame-reave-v3",
+      "decision": "kept",
+      "catalog_registered": true,
+      "plan_version": "le-calculation-plan-v2",
+      "preferred": false,
+      "reason": "在 knowledge/definitions/index.json 登记为共享定义候选（不是废弃版本）；v3/v4 并存是因为 plan 版本不同（v3 → plan-v1/v2/v3 执行语义，v4 → plan-v4），由 selector 按技能/职业/标签择一。v3 文件还被测试与契约显式引用，不能按后缀删除。",
+      "referenced_by": {
+        "docs": [
+          {
+            "path": "docs/contracts/calculation-plan-v2.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/contracts/definitions-v3.md",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 2
+          }
+        ],
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/_index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/coverage-boundaries.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/fr-multi-hit-return-hits.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/item-offhand-exalted-effectiveness.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/skill-added-damage-spell-to-melee.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 3
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/fr-multi-hit-return-hits.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/item-offhand-exalted-effectiveness.json",
+            "occurrences": 2
+          },
+          {
+            "path": "knowledge/mechanisms/skill-added-damage-spell-to-melee.json",
+            "occurrences": 3
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/tests/test_unified_fr_migration.py",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 33455,
+      "sha256": "23cdccdfe555f670e397dac58adfe1c4501961da3b5524fe3867ab0b2eaaa79c"
+    },
+    {
+      "file": "knowledge/definitions/fr-flame-reave-v4.json",
+      "template_id": "fr-flame-reave-v4",
+      "decision": "kept",
+      "catalog_registered": true,
+      "plan_version": "le-calculation-plan-v4",
+      "preferred": true,
+      "reason": "在 knowledge/definitions/index.json 登记为共享定义候选（不是废弃版本）；v3/v4 并存是因为 plan 版本不同（v3 → plan-v1/v2/v3 执行语义，v4 → plan-v4），由 selector 按技能/职业/标签择一。v3 文件还被测试与契约显式引用，不能按后缀删除。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/_index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/coverage-boundaries.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 3
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 2
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/index.json",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 33411,
+      "sha256": "5a2c28e4378de0a667a55485d29273c22a3fdf2f14dd709b33d4708d3211a639"
+    },
+    {
+      "file": "knowledge/definitions/void-cleave-fire-main-v3.json",
+      "template_id": "void-cleave-fire-main-v3",
+      "decision": "kept",
+      "catalog_registered": true,
+      "plan_version": "le-calculation-plan-v1",
+      "preferred": false,
+      "reason": "在 knowledge/definitions/index.json 登记为共享定义候选（不是废弃版本）；v3/v4 并存是因为 plan 版本不同（v3 → plan-v1/v2/v3 执行语义，v4 → plan-v4），由 selector 按技能/职业/标签择一。v3 文件还被测试与契约显式引用，不能按后缀删除。",
+      "referenced_by": {
+        "docs": [
+          {
+            "path": "docs/contracts/calculation-route-v1.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/contracts/definitions-v3.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 2
+          }
+        ],
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/_index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/coverage-boundaries.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 3
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/index.json",
+            "occurrences": 1
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/tests/test_definition_candidates.py",
+            "occurrences": 2
+          },
+          {
+            "path": "tools/phase3/tests/test_unified_skill_migration.py",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 35347,
+      "sha256": "ce371e28c11edd34a8648d1c4a73bd15b17388eeab85fe4ff9361a679ea05768"
+    },
+    {
+      "file": "knowledge/definitions/void-cleave-fire-main-v4.json",
+      "template_id": "void-cleave-fire-main-v4",
+      "decision": "kept",
+      "catalog_registered": true,
+      "plan_version": "le-calculation-plan-v4",
+      "preferred": true,
+      "reason": "在 knowledge/definitions/index.json 登记为共享定义候选（不是废弃版本）；v3/v4 并存是因为 plan 版本不同（v3 → plan-v1/v2/v3 执行语义，v4 → plan-v4），由 selector 按技能/职业/标签择一。v3 文件还被测试与契约显式引用，不能按后缀删除。",
+      "referenced_by": {
+        "docs": [
+          {
+            "path": "docs/contracts/calculation-plan-v4.md",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 2
+          }
+        ],
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/_index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/coverage-boundaries.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 3
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/definitions/index.json",
+            "occurrences": 1
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 35520,
+      "sha256": "5a87309095bb6d326599f00687512cb6aac774bb545c2812c7a09cbeb61798a5"
+    },
+    {
+      "file": "knowledge/definitions/ballista-armed-construction-v4.json",
+      "template_id": "ballista-armed-construction-v4",
+      "decision": "kept",
+      "catalog_registered": true,
+      "plan_version": "le-calculation-plan-v4",
+      "preferred": false,
+      "reason": "在 knowledge/definitions/index.json 登记为共享定义候选（不是废弃版本）；v3/v4 并存是因为 plan 版本不同（v3 → plan-v1/v2/v3 执行语义，v4 → plan-v4），由 selector 按技能/职业/标签择一。v3 文件还被测试与契约显式引用，不能按后缀删除。",
+      "referenced_by": {
+        "evidence_docs": [
+          {
+            "path": "docs/evidence/ballista/ballista-armed-construction-run-20261113.json",
+            "occurrences": 1
+          }
+        ],
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/_index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/coverage-boundaries.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/mechanisms.md",
+            "occurrences": 2
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/INDEX.generated.md",
+            "occurrences": 9
+          },
+          {
+            "path": "knowledge/definitions/README.md",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/definitions/index.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/ballista-death-explosion.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/ballista-dexterity-frequency-and-increased.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/ballista-explosion-damage-composition.json",
+            "occurrences": 6
+          },
+          {
+            "path": "knowledge/mechanisms/ballista-potion-construction-window.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/ballista-summon-limit-lifetime.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/ballista-trap-triggered-summon.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/minion-attribute-scaling-dexterity.json",
+            "occurrences": 5
+          },
+          {
+            "path": "knowledge/mechanisms/minion-explicit-owner-stat-transfer.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/minion-owner-stat-isolation.json",
+            "occurrences": 3
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 27110,
+      "sha256": "1611b8a0f4975d7c8f3509f84868ae922b3ad62ae7e34aecfb7f6f30ec1c16d5"
+    }
+  ],
+  "shared_data_files": [
+    {
+      "file": "tools/phase3/data/monster_dr.json",
+      "decision": "kept",
+      "reason": "怪物等级减伤表；被 le_calc.monster_dr 运行时读取，并被规则包与知识条目引用。",
+      "referenced_by": {
+        "extracted_evidence": [
+          {
+            "path": "docs/evidence/extracted/common-monster-dr.json",
+            "occurrences": 2
+          },
+          {
+            "path": "docs/evidence/extracted/version-audit.json",
+            "occurrences": 1
+          }
+        ],
+        "evidence_docs": [
+          {
+            "path": "docs/evidence/reverse-engineering/README.zh-CN.md",
+            "occurrences": 1
+          }
+        ],
+        "knowledge": [
+          {
+            "path": "knowledge/mechanisms/bh-monster-dr-integration.json",
+            "occurrences": 1
+          },
+          {
+            "path": "knowledge/mechanisms/common-monster-dr.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/fr-hit-target-side.json",
+            "occurrences": 3
+          },
+          {
+            "path": "knowledge/skills/bh-black-hole.json",
+            "occurrences": 1
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/README.md",
+            "occurrences": 1
+          },
+          {
+            "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+            "occurrences": 5
+          },
+          {
+            "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+            "occurrences": 3
+          }
+        ],
+        "code": [
+          {
+            "path": "tools/phase3/src/le_calc/monster_dr.py",
+            "occurrences": 2
+          }
+        ]
+      },
+      "present": true,
+      "bytes": 2681,
+      "sha256": "699ecc39efba5094e4b6770583e047c7faf11010cc7c9219673afd68253a6d4d"
+    }
+  ],
+  "internal_handoff_indexes": [
+    {
+      "file": "knowledge/mechanisms/_INDEX-bh.md",
+      "decision": "removed",
+      "removed_sha256": "5c20ae6e32d00c5efe28816736397934a8b0334768f6c90954c135ed6026cd88",
+      "reason": "子代理人工维护的内部交接索引（含任务/评审流程语），已被 knowledge/INDEX.generated.md、docs/mechanisms.md 与 docs/evidence/extracted/ 取代；其技术内容保留在 skill 模板 unsupported、共享定义 limitations/coverage 与 docs/evidence/extracted/coverage-boundaries.json。"
+    },
+    {
+      "file": "knowledge/mechanisms/_INDEX-fr.md",
+      "decision": "removed",
+      "removed_sha256": "51935b6d4a433fd694920375d38fa32b766001df40c9e168b7ceb1b29fbf6541",
+      "reason": "同上（FR 侧）。"
+    }
+  ],
+  "summary": {
+    "rulesets_kept": 8,
+    "rulesets_removed": 4,
+    "definitions_kept": 7,
+    "definitions_removed": 0,
+    "note": "旧版本删除后，公开树内规则包/定义的文件名引用只出现在历史研究记录的 archive:// 标记中；当前计算入口（config/project.json、case.json、知识 rule_ref）全部指向保留版本。"
+  },
+  "release_snapshot": {
+    "snapshot_id": "public-snapshot-2026-11-13T0523+0800",
+    "cut_at_local": "2026-11-13T05:23+08:00",
+    "cut_at_utc": "2026-11-12T21:23Z",
+    "export_scope": "候选树 .scratch/release/public 的导出快照：含 knowledge/、tools/phase3/（含 rules）、docs/（含 contracts 与 evidence，不含 screenshots）、scripts/、config/ 与公开文档；不含 examples/（仅 _template）、reports/、data/builds/、data/raw/、历史文档；dataset 由 scripts/fetch_dataset.ps1 获取。",
+    "post_snapshot_changes": "导出后作者仓库仍有后续工作（例如 2026-11-13 05:24–05:30 的 Ballista 修复会话，修改了定义/知识/证据/代码）。这些改动不在本快照内，另行发布；本快照内 Ballista 相关代码、知识、证据彼此自洽，支持范围按 partial 声明，不构成完整能力声明。",
+    "note": "本审计的版本保留/删除结论只针对该快照内文件；快照后的改动不改变这些结论。",
+    "snapshot_checks": {
+      "knowledge_rebuild": "OK（126 条目 / 130 内容文件）",
+      "knowledge_test_suite": "PASS 91 tests, skipped 0",
+      "json_validity": "knowledge/rules/docs/evidence 范围 279 个 JSON 全部合法",
+      "bare_author_local_refs_in_knowledge_and_rules": 0
+    }
+  }
+}

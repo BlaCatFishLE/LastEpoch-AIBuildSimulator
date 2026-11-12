@@ -1,0 +1,379 @@
+{
+  "dataset_id": "phase1-dataset-003",
+  "records": {
+    "skill:letools:LEAbilities.abilityList:ba1574": {
+      "entity": {
+        "entity_id": "skill:letools:LEAbilities.abilityList:ba1574",
+        "kind": "skill",
+        "canonical_name": "Ballista",
+        "record_status": "active",
+        "primary_source": "letools",
+        "extensions": "{\"internalName\": \"summonBallista\", \"index\": 379, \"abilitySprite\": \"a-r-351\", \"skillTreeConversionDamageTags\": 0, \"fakeTags\": 8192, \"minionTagsDisplay\": 2049, \"areaTagDisplay\": 0, \"as\": 1.8333375, \"useDelay\": 0.15, \"speedScaler\": 54, \"speedMultiplier\": 1, \"maxCharges\": 0, \"chargesGainedPerSecond\": 0, \"minimumManaCost\": 0, \"attributeScaling\": {\"3\": [{\"property\": 0, \"specialTag\": 0, \"tags\": 8192, \"addedValue\": 0, \"increasedValue\": 0.04, \"moreValues\": []}, {\"property\": 2, \"specialTag\": 0, \"tags\": 8192, \"addedValue\": 0, \"increasedValue\": 0.01, \"moreValues\": []}]}, \"levelScaling\": [{\"property\": 7, \"specialTag\": 0, \"tags\": 8192, \"addedValue\": 75, \"increasedValue\": 0, \"moreValues\": []}], \"comboAbilities\": [\"ba1574_bblsc7_1\"], \"sharedCooldownAbilities\": [], \"flags\": {\"instantCastForPlayer\": false, \"stopMovementOnKeyRelease\": false, \"channelled\": false, \"transform\": false, \"companion\": false, \"transformHasMovementSkill\": false, \"countsAsMovementAbility\": false, \"movementDuringUse\": 0, \"comboAbility\": true, \"comboTimeLimit\": 0, \"traversalSkill\": false}, \"altTextKey\": \"Abilities.Ability_SummonBallista_AltText\", \"skillLoreKey\": null, \"skill_type_basis\": {\"isPlayerAbility\": true, \"channelled\": false, \"companion\": false, \"transform\": false, \"traversalSkill\": false, \"countsAsMovementAbility\": false}}",
+        "created_at": "2026-11-04T14:33:07+00:00"
+      },
+      "effects": []
+    },
+    "skill:letools:LEAbilities.abilityList:entity_bbl7_57": {
+      "entity": {
+        "entity_id": "skill:letools:LEAbilities.abilityList:entity_bbl7_57",
+        "kind": "skill",
+        "canonical_name": "ballistaBolt",
+        "record_status": "active",
+        "primary_source": "letools",
+        "extensions": "{\"internalName\": \"ballistaBolt\", \"index\": 380, \"abilitySprite\": \"a-r-327\", \"skillTreeConversionDamageTags\": 0, \"fakeTags\": 0, \"minionTagsDisplay\": 0, \"areaTagDisplay\": 0, \"as\": 0.47826198, \"useDelay\": 1.6, \"speedScaler\": 2, \"speedMultiplier\": 1.5, \"maxCharges\": 0, \"chargesGainedPerSecond\": 0, \"minimumManaCost\": 0, \"attributeScaling\": {\"3\": [{\"property\": 2, \"specialTag\": 0, \"tags\": 0, \"addedValue\": 0, \"increasedValue\": 0.05, \"moreValues\": []}]}, \"levelScaling\": [], \"comboAbilities\": [], \"sharedCooldownAbilities\": [], \"flags\": {\"instantCastForPlayer\": false, \"stopMovementOnKeyRelease\": false, \"channelled\": false, \"transform\": false, \"companion\": false, \"transformHasMovementSkill\": false, \"countsAsMovementAbility\": false, \"movementDuringUse\": 0, \"comboAbility\": false, \"comboTimeLimit\": 0, \"traversalSkill\": false}, \"altTextKey\": null, \"skillLoreKey\": null, \"skill_type_basis\": {\"isPlayerAbility\": false, \"channelled\": false, \"companion\": false, \"transform\": false, \"traversalSkill\": false, \"countsAsMovementAbility\": false}}",
+        "created_at": "2026-11-04T14:33:07+00:00"
+      },
+      "effects": []
+    },
+    "skill:letools:LEAbilities.abilityList:ba1574_bblsc7_1": {
+      "entity": {
+        "entity_id": "skill:letools:LEAbilities.abilityList:ba1574_bblsc7_1",
+        "kind": "skill",
+        "canonical_name": "Ballista Shot",
+        "record_status": "active",
+        "primary_source": "letools",
+        "extensions": "{\"internalName\": \"ballistaShotCommand\", \"index\": 929, \"abilitySprite\": \"a-r-327\", \"skillTreeConversionDamageTags\": 0, \"fakeTags\": 2049, \"minionTagsDisplay\": 0, \"areaTagDisplay\": 0, \"as\": 1.8333375, \"useDelay\": 0.3, \"speedScaler\": 2, \"speedMultiplier\": 1.5, \"maxCharges\": 0, \"chargesGainedPerSecond\": 0, \"minimumManaCost\": 0, \"attributeScaling\": {\"3\": [{\"property\": 2, \"specialTag\": 0, \"tags\": 0, \"addedValue\": 0, \"increasedValue\": 0.05, \"moreValues\": []}]}, \"levelScaling\": [], \"comboAbilities\": [], \"sharedCooldownAbilities\": [], \"flags\": {\"instantCastForPlayer\": false, \"stopMovementOnKeyRelease\": false, \"channelled\": false, \"transform\": false, \"companion\": false, \"transformHasMovementSkill\": false, \"countsAsMovementAbility\": false, \"movementDuringUse\": 0, \"comboAbility\": false, \"comboTimeLimit\": 0, \"traversalSkill\": false}, \"altTextKey\": null, \"skillLoreKey\": null, \"skill_type_basis\": {\"isPlayerAbility\": false, \"channelled\": false, \"companion\": false, \"transform\": false, \"traversalSkill\": false, \"countsAsMovementAbility\": false}}",
+        "created_at": "2026-11-04T14:33:07+00:00"
+      },
+      "effects": []
+    },
+    "skill:letools:LEAbilities.abilityList:ability_gen517": {
+      "entity": {
+        "entity_id": "skill:letools:LEAbilities.abilityList:ability_gen517",
+        "kind": "skill",
+        "canonical_name": "ballistaShot",
+        "record_status": "active",
+        "primary_source": "letools",
+        "extensions": "{\"internalName\": \"ballistaShot\", \"index\": 928, \"abilitySprite\": \"a-r-327\", \"skillTreeConversionDamageTags\": 0, \"fakeTags\": 0, \"minionTagsDisplay\": 0, \"areaTagDisplay\": 0, \"as\": 2.200005, \"useDelay\": 0.25, \"speedScaler\": 2, \"speedMultiplier\": 1.5, \"maxCharges\": 0, \"chargesGainedPerSecond\": 0, \"minimumManaCost\": 0, \"attributeScaling\": {\"3\": [{\"property\": 2, \"specialTag\": 0, \"tags\": 0, \"addedValue\": 0, \"increasedValue\": 0.05, \"moreValues\": []}]}, \"levelScaling\": [], \"comboAbilities\": [], \"sharedCooldownAbilities\": [], \"flags\": {\"instantCastForPlayer\": false, \"stopMovementOnKeyRelease\": false, \"channelled\": false, \"transform\": false, \"companion\": false, \"transformHasMovementSkill\": false, \"countsAsMovementAbility\": false, \"movementDuringUse\": 0, \"comboAbility\": false, \"comboTimeLimit\": 0, \"traversalSkill\": false}, \"altTextKey\": null, \"skillLoreKey\": null, \"skill_type_basis\": {\"isPlayerAbility\": false, \"channelled\": false, \"companion\": false, \"transform\": false, \"traversalSkill\": false, \"countsAsMovementAbility\": false}}",
+        "created_at": "2026-11-04T14:33:08+00:00"
+      },
+      "effects": []
+    },
+    "minion:letools:LEAbilities.entityList:100053": {
+      "entity": {
+        "entity_id": "minion:letools:LEAbilities.entityList:100053",
+        "kind": "minion",
+        "canonical_name": "Ballista",
+        "record_status": "active",
+        "primary_source": "letools",
+        "extensions": "{\"actor_nameKey\": \"Actors.Actor_Name_Ballista\", \"actor_data\": {\"id\": 433532438, \"genId\": \"rogue_ballista\", \"nameKey\": \"Actors.Actor_Name_Ballista\"}, \"remaining_keys\": {\"abilityList\": {\"abilities\": [\"entity_bbl7_57\"]}, \"abilityMutators\": {\"fi9\": {\"increasedDamage\": 0, \"increasedCastSpeed\": 0, \"addedCritChance\": 0, \"increasedDuration\": 0, \"increasedProjectileSpeed\": 0, \"increasedFreezeRate\": 0, \"addedFreezeRate\": 0, \"increasedRadius\": 0.2, \"extraProjectiles\": 0, \"pierceChance\": 0}}, \"abilityRangeList\": {\"ranges\": [{\"minRange\": 0, \"engageRange\": 13, \"maxRange\": 20, \"persuitRange\": 40}]}, \"castSpeedManager\": {\"overrides\": [{\"ability\": \"entity_fm8_2\", \"useDelay\": 1.1, \"useDuration\": 2, \"as\": 0.55000126}]}, \"timeUntilDeath\": null, \"threat\": 0.001, \"abilityOnDeath\": null, \"retaliateWhenParentHit\": null, \"id\": 100053}}",
+        "created_at": "2026-11-04T14:33:08+00:00"
+      },
+      "effects": []
+    },
+    "node:letools:ba1574:2": [
+      {
+        "effect_id": "node:letools:ba1574:2#stat#0",
+        "owner_entity_id": "node:letools:ba1574:2",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Mana Cost",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_2_0_Stat\", \"value\": \"-25%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-542\", \"property\": 8, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_2_0_Stat\", \"stat_name\": \"Mana Cost\", \"value_text\": \"-25%\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:2#stat#1",
+        "owner_entity_id": "node:letools:ba1574:2",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Duration (seconds)",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_2_1_Stat\", \"value\": \"-20%\", \"noScaling\": false, \"downside\": true, \"sprite\": \"a-r-555\", \"property\": 5093, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_2_1_Stat\", \"stat_name\": \"Duration (seconds)\", \"value_text\": \"-20%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:5": [
+      {
+        "effect_id": "node:letools:ba1574:5#stat#0",
+        "owner_entity_id": "node:letools:ba1574:5",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Ballista Explodes",
+        "parse_status": "unparsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_5_0_Stat\", \"value\": null, \"noScaling\": true, \"downside\": false, \"sprite\": \"a-r-95\", \"property\": 5078, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_5_0_Stat\", \"stat_name\": \"Ballista Explodes\", \"value_text\": null}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:5#stat#1",
+        "owner_entity_id": "node:letools:ba1574:5",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "More Damage per Dexterity",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_5_1_Stat\", \"value\": \"+1%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-548\", \"property\": 0, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_5_1_Stat\", \"stat_name\": \"More Damage per Dexterity\", \"value_text\": \"+1%\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:5#stat#2",
+        "owner_entity_id": "node:letools:ba1574:5",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Increased Area per Dexterity",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_5_2_Stat\", \"value\": \"+1%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-293\", \"property\": 5015, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_5_2_Stat\", \"stat_name\": \"Increased Area per Dexterity\", \"value_text\": \"+1%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:10": [
+      {
+        "effect_id": "node:letools:ba1574:10#stat#0",
+        "owner_entity_id": "node:letools:ba1574:10",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Fire Damage",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_10_0_Stat\", \"value\": \"+3\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-575\", \"property\": 5037, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_10_0_Stat\", \"stat_name\": \"Fire Damage\", \"value_text\": \"+3\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:10#stat#1",
+        "owner_entity_id": "node:letools:ba1574:10",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Ignite Chance",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_10_1_Stat\", \"value\": \"+10%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-1\", \"property\": 10001, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_10_1_Stat\", \"stat_name\": \"Ignite Chance\", \"value_text\": \"+10%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:11": [
+      {
+        "effect_id": "node:letools:ba1574:11#stat#0",
+        "owner_entity_id": "node:letools:ba1574:11",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Attack Speed",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_11_0_Stat\", \"value\": \"+6%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-556\", \"property\": 2, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_11_0_Stat\", \"stat_name\": \"Attack Speed\", \"value_text\": \"+6%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:12": [
+      {
+        "effect_id": "node:letools:ba1574:12#stat#0",
+        "owner_entity_id": "node:letools:ba1574:12",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Exploding Bolts",
+        "parse_status": "unparsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_12_0_Stat\", \"value\": null, \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-95\", \"property\": 5078, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_12_0_Stat\", \"stat_name\": \"Exploding Bolts\", \"value_text\": null}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:12#stat#1",
+        "owner_entity_id": "node:letools:ba1574:12",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Less Attack Speed",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_12_1_Stat\", \"value\": \"-40%\", \"noScaling\": false, \"downside\": true, \"sprite\": \"a-r-556\", \"property\": 2, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_12_1_Stat\", \"stat_name\": \"Less Attack Speed\", \"value_text\": \"-40%\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "skill_bonus:letools:planner.partialSkillBonuses:ba1574#mods#12#explodeFire",
+        "owner_entity_id": "node:letools:ba1574:12",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "config_mod",
+        "raw_text": "{\"explodeFire\": true}",
+        "parse_status": "parsed",
+        "extensions": "{\"node_key\": \"12\", \"node_entity_id\": \"node:letools:ba1574:12\", \"tree_id\": \"ba1574\", \"source_section\": \"mods\", \"flag\": \"explodeFire\", \"value\": true}",
+        "effect_scope": "skill_bonus_config"
+      }
+    ],
+    "node:letools:ba1574:14": [
+      {
+        "effect_id": "node:letools:ba1574:14#stat#0",
+        "owner_entity_id": "node:letools:ba1574:14",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Damage",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_14_0_Stat\", \"value\": \"+40%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-548\", \"property\": 0, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_14_0_Stat\", \"stat_name\": \"Damage\", \"value_text\": \"+40%\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:14#stat#1",
+        "owner_entity_id": "node:letools:ba1574:14",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "More Attack Speed",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_14_1_Stat\", \"value\": \"+40%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-556\", \"property\": 2, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_14_1_Stat\", \"stat_name\": \"More Attack Speed\", \"value_text\": \"+40%\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:14#stat#2",
+        "owner_entity_id": "node:letools:ba1574:14",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Duration (seconds)",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_14_2_Stat\", \"value\": \"-25%\", \"noScaling\": false, \"downside\": true, \"sprite\": \"a-r-555\", \"property\": 5093, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_14_2_Stat\", \"stat_name\": \"Duration (seconds)\", \"value_text\": \"-25%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:15": [
+      {
+        "effect_id": "node:letools:ba1574:15#stat#0",
+        "owner_entity_id": "node:letools:ba1574:15",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Health",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_15_0_Stat\", \"value\": \"+25%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-541\", \"property\": 7, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_15_0_Stat\", \"stat_name\": \"Health\", \"value_text\": \"+25%\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:15#stat#1",
+        "owner_entity_id": "node:letools:ba1574:15",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Duration",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_15_1_Stat\", \"value\": \"+15%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-555\", \"property\": 5093, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_15_1_Stat\", \"stat_name\": \"Duration\", \"value_text\": \"+15%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:18": [
+      {
+        "effect_id": "node:letools:ba1574:18#stat#0",
+        "owner_entity_id": "node:letools:ba1574:18",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Placement Speed per Dexterity",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_18_0_Stat\", \"value\": \"+1%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-351\", \"property\": 54, \"tags\": 0, \"overrideSprite\": true}, \"stat_name_key\": \"Skills.Skill_ba1574_18_0_Stat\", \"stat_name\": \"Placement Speed per Dexterity\", \"value_text\": \"+1%\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:18#stat#1",
+        "owner_entity_id": "node:letools:ba1574:18",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Attack Speed per 5 Dexterity",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_18_1_Stat\", \"value\": \"+1%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-556\", \"property\": 2, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_18_1_Stat\", \"stat_name\": \"Attack Speed per 5 Dexterity\", \"value_text\": \"+1%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:22": [
+      {
+        "effect_id": "node:letools:ba1574:22#stat#0",
+        "owner_entity_id": "node:letools:ba1574:22",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Damage Stat Ratio",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_22_0_Stat\", \"value\": \"+25%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-548\", \"property\": 0, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_22_0_Stat\", \"stat_name\": \"Damage Stat Ratio\", \"value_text\": \"+25%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:23": [
+      {
+        "effect_id": "node:letools:ba1574:23#stat#0",
+        "owner_entity_id": "node:letools:ba1574:23",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Damage",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_23_0_Stat\", \"value\": \"+12%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-548\", \"property\": 0, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_23_0_Stat\", \"stat_name\": \"Damage\", \"value_text\": \"+12%\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:23#stat#1",
+        "owner_entity_id": "node:letools:ba1574:23",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Less Attack Speed",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_23_1_Stat\", \"value\": \"-5%\", \"noScaling\": false, \"downside\": true, \"sprite\": \"a-r-556\", \"property\": 2, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_23_1_Stat\", \"stat_name\": \"Less Attack Speed\", \"value_text\": \"-5%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:25": [
+      {
+        "effect_id": "node:letools:ba1574:25#stat#0",
+        "owner_entity_id": "node:letools:ba1574:25",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Damage",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_25_0_Stat\", \"value\": \"+15%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-548\", \"property\": 0, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_25_0_Stat\", \"stat_name\": \"Damage\", \"value_text\": \"+15%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:26": [
+      {
+        "effect_id": "node:letools:ba1574:26#stat#0",
+        "owner_entity_id": "node:letools:ba1574:26",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Base Crit Chance",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_26_0_Stat\", \"value\": \"+3%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-544\", \"property\": 5007, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_26_0_Stat\", \"stat_name\": \"Base Crit Chance\", \"value_text\": \"+3%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:27": [
+      {
+        "effect_id": "node:letools:ba1574:27#stat#0",
+        "owner_entity_id": "node:letools:ba1574:27",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Critical Chance Stat Ratio",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_27_0_Stat\", \"value\": \"+25%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-544\", \"property\": 4, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_27_0_Stat\", \"stat_name\": \"Critical Chance Stat Ratio\", \"value_text\": \"+25%\"}",
+        "effect_scope": null
+      },
+      {
+        "effect_id": "node:letools:ba1574:27#stat#1",
+        "owner_entity_id": "node:letools:ba1574:27",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Critical Strike Multiplier Stat Ratio",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_27_1_Stat\", \"value\": \"+25%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-539\", \"property\": 5, \"tags\": 0, \"overrideSprite\": false}, \"stat_name_key\": \"Skills.Skill_ba1574_27_1_Stat\", \"stat_name\": \"Critical Strike Multiplier Stat Ratio\", \"value_text\": \"+25%\"}",
+        "effect_scope": null
+      }
+    ],
+    "node:letools:ba1574:31": [
+      {
+        "effect_id": "node:letools:ba1574:31#stat#0",
+        "owner_entity_id": "node:letools:ba1574:31",
+        "owner_component_id": null,
+        "source_entity_id": null,
+        "effect_category": "stat_mod",
+        "raw_text": "Potion Drop Chance Per Second",
+        "parse_status": "parsed",
+        "extensions": "{\"stat\": {\"statNameKey\": \"Skills.Skill_ba1574_31_0_Stat\", \"value\": \"10%\", \"noScaling\": false, \"downside\": false, \"sprite\": \"a-r-630\", \"property\": 49, \"tags\": 0, \"overrideSprite\": true}, \"stat_name_key\": \"Skills.Skill_ba1574_31_0_Stat\", \"stat_name\": \"Potion Drop Chance Per Second\", \"value_text\": \"10%\"}",
+        "effect_scope": null
+      }
+    ]
+  }
+}

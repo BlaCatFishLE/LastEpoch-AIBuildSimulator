@@ -1,0 +1,80 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-charge-schedule-multi-instance",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Black Hole 充能调度（charges/recharge/CDR/ICR/flat）与多实例并发",
+    "en": "Black Hole charge scheduling and concurrent instances"
+  },
+  "source_path": "knowledge/mechanisms/bh-charge-schedule-multi-instance.json",
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "旧 BH 计算器与 ruleset-bh-stage1-v4 仅作迁移证据；生产路径为 plan-v3。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "plan-v3 schedule.charges/action_policies",
+    "path": "knowledge/definitions/black-hole-v3.json",
+    "locator": "#/definition/rules/charge_schedule",
+    "verification": {
+      "status": "verified_locator",
+      "checked_against": "knowledge/definitions/black-hole-v3.json#/definition/rules/charge_schedule",
+      "note": "ref 不是规则 ID（描述性引用）；已按 locator 在该候选树文件内定位"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#abilities bh2",
+      "note": "maxCharges=1、chargesGainedPerSecond=0.07143；Recurrence +60%、Endless Maw +2s",
+      "source": "$.evidence_refs[0]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Black Hole 充能调度（charges/recharge/CDR/ICR/flat）与多实例并发",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency；条件 code：none；必要节点：bh2:30",
+      "source": "$.applicability"
+    },
+    {
+      "text": "max charges 2；effective_recharge=(base+flat)*(1-CDR)/(1+ICR)；eager 允许重叠，patient 等旧黑洞消失。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "聚合操作=frequency；叠层策略=none；顺序/汇总=同一时间仅一个恢复计时器；max charges 仅起手爆发；more 分组依据=n/a",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "充能顺序恢复；eager/patient 两策略；窗口与最大并发采样",
+      "source": "$.handler_ref.note（le_calc.plan_executor_v3._charge_loop/_charge_parameters）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：base recharge / flat、CDR / ICR、max charges",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/dps-step4-bh-2/result.json"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "法力与整数事件：法力消耗/恢复未建模；charge 连续恢复按解析式。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

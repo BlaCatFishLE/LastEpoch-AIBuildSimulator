@@ -1,0 +1,178 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-ignite-penetration",
+  "revision": 2,
+  "title": {
+    "zh": "Ignite 专属火穿与 DoT 穿透",
+    "en": "Ignite-specific fire penetration and DoT penetration"
+  },
+  "aliases": [
+    "Fire Penetration with Ignite",
+    "点燃火穿",
+    "fire pen",
+    "penetration_with_ignite",
+    "ailment penetration",
+    "穿透作用于 DoT"
+  ],
+  "selectors": [
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "penetration",
+        "penetration_with_ignite"
+      ]
+    },
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ignite",
+      "target_side"
+    ],
+    "tags": [
+      "Fire",
+      "DoT",
+      "Ailment"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Ignite 的火焰穿透 = 玩家火焰穿透 + 『Fire Penetration with Ignite』（点燃专属，只作用于 Ignite）+ 旧 ailment-effect 折算行；组合后允许把有效抗性压到 0 以下。BH 本体不吃 Ignite 专属那部分。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-fire-penetration-with-ignite",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-fire-penetration-with-ignite]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "fire pen rows",
+      "source": "current:matched_instances",
+      "unit": "fraction",
+      "note": "玩家火焰穿透合计（derived 行有来源账）。"
+    },
+    {
+      "parameter": "pen with ignite rows",
+      "source": "current:matched_instances",
+      "unit": "fraction",
+      "note": "装备『Fire Penetration with Ignite』行。"
+    },
+    {
+      "parameter": "ignite penetration total",
+      "source": "current:matched_instances",
+      "note": "运行产物：Ignite 穿透行与合计（三组来源分开列示）。"
+    },
+    {
+      "parameter": "penetration_applies_to",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/target_side/penetration_applies_to",
+      "note": "body/ignite 分流；Ignite 必须吃火穿。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ignite",
+    "symbol": "_ignite_scaling",
+    "note": "pen_total = Σ(penetration rows) + Σ(penetration_with_ignite rows) + Σ(ailment_effect rows)；由 _ignite_target 与通用穿透公式结算。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "user_rule",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-fire-penetration-with-ignite]",
+      "note": "用户 2026-11-04：该词条是 Fire Penetration with Ignite（此前导入口径有误）。"
+    },
+    {
+      "kind": "dataset",
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#stats/propertyList:43",
+      "note": "specialTag 显示映射：property 43 + specialTag 1 = Fire Penetration with Ignite。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json#/findings/ignite_ailment_effect",
+      "note": "Ignite additionalPenetrationDamageType=Fire；increased effect of ailments → 额外火穿。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/penetration",
+      "note": "当前 run 的 Ignite 穿透三组行。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "Fire Penetration with Ignite 的索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/fire_penetration_total",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/penetration_with_ignite_total",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/penetration",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_single_stack_core",
+    "tools/phase3/tests/test_stats.py::SnapshotTests::test_weapon_penetration_melee_and_minion_exclusions",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.ignite_total]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-target-resistance-penetration",
+      "requirement": "穿透折进有效抗性；允许负抗性。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#_ignite_target"
+    },
+    {
+      "with": "bh-target-side-settlement",
+      "requirement": "body 用 ruleset.target_side 的 body 策略（不含 Ignite 专属词条），Ignite 用 ignite 策略。",
+      "evidence_locator": "tools/phase3/src/le_calc/damage.py#_target_multiplier"
+    },
+    {
+      "with": "bh-ignite-scaling-pool",
+      "requirement": "Fire Penetration with Ignite 不进 inc 池；它是穿透而非增伤乘区。",
+      "evidence_locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-scaling-pool]"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-fire-penetration-with-ignite]",
+      "data/releases/phase1-dataset-003/data.sqlite#stats/propertyList:43",
+      "docs/evidence/reverse-engineering/code-findings-1.5.3-round1.json#/findings/ignite_ailment_effect",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/penetration"
+    ],
+    "open_questions": [
+      "『increased effect of ailments』折算成穿透的系数在代码层只确认了枚举路径（additionalPenetrationDamageType），精确公式未逐行解出；本案例该行已改为专属词条，effect_rows 为空，不影响数值。",
+      "Ignite 专属火穿与通用火穿在游戏内是同一穿透池还是两个独立因子叠加：当前按相加处理（0 抗性时等价），非 0 抗性下未验证。"
+    ],
+    "requery_when": [
+      "出现非 0 火抗目标时",
+      "旧 dataset 兼容路径重新启用时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

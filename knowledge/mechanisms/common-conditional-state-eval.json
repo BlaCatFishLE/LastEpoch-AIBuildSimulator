@@ -1,0 +1,148 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "common-conditional-state-eval",
+  "revision": 2,
+  "title": {
+    "zh": "条件状态求值（条件效果通道）",
+    "en": "Conditional state evaluation (conditional-effect channel)"
+  },
+  "aliases": [
+    "conditional evaluation",
+    "条件求值",
+    "场景状态",
+    "fixed_conditions",
+    "条件重算",
+    "conditional recompute"
+  ],
+  "selectors": [
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "common-conditional-state-eval",
+        "bh-baseline-profiles"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "conditional",
+      "condition_state"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "把场景 states/effects（固定条件估算）求值成「已满足/未满足/未知」，并只对已映射的效果生成重算提案；不模拟获得/维持状态的操作成本。当前仅 BH 案例接入（FR 仍是 hit_buffs 独立筛查）。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "条件求值语义由注册表 effects[].conditions/control 与场景契约定义，没有单条规则 ID；注册表 tools/phase3/rules/conditional-effects-bh-stage1-v1.json 是权威源。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "scenario states",
+      "source": "current:matched_instances",
+      "note": "条件状态声明（目标/玩家/派生 auto.*）；由 registry.shared_states 定义默认与边界。"
+    },
+    {
+      "parameter": "scenario effects",
+      "source": "current:matched_instances",
+      "note": "逐效果 enabled/stacks；由 registry.effects[].control 定义控制类型。"
+    },
+    {
+      "parameter": "baseline_profile",
+      "source": "current:matched_instances",
+      "note": "legacy_single_skill / build_base 两个基线口径之一。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.conditional.evaluate",
+    "symbol": "evaluate_scenario",
+    "note": "求值主入口：evaluate_effect/condition_results/_modifier_results；场景规范化在 le_calc.conditional.scenario.normalize_scenario/validate_scenario；重算在 le_calc.conditional.recompute.recompute_scenario。"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "docs/contracts/conditional-interface.md",
+      "note": "条件 Buff 配置阶段接口契约（注册表/场景/求值状态枚举）。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/contracts/calc-channel.md",
+      "note": "条件重算通道契约。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states",
+      "note": "当前 run 的逐效果应用状态（applied/skipped/not_selected 及原因）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/conditional/evaluation_summary",
+      "note": "注册 17、检查对象 515、候选 23、相关 10 的汇总。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/states",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/effects",
+      "note": "迁移前案例参数定位，仅作证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://examples/black-hole/scenario/conditional-scenario.json#/baseline_profile",
+      "note": "迁移前案例参数定位，仅作证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_conditional.py::SyntheticEvaluationTests::test_default_statuses",
+    "tools/phase3/tests/test_conditional.py::SyntheticEvaluationTests::test_selected_statuses",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeBaselineTests::test_baseline_single_equals_legacy_within_1e9",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeChannelSupportTests::test_covers_every_registered_effect",
+    "tools/phase3/tests/test_conditional_recompute.py::RecomputeSafetyTests::test_deterministic_and_idempotent",
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[conditional.context_status]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "common-ledger",
+      "requirement": "条件求值的每个提案/跳过都要写入条件工件并保留原因，不得静默改数。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states"
+    },
+    {
+      "with": "bh-baseline-profiles",
+      "requirement": "baseline_profile 决定 build_base 是否包含已确认的常驻自动效果；两个基线不可混用。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/baseline_profile"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "docs/contracts/conditional-interface.md",
+      "docs/contracts/calc-channel.md",
+      "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json",
+      "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/conditional",
+      "tools/phase3/tests/test_conditional.py"
+    ],
+    "open_questions": [
+      "FR 尚未接入该通道（handover §3：FR 无 conditional 重算通道，仍用 hit_buffs 筛查）；作为共享算子当前只有 BH 一个消费者。",
+      "条件求值只做固定条件估算，不模拟获取/维持成本；状态组合的理论可达性由各条目自行说明。"
+    ],
+    "requery_when": [
+      "FR 接入条件重算通道时",
+      "P2 共享算子抽取时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared"
+}

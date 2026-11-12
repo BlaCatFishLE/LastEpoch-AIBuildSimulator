@@ -1,0 +1,109 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cond-idol-altar-layout-cdr",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Pyramidal Altar（布局条件 ICR）",
+    "en": "Pyramidal Altar (layout-conditioned increased cooldown recovery speed)"
+  },
+  "source_path": "knowledge/mechanisms/bh-cond-idol-altar-layout-cdr.json",
+  "evidence_state": "unresolved",
+  "implementation_state": "draft",
+  "reuse_mode": "case_bound",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "conditional_effect",
+    "ref": "idol_altar.layout_cdr",
+    "path": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+    "locator": "effects[effect_id=idol_altar.layout_cdr]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json",
+      "note": "conditional_effect:idol_altar.layout_cdr 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Pyramidal Altar（布局条件 ICR）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency、cooldown、conditional；条件 code：player.idol_layout_condition_met",
+      "source": "$.applicability"
+    },
+    {
+      "text": "布局条件：神像网格中没有『更大的神像位于更小的神像上方』。当前数据缺少神像宽高/翻转规则，无法自动判定（grid_validation=not_verified），只能人工声明；条件未判定时不计 +ICR。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "可把 +ICR 作为 cooldown_recovery_speed 贡献应用；缺的是布局条件的自动判定，只能人工声明。",
+      "source": "$.handler_ref.note（le_calc.conditional.recompute.recompute_scenario）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：mod、effect values、state、icr",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/parameter_bindings/0/source",
+      "original": "archive://examples/black-hole/inputs/calculation-input.affix-db.json#/mods/96"
+    },
+    {
+      "pointer": "$/parameter_bindings/2/source",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/states/player.idol_layout_condition_met"
+    },
+    {
+      "pointer": "$/parameter_bindings/3/source",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/increased_cooldown_recovery_speed_total"
+    },
+    {
+      "pointer": "$/evidence_refs/1/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-evaluation.json#/evaluation/effects/13"
+    },
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/idol_altar.layout_cdr"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/idol_layout"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/issues"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/conditional-recompute.json#/application_states/idol_altar.layout_cdr"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/black-hole/snapshot/input-snapshot.affix-db.json#/derived/idol_layout"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "当前神像布局（Grand/Minor/Adorned 等尺寸）是否满足该条件未判定。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "『larger idols above smaller ones』的 above 是网格 y 方向还是物理位置未确认。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "补齐神像宽高/朝向数据后可自动判定；在那之前只能人工声明并标注假设。",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

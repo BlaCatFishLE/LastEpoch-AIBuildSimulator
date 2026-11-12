@@ -1,0 +1,137 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-hit-target-side",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Flame Reave 目标侧结算（穿透 / 火抗 / 怪物 DR）",
+    "en": "Flame Reave target-side settlement (penetration, fire resistance, monster DR)"
+  },
+  "source_path": "knowledge/mechanisms/fr-hit-target-side.json",
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "R12",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/target；#/rules id=R12",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_rule:R12 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Flame Reave 目标侧结算（穿透 / 火抗 / 怪物 DR）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、target_side；伤害标签：Fire、Melee、Hit；条件 code：boss_or_rare",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=penetration；叠层策略=additive；顺序/汇总=target_multiplier = (1+sum(penetration)) * (1-fire_resistance) * (1-monster_dr)；穿透是独立乘区，不折进抗性；more 分组依据=n/a（穿透不是 more 组；BH 的 fold-into-resistance 口径不同，见交接 §2）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "merge ruleset.target 与 scenario.target；DR 由 le_calc.monster_dr.dr_for_level 查表；_penetration 求和",
+      "source": "$.handler_ref.note（le_calc.hit_damage.resolve_target）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：monster_level、fire_resistance、penetration rows、monster_dr、target multiplier",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/parameter_bindings/1/source",
+      "original": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json#/target/fire_resistance；archive://examples/flame-reave/scenario/conditional-scenario.json#/target/fire_resistance"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/target/monster_level；archive://examples/flame-reave/case.legacy-hit.json#/monster_level"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/contributions[stat_key=penetration]"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json#/single_hit/totals/target"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "目标火抗默认 0 无 1.5.2 证据（R12 assumed）；负抗下限/区域抗性惩罚未建模",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "FR 用独立穿透乘区、BH 折进抗性，仅在 res≠0 且 pen>0 时有数值差（res=0 时等价）",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "scenario 的 target.monster_damage_reduction override 是否应生效（当前 FR 按 level 重查表，忽略显式 override）",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

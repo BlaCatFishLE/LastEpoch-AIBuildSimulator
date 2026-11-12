@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "le-workflow/coverage-v1.json",
+  "title": "Coverage v1",
+  "description": "来源/机制覆盖：included / excluded_with_reason / unresolved / out_of_scope，并列出所选范围（输入引用、技能树、被动、装备/神像/祝福、排除特性）。",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "case_id",
+    "scope",
+    "included",
+    "excluded_with_reason",
+    "unresolved",
+    "out_of_scope",
+    "counts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "le-coverage-v1"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "case_id",
+        "main_skill",
+        "selected_inputs",
+        "skill_trees"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string"
+        },
+        "main_skill": {
+          "type": "object"
+        },
+        "selected_inputs": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "calculation_input": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "snapshot": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "skill_trees": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "passive_tree": {
+          "type": "object"
+        },
+        "equipment_items": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "idols": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "blessings": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "excluded_features": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "included": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "entry_kind": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "evidence_state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "implementation_state": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "excluded_with_reason": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "reason"
+        ]
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "reason"
+        ]
+      }
+    },
+    "out_of_scope": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "reason"
+        ]
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "included",
+        "excluded_with_reason",
+        "unresolved",
+        "out_of_scope"
+      ],
+      "properties": {
+        "included": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "excluded_with_reason": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unresolved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "out_of_scope": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

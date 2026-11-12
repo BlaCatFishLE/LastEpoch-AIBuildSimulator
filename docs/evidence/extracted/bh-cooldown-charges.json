@@ -1,0 +1,93 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-cooldown-charges",
+  "kind": "mechanism",
+  "title": {
+    "zh": "充能基础值、固定秒数与额外充能",
+    "en": "Charge base recharge, flat adjustments and extra charges"
+  },
+  "source_path": "knowledge/mechanisms/bh-cooldown-charges.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-cooldown-base",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-cooldown-base]",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+      "note": "ruleset_rule:rule-cooldown-base 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "充能基础值、固定秒数与额外充能",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：frequency、cooldown、loop；条件 code：none；必要节点：node:bh2:30",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Black Hole 是 charge-based 技能：基础充能时长来自 chargesGainedPerSecond 的倒数；Pocket Dimension 增加最大充能层数；Endless Maw 增加固定秒数（与它同时给的 duration 分开）。层数只提供起手爆发，稳态频率由充能恢复决定。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "固定层数/固定秒数由 compute_fixed_charges + compute_cooldown 收集；循环调度在 simulate.run_loop。",
+      "source": "$.handler_ref.note（le_calc.cooldown.compute_fixed_charges）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：base_charges_gained_per_second、base_recharge_s、base_max_charges、extra_max_charges、flat_adjustment_s、charges",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown"
+    },
+    {
+      "pointer": "$/validation_refs/2",
+      "original": "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.observation_end_s]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "充能恢复按『同一时间只有一个恢复计时器』顺序恢复是 v1 参考模型口径；游戏内是否允许多层并行恢复未单独验证（当前案例充能层数有限，影响小）。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "extraBlackHoles/recast 等额外生成路径未选；相关节点不在本条目范围。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

@@ -1,0 +1,44 @@
+{
+ "note": "candidate impact of the two already-confirmed 1.5.3 RE findings (not a published run; v1 remains frozen). Generated with <author-archive>/phase3/ruleset-v2-candidate.json + v1 input snapshot.",
+ "changes": {
+  "body_tick_model": "remainder_policy merge_into_last_tick -> ceil_full_ticks (24 full ticks for 7.15s @0.3s)",
+  "heat_wave_rolls": "rolls_per_second 1 -> 2 (aura applicationInterval=0.5s, applyOnStart=true); expected_stacks_per_second unchanged, expected_stacks_per_roll halved"
+ },
+ "v1": {
+  "single_total": 31219074.237154916,
+  "body": 3517205.76804946,
+  "ignite": 27701868.469105456,
+  "tail": 13370341.320720382,
+  "stacks_applied": 684.8,
+  "roll_count": 8,
+  "tick_count": 24,
+  "eager_cycle_s": 6.786731707317074,
+  "eager_dps": 4717076.656085403,
+  "patient_cycle_s": 7.6543022427773195,
+  "patient_dps": 3967354.7971152146
+ },
+ "candidate_v2": {
+  "single_total": 29512303.3,
+  "body": 3541801.613,
+  "ignite": 25970501.69,
+  "tail": 12507738.65,
+  "stacks_applied": 642.0,
+  "roll_count": 15,
+  "tick_count": 24,
+  "eager_cycle_s": 6.786731707317074,
+  "eager_dps": 4460025.380912862,
+  "patient_cycle_s": 7.6543022427773195,
+  "patient_dps": 3750927.7064601867
+ },
+ "delta_pct": {
+  "single_total": -5.4671,
+  "body": 0.6993,
+  "ignite": -6.25,
+  "tail": -6.4516,
+  "stacks_applied": -6.25,
+  "eager_dps": -5.4378,
+  "patient_dps": -5.4558
+ },
+ "interpretation": "v1 1s Heat Wave model overcounted expected stacks (8 rolls at 1s = 8s worth for a 7.15s black hole). 1.5.3 aura rolls every 0.5s starting at spawn -> 15 rolls x 42.8 = 642 expected stacks. Body ceil-full-tick adds +0.7%. Net single-cast total -5.47%. Binary/cooldown corrections are NOT included yet (paused pending user in-game test).",
+ "status": "candidate only; do not publish as final until Binary +100% and cooldown/charge are resolved"
+}

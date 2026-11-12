@@ -1,0 +1,180 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-cooldown-charges",
+  "revision": 2,
+  "title": {
+    "zh": "充能基础值、固定秒数与额外充能",
+    "en": "Charge base recharge, flat adjustments and extra charges"
+  },
+  "aliases": [
+    "charges",
+    "充能",
+    "max charges",
+    "Pocket Dimension",
+    "Endless Maw cooldown",
+    "base recharge",
+    "chargesGainedPerSecond"
+  ],
+  "selectors": [
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "bh2:25",
+        "bh2:30"
+      ]
+    },
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "charges",
+        "cooldown_flat"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "frequency",
+      "cooldown",
+      "loop"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [
+      "node:bh2:30"
+    ],
+    "notes": "Black Hole 是 charge-based 技能：基础充能时长来自 chargesGainedPerSecond 的倒数；Pocket Dimension 增加最大充能层数；Endless Maw 增加固定秒数（与它同时给的 duration 分开）。层数只提供起手爆发，稳态频率由充能恢复决定。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-cooldown-base",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-cooldown-base]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "base_charges_gained_per_second",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cooldown/base_charges_gained_per_second",
+      "unit": "charges/second",
+      "note": "基础充能速率（游戏数据）。"
+    },
+    {
+      "parameter": "base_recharge_s",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cooldown/base_recharge_s",
+      "unit": "seconds",
+      "note": "由速率推得的单层充能时长（规则包冻结）。"
+    },
+    {
+      "parameter": "base_max_charges",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cooldown/base_max_charges",
+      "unit": "charges"
+    },
+    {
+      "parameter": "extra_max_charges",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cooldown/extra_max_charges",
+      "note": "Pocket Dimension 的额外层数（node 30）。"
+    },
+    {
+      "parameter": "flat_adjustment_s",
+      "source": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/cooldown/flat_adjustment_s",
+      "note": "Endless Maw 的固定秒数（node 25）。"
+    },
+    {
+      "parameter": "charges",
+      "source": "current:matched_instances",
+      "note": "运行产物：max_charges / flat_total_s。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.cooldown",
+    "symbol": "compute_fixed_charges",
+    "note": "固定层数/固定秒数由 compute_fixed_charges + compute_cooldown 收集；循环调度在 simulate.run_loop。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/cooldown-charge-1.5.3.json#/ability_bh2",
+      "note": "chargesGainedPerSecond / base recharge / maxCharges（1.5.3 能力数据）。"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/reverse-engineering/README.zh-CN.md#10",
+      "note": "冷却/充能数据链逆向记录。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]",
+      "note": "bh2 maxCharges / chargesGainedPerSecond、Pocket Dimension 额外充能、Endless Maw 固定秒数（数值见游戏数据）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown",
+      "note": "当前 run 的充能分项（base/flat/extra charges）。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/mechanisms.md#35-机制条目总表",
+      "note": "基础充能 confirmed 的索引行。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_simulate.py::CastAndCooldownTest::test_cooldown_formula",
+    "tools/phase3/tests/test_simulate.py::LoopTest::test_windows_monotone_and_dps",
+    "archive://examples/black-hole/expected/expected-summary.json#/checks[legacy_single_skill.observation_end_s]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-cooldown-cdr-icr",
+      "requirement": "固定秒数先加在基础上，再应用 CDR/ICR；顺序不可换。",
+      "evidence_locator": "tools/phase3/src/le_calc/cooldown.py#compute_cooldown"
+    },
+    {
+      "with": "bh-duration",
+      "requirement": "Endless Maw 同时给 duration 与 cooldown：duration 影响 patient 空窗，cooldown 影响充能；两个机制必须分别记账。",
+      "evidence_locator": "tools/phase3/src/le_calc/cooldown.py#compute_cooldown"
+    },
+    {
+      "with": "bh-black-hole-instances",
+      "requirement": "max charges 决定连发次数；与黑洞实例上限无关。",
+      "evidence_locator": "tools/phase3/src/le_calc/simulate.py#run_loop"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "docs/evidence/reverse-engineering/cooldown-charge-1.5.3.json",
+      "docs/evidence/reverse-engineering/README.zh-CN.md#10",
+      "archive://reports/phase-3/black-hole-planning-evidence-2026-11-03.json#abilities[0]",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/cooldown",
+      "tools/phase3/tests/test_simulate.py"
+    ],
+    "open_questions": [
+      "充能恢复按『同一时间只有一个恢复计时器』顺序恢复是 v1 参考模型口径；游戏内是否允许多层并行恢复未单独验证（当前案例充能层数有限，影响小）。",
+      "extraBlackHoles/recast 等额外生成路径未选；相关节点不在本条目范围。"
+    ],
+    "requery_when": [
+      "新 BD 选择多充能/额外黑洞节点时",
+      "出现层数并行恢复证据时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

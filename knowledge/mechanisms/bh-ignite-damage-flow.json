@@ -1,0 +1,156 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "bh-ignite-damage-flow",
+  "revision": 2,
+  "title": {
+    "zh": "Ignite 连续流记账与尾部伤害",
+    "en": "Ignite continuous-flow bookkeeping and tail damage"
+  },
+  "aliases": [
+    "ignite slices",
+    "连续流",
+    "切片",
+    "尾伤",
+    "tail damage",
+    "unsettled tail",
+    "damage_between",
+    "cohort"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "bh2"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "ignite",
+      "ignite_tick",
+      "ledger"
+    ],
+    "tags": [
+      "Fire",
+      "Ailment"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "每层 Ignite 视为恒定速率的持续伤害流；窗口/累计曲线/尾部用连续积分精确分摊，事件表把每个 cohort 离散为固定长度切片并按切片结束时刻记录（金额之和严格等于 cohort 总伤害）。这是记账实现假设，不改变每层总伤害；重叠 cohort 的伤害相加。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "rule-ignite-damage-slices",
+    "path": "tools/phase3/rules/ruleset-bh-stage1-v4.json",
+    "locator": "rules[rule_id=rule-ignite-damage-slices]"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "cohorts",
+      "source": "current:matched_instances",
+      "note": "每次判定的期望层数/持续时间/总量/到期时刻。"
+    },
+    {
+      "parameter": "slices",
+      "source": "current:matched_instances",
+      "note": "切片明细不单独落盘；窗口/尾部指标见 totals 与 time_series。"
+    },
+    {
+      "parameter": "tails",
+      "source": "current:matched_instances",
+      "note": "ignite_tail_damage 与 window_damage_until_black_hole_end。"
+    }
+  ],
+  "handler_ref": {
+    "module": "le_calc.ignite",
+    "symbol": "damage_between",
+    "note": "连续流积分：damage_between/cumulative_damage/tail_damage/stacks_at；切片生成 build_damage_slices；窗口在 le_calc.simulate.run_loop.window_metrics。"
+  },
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-damage-slices]",
+      "note": "规则文字：连续积分 + 固定切片长度的事件表；早期按切片结束时刻归属会使 unsettled_tail 在窗口中偏高（规则包记录了量级；本组不复制）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/time_series",
+      "note": "当前 run 的累计曲线（body/ignite/total/stacks）。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency/window_plus_tail_equals_ignite_total",
+      "note": "窗口 + 尾部 = Ignite 总量的严格一致性检查。"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/cohorts",
+      "note": "历史输出仅作验证证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/ignite/cohorts",
+      "note": "历史输出仅作验证证据"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/totals",
+      "note": "历史输出仅作验证证据"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage.py::IgniteTest::test_totals_and_tail",
+    "tools/phase3/tests/test_simulate.py::SingleCastTest::test_totals_reconcile",
+    "tools/phase3/tests/test_simulate.py::SingleCastTest::test_time_series_cumulative",
+    "archive://reports/black-hole/save-build-bh-affix-db/reproduce-report.json#/checks[consistency.all_pass]"
+  ],
+  "interaction_requirements": [
+    {
+      "with": "bh-ignite-heat-wave",
+      "requirement": "cohort 由每次判定生成；重叠窗口决定瞬时层数曲线。",
+      "evidence_locator": "tools/phase3/src/le_calc/ignite.py#build_cohorts"
+    },
+    {
+      "with": "common-ledger",
+      "requirement": "事件表、时间序列、窗口账必须互相对上（单次 = 本体 + Ignite）。",
+      "evidence_locator": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency"
+    },
+    {
+      "with": "bh-loop-action-policies",
+      "requirement": "多黑洞重叠时，各施放 cohort 叠加；窗口按连续流取各自贡献。",
+      "evidence_locator": "tools/phase3/src/le_calc/simulate.py#run_loop"
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "tools/phase3/rules/ruleset-bh-stage1-v4.json#/rules[rule_id=rule-ignite-damage-slices]",
+      "archive://reports/black-hole/save-build-bh-affix-db/result.json#/single_cast/time_series",
+      "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency",
+      "tools/phase3/tests/test_simulate.py"
+    ],
+    "open_questions": [
+      "切片是事件表展示粒度，不是游戏 tick；游戏内 Ignite 的实际结算频率未建模，只要『每层总伤害/持续时间』口径正确，窗口结果与切片时点无关（连续积分）。",
+      "尾部伤害（黑洞结束后仍在跳的 Ignite）在实战中会因目标移动/死亡/新施放而变化；本模型按目标不移动、不死亡、观察至最后一层到期的理论场景计算。"
+    ],
+    "requery_when": [
+      "若报告需要更细的事件时间分辨率时",
+      "目标存活/移动建模接入时"
+    ]
+  },
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "case_scope": [
+    "black-hole"
+  ],
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "bh2"
+  ]
+}

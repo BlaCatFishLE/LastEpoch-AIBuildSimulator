@@ -1,0 +1,135 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "fr-effect-rhythm-of-fire-consume",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Rhythm of Fire 消耗 12 层：+130% more damage（条件效果）",
+    "en": "Rhythm of Fire consume effect (+130% more when consuming max stacks)"
+  },
+  "source_path": "knowledge/mechanisms/fr-effect-rhythm-of-fire-consume.json",
+  "evidence_state": "assumed",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "flame-reave"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "le-1.5.2-phase1-dataset-003",
+    "game_version": "1.5.2",
+    "note": "dataset 定位 data/releases/phase1-dataset-003；来源版本仅作元数据，不因小版本字符串变化自动失效"
+  },
+  "rule_ref": {
+    "kind": "ruleset_effect",
+    "ref": "rhythm_of_fire_consume",
+    "path": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+    "locator": "#/effects id=rhythm_of_fire_consume",
+    "verification": {
+      "status": "verified",
+      "checked_against": "tools/phase3/rules/ruleset-fr-hit-stage1-v2.json",
+      "note": "ruleset_effect:rhythm_of_fire_consume 已在该文件的 rules[]/effects[]/顶层规则段中确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [
+    {
+      "locator": "data/releases/phase1-dataset-003/data.sqlite#effects+effect_values owner_entity_id=node:letools:fr11mv:3",
+      "note": "node 3：12 层消耗 +130% more damage/range/width",
+      "source": "$.evidence_refs[1]"
+    }
+  ],
+  "reusable_conclusions": [
+    {
+      "text": "Rhythm of Fire 消耗 12 层：+130% more damage（条件效果）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；伤害标签：Fire、Melee、Hit；条件 code：consume_rhythm_of_fire",
+      "source": "$.applicability"
+    },
+    {
+      "text": "聚合操作=more；叠层策略=none；顺序/汇总=单次消耗命中的单个 more 乘区（×2.3 口径）；与循环平均因子互斥；more 分组依据=ruleset.rotation.rhythm_of_fire 与 #/effects id=rhythm_of_fire_consume（R18 assumed）",
+      "source": "$.aggregation"
+    },
+    {
+      "text": "_effect_condition_satisfied 判 consume 状态；满足时把 more 行加进命中池（group=effect:rhythm_of_fire_consume）",
+      "source": "$.handler_ref.note（le_calc.hit_damage._effect_rows）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：effect definition、more value、consume state",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json#/derived/node_effects(node_id=3)/effects[stat_index=3]/value_total"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json#/single_hit/states/consume_rhythm_of_fire；#/profiles/*/states"
+    },
+    {
+      "pointer": "$/validation_refs/0",
+      "original": "le.ps1 reproduce --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/validation_refs/1",
+      "original": "le.ps1 validate --case archive://examples/flame-reave/case.legacy-hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://examples/flame-reave/snapshot/input-snapshot.hit.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://examples/flame-reave/scenario/conditional-scenario.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/4",
+      "original": "archive://examples/flame-reave/inputs/calculation-input.affix-db.corrected.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/5",
+      "original": "archive://examples/flame-reave/inputs/bd.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/6",
+      "original": "archive://examples/flame-reave/expected/expected-summary.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/7",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/result.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/8",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/rule-ledger.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/9",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/buff-screening.json"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/10",
+      "original": "archive://reports/flame-reave/save-build-fr-hit-stage16/README.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/16",
+      "original": "archive://docs/reviews/p0-baseline-2026-11-07.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "+130% 是 more 还是 increased：节点描述 multiplicative，本模型按 more（assumed）",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "消耗阈值 12 层与 +4 层/次来自 dataset；其它技能补层会改变节律（OQ8）",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "消耗是否作用于该次施放的全部 4 击：当前模型单次命中口径，DPS 用单一值",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

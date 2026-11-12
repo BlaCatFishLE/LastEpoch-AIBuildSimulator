@@ -1,0 +1,107 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "bh-loop-action-policies",
+  "kind": "mechanism",
+  "title": {
+    "zh": "eager/patient 循环动作策略与窗口",
+    "en": "Eager/patient loop action policies and windows"
+  },
+  "source_path": "knowledge/mechanisms/bh-loop-action-policies.json",
+  "evidence_state": "derived",
+  "implementation_state": "validated",
+  "reuse_mode": "shared",
+  "case_scope": [
+    "black-hole"
+  ],
+  "compatibility_baseline": {
+    "baseline_id": "phase1-dataset-003 / bh-stage1-v4 / fr-hit-stage1-v2",
+    "game_version": "1.5.2 数据 + 1.5.3 机制逆向（见 docs/mechanisms.md §2）",
+    "note": "人工维护的兼容基线；数据与机制证据版本分开标注，不因小版本字符串变化自动失效。"
+  },
+  "rule_ref": {
+    "kind": "none",
+    "ref": "eager/patient 是 DPS 计算器的动作策略（ruleset.action_policies），没有对应游戏规则 ID；并存的合法性见 bh-black-hole-instances。",
+    "verification": {
+      "status": "declared_none",
+      "checked_against": null,
+      "note": "条目声明该机制没有可引用的游戏规则 ID（ref 内写明原因）"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "eager/patient 循环动作策略与窗口",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：loop、frequency、ledger；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "动作流固定为 black_hole_only（只施放黑洞）。eager：有充能且施法动作空闲即施放，多个黑洞重叠；patient：等所有存续黑洞消失后再施放。两者都是建模策略（固定条件估算），不是游戏操作序列。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "充能/施法时间/黑洞存续期驱动的离散事件循环；每窗口统计 body+ignite、尾部与 cast_count；run_single_cast 为单次口径。",
+      "source": "$.handler_ref.note（le_calc.simulate.run_loop）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：action_policies、loop config、windows、policy results",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency"
+    },
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://examples/black-hole/scenario/conditional-scenario.json#/loop"
+    },
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops/0/windows"
+    },
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops"
+    },
+    {
+      "pointer": "$/validation_refs/4",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency"
+    },
+    {
+      "pointer": "$/interaction_requirements/3/evidence_locator",
+      "original": "archive://examples/black-hole/case.legacy.json#/notes"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/1",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/result.json#/loops"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/2",
+      "original": "archive://reports/black-hole/save-build-bh-affix-db/run-manifest.json#/consistency"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "eager/patient 是模型策略，不是玩家实操序列；报告必须标注固定条件估算，不得写成实战 DPS。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "v1 不记录 blocked attempts（被充能/动作空闲拒绝的尝试），也未模拟真实操作延迟/走位。",
+      "source": "$.research_notes.open_questions[1]"
+    },
+    {
+      "text": "窗口按连续流积分、尾部单列；跨窗口对比时只能用同一 policy 与同一观察口径。",
+      "source": "$.research_notes.open_questions[2]"
+    }
+  ],
+  "generated_at": "2026-11-12T21:40:46Z"
+}

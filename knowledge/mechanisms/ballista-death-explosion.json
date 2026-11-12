@@ -1,0 +1,122 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "ballista-death-explosion",
+  "revision": 2,
+  "title": {
+    "zh": "Ballista 到期/销毁爆炸与敏捷倍率"
+  },
+  "aliases": [
+    "Ballista",
+    "Minion",
+    "Ballista 到期/销毁爆炸与敏捷倍率"
+  ],
+  "selectors": [
+    {
+      "kind": "ability",
+      "namespace": "ability",
+      "ids": [
+        "ba1574"
+      ]
+    },
+    {
+      "kind": "node",
+      "namespace": "node",
+      "ids": [
+        "ba1574:5"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "death_event",
+      "explosion"
+    ],
+    "tags": [
+      "Minion"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "Armed Construction 每点每Dex 1% more damage，仅作用该销毁爆炸。目录区分普通弩箭40 Physical/200%和Ballista Explosives 50 Fire/250%；不能把Dex倍率作用于全部攻击。"
+  },
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.frequency",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.frequency"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "parameter_bindings": [
+    {
+      "parameter": "current_points_and_mods",
+      "source": "current:calculation_input.skills.specializations/ba1574 + current:mods",
+      "unit": "current",
+      "note": "只从本次输入绑定；不保存当前31点合计倍率。"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.json",
+      "note": "IL 级逆向证据（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "IL 级中文结论（本轮）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-runtime-and-node-values-20261112.json",
+      "note": "冻结 dataset 1.5.2 原值；节点含义对照官方资料，不用新版本文案替换旧数据。"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/ballista/ballista-mechanism-review-20261112.zh-CN.md"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "note": "当前构筑数值包（本轮）"
+    },
+    {
+      "kind": "reverse_engineering",
+      "detail": "Armed Construction 在 Ballista 实体挂 CreateAbilityObjectOnDeath(ability=626)；到期 UnsummonAfterDelay→Summoned.unsummon→Dying.die 与上限替换 getLowestPriority→unsummon+SelfDestroyer.die 都是死亡事件，每次死亡恰好 1 次爆炸；per-Dex more = 0.04×玩家Dex，仅在爆炸命中（isBallistaExplosion=true 推断）。",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#3-爆炸触发与-ability_gen327"
+    }
+  ],
+  "research_notes": {
+    "open_questions": [
+      "isBallistaExplosion prefab 序列化值需资产侧确认。",
+      "爆炸最终 AT 集合与 Hit 标签需 DamageEnemyOnHit 初始化代码。"
+    ],
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "docs/evidence/ballista/ballista-build-values-20261113.json",
+      "knowledge/definitions/ballista-armed-construction-v4.json"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [
+    "ba1574"
+  ],
+  "case_scope": [],
+  "limitations": [
+    {
+      "item": "isBallistaExplosion 写入点",
+      "reason": "IL 无显式写点，按 prefab 序列化推断 true；若为 false 则 per-Dex more 不生效。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "爆炸 AT 上下文是否含 Hit",
+      "reason": "DamageEnemyOnHit.setStandardVariables 的调用点未解码；当前按 {Bow,Fire,Minion} 闭包。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "minion 等级伤害缩放",
+      "reason": "公式已核但伤害路径无调用点，未纳入。",
+      "blocks_full_dps": false
+    }
+  ]
+}
