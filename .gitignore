@@ -22,7 +22,8 @@ build/
 dist/
 
 # --- 本地临时工作区 ----------------------------------------------------------
-.scratch/
+.scratch/*
+!.scratch/.gitkeep
 _verify/
 *.log
 *.tmp
@@ -37,6 +38,8 @@ examples/*
 # --- 用户产物：报告 / 构筑 / 原始输入 / 缓存 ---------------------------------
 reports/
 data/builds/
+# 本机 BD 编辑器工作区（草稿/保存版本/求值/研究任务，不公开）
+/data/editor-workspace/
 data/raw/
 data/staging/
 data/normalized/

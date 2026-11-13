@@ -136,6 +136,7 @@ SOURCE_KINDS = frozenset(
 
 COMPILER_FILES = (
     "tools/phase3/src/le_calc/conditional_node_buffs.py",
+    "tools/phase3/src/le_calc/conditional_item_buffs.py",
     "tools/phase3/src/le_calc/plan_compiler.py",
     "tools/phase3/src/le_calc/plan_compiler_v3.py",
     "tools/phase3/src/le_calc/contribution_mapping.py",

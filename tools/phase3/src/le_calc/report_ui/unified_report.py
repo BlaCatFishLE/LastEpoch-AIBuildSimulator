@@ -276,10 +276,26 @@ def render(result, binding):
         else:
             field='<label><input class="stack-input" type="number" data-target-state="'+c.esc(key)+'" value="'+str(value if value is not None else 0)+'" min="'+str(control.get('min',0))+'" max="'+str(control.get('max',100))+'"'+disabled+'></label>'
         drawers+='<div class="target-condition"><b>'+c.esc(control.get('label') or key)+'</b>'+field+'</div>'
-    drawers+='<button class="btn" id="reset-target">重置目标</button><p class="muted">修改后点击“计算 DPS”应用。只有适用的目标条件影响伤害。</p></aside>'
+    drawers+='<button class="btn" id="reset-target">重置目标</button><p class="muted">'+('此处展示计算时的目标设置；返回编辑器调整后重算。' if binding.get('read_only') else '修改后点击“计算 DPS”应用。只有适用的目标条件影响伤害。')+'</p></aside>'
+    if binding.get('read_only'):
+        toolbar='<p class="muted">此处展示计算时的 Buff。返回编辑器调整条件后生成新结果。</p>'+toolbar
     bodies={'overview':overview,'damage':damage or c.empty('当前结果未提供乘区明细。'),'windows':timeline,'sources':sources,'equipment':gear_intro+'<div class="gear-grid">'+gear+'</div>','buffs':toolbar+'<div class="buff-grid">'+buffs+'</div>'}
     pages=[{'id':k,'label':v} for k,v in [('overview','总览'),('damage','伤害构成'),('windows','时间与循环'),('sources','增伤来源'),('equipment','装备与神像'),('buffs','Buff 设置')]]
+    snapshot=binding.get('editor_snapshot') or {}
+    if snapshot:
+        condition=snapshot.get('conditions') or {}; target_snapshot=condition.get('target') or {}; character=snapshot.get('character') or {}
+        allocation_cards=''
+        for allocation in snapshot.get('allocations') or []:
+            rows=''.join('<tr><td>'+c.esc(node['name'])+'</td><td>'+c.esc(str(node['points']))+' 点</td></tr>' for node in allocation.get('nodes') or [])
+            allocation_cards+=c.card('<table><thead><tr><th>已投入节点</th><th>点数</th></tr></thead><tbody>'+rows+'</tbody></table>',title=allocation['name'])
+        active='、'.join(c.esc(condition.get('labels',{}).get(key,key))+(' ×'+c.esc(str(value)) if not isinstance(value,bool) else '') for key,value in condition.get('states',{}).items() if value) or '无额外启用条件'
+        summary='<p>'+c.esc(snapshot.get('name'))+' · '+c.esc(str(condition.get('horizon_s')))+' 秒 · '+c.esc({'default':'默认策略','eager':'积极施放','patient':'等待施放'}.get(condition.get('strategy'),'默认策略'))+'</p><p>'+c.esc({'normal':'普通目标','rare':'稀有目标','boss':'Boss'}.get(target_snapshot.get('kind'),'目标'))+' · '+c.esc(str(target_snapshot.get('monster_level')))+' 级</p><p>'+active+'</p>'
+        summary+='<p>'+c.esc(character.get('class'))+' / '+c.esc(character.get('mastery'))+' · 等级 '+c.esc(str(character.get('level','—')))+'</p>'
+        scene_rows=''.join('<tr><td>'+c.esc(condition.get('labels',{}).get(key,key))+'</td><td>'+c.esc(('已启用' if value else '未启用') if isinstance(value,bool) else str(value))+'</td></tr>' for key,value in condition.get('states',{}).items())
+        summary+='<details><summary>全部条件状态</summary><table><tbody>'+scene_rows+'</tbody></table></details>'
+        bodies['build']=c.card(summary,title='计算时的配置与条件')+'<div class="buff-grid">'+allocation_cards+'</div>'
+        pages.append({'id':'build','label':'天赋与完整配置'})
     assets=Path(__file__).with_name('assets')
     # 浏览器复用统一配置/重算协议；展示细节不参与计算。
     client_result=dict(result,controls=controls,report_details=dict(details,equipment=equipment))
-    return render_document(DocumentSpec(model='dps',title=title+' · 伤害分析',brand_mark='LE',heading=title,subtitle='构筑伤害分析 · 固定条件预计值',result=client_result,view={'defaults':{'states':states,'target':target,'target_controls':target_controls}},pages=pages,page_html={p['id']:c.page(p['id'],p['label'],'',bodies[p['id']]) for p in pages},first_page='overview',header_summary_html=c.esc(str(target.get('monster_level',100))+' 级 · 抗性 '+num(target.get('resistance',0)*100)+'%'),header_controls_html='<button class="btn btn-primary" id="compute">计算 DPS</button><span id="compute-status" role="status">当前结果已应用</span>',drawers_html=drawers,number_toggle=True,bindings=binding or None,recalc_endpoint=binding.get('recompute_endpoint'),model_scripts=('shell.js',),inline_scripts=((assets/'unified.js').read_text(encoding='utf-8'),),extra_css=(assets/'dps.css').read_text(encoding='utf-8')+(assets/'unified.css').read_text(encoding='utf-8'),footer_text='预计伤害 · 固定条件计算；实际战斗受走位、覆盖率与目标状态影响。'))
+    return render_document(DocumentSpec(model='dps',title=title+' · 伤害分析',brand_mark='LE',heading=title,subtitle='构筑伤害分析 · 固定条件预计值',result=client_result,view={'defaults':{'states':states,'target':target,'target_controls':target_controls}},pages=pages,page_html={p['id']:c.page(p['id'],p['label'],'',bodies[p['id']]) for p in pages},first_page='overview',header_summary_html=c.esc(str(target.get('monster_level',100))+' 级 · 抗性 '+num(target.get('resistance',0)*100)+'%'),header_controls_html=('<a class="btn btn-primary" href="'+c.esc(binding.get('editor_url','/'))+'">返回编辑器调整</a>' if binding.get('read_only') else '')+'<button class="btn btn-primary" id="compute">计算 DPS</button><span id="compute-status" role="status">当前结果已应用</span>',drawers_html=drawers,number_toggle=True,bindings=binding or None,recalc_endpoint=binding.get('recompute_endpoint'),model_scripts=('shell.js',),inline_scripts=((assets/'unified.js').read_text(encoding='utf-8'),),extra_css=(assets/'dps.css').read_text(encoding='utf-8')+(assets/'unified.css').read_text(encoding='utf-8'),footer_text='预计伤害 · 固定条件计算；实际战斗受走位、覆盖率与目标状态影响。'))

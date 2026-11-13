@@ -47,6 +47,7 @@ if ($rawArguments.Count -eq 0) {
     @'
 用法：.\scripts\le.ps1 <命令> [参数]
 
+  editor    [--port 8766] [--tool-home <目录>]   启动本机 BD 配置工作台
   doctor                                        检查环境、模块导入与运行必需数据
   reproduce --case <case.json>                  仅旧 profile/hit 兼容路径；unified definitions_v3/plan-v4 明确 unsupported_operation
   run       --case <case.json> [--out <dir>]    仅从冻结输入执行计算（快速路径；可 --port）

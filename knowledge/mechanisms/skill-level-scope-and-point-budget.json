@@ -1,0 +1,26 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "skill-level-scope-and-point-budget",
+  "revision": 1,
+  "title": {"zh": "技能等级作用域与编辑器点数预算", "en": "Skill level namespaces and editor point budgets"},
+  "aliases": ["Level of Skills", "skill point budget", "Black Hole level", "技能点数预算"],
+  "selectors": [
+    {"kind": "stat", "namespace": "stat", "ids": ["stat:letools:coreDB.propertyList:88"]},
+    {"kind": "node", "namespace": "node", "ids": ["node:bh2:4", "node:bh2:9"]}
+  ],
+  "applicability": {"components": ["configuration"], "conditions": ["none"], "notes": "用于显示与点数校验，不生成伤害贡献。未知转换/来源保留 partial；不能从已分配点数反推预算。"},
+  "parameter_bindings": [
+    {"parameter": "skill base level and node points", "source": "current:matched_instances", "unit": "points"},
+    {"parameter": "equipment level modifiers", "source": "current:matched_instances", "unit": "levels"}
+  ],
+  "rule_ref": {"kind": "dataset_entity", "ref": "stat:letools:coreDB.propertyList:88", "path": "tools/bd_editor/skill-tag-rules-v1.json"},
+  "handler_ref": {"module": "tools.bd_editor.skill_budget", "symbol": "budgets", "note": "共享 Catalog.skill_level_scope 解码命名空间；按当前实例求和并记录预算范围。"},
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {"kind": "planner_runtime", "locator": "archive://reports/discovery/phase-2-o3ZRm9my/planner-runtime.js#lf,rrlPj,rrlVo", "note": "作者本地归档的 planner runtime 参考语义（第三方站点代码不随公开仓库分发）；specialTag=1 是技能索引；2..6 限定职业；7..11 限定属性缩放；标签匹配后逐项 floor 加总。参考语义，不等同游戏真值。"},
+    {"kind": "dataset", "locator": "data/releases/phase1-dataset-003/data.sqlite#node:letools:bh2:4,node:letools:bh2:9", "note": "Red Giant 转火；Binary System 同时保留火/冰星。"},
+    {"kind": "validation", "locator": "tools/bd_editor/tests/test_player_regressions.py", "note": "两份用户指定 BD 正例与移除遗物后真实超额负例。"}
+  ],
+  "reuse_mode": "shared"
+}

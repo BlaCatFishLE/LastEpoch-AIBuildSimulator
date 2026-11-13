@@ -1223,7 +1223,8 @@ def _scenario_binding(plan: Mapping[str, Any], result: Mapping[str, Any]) -> dic
         return {
             "schema": "le-scenario-binding-v4",
             "primary_evaluation": plan.get("primary_evaluation"),
-            "scenario": copy.deepcopy(plan.get("scenario") or {}),
+            "scenario": copy.deepcopy(result.get("scenario") or plan.get("scenario") or {}),
+            "scenario_sha256": result.get("scenario_sha256"),
         }
     if plan.get("schema") in (planmod.SCHEMA_V2, planmod.SCHEMA_V3):
         return {
@@ -1246,6 +1247,7 @@ def render_stage(
     run_dir: Path,
     endpoint: str,
     display_dir: Optional[Path] = None,
+    report_context: Optional[Mapping[str, Any]] = None,
 ) -> dict[str, Any]:
     """render_report：由 result + plan 生成 HTML/binding/capabilities。"""
     root_path = _root(root)
@@ -1283,6 +1285,10 @@ def render_stage(
         input_fingerprints=fingerprints,
         recompute_endpoint=endpoint,
     )
+    # Optional immutable editor snapshot; cannot overwrite computational bindings.
+    for key in ('read_only', 'editor_url', 'editor_snapshot'):
+        if report_context and key in report_context:
+            binding[key] = copy.deepcopy(report_context[key])
     scenario_binding = _scenario_binding(plan, result)
     binding["scenario_binding"] = scenario_binding
     equipment_rows = _project_equipment(case, root_path, plan)
@@ -1359,6 +1365,12 @@ def render_stage(
         run_dir / "report-binding.json",
         run_dir / "report-capabilities.json",
     ]
+    if binding.get("read_only"):
+        capability = _read(run_dir / "report-capabilities.json")
+        capability["recalculation"] = {"read_only_snapshot": True, "editor_url": binding.get("editor_url")}
+        if binding.get("editor_snapshot"):
+            capability["pages"].append("build")
+        _write(run_dir / "report-capabilities.json", capability)
     return {
         "execution_status": "completed",
         "readiness": "partial"

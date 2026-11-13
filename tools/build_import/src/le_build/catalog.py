@@ -904,6 +904,29 @@ class Catalog:
                         return text
         return self.stat_display_name(stat)
 
+    def skill_level_scope(self, tags=0, special_tag=0) -> dict:
+        """Decode property 88 before interpreting tags as a bitmask.
+
+        Archived planner runtime lf / rrlPj: specialTag=1 is an ability index;
+        2..6 a class namespace; 7..11 an attribute namespace; 0 a tag mask.
+        """
+        tags, special_tag = int(tags or 0), int(special_tag or 0)
+        if special_tag == 1:
+            for row in self._rows('SELECT entity_id, extensions FROM skills'):
+                extra = json.loads(row.get('extensions') or '{}')
+                if extra.get('index') == tags:
+                    return {'kind': 'skill', 'entity_id': row['entity_id'], 'label': self.name(row['entity_id'])}
+            return {'kind': 'unresolved', 'label': 'Level of an unresolved skill'}
+        qualifiers = []
+        if 2 <= special_tag <= 6:
+            qualifiers.append(['Primalist', 'Mage', 'Sentinel', 'Acolyte', 'Rogue'][special_tag-2])
+        elif 7 <= special_tag <= 11:
+            qualifiers.append(['Strength', 'Vitality', 'Intelligence', 'Dexterity', 'Attunement'][special_tag-7])
+        elif special_tag != 0:
+            return {'kind': 'unresolved', 'label': 'Level of Skills (scope unresolved)'}
+        qualifiers.extend(self.tag_names(tags))
+        return {'kind': 'tags' if special_tag == 0 else 'class' if special_tag <= 6 else 'attribute', 'label': 'Level of ' + (' and '.join(qualifiers) + ' ' if qualifiers else '') + 'Skills'}
+
     def tag_names(self, bitmask) -> list[str]:
         """Decode an LE Tools tag bitmask into tag names (from the tags table)."""
         key = ("tag_names", int(bitmask or 0))

@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="le-editor-token" content="__EDITOR_TOKEN__"><title>BD 配置工作台 · Last Epoch</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body><div class="shell">
+<header><div><div class="eyebrow">LAST EPOCH · BUILD WORKSHOP</div><h1>BD 配置工作台</h1><p class="muted" id="dataset">正在连接本机数据库…</p></div><div class="actions"><button id="import">导入配置</button><button id="export">导出配置</button><span class="badge">编辑与计算 · v1</span></div></header>
+<div class="layout">
+<aside class="library"><h2>我的配置</h2><p class="muted">保留每一次构筑尝试</p><div id="builds" class="builds"></div><div class="stack"><button id="new">＋ 新建 BD</button><button id="copy">复制当前配置</button><button id="delete-config">删除当前配置</button><button id="trash">回收站</button><button id="history">历史版本</button></div><div class="section"><label>比较基准<select id="baseline"></select></label></div><p class="muted section">草稿自动保存到本机。<br>“保存版本”保留可恢复的快照。</p></aside>
+<main><div class="row between"><div class="name-wrap"><label class="sr-only" for="name">配置名称</label><input id="name" class="name" placeholder="配置名称"><p class="muted" id="identity"></p></div><button class="primary" id="save">保存版本</button></div>
+<nav id="tabs" aria-label="编辑内容"><button data-tab="equipment" aria-pressed="true">装备</button><button data-tab="passive">被动天赋</button><button data-tab="skill">专精技能</button><button data-tab="idol">神像</button><button data-tab="blessing">祝福</button><button data-tab="conditions">条件与 Buff</button><button data-tab="diff">配置差异</button><button data-tab="character">角色设置</button></nav>
+<section id="content" aria-label="编辑面板"><p class="empty">正在载入配置…</p></section>
+</main>
+<aside class="comparison"><div class="row between"><h2>与基准比较</h2><span id="diff-count" class="muted"></span></div><p id="baseline-name" class="muted"></p><div id="diff-summary"></div><div class="section"><h2>计算结果</h2><button class="primary" id="calculate">计算当前配置</button><div id="calculation-result" aria-live="polite"><p class="muted">选择主技能后，计算当前配置。</p></div><p class="help"><a href="/calculation-plan" target="_blank" rel="noopener">查看计算接入方案 →</a></p></div><div class="section"><h2>配置检查</h2><div id="validation" aria-live="polite"></div></div></aside>
+</div><footer><span id="status" role="status" aria-live="polite">正在启动…</span><span>本机数据 · 不写回游戏存档</span></footer>
+</div><dialog id="dialog"><div class="row between"><h2 id="dialog-title"></h2><button id="close-dialog" aria-label="关闭">关闭</button></div><div id="dialog-body"></div></dialog><input type="file" id="file" accept=".json,application/json" hidden></body></html>

@@ -7,11 +7,11 @@
 | 项 | 值 |
 |---|---|
 | index_format | `le-knowledge-index-v1` |
-| source_digest | `sha256:07ac7a3faa76dbf9bafdbea2421967b629d74fda8434cf5598578d21d7e7202f` |
+| source_digest | `sha256:431b7fb3c7d213e397ffcece88554fd6910f4dda64889d092edb61d19ce6f490` |
 | 生成命令 | `.\scripts\le.ps1 knowledge rebuild` |
-| 内容文件 | 130（mechanisms 127 / skills 3）+ schema 4 |
-| 条目 | mechanisms 127 / skill_templates 3 |
-| 索引明细 | selectors 403 / aliases 592 |
+| 内容文件 | 131（mechanisms 128 / skills 3）+ schema 4 |
+| 条目 | mechanisms 128 / skill_templates 3 |
+| 索引明细 | selectors 406 / aliases 596 |
 
 ## 机制条目（knowledge/mechanisms）
 
@@ -139,6 +139,7 @@
 | skill-dark-duellist | Dark Duellist 准备反击时的全局增伤 | 1 | derived | reusable | hit, dot | node:gs15de:3 | ruleset_effect:skill-dark-duellist | knowledge/mechanisms/skill-dark-duellist.json |
 | skill-entropic-blows | Entropic Blows 的 Time Rot 层数增伤 | 1 | derived | reusable | hit | node:v01cv:25 | ruleset_effect:skill-entropic-blows | knowledge/mechanisms/skill-entropic-blows.json |
 | skill-hellish-chasm-next-fire | Hellish Chasm 后续火焰技能增伤 | 1 | assumed | reusable | hit, dot | node:v01cv:3 | ruleset_effect:skill-hellish-chasm-next-fire | knowledge/mechanisms/skill-hellish-chasm-next-fire.json |
+| skill-level-scope-and-point-budget | 技能等级作用域与编辑器点数预算 | 1 | derived | reusable | configuration | stat:letools:coreDB.propertyList:88, node:bh2:4, node:bh2:9 | dataset_entity:stat:letools:coreDB.propertyList:88 | knowledge/mechanisms/skill-level-scope-and-point-budget.json |
 | skill-nether-coating | Nether Coating 攻速与致盲增伤 | 1 | derived | reusable | hit, dot, frequency | node:ab0lh:14 | ruleset_effect:skill-nether-coating | knowledge/mechanisms/skill-nether-coating.json |
 | skill-void-supremacy | Void Supremacy 对减速目标增伤 | 1 | assumed | reusable | hit, dot | node:ab0lh:19 | ruleset_effect:skill-void-supremacy | knowledge/mechanisms/skill-void-supremacy.json |
 | skill-vorpal-force | Vorpal Force 的 Bleed 层数增伤及上限 | 1 | derived | reusable | hit | node:v01cv:29 | ruleset_effect:skill-vorpal-force | knowledge/mechanisms/skill-vorpal-force.json |

@@ -242,6 +242,13 @@ def _resolve_definitions_v3_source(
     buff_library = (template.get("definition") or {}).get("conditional_buff_library")
     if buff_library:
         refs.append(_source_file_ref(buff_library, root, role="rule_file", schema_version="le-conditional-node-buffs-v1"))
+        buff_config=json.loads((root/buff_library).read_text(encoding="utf-8"))
+        item_library=buff_config.get("item_buff_library")
+        if item_library:
+            if (root/item_library).is_file():
+                refs.append(_source_file_ref(item_library, root, role="rule_file", schema_version="le-conditional-item-buffs-v1"))
+            else:
+                diagnostics.append(_diagnostic("missing_item_buff_library", f"装备条件 Buff 库不存在：{item_library}"))
     if scenario_path:
         refs.append(_source_file_ref(scenario_path, root, role="scenario", schema_version=definitions_v3.SCENARIO_SCHEMA))
     for entry in scenario_entries:

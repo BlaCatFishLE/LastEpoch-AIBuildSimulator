@@ -37,6 +37,8 @@ def bind(definition, context):
             add_control(key,{'enemy_chilled':'目标冰缓','enemy_frozen':'目标冻结'}.get(key,key),'目标条件')
         bound.append(entry)
     definition['_bound_conditional_buffs']=bound
+    from .conditional_item_buffs import bind as bind_items
+    defaults.update(bind_items(definition,context,library.get('item_buff_library')))
     return defaults
 
 

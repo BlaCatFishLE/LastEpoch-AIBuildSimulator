@@ -18,7 +18,7 @@
     GitHub 仓库，`BlaCatFishLE/LastEpoch-AIBuildSimulator` 形式，例如 `BlaCatFishLE/LastEpoch-AIBuildSimulator`。
 
 .PARAMETER Tag
-    Release tag，默认 `v0.4.1`。Release 附件名固定为 `data.sqlite`。
+    Release tag，默认 `v0.4.2`。Release 附件名固定为 `data.sqlite`。
 
 .PARAMETER Url
     直接指定完整下载 URL（覆盖 -Repo/-Tag），适合 GitHub 镜像或代理链接
@@ -32,12 +32,12 @@
 
 .EXAMPLE
     .\scripts\fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator
-    .\scripts\fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator -Tag v0.4.1
+    .\scripts\fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator -Tag v0.4.2
     .\scripts\fetch_dataset.ps1 -Url https://example.com/data.sqlite
 #>
 param(
     [string]$Repo,
-    [string]$Tag = 'v0.4.1',
+    [string]$Tag = 'v0.4.2',
     [string]$Url,
     [string]$OutFile,
     [switch]$Force
@@ -58,7 +58,7 @@ function Write-Usage([string]$Message) {
     [Console]::Error.WriteLine('')
     [Console]::Error.WriteLine('用法示例：')
     [Console]::Error.WriteLine('  .\scripts\fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator')
-    [Console]::Error.WriteLine('  .\scripts\fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator -Tag v0.4.1')
+    [Console]::Error.WriteLine('  .\scripts\fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator -Tag v0.4.2')
     [Console]::Error.WriteLine('  .\scripts\fetch_dataset.ps1 -Url https://example.com/data.sqlite')
     exit 2
 }
@@ -134,7 +134,7 @@ elseif ($Repo) {
     if ($Repo -notmatch '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$') {
         Write-Usage "-Repo 必须是 BlaCatFishLE/LastEpoch-AIBuildSimulator 形式（例如 BlaCatFishLE/LastEpoch-AIBuildSimulator），实际：$Repo"
     }
-    if ([string]::IsNullOrWhiteSpace($Tag)) { $Tag = 'v0.4.1' }
+    if ([string]::IsNullOrWhiteSpace($Tag)) { $Tag = 'v0.4.2' }
     $downloadUrl = "https://github.com/$Repo/releases/download/$Tag/data.sqlite"
 }
 else {

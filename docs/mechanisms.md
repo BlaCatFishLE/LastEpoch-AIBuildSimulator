@@ -1,6 +1,8 @@
 # 机制证据与裁决索引（mechanisms）
 
 本文件回答一个问题：**当前计算里每一条规则/每个数值，凭什么这么说？它的适用范围是什么？哪些还只是假设？**
+> 2026-11-13 v0.4.2：新增 `skill-level-scope-and-point-budget`（编辑器技能等级作用域与点数预算），并新增 Throne of Ambition 编辑器证据（`docs/evidence/conditional/`）。
+
 计算实现入口在 [`tools/phase3/`](../tools/phase3/README.md)，操作流程见 [workflow.md](workflow.md)，
 支持范围与限制见 [current-status.md](current-status.md)。
 

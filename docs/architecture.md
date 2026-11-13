@@ -32,6 +32,7 @@ planner payload ─────────┼─→ BuildSpec v1 ──→ calc
 | [`tools/save_import/`](../tools/save_import/README.md) | 离线存档解码（clean-room、只读）：`ItemData` v6 字节布局、容器枚举、名称/效果 resolver；输出 `save-build-v1` | `python -m le_save_import` |
 | [`tools/build_import/`](../tools/build_import/README.md) | planner payload / 存档结果 → BuildSpec v1；导出 calculation-input-v1；BD 可视化 | `python -m le_build` |
 | [`tools/affix_db/`](../tools/affix_db/) | 词缀 × 基底 × 位置 roll 范围数据库；`affix_base_ranges` 是唯一权威范围表 | `python tools/affix_db/run.py` |
+| [`tools/bd_editor/`](../tools/bd_editor/) | 本机 BD 配置工作台：导入/复制/编辑、条件、计算编排、比较与只读报告 | `\scripts\le.ps1 editor` | 本机工作区 `data/editor-workspace/`；数值复用统一引擎 |
 | [`tools/phase3/`](../tools/phase3/README.md) | **计算引擎**：输入快照、计划编译/执行、条件效果、结果门禁、报告 UI、本机重算服务 | `python -m le_calc` |
 | [`tools/knowledge/`](../tools/knowledge/README.md) | 知识索引构建与查询（`knowledge rebuild/search/show` 的实现） | `python -m le_knowledge` |
 | [`tools/ingest/`](../tools/ingest/) | 数据提取与规范化（LE Tools / Tunklab → SQLite dataset）；研究/重建用，普通计算不需要 | `python -m le_data.cli` |

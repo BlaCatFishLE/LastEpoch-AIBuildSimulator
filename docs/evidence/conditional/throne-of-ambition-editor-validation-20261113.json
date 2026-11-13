@@ -1,0 +1,68 @@
+{
+  "schema": "le-editor-research-resolution-v1",
+  "created_at": "2026-11-13T10:25:11.530330+00:00",
+  "task_id": "2ee326c497364b72933a001538e88e6e",
+  "config_id": "dc12317939ab41b0bfef26fa14d60657",
+  "status": "resolved",
+  "resolved_controls": [
+    "ambition"
+  ],
+  "evaluation_id": "336a0cc76e3944319312bf84a32c5316",
+  "result": "data/editor-workspace/dc12317939ab41b0bfef26fa14d60657/evaluations/336a0cc76e3944319312bf84a32c5316/result.json",
+  "report": "/api/evaluation?id=dc12317939ab41b0bfef26fa14d60657&evaluation=336a0cc76e3944319312bf84a32c5316&name=dps-report.html",
+  "input_unchanged": true,
+  "document_key": "b10bd9e79d80cf3db6e5e78c0c0c66a7369323ad83a237313070010fb60c94a2",
+  "verification": {
+    "focused_binding_checks": 2,
+    "current_execution_check": true,
+    "ambition_stacks": 20,
+    "zero_to_twenty_multiplier": 1.4,
+    "horizon_s": 30,
+    "horizon_dps": 8581048.18784884,
+    "profile_effects_applied": [
+      "item.throne_of_ambition.fire_more",
+      "item.throne_of_ambition.cold_more"
+    ],
+    "unified_validation_passed": true,
+    "rule_dependencies_fingerprinted": true
+  },
+  "hashes": {
+    "config.json": "2ec3923ecc6846f212248192ff837557db57e5c4e35d224db55b4fe78b433821",
+    "calculation-plan.json": "82f99db02b6887408c5bf41b41058bfbdc454175f5e6a995535fade469501610",
+    "result.json": "e2d987252639fba4786ce5cae8f9f8f95e59294701976f2d9d66d4f83e40d606",
+    "report-binding.json": "ef5010adaf94a18a1d07aa57c1988386a8f1a55bc663b8ab907f1057072b500b",
+    "validation-result.json": "cf1680b49a4201f2393c68d52f2e714c0444de2668414d5c2bbf094664c8e81d"
+  },
+  "isolated_evaluations": [
+    {
+      "evaluation_id": "1d24de227ded417bacda575b7224d1d1",
+      "reason": "Initial structural success did not execute declared profile effects; status failed, numeric artifacts preserved."
+    }
+  ],
+  "remaining_gaps": [
+    {
+      "code": "per_attribute_unresolved",
+      "contribution_ids": [
+        "passive:12:2"
+      ],
+      "count": 1,
+      "detail": "passive:12:2：per 缩放属性 8 未声明（覆盖缺口）"
+    },
+    {
+      "code": "per_attribute_unresolved",
+      "contribution_ids": [
+        "passive:32:2"
+      ],
+      "count": 1,
+      "detail": "passive:32:2：per 缩放属性 7 未声明（覆盖缺口）"
+    }
+  ],
+  "assumptions": [
+    "手工声明已获取并维持 20 层，不模拟获取/刷新/清空。",
+    "Ignite 继承仍按既有假设计入，未新增游戏实测。"
+  ],
+  "knowledge_entries": [
+    "bh-cond-throne-of-ambition",
+    "fr-effect-ambition-stacks"
+  ]
+}

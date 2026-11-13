@@ -1,0 +1,9 @@
+{
+  "schema": "le-editor-skill-tag-rules-v1",
+  "rules": {
+    "bh2": [
+      {"node_index": 4, "min_points": 1, "remove": 4, "add": 8, "evidence": "node:letools:bh2:4 description; Red Giant converts base cold damage to fire"},
+      {"node_index": 9, "min_points": 1, "remove": 0, "add": 12, "evidence": "node:letools:bh2:9 description; Binary System creates both fire and cold stars"}
+    ]
+  }
+}

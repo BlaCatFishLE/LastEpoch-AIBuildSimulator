@@ -1,7 +1,7 @@
 # 当前状态（current-status）
 
 > 本页是公开版的能力摘要，不是导入前检查清单，也不复制日常操作规则（见 [workflow.md](workflow.md)、[AGENTS.md](../AGENTS.md)）。
-> 版本：0.4.1（2026-11-13 发布；v0.4.0 已发布，本版同步 2026-11-13 修复批次）。数值与结论以当前案例输入、规则包和结果中的 `issues` / `coverage` 为准，不要从本文抄写数值。
+> 版本：0.4.2（2026-11-13 发布；v0.4.0 / v0.4.1 为已发布快照；本版新增本机 BD 编辑器并同步编辑器相关契约/知识）。数值与结论以当前案例输入、规则包和结果中的 `issues` / `coverage` 为准，不要从本文抄写数值。
 
 ## 1. 摘要
 
@@ -22,6 +22,7 @@
 | planner payload（本地 JSON）→ BuildSpec → 计算 | 支持（进阶手工流程） | 不依赖 Node；`le_build import --file ... --share-id ... --offline` → export → 补齐案例字段 → prepare/run |
 | 词缀库（`data/affix-db/v1`）按基底/位置修正 roll 范围 | 支持 | 数据来源自报游戏 1.5.2 |
 | 构筑知识检索（`knowledge rebuild/search/show`） | 支持 | JSON 权威源 + 可重建 SQLite 索引 |
+| 本机 BD 编辑器（`le.ps1 editor`） | 支持（v0.4.2 新增） | 导入 BuildSpec/编辑器配置，调整装备/词缀/被动/专精/神像/祝福与条件；计算复用统一链路，详情见 [编辑器说明](../tools/bd_editor/README.zh-CN.md) |
 | Void Cleave / Flame Reave / Black Hole execution-v1 | 支持（限定范围） | plan-v4 / result-v6；各自覆盖缺口见结果与证据 |
 | 共享 damage channel（多类型 added / 增伤闭包） | 支持（现行契约约束） | 按实际伤害类型构造闭包；Elemental 仅 Fire/Cold/Lightning；跨类型标签不误吃增伤；无类型 added 显式 adaptive |
 | 装备页完整词条投影（含 `unique_description`） | 支持（v0.4.1 校正后） | 完整 mods 来自 `calculation_input`；旧 affixes 摘要须标注；输出 `equipment_projection` 完整性标记 |

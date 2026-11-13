@@ -2,8 +2,8 @@
  "schema": "le-project-config-v1",
  "project": {
   "name": "LastEpoch-BuildSimulator",
-  "version": "0.4.1",
-  "description": "Last Epoch 离线构筑导入、词缀库与统一 DPS 计划/执行/报告工具集（公开最小版：不含案例、存档、构筑 revision 与历史报告）。"
+  "version": "0.4.2",
+  "description": "Last Epoch 离线构筑导入、本机 BD 编辑器、词缀库与统一 DPS 计划/执行/报告工具集（公开最小版：不含案例、存档、构筑 revision 与历史报告）。"
  },
  "python": {
   "comment": "按顺序尝试：环境变量 LE_PYTHON → 候选列表中第一个存在的解释器 → PATH 上的 python。相对候选路径相对项目根目录解析。",

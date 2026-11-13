@@ -10,6 +10,7 @@
 | [workflow.md](workflow.md) | 从导入到报告的操作流程；新机制接入与最小语义验证规则 |
 | [architecture.md](architecture.md) | 模块职责、数据流、格式契约与绑定/不可变规则 |
 | [version-control.md](version-control.md) | 跟踪与忽略策略、不可变数据、提交/tag/Release 流程、发布检查清单 |
+| [../tools/bd_editor/README.zh-CN.md](../tools/bd_editor/README.zh-CN.md) | 本机 BD 编辑器：启动、配置、条件与计算边界 |
 | [mechanisms.md](mechanisms.md) | 机制证据索引与登记规程（哪些是 confirmed / assumed / unresolved） |
 | [rea-guide.zh-CN.md](rea-guide.zh-CN.md) | 可选的逆向研究工具链（REA/Node/Ghidra/JDK）；工具不随仓库捆绑 |
 | [data-dictionary.zh-CN.md](data-dictionary.zh-CN.md) | 规范化 dataset 的 schema 语义、值状态与单位约定 |
@@ -22,6 +23,7 @@
 
 | 文件 | 内容 |
 |---|---|
+| [contracts/bd-editor-player-projection.md](contracts/bd-editor-player-projection.md) | 编辑器玩家投影与校验：只读快照、完整装备词条、范围与名称显示 |
 | [contracts/save-onboarding.md](contracts/save-onboarding.md) | 新存档正式接入：来源冻结、BuildSpec 发布、prepare 与报告接入 |
 | [contracts/workflow-interface.md](contracts/workflow-interface.md) | 流水线工作流接口：阶段执行/领域查询/研究交接/提交恢复 |
 | [contracts/component-knowledge-v1.md](contracts/component-knowledge-v1.md) | 构筑组件稳定 ID 与共享知识匹配、当前实例绑定 |

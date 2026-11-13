@@ -416,6 +416,30 @@ def compile_v3(context: core.FrozenContext, resolved_model: Any) -> CompileResul
         append(row, _row_meta(row, category="effect", handler_id="generic_mod_mapping-v1",
                              condition_ref=register_condition(program)))
 
+    # 标准 profile effects 也进入 DoT/充能编译路径，复用统一来源与叠层语义。
+    # 仅声明 controls 不足以表示效果已被执行；required 来源错误在此拒绝。
+    effect_results=binding.bind_profile_effects(
+        calc,catalog,dict(profile),states=fake_values,target=fake_target,
+        pool_lookup=lambda stat,target:sum(float(r.value) for r in rows if r.active and r.stat_key==stat and (target is None or str(r.target)==target)),
+    )
+    for result in effect_results:
+        declared=next(e for e in profile.get("effects",[]) if str(e.get("id"))==result.effect_id)
+        if result.status in (binding.BINDING_UNRESOLVED,binding.BINDING_UNVERIFIED,binding.BINDING_IDENTITY_MISMATCH,binding.BINDING_SEMANTICS_MISMATCH) or (result.status==binding.BINDING_SOURCE_ABSENT and declared.get("required",True)):
+            raise PlanCompileError(f"effect {result.effect_id} 来源绑定失败：{result.reason}")
+        if result.contribution is None:continue
+        core._apply_per_attribute_scaling(result,attributes)
+        terms=[{"kind":"control_true","key":str(key)} for key in declared.get("states",[])]
+        if declared.get("requires_target"):terms.append({"kind":"target_true","key":str(declared["requires_target"])})
+        meta=_row_meta(result.contribution,category="effect",handler_id="profile_effect-v1",
+                       condition_ref=register_condition({"op":"all","terms":terms}) if terms else None)
+        stack_control=declared.get("stack_control")
+        meta.update(value_mode="stack_scale" if stack_control else "static",
+                    value_params={"base_value":float(result.contribution.value),"control":str(stack_control)} if stack_control else {},
+                    rule_id=result.effect_id,ledger_kind="effects",ledger=result.to_dict(),
+                    coverage_status=result.status,source_facts=copy.deepcopy(result.source or {}),
+                    required=bool(declared.get("required",True)))
+        append(result.contribution,meta)
+
     reclass_applied = _apply_reclassifications(rows, rules.get("row_reclassifications") or [])
     overcap_applied = _apply_overcapped_scaling(rows, rules.get("overcapped_scaling") or [])
     attributes = mapping.attribute_detail(rows, class_base)["attributes"]
@@ -722,7 +746,7 @@ def compile_v3(context: core.FrozenContext, resolved_model: Any) -> CompileResul
             "skill_constants": copy.deepcopy(skill_constants),
             "ledger_static": {
                 "node_bindings": [result.to_dict() for result in node_results],
-                "effects": [],
+                "effects": [result.to_dict() for result in effect_results],
                 "state_scalings": [],
                 "movement_conversion": {},
                 "attribute_scaling": {},
@@ -782,7 +806,8 @@ def compile_v3(context: core.FrozenContext, resolved_model: Any) -> CompileResul
                     f"×(1-{cdr_total:g})/(1+ICR)；eager/patient 两种 action policy 均输出。"
                 ),
             },
-        ] + [{"assumption_id": "buff:"+e["id"], "status": e["status"], "kind": "conditional_buff", "scope": "single_cast" if e.get("single_cast_only") else "fixed_conditions", "note": e["note"], "evidence": e["evidence"]} for e in profile.get("_bound_conditional_buffs") or []],
+        ] + [{"assumption_id": "buff:"+e["id"], "status": e["status"], "kind": "conditional_buff", "scope": "single_cast" if e.get("single_cast_only") else "fixed_conditions", "note": e["note"], "evidence": e["evidence"]} for e in profile.get("_bound_conditional_buffs") or []]
+          + [{"assumption_id": "profile:limitation:"+str(i),"status":"assumed","kind":"limitation","scope":"fixed_conditions","note":str(note)} for i,note in enumerate(profile.get("limitations") or [])],
         "scope": {
             "skill": skill_name,
             "ailment_labels": ["Ignite"],

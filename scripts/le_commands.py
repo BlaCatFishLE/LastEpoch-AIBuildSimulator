@@ -4433,7 +4433,18 @@ def cmd_knowledge(args: 'argparse.Namespace') -> 'int':
         return EXIT_FAIL
     return int(knowledge_cli.main(argv))
 
-COMMANDS = ('doctor', 'reproduce', 'run', 'serve', 'prepare', 'import', 'validate', 'test', 'package', 'knowledge')
+def cmd_editor(args):
+    """Launch the independent local BD editor without mutating calculator runs."""
+    import importlib.util
+    editor_path = ROOT / 'tools' / 'bd_editor' / 'service.py'
+    spec = importlib.util.spec_from_file_location('le_bd_editor_service', editor_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.serve(root=ROOT, port=args.port, tool_home=args.tool_home or os.environ.get('LE_TOOL_NATIVE_HOME'))
+    return EXIT_OK
+
+
+COMMANDS = ('editor', 'doctor', 'reproduce', 'run', 'serve', 'prepare', 'import', 'validate', 'test', 'package', 'knowledge')
 
 def build_parser() -> 'argparse.ArgumentParser':
     parser = argparse.ArgumentParser(prog='le.ps1', description='LastEpoch-BuildSimulator 统一操作入口（统一由 scripts/le_commands.py 实现）')
@@ -4503,6 +4514,10 @@ def build_parser() -> 'argparse.ArgumentParser':
     knowledge = sub.add_parser('knowledge', help='知识索引与查询（search/show/rebuild；实现位于 tools/knowledge）', description='知识索引与查询：search（短摘要）/ show（详情）/ rebuild（重建索引）。')
     knowledge.add_argument('knowledge_args', nargs=argparse.REMAINDER, help='子命令与参数，例如 search --query "Flame Reave"（用 knowledge search --help 查看）')
     knowledge.set_defaults(func=cmd_knowledge)
+    editor = sub.add_parser('editor', help='启动本机 BD 配置工作台（装备/完整节点/多配置）')
+    editor.add_argument('--port', type=int, default=8766, help='本机编辑平台端口（默认 8766）')
+    editor.add_argument('--tool-home', default=None, help='兼容旧参数；编辑器统一显示英文游戏原文')
+    editor.set_defaults(func=cmd_editor)
     return parser
 
 def main(argv: 'list[str] | None'=None) -> 'int':

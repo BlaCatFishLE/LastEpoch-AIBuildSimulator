@@ -2,9 +2,16 @@
 
 本文件是 AI agent / 维护者在本仓库工作的入口。项目由 AI 协作开发，结果按 **AS IS** 提供；不要把它当作游戏官方数据。先读本文件，需要字段或实现细节时再按“契约导航”查 [docs/](docs/README.md)，不要先读历史产物。
 
+## 本机 BD 编辑器（v0.4.2 新增）
+
+- 启动：`\scripts\le.ps1 editor --port 8766`，浏览器打开 `http://127.0.0.1:8766/`。
+- 用途：导入 BuildSpec / 编辑器导出 JSON，复制方案并调整装备、词缀、完整被动、当前职业专精、神像和祝福；在“条件与 Buff”应用主技能与场景后点“计算当前配置”。
+- 计算复用统一 compile → simulate → validate → render 链与共享报告；A 复用计划 / B 重新绑定 / C 研究任务按输入变化分流，不另建技能伤害模型。
+- 本机工作区 `data/editor-workspace/` 已被 `.gitignore` 排除；详情见 [tools/bd_editor/README.zh-CN.md](tools/bd_editor/README.zh-CN.md) 与 [编辑器玩家投影契约](docs/contracts/bd-editor-player-projection.md)。
+
 ## 日常执行顺序（用户要求）
 
-1. 先冻结、解析用户本次指定的存档，生成独立 BuildSpec 与 calculation-input。只检查当前输入和解码必需依赖；不要运行默认案例 doctor，也不要在导入前完整检查任何旧案例。
+1. 先冻结、解析用户本次指定的存档，生成独立 BuildSpec 与 calculation-input；已有 BuildSpec/编辑器配置可直接在 `le.ps1 editor` 中导入调整。只检查当前输入和解码必需依赖；不要运行默认案例 doctor，也不要在导入前完整检查任何旧案例。
 2. 导入后按当前构筑的技能、节点、被动、装备、神像、祝福及词条稳定 ID 查询沉淀知识，绑定当前实例的数值和点数。只按命中记录追溯必要证据；历史案例没有默认优先级。
 3. 复用统一 DPS 流程的属性、乘区、暴击、目标、时间与报告组件。hit/DoT 仅表示击中与持续伤害的计算组件差异；技能行为由数据和规则表达，不能按技能建立独立 DPS 模型。
 4. 优先生成当前 BD 的结果和网页；区分研究/候选产物与可用于当前声明范围的计算结果。机制未知可以显式假设或缩小范围继续；已知来源、执行或账本错误不能用 partial 掩盖，也不能据此更新可用 canonical。

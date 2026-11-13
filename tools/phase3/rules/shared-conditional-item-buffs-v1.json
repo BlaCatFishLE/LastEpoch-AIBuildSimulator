@@ -1,0 +1,60 @@
+{
+  "schema": "le-conditional-item-buffs-v1",
+  "buffs": [
+    {
+      "id": "item.throne_of_ambition.fixed_stacks",
+      "label": "Throne of Ambition",
+      "definition_entity_id": "item:letools:uniqueList.uniques:211",
+      "stacking": "single_buff",
+      "required_texts": [
+        "2% more Fire Damage per stack of Ambition",
+        "2% more Cold Damage per stack of Ambition",
+        "20 Maximum Stacks of Ambition"
+      ],
+      "control": {
+        "key": "ambition",
+        "label": "Throne of Ambition",
+        "type": "integer",
+        "min": 0,
+        "max": 20,
+        "default": 0
+      },
+      "effects": [
+        {
+          "id": "item.throne_of_ambition.fire_more",
+          "label": "Throne of Ambition · Fire",
+          "source": {
+            "kind": "unique_description",
+            "expected_text_contains": "2% more Fire Damage per stack of Ambition"
+          },
+          "stat": "damage",
+          "operation": "more",
+          "value": 0.02,
+          "tags": ["Fire"],
+          "status": "assumed",
+          "required": true
+        },
+        {
+          "id": "item.throne_of_ambition.cold_more",
+          "label": "Throne of Ambition · Cold",
+          "source": {
+            "kind": "unique_description",
+            "expected_text_contains": "2% more Cold Damage per stack of Ambition"
+          },
+          "stat": "damage",
+          "operation": "more",
+          "value": 0.02,
+          "tags": ["Cold"],
+          "status": "assumed",
+          "required": true
+        }
+      ],
+      "note": "手动声明已获得并在观察期维持的 0–20 层 Ambition；每层火焰/冰霜独立增伤 2%，20 层为 ×1.40，同一 Buff 的层数不逐层相乘。Black Hole 本体不能自行叠层；不模拟获取命中、1 秒获取冷却或 4 秒清空。点燃继承按现有假设计入，尚未经游戏实测确认；护甲收益不进入伤害计算。",
+      "evidence": [
+        {"kind": "game_data", "locator": "data/releases/phase1-dataset-003/data.sqlite#entities item:letools:uniqueList.uniques:211"},
+        {"kind": "game_data", "locator": "data/releases/phase1-dataset-003/data.sqlite#buffs buff:letools:UIBuffs:79"},
+        {"kind": "document", "locator": "tools/phase3/rules/conditional-effects-bh-stage1-v1.json#effects/12"}
+      ]
+    }
+  ]
+}

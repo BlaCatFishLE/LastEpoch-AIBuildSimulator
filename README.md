@@ -16,6 +16,7 @@ Last Epoch 离线构筑工具集：从本机离线存档导入构筑 → 匹配�
 | Void Cleave（VC）、Flame Reave（FR）、Black Hole（BH）三个 execution-v1 计算切片，统一 plan-v4 / result-v6 | 支持（限定范围） |
 | Ballista / Armed Construction 到期与销毁爆炸口径 | **partial**（玩家侧尚有未建模来源） |
 | 词缀库、构筑知识检索、离线 HTML 报告、本机条件重算 | 支持 |
+| 本机 BD 编辑器（`le.ps1 editor`，v0.4.2 新增） | 支持（限定范围） | 导入 BuildSpec/编辑器配置，调整装备/词缀/被动/专精/神像/祝福与条件；计算复用统一链路 |
 | 其它技能/天赋、完整循环与实战 DPS、组队 Buff、法力消耗、完整战斗生命周期 | **不支持** |
 | 完整回归、所有机制实测确认 | **不承诺** |
 
@@ -54,7 +55,7 @@ cd <REPO>
 
 ```powershell
 .\scripts\fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator
-# 可选参数：-Tag v0.4.1（默认）、-Url <直链覆盖>、-OutFile <目标路径>、-Force（已存在且哈希正确时仍重下）
+# 可选参数：-Tag v0.4.2（默认）、-Url <直链覆盖>、-OutFile <目标路径>、-Force（已存在且哈希正确时仍重下）
 ```
 
 仓库地址：<https://github.com/BlaCatFishLE/LastEpoch-AIBuildSimulator>。
@@ -69,10 +70,11 @@ cd <REPO>
 
 ## 快速开始
 
-项目有两条输入路径（都需要先完成环境与 dataset 准备）：
+项目有三条输入路径（都需要先完成环境与 dataset 准备）：
 
 - **存档路径**：clean-room 解析存档 → BD；若要生成可计算报告，需要“完整首接”（依赖 Node + `lastepochsupertools`，见可选依赖）。
 - **planner 路径**（不依赖 Node，进阶手工流程）：用户提供 Last Epoch Tools planner payload 的本地 JSON → `le_build import --file ... --share-id ... --offline` → `le_build export` → 补齐案例字段 → prepare/run；命令见 `tools/build_import/README.md`。
+- **编辑器路径**（v0.4.2 新增）：已有 BuildSpec 或本平台导出的配置 JSON，直接启动本机 BD 编辑器调整装备/节点/条件并计算；见下文“本机 BD 编辑器”。
 
 ```powershell
 # 1) 创建虚拟环境（无需 pip install；le.ps1 会自动优先使用 .venv\Scripts\python.exe）
@@ -110,6 +112,19 @@ py -3.12 -m venv .venv
 - 新案例目录可用 `examples/_template/` 作为空模板；推荐的路径仍是让 `import` 生成案例骨架（`import` 拒绝覆盖已存在的路径）。`examples/` 下除模板外都是用户本地产物，已 gitignore。
 - 若主技能不在当前支持范围，`import`/`prepare` 会停在 `research` / `needs_research` 状态：只完成数据接入与准备，不伪造 DPS。支持范围见 [docs/current-status.md](docs/current-status.md)。
 - 其它常用命令：`.\scripts\le.ps1 test --suite <name>`（按套件运行测试，公开版部分依赖用户本地数据的测试会 SKIP）、`.\scripts\le.ps1 package`（按显式清单生成发布包）、`.\scripts\le.ps1 doctor --help`。完整命令清单见 [docs/workflow.md](docs/workflow.md)。
+
+### 本机 BD 编辑器（v0.4.2 新增）
+
+```powershell
+# 启动本机配置工作台（默认 http://127.0.0.1:8766/）
+.\scripts\le.ps1 doctor
+.\scripts\le.ps1 editor --port 8766
+```
+
+- 导入 BuildSpec 或编辑器导出 JSON，复制方案后调整装备/词缀/完整被动/当前职业专精/神像/祝福；在“条件与 Buff”选择主技能、目标、窗口与 Buff 并应用，再点“计算当前配置”。
+- 计算复用统一 compile → simulate → validate → render 链与共享报告；支持的运行时条件复用计划，装备/节点/调度变化重新绑定；缺能力时生成研究任务，需手工复制到 agent 对话（当前**没有自动 agent 桥接器**）。
+- 条件独立保存并参与差异；修改后生成新求值，不覆盖旧结果。编辑器工作区在本机 `data/editor-workspace/`，已 gitignore，不随仓库分发。
+- 控件、保存与计算边界见 [tools/bd_editor/README.zh-CN.md](tools/bd_editor/README.zh-CN.md)；玩家投影契约见 [docs/contracts/bd-editor-player-projection.md](docs/contracts/bd-editor-player-projection.md)。
 
 ## 知识检索
 
@@ -159,9 +174,10 @@ scripts/          统一入口 le.ps1、命令实现、打包/校验、dataset �
 config/           通用配置模板（project.json 等）；本机配置与密钥不入库
 data/             词缀库、映射、data/current.json 与本地 dataset（大文件不入库）
 knowledge/        机制/技能知识 JSON 权威源与生成索引
-tools/            实现模块：save_import / build_import / affix_db / phase3（计算引擎）/ knowledge / ingest / extract-game
+tools/            实现模块：save_import / build_import / bd_editor（本机编辑器）/ affix_db / phase3（计算引擎）/ knowledge / ingest / extract-game
 docs/             现行文档、契约、证据（见 docs/README.md）
 examples/         用户本地案例目录；仓库只保留 _template 模板
+data/editor-workspace/  本机 BD 编辑器工作区（草稿/保存版本/求值；gitignored，不公开）
 reports/          用户本地运行产物（gitignored）
 dist/             打包输出（gitignored）
 ```
@@ -174,19 +190,20 @@ dist/             打包输出（gitignored）
 - [docs/workflow.md](docs/workflow.md)：从导入到报告的操作流程与新机制接入规则。
 - [docs/architecture.md](docs/architecture.md)：模块职责、数据流与格式契约。
 - [docs/version-control.md](docs/version-control.md)：跟踪范围、不可变数据、发布流程。
+- [tools/bd_editor/README.zh-CN.md](tools/bd_editor/README.zh-CN.md)：本机 BD 编辑器控件、保存与计算边界。
+- [docs/contracts/bd-editor-player-projection.md](docs/contracts/bd-editor-player-projection.md)：编辑器玩家投影与校验契约。
 
 ## 验证状态
 
-**公开发布验证（2026-11-13，tag v0.4.1）**
+**公开发布验证（2026-11-13，tag v0.4.2）**
 
-- **仓库与 Release**：<https://github.com/BlaCatFishLE/LastEpoch-AIBuildSimulator>；dataset 通过 Release 附件 `data.sqlite` 分发（251.2 MB，sha256 `afa79e9fda0023b2ed09f4cbe8e07da436e0c74c03f34f80772da471c0adb8ab`）。`scripts/fetch_dataset.ps1` 已实测从本 tag 的 Release 下载并校验通过（默认 `-Tag v0.4.1`）。
-- **v0.4.1 同步范围**：在 v0.4.0 快照（2026-11-13 05:23 +08:00）基础上，同步 2026-11-13 的修复批次：Ballista Armed Construction 修正轮（伤害通道类型隔离、来源绑定/结果门禁、编译期暴击折叠）、共享 damage channel 闭包、装备页完整词条与 `unique_description` 投影、报告 UI/契约/知识索引更新。同步边界截至 2026-11-13 12:53 (+08:00)；之后的上游工作另行发布。
+- **仓库与 Release**：<https://github.com/BlaCatFishLE/LastEpoch-AIBuildSimulator>；dataset 通过 Release 附件 `data.sqlite` 分发（251.2 MB，sha256 `afa79e9fda0023b2ed09f4cbe8e07da436e0c74c03f34f80772da471c0adb8ab`）。`scripts/fetch_dataset.ps1` 默认指向 `v0.4.2` Release（附件发布后可用），下载后按 `data/current.json` 的 sha256 校验。
+- **v0.4.2 更新范围**：新增本机 BD 编辑器（`\scripts\le.ps1 editor`：导入 BuildSpec/编辑器配置 → 调整装备/节点/条件 → 计算 → 比较与只读报告）；同步编辑器所需引擎增量（`Catalog.skill_level_scope`、条件 item buffs 与 `shared-conditional-item-buffs-v1` 规则、计划编译/渲染小幅增强）；新增 `docs/contracts/bd-editor-player-projection.md`、Throne of Ambition 编辑器证据与 `skill-level-scope-and-point-budget` 机制；公开文档补编辑器入口与能力边界。
 - **验证环境**：Windows 10（10.0.19045）、PowerShell 7.6.10（脚本声明 5.1+）、Python 3.12.14。
 - **已执行**：
-  - 结构/隐私/死链/JSON 检查：PASS（0 本机路径、0 断开链接、0 无效 JSON、0 个 >100 MB 的跟踪文件）；
-  - `le.ps1 doctor`：PASS（dataset 指针 + 文件 sha256 + SQLite + 解析路由）；
-  - `knowledge rebuild`：OK（127 机制 / 130 条目，`source_digest=sha256:07ac7a3f…`）；`knowledge search` 抽查命中；
-  - 合成最小输入 `fixtures/min-case/input-snapshot.json`：`le_calc check` 通过；`le_calc run` 生成 `result.json` 与 `black-hole-damage.html`；
-  - 测试套件（含 Release dataset）：`save_import` 24/0、`knowledge` 91/0、`affix_db` 71/skip 23、`build_import` 35/skip 15、`phase3` **628/skip 117**、`ingest` 188/skip 38，全部 PASS（skip 为依赖作者本地案例/报告的模块，显式跳过）。
-- **快照边界**：v0.4.1 为 2026-11-13 12:53 (+08:00) 的同步结果；仍不是完整战斗模拟，Ballista 支持范围按 partial 声明。版本审计见 `docs/evidence/extracted/version-audit.json` 的 `release_snapshot.incremental_syncs`。
-- **未验证项（如实列出）**：真实用户存档的完整首接（需自备可选 Node + `lastepochsupertools v1.3.1`）、planner payload 手工流程的端到端操作、原生 Windows PowerShell 5.1 实机、完整 `test --suite all` 与完整网页验收矩阵。能力边界见 [docs/current-status.md](docs/current-status.md) §4。
+  - `le.ps1 doctor`：PASS（dataset 指针 + sha256 + SQLite + 解析路由）；
+  - `knowledge rebuild`：OK（mechanisms 128 / skills 3 / schema 4，131 条目，`source_digest=sha256:431b7fb3…`）；`knowledge search --query "skill-level-scope"` 命中新增机制；
+  - 编辑器端到端（真实链）：导入含条件的现有配置 → 主技能条件 → 计算 **completed**，生成 `result.json` 与 HTML 报告；编辑器单元测试 28 项（5 skip）通过；新增条件 item buffs 测试 3 项（1 skip）通过；
+  - 测试套件（含 Release dataset）：`phase3` **631 tests / skip 118**、`knowledge` **91 / 0**，全部 PASS（skip 为依赖作者本地案例/报告的模块，显式跳过）。
+- **快照边界**：v0.4.2 为 2026-11-13 的公开最小内容同步（编辑器 + 必要引擎/知识/文档）；仍不是完整战斗模拟，Ballista 支持范围按 partial 声明。
+- **未验证项（如实列出）**：真实用户存档的完整首接（需自备可选 Node + `lastepochsupertools v1.3.1`）、planner payload 手工流程的端到端操作、原生 Windows PowerShell 5.1 实机、完整 `test --suite all` 与完整网页验收矩阵。能力边界见 [docs/current-status.md](docs/current-status.md)。

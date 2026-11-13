@@ -177,5 +177,6 @@
       ],
       "note": "仅本次施法就绪：提高下一次元素法术的本体伤害，不提高持续循环 DPS；不模拟刷新与其它法术消耗顺序。"
     }
-  ]
+  ],
+  "item_buff_library": "tools/phase3/rules/shared-conditional-item-buffs-v1.json"
 }
