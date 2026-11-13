@@ -31,7 +31,7 @@
       "source": "$.ability_id/binding_version/capabilities"
     },
     {
-      "text": "定义规则段（共享计算语义的权威位置）：attribute_scaling、stat_transfer、node_attribute_scaled",
+      "text": "定义规则段（共享计算语义的权威位置）：attribute_scaling、stat_transfer、node_attribute_scaled、equipment_condition_effects",
       "source": "$.definition.rules"
     },
     {
@@ -48,6 +48,18 @@
     }
   ],
   "author_local_refs": [
+    {
+      "pointer": "$/definition/effects/4/evidence/1/locator",
+      "original": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#items equipment.feet mods unique_description#0"
+    },
+    {
+      "pointer": "$/definition/effects/5/evidence/1/locator",
+      "original": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#items equipment.ring2#affix#corrupted#0.1"
+    },
+    {
+      "pointer": "$/definition/rules/equipment_condition_effects/0/evidence/1/locator",
+      "original": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#mods equipment.chest#affix#corrupted#0.0"
+    },
     {
       "pointer": "$/migration/canonical_case",
       "original": "archive://examples/ballista-beta5-native-20261112/case.json"
@@ -67,7 +79,7 @@
       "source": "$.definition.limitations[2]"
     },
     {
-      "text": "暴击几率按 LE 通用口径 (base+added)×(1+increased) 聚合并钳制到 [0,1]；暴击伤害按 base+added。",
+      "text": "暴击几率按 LE 通用口径 (base+added)×(1+increased) 在执行期按 actor 行逐条结算（active/included/条件/标签过滤后），编译期不折叠、不覆盖基础暴击；暴击伤害按 base+added 同样执行期结算。",
       "source": "$.definition.limitations[3]"
     },
     {
@@ -83,8 +95,24 @@
       "source": "$.definition.limitations[6]"
     },
     {
-      "text": "{\"id\": \"limitation:controls\", \"kind\": \"limitation\", \"note\": \"Siege Engineering 点数来自当前输入专精绑定，不暴露为场景控件；陷阱引爆率控件 min=1（0 表示无事件，本口径不支持零事件重算）。\", \"scope\": \"result\", \"status\": \"assumed\"}",
+      "text": "Siege Engineering 点数来自当前输入专精绑定，不暴露为场景控件；陷阱引爆率控件 min=1（0 表示无事件，本口径不支持零事件重算）。",
       "source": "$.definition.limitations[7]"
+    },
+    {
+      "text": "actor 命中按伤害通道隔离：有类型 added 只进入对应伤害类型组件，无类型 added 只进入 adaptive 通道；v4_execution 的通用 v2 路径仍未接隔离（当前 actor 路径不走该路径）。",
+      "source": "$.definition.limitations[8]"
+    },
+    {
+      "text": "Mourningfrost +1 cold damage per Dexterity 已建模（Bow 分支 ×0.75 Shared Enhancements ×250% effectiveness）；其 Melee/Spell/Throwing 分支对 Ballista 爆炸不适用；同词条的 -1% physical/cold resistance per Dex 属防御属性，未进入本 DPS 口径。",
+      "source": "$.definition.limitations[9]"
+    },
+    {
+      "text": "Phantom Grip 腐化词条“每点敏捷 +1% increased Critical Strike Chance”已建模（0.01×Dex，经 Perfect Aim 100% 复制）；暴击几率在 Dex=228 时被 cap 到 1.0。",
+      "source": "$.definition.limitations[10]"
+    },
+    {
+      "text": "剩余暗金/特殊词条已核实（docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.zh-CN.md）：Phantom Grip per-Dex 暴击与 Urzil +8 全属性已补入；其余 14 项经 IL/数据核实不适用于 Ballista 爆炸；idol_refraction 按输入假设 refracted_idols=[]/倍率 0 处理；Julra 三倍窗口与 per-stat（Movespeed/Crit Avoidance）缩放仍 unresolved。",
+      "source": "$.definition.limitations[11]"
     },
     {
       "text": "[coverage.gaps] 陷阱引爆事件率是场景假设（上游控件），未做游戏内实测；每次施放引爆数存在 0.60–2.60×λ_throw 的未验证区间。",
@@ -111,5 +139,5 @@
       "source": "$.definition.coverage.assumed_active_mods[0]"
     }
   ],
-  "generated_at": "2026-11-12T21:40:46Z"
+  "generated_at": "2026-11-13T05:06:40Z"
 }

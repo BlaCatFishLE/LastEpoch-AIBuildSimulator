@@ -68,8 +68,11 @@ _INPUT_POOL_ALLOWED = {
     "include_source_kinds",
 }
 #: 转移输入默认只允许玩家来源（skill_node 行是 actor 自身效果，不能再被转移重复计入）。
+#: ``unique_description`` 是暗金特殊说明词条（玩家侧 Stat 行），属于玩家来源；
+#: 是否真正进入某条转移仍由该 transfer 的 stat/operation/tag/scope 过滤决定。
 DEFAULT_TRANSFER_SOURCE_KINDS = (
-    "base_character", "equipment", "idol", "idol_altar", "blessing", "passive_node", "derived",
+    "base_character", "equipment", "idol", "idol_altar", "blessing", "passive_node",
+    "unique_description", "derived",
 )
 _OUTPUT_ALLOWED = {"stat", "operation", "tags", "scope", "notes"}
 

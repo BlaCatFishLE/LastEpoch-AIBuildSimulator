@@ -54,7 +54,7 @@ cd <REPO>
 
 ```powershell
 .\scripts\fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator
-# 可选参数：-Tag v0.4.0（默认）、-Url <直链覆盖>、-OutFile <目标路径>、-Force（已存在且哈希正确时仍重下）
+# 可选参数：-Tag v0.4.1（默认）、-Url <直链覆盖>、-OutFile <目标路径>、-Force（已存在且哈希正确时仍重下）
 ```
 
 仓库地址：<https://github.com/BlaCatFishLE/LastEpoch-AIBuildSimulator>。
@@ -177,15 +177,16 @@ dist/             打包输出（gitignored）
 
 ## 验证状态
 
-**公开发布验证（2026-11-13，tag v0.4.0）**
+**公开发布验证（2026-11-13，tag v0.4.1）**
 
-- **仓库与 Release**：<https://github.com/BlaCatFishLE/LastEpoch-AIBuildSimulator>；dataset 通过 Release 附件 `data.sqlite` 分发。已在干净 clone 中实测 `scripts/fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator` 从 Release 下载并校验通过（251.2 MB / 263,401,472 bytes，sha256 `afa79e9fda0023b2ed09f4cbe8e07da436e0c74c03f34f80772da471c0adb8ab`）。
-- **验证环境**：Windows 10（10.0.19045）、PowerShell 7.6.10（脚本声明 5.1+）、Python 3.12.14（干净 clone 内新建 `.venv`）。
-- **干净 clone（`--branch v0.4.0`，826 文件）已执行**：
-  - 结构/隐私/死链/体积检查：PASS（0 个人路径、0 断开链接、0 无效 JSON、0 个 >100 MB 的跟踪文件）；
-  - `le.ps1 doctor`：PASS（解释器/模块导入/dataset 指针/文件 sha256/SQLite/解析路由）；
-  - `knowledge rebuild`：OK；`knowledge search --query "node:fr11mv:9"`：3/3 命中；
-  - 合成最小输入 `fixtures/min-case/input-snapshot.json`：`le_calc check` 通过（含预期的 synthetic `calc_input_missing` issue）；`le_calc run --snapshot ... --out reports/min-case-demo` 生成 `result.json` 与 `black-hole-damage.html`；
-  - 测试套件：`save_import` 24/0、`knowledge` 91/0、`affix_db` 71/skip 23、`build_import` 35/skip 15、`phase3` 613/skip 113、`ingest` 188/skip 38，全部 PASS（skip 为依赖作者本地案例/报告的模块，缺少数据时显式跳过）。
-- **快照边界**：tag v0.4.0 为 2026-11-13 05:23 (+08:00) 导出的公开快照；导出后上游 Ballista 相关修复不在该 tag 内，将在后续版本发布；本快照内 Ballista 支持范围按 partial 声明。版本审计见 `docs/evidence/extracted/version-audit.json` 的 `release_snapshot`。
-- **未验证项（如实列出）**：真实用户存档的完整首接（需自备可选 Node + `lastepochsupertools v1.3.1`）、planner payload 手工流程的端到端操作、原生 Windows PowerShell 5.1 实机（脚本声明 5.1+ 兼容）、完整 `test --suite all` 与完整网页验收矩阵。能力边界见 [docs/current-status.md](docs/current-status.md) §4。
+- **仓库与 Release**：<https://github.com/BlaCatFishLE/LastEpoch-AIBuildSimulator>；dataset 通过 Release 附件 `data.sqlite` 分发（251.2 MB，sha256 `afa79e9fda0023b2ed09f4cbe8e07da436e0c74c03f34f80772da471c0adb8ab`）。`scripts/fetch_dataset.ps1` 默认从本 tag 的 Release 下载并校验（附件发布后复核）。
+- **v0.4.1 同步范围**：在 v0.4.0 快照（2026-11-13 05:23 +08:00）基础上，同步 2026-11-13 的修复批次：Ballista Armed Construction 修正轮（伤害通道类型隔离、来源绑定/结果门禁、编译期暴击折叠）、共享 damage channel 闭包、装备页完整词条与 `unique_description` 投影、报告 UI/契约/知识索引更新。同步边界截至 2026-11-13 12:53 (+08:00)；之后的上游工作另行发布。
+- **验证环境**：Windows 10（10.0.19045）、PowerShell 7.6.10（脚本声明 5.1+）、Python 3.12.14。
+- **已执行**：
+  - 结构/隐私/死链/JSON 检查：PASS（0 本机路径、0 断开链接、0 无效 JSON、0 个 >100 MB 的跟踪文件）；
+  - `le.ps1 doctor`：PASS（dataset 指针 + 文件 sha256 + SQLite + 解析路由）；
+  - `knowledge rebuild`：OK（127 机制 / 130 条目，`source_digest=sha256:07ac7a3f…`）；`knowledge search` 抽查命中；
+  - 合成最小输入 `fixtures/min-case/input-snapshot.json`：`le_calc check` 通过；`le_calc run` 生成 `result.json` 与 `black-hole-damage.html`；
+  - 测试套件（含 Release dataset）：`save_import` 24/0、`knowledge` 91/0、`affix_db` 71/skip 23、`build_import` 35/skip 15、`phase3` **628/skip 117**、`ingest` 188/skip 38，全部 PASS（skip 为依赖作者本地案例/报告的模块，显式跳过）。
+- **快照边界**：v0.4.1 为 2026-11-13 12:53 (+08:00) 的同步结果；仍不是完整战斗模拟，Ballista 支持范围按 partial 声明。版本审计见 `docs/evidence/extracted/version-audit.json` 的 `release_snapshot.incremental_syncs`。
+- **未验证项（如实列出）**：真实用户存档的完整首接（需自备可选 Node + `lastepochsupertools v1.3.1`）、planner payload 手工流程的端到端操作、原生 Windows PowerShell 5.1 实机、完整 `test --suite all` 与完整网页验收矩阵；v0.4.1 Release 附件下载在发布后复核。能力边界见 [docs/current-status.md](docs/current-status.md) §4。

@@ -1,6 +1,6 @@
 {
   "schema": "le-extracted-coverage-boundaries-v1",
-  "generated_at": "2026-11-12T21:35:05Z",
+  "generated_at": "2026-11-13T05:06:54Z",
   "note": "覆盖边界汇总；由 skill 模板 unsupported、共享定义 limitations/coverage 与条件注册表 support.level 生成，不是新证据。逐条机制状态见 docs/evidence/extracted/<entry-id>.json。",
   "scopes": [
     {
@@ -409,7 +409,7 @@
               "text": "Elixir 按 100% 覆盖；minion 等级缩放因伤害路径无调用点未纳入；isBallistaExplosion 按推断 true 建模。"
             },
             {
-              "text": "暴击几率按 LE 通用口径 (base+added)×(1+increased) 聚合并钳制到 [0,1]；暴击伤害按 base+added。"
+              "text": "暴击几率按 LE 通用口径 (base+added)×(1+increased) 在执行期按 actor 行逐条结算（active/included/条件/标签过滤后），编译期不折叠、不覆盖基础暴击；暴击伤害按 base+added 同样执行期结算。"
             },
             {
               "text": "目标为 100 级 Boss Dummy、0 抗性、无额外减伤；不建模敌方护甲/减抗/暴击抑制。"
@@ -421,7 +421,19 @@
               "text": "Minion 原生 Minion 标签伤害/暴击行按 100% actor 行处理；与转移规则显式互斥（exclude_tags=[Minion]）。"
             },
             {
-              "text": "{\"id\": \"limitation:controls\", \"kind\": \"limitation\", \"note\": \"Siege Engineering 点数来自当前输入专精绑定，不暴露为场景控件；陷阱引爆率控件 min=1（0 表示无事件，本口径不支持零事件重算）。\", \"scope\": \"result\", \"status\": \"assumed\"}"
+              "text": "Siege Engineering 点数来自当前输入专精绑定，不暴露为场景控件；陷阱引爆率控件 min=1（0 表示无事件，本口径不支持零事件重算）。"
+            },
+            {
+              "text": "actor 命中按伤害通道隔离：有类型 added 只进入对应伤害类型组件，无类型 added 只进入 adaptive 通道；v4_execution 的通用 v2 路径仍未接隔离（当前 actor 路径不走该路径）。"
+            },
+            {
+              "text": "Mourningfrost +1 cold damage per Dexterity 已建模（Bow 分支 ×0.75 Shared Enhancements ×250% effectiveness）；其 Melee/Spell/Throwing 分支对 Ballista 爆炸不适用；同词条的 -1% physical/cold resistance per Dex 属防御属性，未进入本 DPS 口径。"
+            },
+            {
+              "text": "Phantom Grip 腐化词条“每点敏捷 +1% increased Critical Strike Chance”已建模（0.01×Dex，经 Perfect Aim 100% 复制）；暴击几率在 Dex=228 时被 cap 到 1.0。"
+            },
+            {
+              "text": "剩余暗金/特殊词条已核实（docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.zh-CN.md）：Phantom Grip per-Dex 暴击与 Urzil +8 全属性已补入；其余 14 项经 IL/数据核实不适用于 Ballista 爆炸；idol_refraction 按输入假设 refracted_idols=[]/倍率 0 处理；Julra 三倍窗口与 per-stat（Movespeed/Crit Avoidance）缩放仍 unresolved。"
             },
             {
               "section": "coverage.gaps",

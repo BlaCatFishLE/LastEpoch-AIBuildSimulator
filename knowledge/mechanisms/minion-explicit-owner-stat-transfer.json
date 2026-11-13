@@ -1,7 +1,7 @@
 {
   "schema": "le-knowledge-mechanism-v1",
   "mechanism_id": "minion-explicit-owner-stat-transfer",
-  "revision": 2,
+  "revision": 3,
   "title": {
     "zh": "节点驱动的玩家→召唤物属性转移"
   },
@@ -85,6 +85,21 @@
       "kind": "reverse_engineering",
       "detail": "GetValueMultiplier：SP=0→playerDamageModifierEffectivenessRatio、SP=4→critChance ratio、SP=5→critMulti ratio；GetStatsFromPlayer 对每个匹配 Stat 用 Stat.CopyFrom(stat, ratio) 复制，added/increased/moreValues 全部乘比例，保留 tags，召唤时快照进 SummonEntityOnDeath.statList。",
       "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#4-属性转移与-per-dex"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-mourningfrost-20261113.json",
+      "note": "Mourningfrost 修正证据（IL/常量/run-5）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md",
+      "note": "修正轮复验记录"
+    },
+    {
+      "kind": "document",
+      "locator": "knowledge/mechanisms/mourningfrost-cold-per-dexterity.json",
+      "note": "Mourningfrost per-Dex cold 机制"
     }
   ],
   "research_notes": {
@@ -94,7 +109,9 @@
     "checked_sources": [
       "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
       "docs/evidence/ballista/ballista-build-values-20261113.json",
-      "knowledge/definitions/ballista-armed-construction-v4.json"
+      "knowledge/definitions/ballista-armed-construction-v4.json",
+      "tools/phase3/tests/test_step5_v4_attribute_scaled_effect.py",
+      "docs/evidence/ballista/ballista-mourningfrost-20261113.json"
     ]
   },
   "reuse_mode": "shared",
@@ -111,6 +128,16 @@
     {
       "item": "基础暴击是否共享",
       "reason": "玩家 Stat 不含技能自身 5% 基础暴击；本轮按只转移 Stat 行处理。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "转移来源白名单",
+      "reason": "通用默认 include_source_kinds 已加入 unique_description（暗金说明行属玩家来源）；技能节点行仍排除；unique_description 行仍须通过 stat/operation/tag/scope 过滤。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "Mourningfrost 特例",
+      "reason": "Mourningfrost 的 +1 cold/Dex 在 Bow|Cold 分支上经 75% 转移后为 171 added cold（见 mourningfrost-cold-per-dexterity 条目）。",
       "blocks_full_dps": false
     }
   ]

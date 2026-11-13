@@ -1,6 +1,6 @@
 {
   "schema": "le-extracted-evidence-index-v1",
-  "generated_at": "2026-11-12T21:40:46Z",
+  "generated_at": "2026-11-13T05:06:40Z",
   "note": "由 knowledge 条目生成的可复用结论 + 作者本地归档定位清单；不复制条目数值。",
   "entries": [
     {
@@ -10,6 +10,30 @@
       "author_ref_count": 1,
       "conclusion_count": 4,
       "limitation_count": 0
+    },
+    {
+      "entry_id": "ballista-armed-construction-v4",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/ballista-armed-construction-v4.json",
+      "author_ref_count": 4,
+      "conclusion_count": 6,
+      "limitation_count": 18
+    },
+    {
+      "entry_id": "ballista-explosion-damage-composition",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/ballista-explosion-damage-composition.json",
+      "author_ref_count": 2,
+      "conclusion_count": 4,
+      "limitation_count": 7
+    },
+    {
+      "entry_id": "ballista-trap-triggered-summon",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/ballista-trap-triggered-summon.json",
+      "author_ref_count": 2,
+      "conclusion_count": 4,
+      "limitation_count": 6
     },
     {
       "entry_id": "bh-attribute-scaling",
@@ -36,12 +60,28 @@
       "limitation_count": 2
     },
     {
+      "entry_id": "bh-black-hole",
+      "kind": "skill",
+      "source_path": "knowledge/skills/bh-black-hole.json",
+      "author_ref_count": 24,
+      "conclusion_count": 24,
+      "limitation_count": 12
+    },
+    {
       "entry_id": "bh-black-hole-instances",
       "kind": "mechanism",
       "source_path": "knowledge/mechanisms/bh-black-hole-instances.json",
       "author_ref_count": 3,
       "conclusion_count": 5,
       "limitation_count": 2
+    },
+    {
+      "entry_id": "bh-black-hole-v3",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/black-hole-v3.json",
+      "author_ref_count": 7,
+      "conclusion_count": 5,
+      "limitation_count": 4
     },
     {
       "entry_id": "bh-body-component",
@@ -388,6 +428,14 @@
       "limitation_count": 2
     },
     {
+      "entry_id": "black-hole-v4",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/black-hole-v4.json",
+      "author_ref_count": 6,
+      "conclusion_count": 5,
+      "limitation_count": 4
+    },
+    {
       "entry_id": "common-conditional-state-eval",
       "kind": "mechanism",
       "source_path": "knowledge/mechanisms/common-conditional-state-eval.json",
@@ -450,6 +498,14 @@
       "author_ref_count": 8,
       "conclusion_count": 5,
       "limitation_count": 3
+    },
+    {
+      "entry_id": "damage-channel-added-and-multipliers",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/damage-channel-added-and-multipliers.json",
+      "author_ref_count": 1,
+      "conclusion_count": 5,
+      "limitation_count": 1
     },
     {
       "entry_id": "fr-effect-ambition-gain-source",
@@ -546,6 +602,30 @@
       "author_ref_count": 14,
       "conclusion_count": 5,
       "limitation_count": 3
+    },
+    {
+      "entry_id": "fr-flame-reave",
+      "kind": "skill",
+      "source_path": "knowledge/skills/fr-flame-reave.json",
+      "author_ref_count": 34,
+      "conclusion_count": 26,
+      "limitation_count": 16
+    },
+    {
+      "entry_id": "fr-flame-reave-v3",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/fr-flame-reave-v3.json",
+      "author_ref_count": 10,
+      "conclusion_count": 6,
+      "limitation_count": 10
+    },
+    {
+      "entry_id": "fr-flame-reave-v4",
+      "kind": "definition",
+      "source_path": "knowledge/definitions/fr-flame-reave-v4.json",
+      "author_ref_count": 9,
+      "conclusion_count": 6,
+      "limitation_count": 10
     },
     {
       "entry_id": "fr-hit-added-scaling",
@@ -764,6 +844,30 @@
       "limitation_count": 1
     },
     {
+      "entry_id": "minion-explicit-owner-stat-transfer",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/minion-explicit-owner-stat-transfer.json",
+      "author_ref_count": 1,
+      "conclusion_count": 4,
+      "limitation_count": 5
+    },
+    {
+      "entry_id": "mourningfrost-cold-per-dexterity",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/mourningfrost-cold-per-dexterity.json",
+      "author_ref_count": 2,
+      "conclusion_count": 5,
+      "limitation_count": 5
+    },
+    {
+      "entry_id": "phantom-grip-crit-chance-per-dexterity",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/phantom-grip-crit-chance-per-dexterity.json",
+      "author_ref_count": 2,
+      "conclusion_count": 5,
+      "limitation_count": 3
+    },
+    {
       "entry_id": "skill-added-damage-spell-to-melee",
       "kind": "mechanism",
       "source_path": "knowledge/mechanisms/skill-added-damage-spell-to-melee.json",
@@ -772,20 +876,12 @@
       "limitation_count": 1
     },
     {
-      "entry_id": "bh-black-hole",
-      "kind": "skill",
-      "source_path": "knowledge/skills/bh-black-hole.json",
-      "author_ref_count": 24,
-      "conclusion_count": 24,
-      "limitation_count": 12
-    },
-    {
-      "entry_id": "fr-flame-reave",
-      "kind": "skill",
-      "source_path": "knowledge/skills/fr-flame-reave.json",
-      "author_ref_count": 34,
-      "conclusion_count": 26,
-      "limitation_count": 16
+      "entry_id": "urzil-pride-all-attributes-corrupted-condition",
+      "kind": "mechanism",
+      "source_path": "knowledge/mechanisms/urzil-pride-all-attributes-corrupted-condition.json",
+      "author_ref_count": 2,
+      "conclusion_count": 5,
+      "limitation_count": 3
     },
     {
       "entry_id": "void-cleave-fire-main",
@@ -794,46 +890,6 @@
       "author_ref_count": 1,
       "conclusion_count": 17,
       "limitation_count": 2
-    },
-    {
-      "entry_id": "ballista-armed-construction-v4",
-      "kind": "definition",
-      "source_path": "knowledge/definitions/ballista-armed-construction-v4.json",
-      "author_ref_count": 1,
-      "conclusion_count": 6,
-      "limitation_count": 14
-    },
-    {
-      "entry_id": "bh-black-hole-v3",
-      "kind": "definition",
-      "source_path": "knowledge/definitions/black-hole-v3.json",
-      "author_ref_count": 7,
-      "conclusion_count": 5,
-      "limitation_count": 4
-    },
-    {
-      "entry_id": "black-hole-v4",
-      "kind": "definition",
-      "source_path": "knowledge/definitions/black-hole-v4.json",
-      "author_ref_count": 6,
-      "conclusion_count": 5,
-      "limitation_count": 4
-    },
-    {
-      "entry_id": "fr-flame-reave-v3",
-      "kind": "definition",
-      "source_path": "knowledge/definitions/fr-flame-reave-v3.json",
-      "author_ref_count": 10,
-      "conclusion_count": 6,
-      "limitation_count": 10
-    },
-    {
-      "entry_id": "fr-flame-reave-v4",
-      "kind": "definition",
-      "source_path": "knowledge/definitions/fr-flame-reave-v4.json",
-      "author_ref_count": 9,
-      "conclusion_count": 6,
-      "limitation_count": 10
     },
     {
       "entry_id": "void-cleave-fire-main-v3",

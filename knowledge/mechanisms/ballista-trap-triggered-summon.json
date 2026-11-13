@@ -1,7 +1,7 @@
 {
   "schema": "le-knowledge-mechanism-v1",
   "mechanism_id": "ballista-trap-triggered-summon",
-  "revision": 2,
+  "revision": 3,
   "title": {
     "zh": "Explosive Trap 触发 Ballista 的来源链"
   },
@@ -87,6 +87,16 @@
       "kind": "reverse_engineering",
       "detail": "Siege Engineering 2/2=每点0.10、每个引爆陷阱独立 Roll；召唤走 ba1574 SummonEntityOnDeath，mana=44×0.5=22，mana 不足则整次跳过；Clustered 2/2→3 陷阱/施放，Trap Sprinkler 0.30、Automated Bombardment 0.70+11 mana；溢出门槛 ≤3 次强制引爆/2s、活动上限 6。",
       "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#8-siege-engineering-触发链与频率代数问题-ef-q11"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md",
+      "note": "独立复核修正轮（P1 反例闭合）"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-fix-verification-20261113.json",
+      "note": "修复/复验结构化证据"
     }
   ],
   "research_notes": {
@@ -97,7 +107,8 @@
     "checked_sources": [
       "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
       "docs/evidence/ballista/ballista-build-values-20261113.json",
-      "knowledge/definitions/ballista-armed-construction-v4.json"
+      "knowledge/definitions/ballista-armed-construction-v4.json",
+      "archive://docs/reviews/ballista-armed-construction-independent-review-20261113.zh-CN.md P1-B1/P2 closure"
     ]
   },
   "reuse_mode": "shared",
@@ -114,6 +125,16 @@
     {
       "item": "mana 约束",
       "reason": "mana 池/回复/药水节奏未纳入频率推导；若 mana 不足，部分召唤被跳过。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "Siege Engineering 点数来源",
+      "reason": "点数只在编译期从当前输入 ex4tp 专精节点30绑定；场景不再提供 points 控件，points=0/专精缺失/目录缺失均编译拒绝（独立复核 P1-B1 反例已闭合）。",
+      "blocks_full_dps": true
+    },
+    {
+      "item": "陷阱引爆率控件 0 值",
+      "reason": "trap_detonation_rate_per_s 模板 min=1，越界在绑定期拒绝；0 表示无事件，本口径不支持零事件重算。",
       "blocks_full_dps": false
     }
   ]

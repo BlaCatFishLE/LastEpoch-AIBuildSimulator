@@ -204,8 +204,8 @@
       "binding_version": "definitions_v3.selector-v1",
       "ability_id": "ba1574",
       "plan_version": "le-calculation-plan-v4",
-      "revision": "sha256:1611b8a0f4975d7c",
-      "sha256": "1611b8a0f4975d7c8f3509f84868ae922b3ad62ae7e34aecfb7f6f30ec1c16d5",
+      "revision": "sha256:25e64696a3ea8e13",
+      "sha256": "25e64696a3ea8e13aba2914ee740cf34b164112fdda6cb5fb3d8b4d0a722a410",
       "capabilities": [
         "hit_components",
         "minion_actor",

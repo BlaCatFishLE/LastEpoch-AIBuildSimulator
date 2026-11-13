@@ -1068,8 +1068,49 @@ def _project_item(instance: Mapping[str, Any], *, slot: str, role: str) -> dict[
     }
 
 
-def _project_equipment(case: Mapping[str, Any], root: Path) -> list[dict[str, Any]]:
-    """BuildSpec equipment/idols/blessings → generic report equipment rows."""
+def _project_equipment(
+    case: Mapping[str, Any], root: Path, plan: Optional[Mapping[str, Any]] = None,
+) -> list[dict[str, Any]]:
+    """以计划绑定的完整 calculation-input 为装备清单；BuildSpec 仅兼容补充。"""
+    refs = [ref for ref in (plan or {}).get("input_refs") or []
+            if ref.get("role") == "calculation_input"]
+    if len(refs) > 1:
+        raise ValueError("装备投影存在多个 calculation_input 权威来源")
+    ref = refs[0] if refs else None
+    path_text = ref.get("path") if ref else (case.get("inputs") or {}).get("calculation_input")
+    if path_text:
+        path = root / str(path_text)
+        expected_sha = ref.get("sha256") if ref else (case.get("input_sha256") or {}).get("calculation_input")
+        if not path.is_file():
+            raise ValueError(f"装备明细输入不存在：{path_text}")
+        if expected_sha and planmod.sha256_file(path) != expected_sha:
+            raise ValueError(f"装备明细输入与绑定 SHA 不一致：{path_text}")
+        calc = _read(path)
+        items = calc.get("items")
+        if not isinstance(items, list):
+            raise ValueError("装备明细 calculation-input.items 必须是数组")
+        rows = []
+        seen = set()
+        for item in items:
+            iid = str(item.get("instance_id") or "")
+            if not iid or iid in seen:
+                raise ValueError(f"装备明细实例身份缺失或重复：{iid!r}")
+            seen.add(iid)
+            row = copy.deepcopy(item)
+            if not isinstance(row.get("mods"), list):
+                raise ValueError(f"装备明细 {iid} 缺少完整 mods 清单")
+            mod_ids = [mod.get("mod_id") for mod in row["mods"]]
+            if any(not key for key in mod_ids) or len(mod_ids) != len(set(mod_ids)):
+                raise ValueError(f"装备明细 {iid} 词条身份缺失或重复")
+            row["mods_complete"] = True
+            rows.append(row)
+        return rows
+    # 旧输入未提供完整解码清单时，仅保留兼容摘要，不称为完整词条。
+    return _project_equipment_summary(case, root)
+
+
+def _project_equipment_summary(case: Mapping[str, Any], root: Path) -> list[dict[str, Any]]:
+    """Legacy BuildSpec 元数据/affix 摘要；不能覆盖已有完整 mods。"""
     build_spec = case.get("build", {}).get("build_spec") if isinstance(case.get("build"), dict) else None
     if not build_spec:
         return []
@@ -1118,11 +1159,49 @@ def _target_controls(plan: Mapping[str, Any]) -> list[dict[str, Any]]:
     return controls
 
 
+def _state_controls(plan: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """把 plan 声明的 state 控件投影为报告可编辑控件（场景假设/Buff），target 控件另走 _target_controls。"""
+    controls: list[dict[str, Any]] = []
+    for control in (plan.get("execution") or {}).get("controls") or []:
+        if not isinstance(control, dict):
+            continue
+        key = str(control.get("key") or "")
+        namespace = str(
+            control.get("namespace") or ("target" if key.startswith("target.") else "state")
+        )
+        if namespace != "state":
+            continue
+        controls.append(
+            {
+                "key": key,
+                "label": control.get("label") or key,
+                "source": control.get("source"),
+                "type": control.get("type") or "boolean",
+                "default": control.get("default"),
+                "min": control.get("min"),
+                "max": control.get("max"),
+                "readonly": bool(control.get("readonly")),
+                "effect": control.get("effect"),
+                "single_cast_only": bool(control.get("single_cast_only")),
+                "requires_target": control.get("requires_target"),
+            }
+        )
+    return controls
+
+
 def _report_details(plan: Mapping[str, Any], result: Mapping[str, Any], binding: Mapping[str, Any]) -> dict[str, Any]:
     """Return disk result.report_details verbatim; build a fallback only when absent."""
     existing = result.get("report_details")
     if isinstance(existing, dict) and existing:
-        return copy.deepcopy(existing)
+        details = copy.deepcopy(existing)
+        current = {str(item.get("instance_id")): item for item in details.get("equipment") or []}
+        for item in binding.get("equipment") or []:
+            iid = str(item.get("instance_id"))
+            # 已绑定完整清单优先；兼容摘要不能覆盖原来已有的 mods。
+            if item.get("mods_complete") or iid not in current:
+                current[iid] = copy.deepcopy(item)
+        details["equipment"] = list(current.values())
+        return details
     generic = (plan.get("execution") or {}).get("execution_v1") or {}
     return {
         "components": list(generic.get("components") or []),
@@ -1206,9 +1285,30 @@ def render_stage(
     )
     scenario_binding = _scenario_binding(plan, result)
     binding["scenario_binding"] = scenario_binding
-    binding["equipment"] = _project_equipment(case, root_path)
+    equipment_rows = _project_equipment(case, root_path, plan)
+    binding["equipment"] = equipment_rows
+    # 明确装备投影来源/完整度：完整解码清单一律带 mods_complete；旧输入只能回退摘要，
+    # 用 mode 字段如实标注，避免摘要被误认为完整词条（报告契约 §6.9 / UR-15）。
+    complete = bool(equipment_rows) and all(bool(item.get("mods_complete")) for item in equipment_rows)
+    role_counts: dict[str, int] = {}
+    for item in equipment_rows:
+        role = str(item.get("role") or "equipment")
+        role_counts[role] = role_counts.get(role, 0) + 1
+    binding["equipment_projection"] = {
+        "mode": "complete" if complete else ("summary" if equipment_rows else "empty"),
+        "item_count": len(equipment_rows),
+        "mod_count": sum(
+            len(item.get("mods") or item.get("affixes") or []) for item in equipment_rows
+        ),
+        "roles": role_counts,
+    }
     display_result = dict(result)
     display_result["report_details"] = _report_details(plan, result, binding)
+    report_details = display_result["report_details"]
+    if not report_details.get("controls"):
+        projected_controls = _state_controls(plan)
+        if projected_controls:
+            report_details["controls"] = projected_controls
     binding["target_controls"] = _target_controls(plan)
     html = dps_report.render(display_result, binding)
     (run_dir / HTML_NAME).write_text(html, encoding="utf-8")
@@ -1251,6 +1351,7 @@ def render_stage(
             "coverage": (result.get("coverage") or {}).get("status"),
             "calculation_plan": planmod.plan_ref(plan),
             "scenario_binding": scenario_binding,
+            "equipment_projection": binding.get("equipment_projection"),
         },
     )
     outputs = [

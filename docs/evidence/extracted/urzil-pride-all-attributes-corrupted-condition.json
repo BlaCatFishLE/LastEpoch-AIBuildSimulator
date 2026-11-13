@@ -1,0 +1,77 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "urzil-pride-all-attributes-corrupted-condition",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Urzil's Pride：≥7 件 corrupted 非神像装备时 +8 All Attributes",
+    "en": "Urzil's Pride: +8 all attributes with 7+ corrupted non-idol items"
+  },
+  "source_path": "knowledge/mechanisms/urzil-pride-all-attributes-corrupted-condition.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [],
+  "compatibility_baseline": null,
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.equipment_condition_effects",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "rules.equipment_condition_effects[0] = urzil_all_attributes_with_7_corrupted_items",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.equipment_condition_effects",
+      "note": "ref 指向共享定义内的规则段（不是外部规则包 ID），已在该定义文件确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Urzil's Pride：≥7 件 corrupted 非神像装备时 +8 All Attributes",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、frequency；条件 code：corrupted_non_idol_items_ge_7",
+      "source": "$.applicability"
+    },
+    {
+      "text": "装备实例中拥有 corrupted channel 词条的非神像件数≥7 时，+8 全属性（SP=46 AllAttributes）进入玩家属性池；Dex 228→236，连锁 attribute_scaling、Armed per-Dex more 与 Mourningfrost cold/Dex。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "按实例统计 channel 词条数（exclude_roles/include_roles）；plan_compiler 在 attribute_detail 之前产出 all_attributes 行。",
+      "source": "$.handler_ref.note（le_calc.effect_binding.count_equipment_condition_items）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：all_attributes_added、min_items",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#mods equipment.chest#affix#corrupted#0.0"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "计数口径：以“实例存在 corrupted channel 词条”计数；equipment.idol_altar 角色为 equipment，当前计入（11 或 12 均≥7，不影响结果）。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    },
+    {
+      "text": "条件能力范围：equipment_condition_effects 在 v1/v2 装配链执行，v3 显式拒绝；v4-actor 复用 v1 链可用。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[1]"
+    },
+    {
+      "text": "是否存在需要排除 idol_altar 的其它构筑语义（当前不影响本案例）。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-13T05:06:40Z"
+}

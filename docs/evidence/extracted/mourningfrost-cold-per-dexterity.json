@@ -1,0 +1,86 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "mourningfrost-cold-per-dexterity",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Mourningfrost：每点敏捷 +1 冰霜伤害（攻击/法术）",
+    "en": "Mourningfrost: +1 cold damage to attacks and spells per Dexterity"
+  },
+  "source_path": "knowledge/mechanisms/mourningfrost-cold-per-dexterity.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [],
+  "compatibility_baseline": null,
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.effects",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "effects[4] = mourningfrost_cold_per_dexterity",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/ballista-armed-construction-v4.json#definition.effects",
+      "note": "ref 指向共享定义内的规则段（不是外部规则包 ID），已在该定义文件确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Mourningfrost：每点敏捷 +1 冰霜伤害（攻击/法术）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、frequency；伤害标签：Cold、Bow；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "玩家装备 Mourningfrost 时创建 4 个 SP=Damage 的 per-Dex 冰霜 added Stat（Melee/Spell/Throwing/Bow 四分支，各 +1×Dex）；Ballista 爆炸（Bow+Fire）仅 Bow|Cold 分支按 otherTags 匹配生效。经 Shared Enhancements（节点22 3/3 ×0.25=0.75）复制给 minion，再乘 250% added effectiveness。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "通用 effect.per_attribute：绑定后 value×属性/per；unique_description 来源锚点沿用 effect_binding.verify_unique_description。",
+      "source": "$.handler_ref.note（le_calc.plan_compiler._apply_per_attribute_scaling）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：added_per_dexterity、transfer_ratio、added_damage_effectiveness",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/2/locator",
+      "original": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#items equipment.feet"
+    },
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "每点数值来源：unique 说明文本 + IL 常量 1.0；未做游戏内逐点实测。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    },
+    {
+      "text": "Melee/Spell/Throwing 变体：对 Ballista 爆炸不适用（otherTags 与 ability tags 不匹配），仅 Bow|Cold 进入本口径。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[1]"
+    },
+    {
+      "text": "防御副作用：-1% physical/cold resistance per Dex 属防御属性，未进入 DPS 口径。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[2]"
+    },
+    {
+      "text": "游戏内单次爆炸的冰霜点伤是否与模型 171×2.5 完全一致（需 LEns 实测）。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "其它暗金说明行（如 Phantom Grip 的 per-Dex 暴击）是否也应逐条建模。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-13T05:06:40Z"
+}

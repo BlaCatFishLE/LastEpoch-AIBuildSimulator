@@ -74,3 +74,10 @@ coverage 的 `unclassified` 仅表示没有独立知识文章，不等价于已�
 该变更不改变知识匹配契约（`resolve_build` / `collect_components` / `bind_instances` 等接口与 coverage 的 `unclassified` 语义保持原样）；知识查询仍按稳定组件 ID 绑定当前实例数值与点数。
 
 **验收补修（2026-11-10 晚）**：`coverage` 现在把未验证（`unverified`）的相关效果计入缺口、把可选来源缺失/节点未分配视为不适用而非缺口；来源绑定要求“稳定定义身份 + 效果语义”双锚点（equipment 词条与 unique 说明行缺一即 `unverified`）；属性转换在加载与运行时都强制 `expected` 身份锚点；`every_nth_hit.n` 必须为正整数、计数策略/相位必须被显式支持；条件代码求值已抽到共享 `condition_codes` 模块，新旧路径共同调用。
+
+## 物品特殊效果与暗金说明行（2026-11-13 补充）
+
+- `unique_description` 不是可计算 mod；dataset 可能只有翻译文本、没有数值编码。涉及伤害/属性/频率的说明行必须逐条核实并登记：可计算项落模板 effect/rule，不适用项写明机制理由，未解决项登记缺口；不得因 dataset 无编码而静默丢弃，也不得用说明文本猜数值。
+- 每个可复用的物品特殊效果应有稳定 `knowledge/mechanisms/` 条目（选择器可用 item 定义 ID + mechanism ID），并引用 IL/数据/输入证据与参数绑定（例如 per-attribute、装备数量条件）。
+- 条件型或按属性/装备数量缩放的 effect 必须用通用声明能力；effect 字段白名单外的键必须拒绝（禁止 `condition` 拼错后静默变常驻）。
+- 机制条目示例（稳定 ID，不代表公开版全部机制）：`mourningfrost-cold-per-dexterity`、`phantom-grip-crit-chance-per-dexterity`、`urzil-pride-all-attributes-corrupted-condition`。

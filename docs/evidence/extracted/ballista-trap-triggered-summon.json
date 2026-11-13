@@ -1,0 +1,87 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "ballista-trap-triggered-summon",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Explosive Trap 触发 Ballista 的来源链",
+    "en": null
+  },
+  "source_path": "knowledge/mechanisms/ballista-trap-triggered-summon.json",
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [],
+  "compatibility_baseline": null,
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.frequency#derivation",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.frequency#derivation",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/ballista-armed-construction-v4.json#definition.frequency",
+      "note": "ref 指向共享定义内的规则段（不是外部规则包 ID），已在该定义文件确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Explosive Trap 触发 Ballista 的来源链",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：trigger、summon、frequency；伤害标签：Minion；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "当前树有 Siege Engineering（每点10%召唤Ballista概率、Ballista消耗50%法力），Automated Bombardment 和 Traps Throw Traps；按当前点数和事件建立触发链。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：current_points_and_mods",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/6/locator",
+      "original": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://docs/reviews/ballista-armed-construction-independent-review-20261113.zh-CN.md P1-B1/P2 closure"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "每次施放平均引爆数：Blast Rain 弹数、Sprinkler 逐颗判定与嵌套顺序未逐指令证明；事件率由场景控件 trap_detonation_rate_per_s 给出（默认 4/s）。",
+      "blocks_full_dps": true,
+      "source": "$.limitations[0]"
+    },
+    {
+      "text": "mana 约束：mana 池/回复/药水节奏未纳入频率推导；若 mana 不足，部分召唤被跳过。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[1]"
+    },
+    {
+      "text": "Siege Engineering 点数来源：点数只在编译期从当前输入 ex4tp 专精节点30绑定；场景不再提供 points 控件，points=0/专精缺失/目录缺失均编译拒绝（独立复核 P1-B1 反例已闭合）。",
+      "blocks_full_dps": true,
+      "source": "$.limitations[2]"
+    },
+    {
+      "text": "陷阱引爆率控件 0 值：trap_detonation_rate_per_s 模板 min=1，越界在绑定期拒绝；0 表示无事件，本口径不支持零事件重算。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[3]"
+    },
+    {
+      "text": "需要实测/逐指令确认每次施放的平均陷阱引爆数。",
+      "source": "$.research_notes.open_questions[0]"
+    },
+    {
+      "text": "mana 约束下的稳态召唤率需场景假设。",
+      "source": "$.research_notes.open_questions[1]"
+    }
+  ],
+  "generated_at": "2026-11-13T05:06:40Z"
+}

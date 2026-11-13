@@ -20,13 +20,12 @@ from typing import Any, Iterable, Optional
 from . import model
 from .mechanics.crit_expected import CritCapability, CritPools, expected_crit
 from .mechanics.increased_aggregate import aggregate
-from .mechanics.tag_match import TagPolicy, UNKNOWN_RESTRICT, tags_match
+from .mechanics.tag_match import TagPolicy, UNKNOWN_RESTRICT, tags_match, damage_channel_tags
 from .mechanics.target_side import hit_component_target
 
-#: 组件标签闭包策略：``Elemental`` 视为展开（等价跳过），其余标签必须出现在
-#: 组件闭包内。与历史 hit 口径相同，但作为 dps 的显式策略声明，不再经 hit 模块。
+#: 类型/行为标签匹配实际分量；Elemental 仅加入火/冰/电分量闭包。
 DPS_TAG_POLICY = TagPolicy(
-    ignored_tags=frozenset({"Elemental"}),
+    ignored_tags=frozenset(),
     known_tags=frozenset(),
     unknown_tag_policy=UNKNOWN_RESTRICT,
     name="dps-component-closure",
@@ -92,20 +91,11 @@ def component_tags(
     component: dict[str, Any],
     damage_type: str,
     *,
-    isolate_damage_channels: bool = False,
+    isolate_damage_channels: bool = True,
 ) -> list[str]:
-    """构造一个伤害通道的标签闭包。
-
-    默认（``isolate_damage_channels=False``）沿用历史口径：把当前
-    ``damage_type`` 与组件声明的全部 tags 合并，因此公共 tags 里的其它
-    伤害类型（如 Fire）也会进入 Physical/Cold/... 通道的闭包。
-
-    开启类型隔离后，组件 tags 中**其它**伤害类型不再进入闭包，只保留当前
-    通道的 ``damage_type`` 与行为标签（Bow/Minion/Hit/...）。这样一条
-    ``[Bow, Fire]`` 的附加伤害行只可能匹配 Fire 通道，不会串入其它六种
-    伤害组件。``damage_type`` 本身始终在闭包内，因此组件 tags 里声明的
-    当前类型会保留（与历史口径一致）。
-    """
+    """默认按实际分量构造闭包；False 仅供显式历史兼容调用。"""
+    if isolate_damage_channels:
+        return damage_channel_tags(component.get("tags") or [], damage_type)
     tags = [damage_type]
     for tag in component.get("tags") or []:
         if isolate_damage_channels and tag in DAMAGE_TYPES:
@@ -121,7 +111,7 @@ def _tag_ok(
     component: dict[str, Any],
     damage_type: str,
     *,
-    isolate_damage_channels: bool = False,
+    isolate_damage_channels: bool = True,
 ) -> bool:
     return tags_match(
         row.damage_tags,
@@ -202,18 +192,18 @@ def build_hit_components(
     states: dict[str, Any],
     target_info: dict[str, Any],
     damage_types: Optional[Iterable[str]] = None,
-    typed_added_policy: str = "legacy",
-    isolate_damage_channels: bool = False,
+    typed_added_policy: str = "by_type",
+    isolate_damage_channels: bool = True,
     unit_scope: Optional[str] = None,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     """装配所有命中伤害类型组件，返回 ``(components, applications)``。
 
-    ``damage_types`` 缺省遍历全部伤害类型（v1 既有行为）；plan-v2 只传入声明
-    组件类型。``typed_added_policy="by_type"`` 时，显式带伤害类型的 added 行只
+    ``damage_types`` 缺省遍历全部伤害类型；不能把技能基础元素当作附加
+    点伤白名单。显式限制仅适用于调用方确有转换/能力限制的场景。``typed_added_policy="by_type"`` 时，显式带伤害类型的 added 行只
     进入对应类型组件，无显式伤害类型的 added 行进入自适应类型组件——与迁移前
     hit 模型的组件口径一致。
 
-    ``isolate_damage_channels``（默认 ``False``，保持既有案例逐字节不变）：
+    ``isolate_damage_channels`` 默认 True；显式 False 仅用于历史兼容重放：
     开启后每个伤害通道的标签闭包只保留当前 ``damage_type`` 和行为标签，
     其它伤害类型标签被移除（见 :func:`component_tags`）；因此显式带类型的
     added 行只进入对应类型通道，无类型 added 行只进入

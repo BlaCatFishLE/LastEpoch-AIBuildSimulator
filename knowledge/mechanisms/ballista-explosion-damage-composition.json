@@ -1,7 +1,7 @@
 {
   "schema": "le-knowledge-mechanism-v1",
   "mechanism_id": "ballista-explosion-damage-composition",
-  "revision": 1,
+  "revision": 4,
   "title": {
     "zh": "Ballista 爆炸伤害构成（ability_gen327）"
   },
@@ -86,6 +86,41 @@
       "kind": "document",
       "locator": "knowledge/definitions/ballista-armed-construction-v4.json",
       "note": "可执行定义"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-fix-verification-20261113.json",
+      "note": "修复/复验结构化证据"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-mourningfrost-20261113.json",
+      "note": "Mourningfrost 修正证据（IL/常量/run-5）"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md",
+      "note": "修正轮复验记录"
+    },
+    {
+      "kind": "document",
+      "locator": "knowledge/mechanisms/mourningfrost-cold-per-dexterity.json",
+      "note": "Mourningfrost per-Dex cold 机制"
+    },
+    {
+      "kind": "document",
+      "locator": "knowledge/mechanisms/phantom-grip-crit-chance-per-dexterity.json",
+      "note": "crit cap 来源"
+    },
+    {
+      "kind": "document",
+      "locator": "knowledge/mechanisms/urzil-pride-all-attributes-corrupted-condition.json",
+      "note": "Dex 236 条件来源"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.json",
+      "note": "剩余特殊词条审计"
     }
   ],
   "research_notes": {
@@ -95,7 +130,8 @@
     "checked_sources": [
       "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
       "docs/evidence/ballista/ballista-build-values-20261113.json",
-      "knowledge/definitions/ballista-armed-construction-v4.json"
+      "knowledge/definitions/ballista-armed-construction-v4.json",
+      "archive://docs/reviews/ballista-armed-construction-independent-review-20261113.zh-CN.md P1-A/P1-D closure"
     ]
   },
   "limitations": [
@@ -107,6 +143,26 @@
     {
       "item": "暴击期望 clamp",
       "reason": "聚合 crit_chance 可达 1.39；执行层按 min(1) 钳制，报告投影保留未钳制值。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "伤害通道类型隔离",
+      "reason": "actor 命中按通道隔离：有类型 added 只进对应伤害类型组件，无类型 added 只进 adaptive；独立复核 P1-A 反例（Fire added 串入 7 通道）已闭合。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "暴击结算位置",
+      "reason": "暴击不再在编译期折叠/覆盖组件字段（crit_absorbed 已废弃），执行期按 active/included/条件/标签逐行结算；独立复核 P1-D 反例已闭合。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "Cold 通道来源",
+      "reason": "Cold 组件 added 214.5 中 171 来自 Mourningfrost +1 cold/Dex（经 Shared Enhancements 75% 转移、×250% effectiveness=427.5）；武器 Cold added 转移为 24+19.5。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "暴击 cap 与全属性条件",
+      "reason": "Phantom Grip per-Dex crit 使执行期 crit_chance 由 0.8106 达 cap 1.0（average_crit 6.98）；Urzil +8 all attributes 使 Dex 228→236，连锁 increased/more 与 Mourningfrost cold/Dex。",
       "blocks_full_dps": false
     }
   ],

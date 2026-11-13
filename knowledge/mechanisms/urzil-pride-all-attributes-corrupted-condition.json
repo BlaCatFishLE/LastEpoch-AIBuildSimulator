@@ -1,0 +1,121 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "urzil-pride-all-attributes-corrupted-condition",
+  "revision": 1,
+  "title": {
+    "zh": "Urzil's Pride：≥7 件 corrupted 非神像装备时 +8 All Attributes",
+    "en": "Urzil's Pride: +8 all attributes with 7+ corrupted non-idol items"
+  },
+  "aliases": [
+    "Urzil's Pride",
+    "Iron Armor unique",
+    "urzil_all_attributes_with_7_corrupted_items"
+  ],
+  "selectors": [
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "item:letools:uniqueList.uniques:10"
+      ]
+    },
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "urzil-pride-all-attributes-corrupted-condition"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [],
+    "conditions": [
+      "corrupted_non_idol_items_ge_7"
+    ],
+    "notes": "装备实例中拥有 corrupted channel 词条的非神像件数≥7 时，+8 全属性（SP=46 AllAttributes）进入玩家属性池；Dex 228→236，连锁 attribute_scaling、Armed per-Dex more 与 Mourningfrost cold/Dex。",
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "all_attributes_added",
+      "source": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.equipment_condition_effects[0].value",
+      "unit": "flat per attribute",
+      "note": "条件满足时每项基础属性 +8。"
+    },
+    {
+      "parameter": "min_items",
+      "source": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.equipment_condition_effects[0].requires.min_items",
+      "unit": "items",
+      "note": "当前输入 corrupted 非神像实例 11 件（含 altar 12）≥7。"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.equipment_condition_effects",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "rules.equipment_condition_effects[0] = urzil_all_attributes_with_7_corrupted_items"
+  },
+  "handler_ref": {
+    "module": "le_calc.effect_binding",
+    "symbol": "count_equipment_condition_items",
+    "note": "按实例统计 channel 词条数（exclude_roles/include_roles）；plan_compiler 在 attribute_detail 之前产出 all_attributes 行。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.json",
+      "note": "逐项审计与 IL/公式"
+    },
+    {
+      "kind": "document",
+      "locator": "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.zh-CN.md",
+      "note": "审计摘要 A2"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": ".scratch/cpp2il_isil/IsilDump/LE/CharacterMutator.txt",
+      "note": "addedAllAttributesWith7Corrupted(0x1FD8)；count(corrupted && !isIdol)>=7 → SP=46 AllAttributes"
+    },
+    {
+      "kind": "game_data",
+      "locator": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#mods equipment.chest#affix#corrupted#0.0",
+      "note": "+8 to All Attributes with at least 7 Corrupted non-Idol Items equipped"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md",
+      "note": "修正轮复验记录"
+    }
+  ],
+  "limitations": [
+    {
+      "item": "计数口径",
+      "reason": "以“实例存在 corrupted channel 词条”计数；equipment.idol_altar 角色为 equipment，当前计入（11 或 12 均≥7，不影响结果）。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "条件能力范围",
+      "reason": "equipment_condition_effects 在 v1/v2 装配链执行，v3 显式拒绝；v4-actor 复用 v1 链可用。",
+      "blocks_full_dps": false
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.json",
+      ".scratch/cpp2il_cs/DiffableCs/LE/CharacterMutator.cs",
+      "tools/phase3/tests/test_step5_v4_equipment_condition_effect.py"
+    ],
+    "open_questions": [
+      "是否存在需要排除 idol_altar 的其它构筑语义（当前不影响本案例）。"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [],
+  "case_scope": []
+}

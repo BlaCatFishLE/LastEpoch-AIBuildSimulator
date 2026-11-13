@@ -72,6 +72,22 @@ class TagPolicy:
         }
 
 
+DAMAGE_CHANNEL_TYPES = frozenset({"Physical", "Fire", "Cold", "Lightning", "Void", "Necrotic", "Poison"})
+
+
+def damage_channel_tags(tags: Iterable[str], damage_type: str) -> list[str]:
+    """分量携带自身类型和行为标签；基础技能元素不是其它点伤的白名单。"""
+    dtype = next((t for t in DAMAGE_CHANNEL_TYPES if t.lower() == str(damage_type).lower()), str(damage_type))
+    result = [dtype]
+    type_names = {item.lower() for item in DAMAGE_CHANNEL_TYPES} | {"elemental"}
+    for tag in tags or ():
+        if str(tag).lower() not in type_names and tag not in result:
+            result.append(str(tag))
+    if dtype in {"Fire", "Cold", "Lightning"}:
+        result.append("Elemental")
+    return result
+
+
 def tags_match(
     damage_tags: Iterable[str],
     component_tags: Iterable[str],

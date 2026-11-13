@@ -1,0 +1,61 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "damage-channel-added-and-multipliers",
+  "kind": "mechanism",
+  "title": {
+    "zh": "技能基础元素、附加点伤与分量增伤的独立匹配",
+    "en": null
+  },
+  "source_path": "knowledge/mechanisms/damage-channel-added-and-multipliers.json",
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [],
+  "compatibility_baseline": null,
+  "rule_ref": {
+    "kind": "none",
+    "ref": "公共标签/组件装配规则由受限 Python handler 实现，无独立规则 JSON；实际入口见 handler_ref",
+    "verification": {
+      "status": "declared_none",
+      "checked_against": null,
+      "note": "条目声明该机制没有可引用的游戏规则 ID（ref 内写明原因）"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "技能基础元素、附加点伤与分量增伤的独立匹配",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "基础类型不构成点伤白名单；行为/主体/条件仍需匹配。其它类型点伤生成对应分量，typed 修正只匹配最终分量，Elemental 仅火冰电。转换或排除需另有显式规则。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "由 dps_components/build_hit_components 与通用 execution primitive 复用；v4/显式 v2 多击装配均按分量展开。",
+      "source": "$.handler_ref.note（le_calc.mechanics.tag_match.damage_channel_tags）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：typed_contribution_rows",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/0/locator",
+      "original": "archive://docs/reviews/shared-damage-channel-and-equipment-fix-20261113.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "未宣称任意技能的特殊转换、伤害排除与事件生命周期均已支持；遇到特殊规则单独绑定与验证。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-13T05:06:40Z"
+}

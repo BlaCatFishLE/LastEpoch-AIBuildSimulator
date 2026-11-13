@@ -852,6 +852,11 @@ class ActorNativeAssemblyTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # The dataset database is a GitHub Release asset, not part of the public
+        # repository; skip cleanly when it has not been fetched locally.
+        from _dataset_asset import require_dataset_db
+
+        require_dataset_db()
         from le_calc.catalog import open_catalog
 
         cls.catalog = open_catalog()

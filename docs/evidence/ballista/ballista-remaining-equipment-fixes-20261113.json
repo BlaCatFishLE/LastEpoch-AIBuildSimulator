@@ -1,0 +1,186 @@
+{
+  "schema": "le-evidence-ballista-remaining-equipment-fixes-v1",
+  "date": "2026-11-13",
+  "scope": "remaining-equipment-unique-effects-and-equipment-page",
+  "references": {
+    "audit_md": "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.zh-CN.md",
+    "audit_json": "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.json",
+    "mourningfrost": "docs/evidence/ballista/ballista-mourningfrost-20261113.json",
+    "fix_review": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md"
+  },
+  "added_effects": [
+    {
+      "id": "phantom_grip_crit_chance_per_dexterity",
+      "item": "equipment.ring2 / item:letools:uniqueList.uniques:348",
+      "mod": "equipment.ring2#affix#corrupted#0.1",
+      "formula": "increased crit chance = 0.01 × Dexterity(228) = 2.28；经 Perfect Aim(SP=4) 100% 复制 → crit chance (0.05+0.16)×(1+2.86+2.28)=1.2894 → cap 1.0",
+      "effect": "stat=crit_chance, operation=increased, per_attribute={dexterity,1}",
+      "evidence": "IL CharacterMutator.playerPropertyCritChancePerDex=427; ISIL seq 11648-11692; BallistaMutator GetStatsFromPlayer"
+    },
+    {
+      "id": "urzil_all_attributes_with_7_corrupted_items",
+      "item": "equipment.chest / item:letools:uniqueList.uniques:10",
+      "mod": "equipment.chest#affix#corrupted#0.0",
+      "formula": "条件（corrupted 非神像实例≥7，当前 11/12 件满足）→ +8 all attributes → Dex 228→236；attribute_scaling 9.12→9.44；Armed per-Dex more 9.12→9.44；Mourningfrost owner 228→236，shared transfer 171→177",
+      "rule": "rules.equipment_condition_effects[0]",
+      "evidence": "IL CharacterMutator.addedAllAttributesWith7Corrupted(0x1FD8); ISIL seq 4361-4478"
+    }
+  ],
+  "run": {
+    "run_dir": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-7",
+    "plan_sha256": "4742aab9901da76493734cffd8c11043f6d1f4afb0f14bc7c44c69d1e4b7458b",
+    "plan_file_sha256": "261d68e167961c8e98a1acdcf216ac1061bbbc929a609cec306eae39c0f62024",
+    "result_file_sha256": "6f5cf4e91af0b382bb61bc453514f8bb867ac16bf25181f873f3397bf427abcd",
+    "html_sha256": "db65801867321a89fac01033c9cf4c3bfcfc8f01a888484952096ca726c23f50",
+    "template_sha256": "baf3e678735183e97a5edc068efb82d0561d71cdec5a386556c3a2a4e3e67841",
+    "scenario_sha256": "e2b18cd39c83fdd2e75cc5630982f5b97da1740d7dd2d33c42d3637a0bca60df",
+    "execution_fingerprint": "61d89ab082acc892146003c18da557f6537673591a3e9ddfa5d993a50f241c8f",
+    "totals": {
+      "single_event_damage": 499912.95675243996,
+      "horizon_dps": 399930.36540195195,
+      "cast_count": 96,
+      "windows_s": [
+        5,
+        30,
+        120
+      ]
+    },
+    "components_single_event": {
+      "hit:Physical": 1207.8135675169199,
+      "hit:Fire": 102950.90475481536,
+      "hit:Cold": 345257.40682033135,
+      "hit:Lightning": 50496.83160977635
+    },
+    "report_details_components": [
+      {
+        "component_id": "hit:Physical",
+        "base": 0.0,
+        "added": 0.75,
+        "subtotal": 1.875,
+        "increased_multiplier": 16.42,
+        "more_multiplier": 43.234127999999984,
+        "crit_chance": 1.0,
+        "crit_multiplier": 6.98,
+        "average_crit": 6.98,
+        "damage": 1207.8135675169199,
+        "target_multiplier": 0.13
+      },
+      {
+        "component_id": "hit:Fire",
+        "base": 50.0,
+        "added": 45.75,
+        "subtotal": 164.375,
+        "increased_multiplier": 15.965,
+        "more_multiplier": 43.234127999999984,
+        "crit_chance": 1.0,
+        "crit_multiplier": 6.98,
+        "average_crit": 6.98,
+        "damage": 102950.90475481536,
+        "target_multiplier": 0.13
+      },
+      {
+        "component_id": "hit:Cold",
+        "base": 0.0,
+        "added": 220.5,
+        "subtotal": 551.25,
+        "increased_multiplier": 15.965,
+        "more_multiplier": 43.234127999999984,
+        "crit_chance": 1.0,
+        "crit_multiplier": 6.98,
+        "average_crit": 6.98,
+        "damage": 345257.40682033135,
+        "target_multiplier": 0.13
+      },
+      {
+        "component_id": "hit:Lightning",
+        "base": 0.0,
+        "added": 32.25,
+        "subtotal": 80.625,
+        "increased_multiplier": 15.965,
+        "more_multiplier": 43.234127999999984,
+        "crit_chance": 1.0,
+        "crit_multiplier": 6.98,
+        "average_crit": 6.98,
+        "damage": 50496.83160977635,
+        "target_multiplier": 0.13
+      }
+    ],
+    "frequency": {
+      "event_rate_per_s": 0.8,
+      "event_interval_s": 1.25,
+      "gate_probability": 0.2
+    },
+    "coverage": {
+      "status": "partial",
+      "gap_count": 31,
+      "codes": {
+        "out_of_scope": 20,
+        "idol_refraction": 8,
+        "damage_relevant_unknown": 3
+      }
+    },
+    "validation": {
+      "checks": "10/10 PASS",
+      "cli_exit_code": 3,
+      "exit_note": "partial coverage"
+    }
+  },
+  "equipment_page": {
+    "projection_mode": "complete",
+    "item_count": 30,
+    "mod_count": 189,
+    "roles": {
+      "equipment": 12,
+      "idol": 8,
+      "blessing": 10
+    },
+    "unique_descriptions_visible": true,
+    "verified_examples": [
+      "equipment.feet#unique_description#0/+1 cold damage to attacks and spells per point of dexterity",
+      "equipment.feet#unique_description#1/-1% physical and cold resistance per point of dexterity",
+      "equipment.ring2#affix#corrupted#0.1/1% Increased Critical Strike Chance per Dexterity",
+      "equipment.chest#affix#corrupted#0.0/+8 to All Attributes with at least 7 Corrupted non-Idol Items equipped"
+    ],
+    "fixes": [
+      "workflow/unified.py: render_stage passes plan to _project_equipment; equipment_projection metadata",
+      "report_ui/unified_report.py: per-instance full mods by channel incl unique_description; no DPS-relevance filter",
+      "dps_report.py: MAX_RECALC_REQUEST_BYTES=2,000,000 for full-equipment binding recompute"
+    ],
+    "note": "HTML verified by minimal static assertion: Mourningfrost/Phantom Grip/Urzil cards contain unique_description and corrupted affix lines; not browser full acceptance."
+  },
+  "general_docs_updated": [
+    "docs/workflow.md#暗金说明行与特殊词条（每个 BD 必做）",
+    "docs/contracts/player-report-ui.md §6.9（unique_description 显式展示、完整 mods 来源、摘要标注、重算请求上限、生成器已修）",
+    "docs/contracts/component-knowledge-v1.md#物品特殊效果与暗金说明行"
+  ],
+  "http_recompute": {
+    "endpoint": "http://127.0.0.1:8765/recompute",
+    "request": {
+      "trap_detonation_rate_per_s": 5
+    },
+    "response_status": 200,
+    "recomputed_horizon_dps": 499912.95675243996,
+    "note": "一次页面 GET + 一次 POST 成功；本次 binding 含完整装备 189 条词条（约 360 KB），请求上限已从 150000 提升到 2,000,000"
+  },
+  "tests": {
+    "new_capabilities": "test_step5_v4_attribute_scaled_effect.py 16 passed; test_step5_v4_equipment_condition_effect.py 15 passed; test_report_equipment_projection.py 8 passed",
+    "regression": "多批 targeted 组合通过（pipeline/actor/report 相关）；未跑全仓"
+  },
+  "not_performed": [
+    "全仓回归",
+    "浏览器逐页/多分辨率验收",
+    "游戏内实测",
+    "历史案例成组 reproduce"
+  ],
+  "unresolved": [
+    "idol_refraction：输入显式假设 refracted_idols=[]/倍率 0，影响 0；真实存档 refracted 神像集合缺证据",
+    "Julra's Stardial 三倍窗口（4s/12s CD）：需 action/time + 召唤快照能力，未常驻化",
+    "U3/U4 per-stat 缩放：passive:8:1 per Movespeed 增伤、passive:106:2 per Crit Avoidance minion crit multi；通用 per 缩放仅支持 5 基础属性，未实现",
+    "14 项不适用项（Hydra global conditional、Zeurial 条件 pen、Blood Roost bleed pen、玩家 repeat/evade、不同 minion 等）均有审计理由"
+  ],
+  "limitations": [
+    "DPS 数值仍是单目标、含项目 canonical 0.87 monster DR；不与游戏内多目标/全技能面板直接可比",
+    "未做游戏内实测校准",
+    "装备页自动完整性门禁未实现，不宣称 UR-15 自动通过"
+  ]
+}

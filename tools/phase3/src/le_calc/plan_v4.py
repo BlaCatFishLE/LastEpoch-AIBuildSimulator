@@ -1354,12 +1354,8 @@ def _execute_native_v4(plan: Mapping[str, Any], scenario: Mapping[str, Any] | No
             "crit_multiplier": skill_params.get("crit_multiplier") or 1.0,
         }
     )
-    # v4-actor 装配（hit 组件 scope=="actor"）：行为标签与伤害通道必须隔离，
-    # 且显式带类型的 added 只进入对应类型通道。非 actor 路径保持历史默认
-    # （typed_added_policy="legacy"、不隔离），保证 VC/FR/BH 既有输出不变。
-    hit_assembly_kwargs: dict[str, Any] = {}
-    if hit_template["scope"] == "actor":
-        hit_assembly_kwargs = {"typed_added_policy": "by_type", "isolate_damage_channels": True}
+    # 全部生产命中均按分量匹配，不以 actor/owner 或基础元素决定是否隔离。
+    hit_assembly_kwargs = {"typed_added_policy": "by_type", "isolate_damage_channels": True}
     hit_components, hit_applications = runtime.handler("hit_component_assembly-v1")(contributions=rows, skill=hit_skill, component=hit_template, crit_rules=rule_payload.get("crit") or {}, target=target, states=state_values, target_info=target_info, unit_scope=hit_template["scope"], **hit_assembly_kwargs)
     dot_components, dot_applications, chance_notes = runtime.handler("dot_component_assembly-v1")(contributions=rows, ailments=rule_payload.get("ailments") or [], dot_component=dot_template, penetration_rule=rule_payload.get("damage_to_penetration"), target=target, target_info=target_info, additional_chance=(generic.get("additional_chance") or {}) if generic else (parameters.get("additional_chance") or {}))
     if generic_target.get("damage_reduction") is not None:
@@ -2892,6 +2888,9 @@ def _assembly_is_known_component_ref(known: Mapping[str, Any], component_id: Any
     if not ref:
         return False
     if ref in known["exact"]:
+        return True
+    parent, _, channel = ref.rpartition(":")
+    if parent in known["exact"] and channel in _ASSEMBLY_HIT_CHANNELS:
         return True
     for prefix, kind in known["prefixes"].items():
         if not ref.startswith(prefix):

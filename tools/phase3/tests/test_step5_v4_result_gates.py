@@ -7,9 +7,9 @@ coverage/账本引用/组件 damage_total/贡献 value 的篡改都能通过。
 
 本测试文件覆盖本轮新增的两条边界：
 
-1. **调用侧接线**：``plan_v4._execute_native_v4`` 在 hit 组件 ``scope=="actor"``
-   时向 ``hit_component_assembly-v1`` 传 ``typed_added_policy="by_type"`` 与
-   ``isolate_damage_channels=True``；非 actor 路径保持历史默认（legacy/不隔离）。
+1. **调用侧接线**：``plan_v4._execute_native_v4`` 对 hit 组件装配传
+   ``typed_added_policy="by_type"`` 与 ``isolate_damage_channels=True``；
+   v0.4.1 起类型隔离是默认口径，非 actor 路径也不再保留历史通道闭包。
 2. **结果门禁**：``_validate_assembly_result`` / ``_assembly_stage_checks`` 现在
    用 plan/execution 声明构造 known 组件集合，校验账本引用、应用摘要计数、
    totals/windows 算式、coverage 投影和 contributions 与 execution 行绑定。
@@ -456,7 +456,7 @@ class SyntheticResultGateTest(unittest.TestCase):
 
 
 class ActorCallSiteWiringTest(unittest.TestCase):
-    """P1-A 调用侧：actor 隔离、非 actor 保持历史默认。"""
+    """P1-A 调用侧：actor / 非 actor 均按伤害通道类型隔离。"""
 
     def test_actor_scope_passes_isolation_and_only_typed_channels(self) -> None:
         plan, result = fixture("actor")
@@ -473,23 +473,12 @@ class ActorCallSiteWiringTest(unittest.TestCase):
             delta=1e-9,
         )
 
-    def test_non_actor_scope_keeps_historical_legacy_channels(self) -> None:
+    def test_non_actor_scope_isolates_damage_channels_by_default(self) -> None:
         plan, result = fixture("body")
         self.assertEqual(plan["execution"]["execution_v1"]["components"][0]["scope"], "body")
         component_ids = {item["component_id"] for item in result["components"]}
-        # 非 actor 路径保持 legacy 默认：公共 tags 中的 Fire 会进入其它通道闭包。
-        self.assertEqual(
-            component_ids,
-            {
-                "hit:Physical",
-                "hit:Fire",
-                "hit:Cold",
-                "hit:Lightning",
-                "hit:Void",
-                "hit:Necrotic",
-                "hit:Poison",
-            },
-        )
+        # v0.4.1 起类型隔离是默认口径：公共 tags 中的 Fire 不再串入其它伤害通道。
+        self.assertEqual(component_ids, {"hit:Fire"})
         plan_v4.validate_result_v6(plan, result)
 
 
@@ -518,6 +507,18 @@ class HistoricalRunGateRegressionTest(unittest.TestCase):
         # 覆盖缺口来自 plan facts（32 条），结果与门禁一致。
         self.assertEqual(result["coverage"]["status"], "partial")
         self.assertEqual(result["coverage"]["gap_count"], len(result["coverage"]["gaps"]))
+        # issue 文案按 code 分类，不能把所有缺口都写成“伤害相关”；计数必须与 coverage 一致。
+        counts = plan_v4._coverage_gap_counts(result["coverage"])
+        issue = next(item for item in result["issues"] if str(item).startswith("覆盖状态 partial"))
+        damage_related = sum(
+            count for code, count in counts.items() if "damage_relevant" in code
+        )
+        self.assertIn(f"未解析伤害相关 {damage_related}", issue)
+        for code, count in counts.items():
+            if "damage_relevant" in code:
+                continue
+            label = "out_of_scope" if code == "unmapped:out_of_scope" else code.removeprefix("unmapped:")
+            self.assertIn(f"{label} {count}", issue)
 
     def test_saved_legacy_results_still_pass_gates(self) -> None:
         for name, run in LEGACY_RUNS.items():

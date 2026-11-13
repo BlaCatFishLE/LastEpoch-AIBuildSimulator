@@ -1,0 +1,93 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "ballista-explosion-damage-composition",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Ballista 爆炸伤害构成（ability_gen327）",
+    "en": null
+  },
+  "source_path": "knowledge/mechanisms/ballista-explosion-damage-composition.json",
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [],
+  "compatibility_baseline": null,
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.skill",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.skill",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/ballista-armed-construction-v4.json#definition.skill",
+      "note": "ref 指向共享定义内的规则段（不是外部规则包 ID），已在该定义文件确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Ballista 爆炸伤害构成（ability_gen327）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit、frequency；伤害标签：Minion、Fire、Bow；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "爆炸 = Fire 50 基伤、250% added effectiveness、5%/200% 暴击、tags Bow+Fire(+Minion 统计上下文)；乘区：increased(含 Dex×4%/点 attributeScaling、Minion 标签原生池、Shared Enhancements 75% 转移)、more(minion base 0.5、Heavy Bolts 0.36、Practical Build 0.40、Elixir 0.45、Armed Construction 0.04×Dex)、暴击期望（Perfect Aim 转移后 clamp 1.0）。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：base_damage、per_dex_more、node_more",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/5/locator",
+      "original": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md"
+    },
+    {
+      "pointer": "$/research_notes/checked_sources/3",
+      "original": "archive://docs/reviews/ballista-armed-construction-independent-review-20261113.zh-CN.md P1-A/P1-D closure"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "minion base 50% more 读法：dataset minion base_stats 的 moreValues[0.5] 按 more damage 读；未实测。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    },
+    {
+      "text": "暴击期望 clamp：聚合 crit_chance 可达 1.39；执行层按 min(1) 钳制，报告投影保留未钳制值。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[1]"
+    },
+    {
+      "text": "伤害通道类型隔离：actor 命中按通道隔离：有类型 added 只进对应伤害类型组件，无类型 added 只进 adaptive；独立复核 P1-A 反例（Fire added 串入 7 通道）已闭合。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[2]"
+    },
+    {
+      "text": "暴击结算位置：暴击不再在编译期折叠/覆盖组件字段（crit_absorbed 已废弃），执行期按 active/included/条件/标签逐行结算；独立复核 P1-D 反例已闭合。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[3]"
+    },
+    {
+      "text": "Cold 通道来源：Cold 组件 added 214.5 中 171 来自 Mourningfrost +1 cold/Dex（经 Shared Enhancements 75% 转移、×250% effectiveness=427.5）；武器 Cold added 转移为 24+19.5。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[4]"
+    },
+    {
+      "text": "暴击 cap 与全属性条件：Phantom Grip per-Dex crit 使执行期 crit_chance 由 0.8106 达 cap 1.0（average_crit 6.98）；Urzil +8 all attributes 使 Dex 228→236，连锁 increased/more 与 Mourningfrost cold/Dex。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[5]"
+    },
+    {
+      "text": "Minion 等级伤害缩放是否作用于爆炸未确认。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-13T05:06:40Z"
+}

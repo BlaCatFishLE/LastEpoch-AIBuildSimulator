@@ -215,6 +215,90 @@
           }
         ],
         "required": true
+      },
+      {
+        "id": "mourningfrost_cold_per_dexterity",
+        "label": "Mourningfrost：每点敏捷 +1 冰霜伤害（攻击/法术词条中的 Bow 分支）",
+        "source": {
+          "kind": "unique_description",
+          "binding_selector": {
+            "kind": "unique_description",
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:19",
+            "expected_description_index": 0,
+            "selection": "one"
+          },
+          "expected_text_contains": "cold damage to attacks and spells per point of dexterity",
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:19"
+        },
+        "stat": "added_damage",
+        "operation": "added",
+        "value": 1.0,
+        "value_source": "declared",
+        "per_attribute": {
+          "attribute": "dexterity",
+          "per": 1.0
+        },
+        "tags": [
+          "Cold",
+          "Bow"
+        ],
+        "scope": "owner",
+        "source_kind": "unique_description",
+        "status": "derived",
+        "required": false,
+        "evidence": [
+          {
+            "kind": "reverse_engineering",
+            "detail": "Mourningfrost(unique 19) 组件 EquipUnique 创建 4 个 SP=Damage Stat（AT=Melee|Cold、Spell|Cold、Throwing|Cold、Bow|Cold），addedValue=1.0；UpdateModifiers 按玩家 Dexterity 缩放（常量 0x18457CC18=1.0）。对 Bow+Fire 的 Ballista 爆炸只有 Bow|Cold 分支通过 otherTags 匹配。",
+            "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md#mourningfrost"
+          },
+          {
+            "kind": "game_data",
+            "detail": "当前计算输入 equipment.feet=item:letools:uniqueList.uniques:19 的 unique_description#0 文本为“+1 cold damage to attacks and spells per point of dexterity”。",
+            "locator": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#items equipment.feet mods unique_description#0"
+          }
+        ],
+        "notes": "该行是玩家 Stat（SP=Damage, AT=Bow|Cold）；经 Shared Enhancements 0.75 复制给 minion 后按 250% added effectiveness 进入 Cold 通道。"
+      },
+      {
+        "id": "phantom_grip_crit_chance_per_dexterity",
+        "label": "Phantom Grip：每点敏捷 +1% increased Critical Strike Chance（腐化词条）",
+        "source": {
+          "kind": "equipment_mod",
+          "binding_selector": {
+            "kind": "equipment_mod",
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:348",
+            "expected_property": 98,
+            "selection": "one"
+          },
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:348",
+          "expected_property": 98,
+          "expected_readable_text_contains": "Critical Strike Chance per Dexterity"
+        },
+        "stat": "crit_chance",
+        "operation": "increased",
+        "value_source": "source_value",
+        "per_attribute": {
+          "attribute": "dexterity",
+          "per": 1.0
+        },
+        "tags": [],
+        "scope": "owner",
+        "status": "derived",
+        "required": false,
+        "evidence": [
+          {
+            "kind": "reverse_engineering",
+            "detail": "Phantom Grip(unique 348) 腐化词条 equipment.ring2#affix#corrupted#0.1：property 98 marker/tags 427/每点 Dex 0.01；IL CharacterMutator.playerPropertyCritChancePerDex=427，按 Dex 创建 SP=4 CritChance Stat；Perfect Aim(SP=4) 100% 复制给 Ballista。",
+            "locator": "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.zh-CN.md#a1-phantom-grip"
+          },
+          {
+            "kind": "game_data",
+            "detail": "当前输入 mod 文本「1% Increased Critical Strike Chance per Dexterity」，value_numeric=0.01。",
+            "locator": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#items equipment.ring2#affix#corrupted#0.1"
+          }
+        ],
+        "notes": "玩家 increased crit chance = 0.01×Dex；经 Perfect Aim 100% 复制后使 Ballista crit chance 由 0.8106 升至 cap 1.0。"
       }
     ],
     "node_bindings": [
@@ -522,6 +606,53 @@
             }
           ]
         }
+      ],
+      "equipment_condition_effects": [
+        {
+          "id": "urzil_all_attributes_with_7_corrupted_items",
+          "label": "Urzil's Pride：≥7 件 corrupted 非神像装备时 +8 全属性",
+          "source": {
+            "kind": "equipment_mod",
+            "binding_selector": {
+              "kind": "equipment_mod",
+              "item_definition_entity_id": "item:letools:uniqueList.uniques:10",
+              "expected_source": "affix",
+              "expected_property": 98,
+              "expected_tags": 649,
+              "expected_special_tag": 0,
+              "selection": "one"
+            },
+            "expected_definition_entity_id": "item:letools:uniqueList.uniques:10",
+            "expected_property": 98,
+            "expected_special_tag": 0,
+            "expected_readable_text_contains": "All Attributes with at least 7 Corrupted non-Idol Items equipped"
+          },
+          "requires": {
+            "min_items": 7,
+            "channel": "corrupted",
+            "exclude_roles": [
+              "idol"
+            ]
+          },
+          "stat": "all_attributes",
+          "operation": "added",
+          "value": 8,
+          "status": "derived",
+          "required": true,
+          "evidence": [
+            {
+              "kind": "reverse_engineering",
+              "detail": "Urzil's Pride(unique 10) 腐化词条 property 98/tags 649：CharacterMutator.addedAllAttributesWith7Corrupted(0x1FD8)；count(corrupted && !isIdol)>=7 时以 SP=46 AllAttributes 创建 Stat。当前输入满足 11 件普通装备（含 altar 12 件）。",
+              "locator": "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.zh-CN.md#a2-urzils-pride"
+            },
+            {
+              "kind": "game_data",
+              "detail": "当前输入 mod 文本「+8 to All Attributes with at least 7 Corrupted non-Idol Items equipped」，property 98/tags 649/value 8。",
+              "locator": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#mods equipment.chest#affix#corrupted#0.0"
+            }
+          ],
+          "notes": "条件满足时 Dex 228→236，连锁 attribute_scaling、Armed Construction per-Dex more 与 Mourningfrost cold-per-Dex。"
+        }
       ]
     },
     "frequency": {
@@ -602,17 +733,15 @@
       "只统计 Armed Construction 的到期/销毁爆炸伤害；不含 Explosive Delivery 的 bolt 命中爆炸、箭矢直击、点燃 DoT 或 Explosive Trap/Falcon 自身伤害（用户指定口径）。",
       "陷阱引爆事件率是外部场景假设（控件 trap_detonation_rate_per_s），上界由 λ_throw×每次施放引爆数推导；未做游戏内实测。",
       "Elixir 按 100% 覆盖；minion 等级缩放因伤害路径无调用点未纳入；isBallistaExplosion 按推断 true 建模。",
-      "暴击几率按 LE 通用口径 (base+added)×(1+increased) 聚合并钳制到 [0,1]；暴击伤害按 base+added。",
+      "暴击几率按 LE 通用口径 (base+added)×(1+increased) 在执行期按 actor 行逐条结算（active/included/条件/标签过滤后），编译期不折叠、不覆盖基础暴击；暴击伤害按 base+added 同样执行期结算。",
       "目标为 100 级 Boss Dummy、0 抗性、无额外减伤；不建模敌方护甲/减抗/暴击抑制。",
       "Shared Enhancements 转移按 Stat 行复制（added/increased/more 全部乘比例、保留 tags、召唤时快照）；tag 匹配沿用通用 subset 语义。",
       "Minion 原生 Minion 标签伤害/暴击行按 100% actor 行处理；与转移规则显式互斥（exclude_tags=[Minion]）。",
-      {
-        "id": "limitation:controls",
-        "kind": "limitation",
-        "note": "Siege Engineering 点数来自当前输入专精绑定，不暴露为场景控件；陷阱引爆率控件 min=1（0 表示无事件，本口径不支持零事件重算）。",
-        "scope": "result",
-        "status": "assumed"
-      }
+      "Siege Engineering 点数来自当前输入专精绑定，不暴露为场景控件；陷阱引爆率控件 min=1（0 表示无事件，本口径不支持零事件重算）。",
+      "actor 命中按伤害通道隔离：有类型 added 只进入对应伤害类型组件，无类型 added 只进入 adaptive 通道；v4_execution 的通用 v2 路径仍未接隔离（当前 actor 路径不走该路径）。",
+      "Mourningfrost +1 cold damage per Dexterity 已建模（Bow 分支 ×0.75 Shared Enhancements ×250% effectiveness）；其 Melee/Spell/Throwing 分支对 Ballista 爆炸不适用；同词条的 -1% physical/cold resistance per Dex 属防御属性，未进入本 DPS 口径。",
+      "Phantom Grip 腐化词条“每点敏捷 +1% increased Critical Strike Chance”已建模（0.01×Dex，经 Perfect Aim 100% 复制）；暴击几率在 Dex=228 时被 cap 到 1.0。",
+      "剩余暗金/特殊词条已核实（docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.zh-CN.md）：Phantom Grip per-Dex 暴击与 Urzil +8 全属性已补入；其余 14 项经 IL/数据核实不适用于 Ballista 爆炸；idol_refraction 按输入假设 refracted_idols=[]/倍率 0 处理；Julra 三倍窗口与 per-stat（Movespeed/Crit Avoidance）缩放仍 unresolved。"
     ],
     "evidence": [
       {

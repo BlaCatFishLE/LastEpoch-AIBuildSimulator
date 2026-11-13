@@ -130,18 +130,21 @@ def build_hit_components_v2(
             "crit_capable": bool(entry.get("crit_capable")),
             "adaptive_damage_type": entry.get("adaptive_damage_type"),
         }
+        # entry.damage_type 是该事件的基础类型，不限制其它类型的附加点伤。
+        event_skill = dict(skill)
+        if entry.get("damage_type"):
+            dtype = str(entry["damage_type"])
+            event_skill["base_damage"] = {dtype: skill["base_damage"].get(dtype, 0.0)}
         built, built_apps = build_hit_components(
             contributions=contributions,
-            skill=skill,
+            skill=event_skill,
             component=template,
             crit_rules=dict(crit_rules),
             target=dict(target),
             states=dict(states),
             target_info=dict(target_info),
-            damage_types=(
-                [str(entry.get("damage_type"))] if entry.get("damage_type") else None
-            ),
             typed_added_policy="by_type",
+            isolate_damage_channels=True,
         )
         hits = int(entry.get("hits_per_cast") or 1)
         weights = [float(value) for value in entry.get("damage_weights") or [1.0] * hits]
@@ -155,7 +158,7 @@ def build_hit_components_v2(
             if declared_id:
                 new_id = (
                     declared_id
-                    if len(built) == 1
+                    if component["damage_type"] == str(entry.get("damage_type") or entry.get("adaptive_damage_type"))
                     else f"{declared_id}:{component['damage_type']}"
                 )
             else:
@@ -185,14 +188,19 @@ def component_hit_totals(components: list[Mapping[str, Any]]) -> dict[str, Any]:
     per_cast = 0.0
     hits_per_cast = 0
     effective = 0.0
+    counted_events: set[str] = set()
     for component in components:
         damage = float(component.get("damage") or 0.0)
         weights = [float(value) for value in component.get("damage_weights") or [1.0]]
         hits = int(component.get("hits_per_cast") or 1)
         first_hit += damage * weights[0]
         per_cast += damage * sum(weights)
-        hits_per_cast += hits
-        effective += sum(weights)
+        # 多系分量共享同一击；伤害相加，事件次数不重复增加。
+        event_id = str(component.get("declared_component_id") or component.get("component_id"))
+        if event_id not in counted_events:
+            counted_events.add(event_id)
+            hits_per_cast += hits
+            effective += sum(weights)
     return {
         "single_hit": first_hit,
         "per_cast_hit": per_cast,

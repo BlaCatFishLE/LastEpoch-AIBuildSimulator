@@ -40,9 +40,113 @@ def chart(windows):
     rows = ''.join('<div class="window-bar"><span>'+num(w['window_s'])+' 秒</span><div><i style="width:'+str(max(0,w.get('dps',0)/maximum*100))+'%"></i></div><b>'+num(w.get('dps'))+'</b></div>' for w in windows)
     return c.card(rows,title='观察窗口 · 平均 DPS',cls='window-chart')
 
+CHANNEL_LABELS = {
+    'implicit': '基底隐含',
+    'affix': '普通词条',
+    'unique': '暗金固有效果',
+    'unique_mod': '暗金固有效果',
+    'unique_description': '暗金说明',
+    'corrupted': '腐化词条',
+    'sealed': '封印词条',
+    'legendary': '传奇合成词条',
+}
+CHANNEL_ORDER = ('implicit', 'affix', 'unique_mod', 'unique_description', 'corrupted', 'sealed', 'legendary')
+ROLE_LABELS = {'equipment': '装备', 'idol': '神像', 'blessing': '祝福'}
+
+
+def mod_channel(mod):
+    """词条通道：优先显式 channel，description 归入 unique_description，普通 affix 归 affix。"""
+    mod_id = str(mod.get('mod_id') or '')
+    if '#unique_description#' in mod_id or mod.get('kind') == 'description':
+        return 'unique_description'
+    channel = str(mod.get('channel') or mod.get('source') or '').strip()
+    if channel == 'normal':
+        return 'affix'
+    if channel == 'unique':
+        return 'unique_mod'
+    return channel or 'affix'
+
+
+def mod_text(mod):
+    """玩家可读词条文本：readable_text → name → stat+value → 明确缺失说明。"""
+    for key in ('readable_text', 'name', 'label'):
+        value = mod.get(key)
+        if isinstance(value, str) and value.strip():
+            return ' '.join(value.split())
+    stat = mod.get('stat') if isinstance(mod.get('stat'), dict) else {}
+    stat_name = stat.get('name') or mod.get('stat_name')
+    value_text = mod.get('display_value')
+    if value_text is None and mod.get('value_numeric') is not None:
+        percent = str(stat.get('unit') or '') == 'percent'
+        value_text = num(float(mod['value_numeric']) * (100 if percent else 1)) + ('%' if percent else '')
+    if value_text is not None and stat_name:
+        return str(value_text) + ' ' + str(stat_name)
+    if stat_name:
+        return str(stat_name)
+    if mod.get('hidden'):
+        return '内部记录：无玩家可读说明（未参与展示换算）'
+    return '词条说明尚未解析'
+
+
+def gear_mod_groups(item):
+    mods = item.get('mods')
+    if not isinstance(mods, list) or not mods:
+        mods = item.get('affixes') if isinstance(item.get('affixes'), list) else []
+    groups = {}
+    for index, mod in enumerate(mods):
+        if not isinstance(mod, dict):
+            continue
+        channel = mod_channel(mod)
+        groups.setdefault(channel, []).append((index, mod))
+    ordered = []
+    for channel in CHANNEL_ORDER:
+        if channel in groups:
+            ordered.append((channel, groups.pop(channel)))
+    for channel in sorted(groups):
+        ordered.append((channel, groups[channel]))
+    return ordered, mods
+
+
+def gear_card(item, index):
+    role = str(item.get('role') or 'equipment')
+    slot = item.get('slot')
+    slot_label = SLOTS.get(slot) if isinstance(slot, str) else None
+    if not slot_label:
+        slot_label = ROLE_LABELS.get(role, KINDS.get(role, '装备'))
+    base_name = item.get('base_name') or item.get('base') or ''
+    rarity = item.get('rarity')
+    rarity_label = (rarity.get('label_zh') or rarity.get('label_en') or '') if isinstance(rarity, dict) else str(rarity or '')
+    instance_id = str(item.get('instance_id') or f'{role}#{index}')
+    groups, mods = gear_mod_groups(item)
+    total = sum(len(rows) for _channel, rows in groups)
+    completeness = '完整词条' if item.get('mods_complete') else '摘要词条（非完整解码）'
+    meta = ' · '.join(x for x in (slot_label, base_name, rarity_label, completeness + ' · ' + str(total) + ' 条') if x)
+    sections = []
+    for channel, rows in groups:
+        label = CHANNEL_LABELS.get(channel, channel or '词条')
+        lines = []
+        for mod_index, mod in rows:
+            mod_id = str(mod.get('mod_id') or '')
+            body = '<li data-mod-id="' + c.esc(mod_id) + '" data-channel="' + c.esc(channel) + '">' + c.esc(mod_text(mod)) + '</li>'
+            lines.append(body)
+        sections.append('<section class="mod-channel" data-channel="' + c.esc(channel) + '"><h5>' + c.esc(label + ' · ' + str(len(rows)) + ' 条') + '</h5><ul>' + ''.join(lines) + '</ul></section>')
+    content = ('<p class="muted">' + c.esc(meta) + '</p>'
+               + ('<div class="mod-channels">' + ''.join(sections) + '</div>' if sections else '<p class="muted">该实例没有已解码词条记录。</p>'))
+    return ('<article class="card gear-card" data-instance-id="' + c.esc(instance_id)
+            + '" data-role="' + c.esc(role) + '" data-slot="' + c.esc(str(slot or ''))
+            + '" data-mod-count="' + str(total) + '"><header class="card-head"><h4>'
+            + c.esc(name(item.get('display_name') or item.get('name') or base_name or instance_id))
+            + '</h4></header>' + content + '</article>')
+
+
 def render(result, binding):
     details = result.get('report_details') or {}
-    equipment = details.get('equipment') or binding.get('equipment') or []
+    equipment_by_id = {str(item.get('instance_id')): item for item in details.get('equipment') or []}
+    for item in binding.get('equipment') or []:
+        iid = str(item.get('instance_id'))
+        if item.get('mods_complete') or iid not in equipment_by_id:
+            equipment_by_id[iid] = item
+    equipment = list(equipment_by_id.values())
     contributions = result.get('contributions') or []
     by_id = {r['contribution_id']:r for r in contributions}
     items = {i['instance_id']:i for i in equipment if i.get('instance_id')}
@@ -138,11 +242,14 @@ def render(result, binding):
         source_html+=ui.source_group(name=source_name(first),caption=SLOTS.get((item or {}).get('slot'),KINDS.get(category,'其它来源')),effects=[(effect(r),c.badge(state(r,result),'ok' if state(r,result)=='生效' else 'muted')) for r in rows],group_attrs='data-category="'+c.esc(category)+'" data-active="'+active+'"')
     sources='<div class="toolbar"><label>搜索 <input id="source-search" type="search" placeholder="装备、节点或属性"></label><label>类别 <select id="source-category"><option value="">全部来源</option>'+''.join('<option value="'+c.esc(k)+'">'+c.esc(KINDS.get(k,'其它来源'))+'</option>' for k in sorted(categories))+'</select></label><label>状态 <select id="source-status"><option value="">全部</option><option value="true">有生效属性</option><option value="false">未作用于伤害</option></select></label></div>'+ui.source_table(body_html=source_html)
     gear=''
-    for item in equipment:
-        mods=item.get('mods') or item.get('affixes') or []
-        lines=[name(m.get('readable_text') or m.get('name'),'') for m in mods if not m.get('hidden')]
-        content='<p class="muted">'+c.esc(SLOTS.get(item.get('slot'),KINDS.get(item.get('role'),'装备'))+' · '+str(item.get('base_name') or item.get('base') or ''))+'</p><ul>'+''.join('<li>'+c.esc(t)+'</li>' for t in lines if t)+'</ul>'
-        gear+=c.card(content,title=name(item.get('display_name') or item.get('name')),cls='gear-card')
+    role_counts={}
+    total_mods=0
+    for index,item in enumerate(equipment):
+        role_counts[str(item.get('role') or 'equipment')]=role_counts.get(str(item.get('role') or 'equipment'),0)+1
+        total_mods+=sum(len(rows) for _channel,rows in gear_mod_groups(item)[0])
+        gear+=gear_card(item,index)
+    summary=' · '.join([ROLE_LABELS.get(role,KINDS.get(role,role))+' '+str(count)+' 件' for role,count in sorted(role_counts.items())]) + ' · 合计 ' + str(total_mods) + ' 条词条'
+    gear_intro=c.note('装备页展示当前实例的全部已解码词条（含未参与计算、防御/功能属性）；不按主技能 DPS 相关性筛选，展示不代表已计入 DPS。')+'<p class="muted">'+c.esc(summary)+'</p>'
     controls=details.get('controls') or []
     target_controls=(binding or {}).get('target_controls') or details.get('target_controls') or []
     buffs=''
@@ -170,9 +277,9 @@ def render(result, binding):
             field='<label><input class="stack-input" type="number" data-target-state="'+c.esc(key)+'" value="'+str(value if value is not None else 0)+'" min="'+str(control.get('min',0))+'" max="'+str(control.get('max',100))+'"'+disabled+'></label>'
         drawers+='<div class="target-condition"><b>'+c.esc(control.get('label') or key)+'</b>'+field+'</div>'
     drawers+='<button class="btn" id="reset-target">重置目标</button><p class="muted">修改后点击“计算 DPS”应用。只有适用的目标条件影响伤害。</p></aside>'
-    bodies={'overview':overview,'damage':damage or c.empty('当前结果未提供乘区明细。'),'windows':timeline,'sources':sources,'equipment':'<div class="gear-grid">'+gear+'</div>','buffs':toolbar+'<div class="buff-grid">'+buffs+'</div>'}
+    bodies={'overview':overview,'damage':damage or c.empty('当前结果未提供乘区明细。'),'windows':timeline,'sources':sources,'equipment':gear_intro+'<div class="gear-grid">'+gear+'</div>','buffs':toolbar+'<div class="buff-grid">'+buffs+'</div>'}
     pages=[{'id':k,'label':v} for k,v in [('overview','总览'),('damage','伤害构成'),('windows','时间与循环'),('sources','增伤来源'),('equipment','装备与神像'),('buffs','Buff 设置')]]
     assets=Path(__file__).with_name('assets')
     # 浏览器复用统一配置/重算协议；展示细节不参与计算。
-    client_result=dict(result,controls=controls)
+    client_result=dict(result,controls=controls,report_details=dict(details,equipment=equipment))
     return render_document(DocumentSpec(model='dps',title=title+' · 伤害分析',brand_mark='LE',heading=title,subtitle='构筑伤害分析 · 固定条件预计值',result=client_result,view={'defaults':{'states':states,'target':target,'target_controls':target_controls}},pages=pages,page_html={p['id']:c.page(p['id'],p['label'],'',bodies[p['id']]) for p in pages},first_page='overview',header_summary_html=c.esc(str(target.get('monster_level',100))+' 级 · 抗性 '+num(target.get('resistance',0)*100)+'%'),header_controls_html='<button class="btn btn-primary" id="compute">计算 DPS</button><span id="compute-status" role="status">当前结果已应用</span>',drawers_html=drawers,number_toggle=True,bindings=binding or None,recalc_endpoint=binding.get('recompute_endpoint'),model_scripts=('shell.js',),inline_scripts=((assets/'unified.js').read_text(encoding='utf-8'),),extra_css=(assets/'dps.css').read_text(encoding='utf-8')+(assets/'unified.css').read_text(encoding='utf-8'),footer_text='预计伤害 · 固定条件计算；实际战斗受走位、覆盖率与目标状态影响。'))

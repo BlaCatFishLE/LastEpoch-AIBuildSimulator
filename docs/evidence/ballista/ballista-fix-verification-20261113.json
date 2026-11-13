@@ -1,0 +1,164 @@
+{
+  "schema": "le-evidence-ballista-fix-v1",
+  "date": "2026-11-13",
+  "scope": "independent-review-p1-closure",
+  "reference_review": "archive://docs/reviews/ballista-armed-construction-independent-review-20261113.zh-CN.md",
+  "rejected_baseline": {
+    "run": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-1",
+    "horizon_dps": 205207.9021057712,
+    "status": "historical candidate, not accepted; kept unchanged"
+  },
+  "fixes": [
+    {
+      "id": "P1-A",
+      "file": "tools/phase3/src/le_calc/dps_components.py",
+      "change": "新增 isolate_damage_channels 参数；隔离时每通道标签闭包只含当前伤害类型+行为标签；added 行按 by_type 选通道；increased/more/crit/penetration 走同一隔离闭包；默认路径逐字节不变",
+      "call_site": "tools/phase3/src/le_calc/plan_v4.py: hit scope==actor 时传 typed_added_policy=by_type + isolate_damage_channels=True"
+    },
+    {
+      "id": "P1-B1",
+      "file": "tools/phase3/src/le_calc/plan_compiler_actor.py::resolve_derived_frequency",
+      "change": "删除失败回退运行期 control 的分支；专精缺失/节点缺失/点数=0/目录缺失分别明确拒绝；点数只来自当前输入专精；模板/场景移除 points_siege_engineering 控件"
+    },
+    {
+      "id": "P1-B2",
+      "file": "tools/phase3/src/le_calc/plan_compiler_actor.py::_dataset_actor_facts + actor_pool.py",
+      "change": "catalog/minion/actor 身份硬校验；actor base_effects 必须与 dataset minion base stats 同 stat/operation/value；异常不再吞"
+    },
+    {
+      "id": "P1-C",
+      "file": "tools/phase3/src/le_calc/plan_v4.py",
+      "change": "assembly 结果门禁补齐：known 组件只来自 plan 声明、ledger/摘要/引用、totals/组件/窗口算式、coverage 投影、contributions 与 execution 行绑定；同时接入 _assembly_stage_checks 正式阶段路径"
+    },
+    {
+      "id": "P1-D",
+      "file": "tools/phase3/src/le_calc/plan_compiler_actor.py / plan_compiler.py",
+      "change": "删除编译期 crit 折叠/吸收与 parameters.skill 覆盖；执行期由 dps_components crit 池按 active/included/条件/标签逐行结算；plan 不再序列化 crit_absorbed"
+    },
+    {
+      "id": "P2",
+      "file": "tools/phase3/src/le_calc/definitions_v3.py + knowledge/definitions/ballista-armed-construction-v4.json",
+      "change": "scenario control 按模板 type/min/max 在绑定期拒绝（trap_detonation_rate_per_s min=1，越界信息含范围）；移除 points 控件；coverage issue 文案按 gap code 分类"
+    }
+  ],
+  "counterexample_probes": {
+    "script": ".scratch/ballista_fix_probe.py",
+    "output": ".scratch/ballista_fix_probe.out",
+    "results": [
+      {
+        "id": "P1-A",
+        "observation": "Fire added 行(10.5, tags [Bow,Fire]) applied_to=[hit:Fire]；组件仅 Physical/Fire/Cold/Lightning，Void/Necrotic/Poison 消失（run-4 probe: 仅 hit:Fire）"
+      },
+      {
+        "id": "P1-B1",
+        "observation": "ex4tp node30 points=0 → 编译拒绝：'当前输入无召唤来源（ex4tp 节点 30 点数=0）…拒绝以场景点数补回'"
+      },
+      {
+        "id": "P1-B1b",
+        "observation": "移除 ex4tp 专精 → 编译拒绝：'当前输入没有 ex4tp 专精（未选择）；不能回退场景点数'"
+      },
+      {
+        "id": "P1-D",
+        "observation": "plan 无 crit_absorbed；execution_v1 组件 crit=0.05/2.0；执行期 crit=0.8106/multiplier 6.98/average 5.847；篡改 crit effect 被 plan_sha256 一致性拒绝（另 .scratch/t5_crit_tamper.py 证明重算哈希后数值变化）"
+      },
+      {
+        "id": "P1-C",
+        "observation": "coverage→complete/0/[]、ledger[0].component_id→nonexistent、components[0].damage_total→999999999、contributions[0].value→999999999 四类篡改均被 validate_result_v6 与 stage_validation_checks 双拒"
+      }
+    ]
+  },
+  "run": {
+    "run_dir": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-4",
+    "plan_sha256": "e0f6394590cd6943782e1f888af94cc3fd4b677752268572fe1907955bd7a21a",
+    "plan_file_sha256": "17ab8280ff3c893981b6ea378bd82ed937c5716eee115ef130cead3d9ce265bc",
+    "result_file_sha256": "1a7d480a7f048be40f7ee63173b132fe9cc78526f57d29df887279730f1bf21c",
+    "html_sha256": "507ee953f9224f6f8773013d78ce8376979dcb416fea8cf3f208793d6e89c9d5",
+    "template_sha256": "492607851988316ab561171613503a9a81067d12265810408f723ef7929e728d",
+    "scenario_sha256": "658c729569da886ceef2173a0d9f11591cdd2bc79bbe8e8faf4387cf9c328874",
+    "totals": {
+      "horizon_dps": 141819.64975724937,
+      "single_event_damage": 177274.56219656172,
+      "cast_count": 96,
+      "windows_s": [
+        5,
+        30,
+        120
+      ],
+      "window_dps": [
+        141819.64975724937,
+        141819.64975724937,
+        141819.64975724937
+      ]
+    },
+    "components_single_event": {
+      "hit:Physical": 961.6989245750689,
+      "hit:Fire": 81926.2951246157,
+      "hit:Cold": 54202.187648985295,
+      "hit:Lightning": 40184.38049838565
+    },
+    "component_multipliers": {
+      "increased_multiplier_fire": 15.645,
+      "increased_multiplier_physical": 16.1,
+      "more_multiplier": 41.908944,
+      "crit_chance": 0.8106,
+      "crit_multiplier": 6.98,
+      "average_crit": 5.847388,
+      "target_multiplier": 0.13
+    },
+    "frequency": {
+      "event_rate_per_s": 0.8,
+      "event_interval_s": 1.25,
+      "destroy_binding": "limit",
+      "gate_probability": 0.2
+    },
+    "coverage": {
+      "status": "partial",
+      "gap_count": 32,
+      "codes": {
+        "out_of_scope": 20,
+        "idol_refraction": 8,
+        "damage_relevant_unknown": 4
+      }
+    },
+    "validation": {
+      "checks": "10/10 PASS",
+      "cli_exit_code": 3,
+      "exit_note": "3 = partial coverage，非失败"
+    },
+    "report_controls": "report_details.controls 已由 render 阶段从 plan.execution.controls 投影：elixir + trap_detonation_rate_per_s（trap min=1/max=30），无 points 控件；report-capabilities.controls 同步为 2 项",
+    "manifest_files": 11
+  },
+  "http_recompute": {
+    "endpoint": "http://127.0.0.1:8765/recompute",
+    "run": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-4",
+    "request": {
+      "command": "recompute-via-report-client",
+      "trap_detonation_rate_per_s": 5
+    },
+    "response_status": 200,
+    "recomputed_horizon_dps": 177274.56219656172,
+    "note": "单目标事件率 1.0/s 时 DPS=单发 177274.5622；run-4 上服务启动/停止各一次，页面 GET 200 与一次 POST /recompute 200 成功（页面已含 elixir/trap 控件、无 points 控件），未做多请求/错误分支/浏览器矩阵"
+  },
+  "directed_tests": {
+    "type_isolation": "13 passed (tools/phase3/tests/test_step5_v4_type_isolation.py)",
+    "actor_binding": "14 passed (tools/phase3/tests/test_step5_v4_actor_binding.py)",
+    "result_gates": "12 passed + 6 subtests (tools/phase3/tests/test_step5_v4_result_gates.py)",
+    "actor_frequency_regression": "38 passed (更新 2 条旧 P1-D 断言后)",
+    "combined": "77 passed + 6 subtests (四文件同批)",
+    "legacy_replay": "VC/FR/BH 冻结 plan+scenario 内存重放与磁盘 result 逐项一致（totals 零差异、components/coverage 全等），frozen/replay 门禁全 PASS"
+  },
+  "not_performed": [
+    "全仓回归/全套测试",
+    "浏览器交互矩阵/多页巡检",
+    "游戏内实测",
+    "独立 IL 逆向复核",
+    "历史案例成组 reproduce"
+  ],
+  "residual_risks": [
+    "v4_execution.build_hit_components_v2 通用 v2 路径仍未接 isolate_damage_channels（当前 actor 路径不走该路径）",
+    "v1 legacy 的 dot/运行时派生 value 口径限制：门禁只对 value_mode=static 的 contributions 严格比对",
+    "plan_v4._execute_assembly_plan 未定义属既有缺口（Ballista 走 execution 不受影响）",
+    "isBallistaExplosion、minion 等级缩放、陷阱引爆率、多伤害类型 added 的标签语义仍属假设/未知",
+    "页面场景控件由 render 阶段投影（elixir/trap；无 points）；run-1/2/3 是中间候选，历史 run 不回写"
+  ]
+}

@@ -834,6 +834,15 @@ SCENARIO_ASSUMPTION = "scenario_assumption"
 
 EFFECT_SOURCE_KINDS = (STATE_SOURCE, SKILL_NODE, EQUIPMENT_MOD, UNIQUE_DESCRIPTION, SCENARIO_ASSUMPTION)
 
+#: effect 声明允许的字段（严格白名单；未列出的字段一律拒绝，避免未知条件被静默当常驻）。
+#: 依据：knowledge/definitions/*.json 现有模板实际字段 + bind_profile_effects/actor/plan 投影读取字段。
+EFFECT_ALLOWED_FIELDS = frozenset({
+    "id", "label", "source", "stat", "operation", "value", "value_source",
+    "per_attribute", "tags", "unit", "scope", "source_kind", "source_path",
+    "status", "required", "states", "requires_target", "stack_control",
+    "scaling", "handler_id", "group", "target", "evidence", "notes",
+})
+
 
 def _state_source_check(
     calc: dict[str, Any],
@@ -973,6 +982,50 @@ def _declared_evidence(declared: dict[str, Any]) -> list[model.Evidence]:
     ]
 
 
+#: effect 可选 ``per_attribute`` 缩放声明的允许字段；attribute 必须是五个属性之一。
+PER_ATTRIBUTE_KEYS = frozenset({"attribute", "per"})
+PER_ATTRIBUTE_ATTRIBUTES = tuple(model.ATTRIBUTE_ORDER)
+
+
+def validate_per_attribute(
+    declared: Any,
+    *,
+    effect_id: str,
+    field_name: str = "per_attribute",
+) -> Optional[dict[str, Any]]:
+    """校验 effect 的可选 ``per_attribute`` 声明并返回规范化结果。
+
+    语义：绑定后 value = 声明值 × 属性值 / per（``per`` 缺省 1，必须 > 0）。
+    本函数只做结构/取值校验，不读取属性池；返回 ``None`` 表示未声明。
+    非法声明直接拒绝（消息含 effect id 与字段名），不静默忽略或猜默认属性。
+    """
+    if declared is None:
+        return None
+    label = f"effect {effect_id!r}.{field_name}"
+    if not isinstance(declared, dict):
+        raise BindingError(f"{label} 必须是对象")
+    unknown = sorted(set(declared) - PER_ATTRIBUTE_KEYS)
+    if unknown:
+        raise BindingError(f"{label} 含未知字段：{unknown}")
+    if "attribute" not in declared:
+        raise BindingError(f"{label} 缺少 attribute")
+    attribute = declared.get("attribute")
+    if not isinstance(attribute, str) or not attribute.strip():
+        raise BindingError(f"{label}.attribute 必须是非空字符串：{attribute!r}")
+    attribute = attribute.strip()
+    if attribute not in PER_ATTRIBUTE_ATTRIBUTES:
+        raise BindingError(
+            f"{label}.attribute 不受支持：{attribute!r}（允许 {list(PER_ATTRIBUTE_ATTRIBUTES)}）"
+        )
+    per = declared.get("per", 1.0)
+    if isinstance(per, bool) or not isinstance(per, (int, float)):
+        raise BindingError(f"{label}.per 必须是有限数值：{per!r}")
+    per_value = float(per)
+    if not math.isfinite(per_value) or per_value <= 0:
+        raise BindingError(f"{label}.per 必须大于 0：{per!r}")
+    return {"attribute": attribute, "per": per_value}
+
+
 def bind_profile_effects(
     calc: dict[str, Any],
     catalog: Catalog,
@@ -989,6 +1042,14 @@ def bind_profile_effects(
         label = str(declared.get("label") or effect_id)
         if not effect_id:
             raise BindingError("effect 缺少 id")
+        unknown_fields = sorted(set(declared) - EFFECT_ALLOWED_FIELDS)
+        if unknown_fields:
+            raise BindingError(
+                f"effect {effect_id!r} 含未支持字段：{unknown_fields}（允许 {sorted(EFFECT_ALLOWED_FIELDS)}）"
+            )
+        per_attribute = validate_per_attribute(
+            declared.get("per_attribute"), effect_id=effect_id
+        )
         check, source_facts, source_value, meta = _resolve_effect_source(calc, catalog, profile, declared.get("source") or {})
         evidence = list(meta.get("evidence") or [])
         required_states = [str(key) for key in declared.get("states") or []]
@@ -1082,6 +1143,11 @@ def bind_profile_effects(
                 "effect_id": effect_id,
                 "source": source_facts,
                 "binding": check.to_dict(),
+                **(
+                    {"per_attribute": dict(per_attribute)}
+                    if per_attribute is not None
+                    else {}
+                ),
                 **{
                     key: source_facts.get(key)
                     for key in ("mod_id", "tree", "node", "stat_index")
@@ -1096,6 +1162,7 @@ def bind_profile_effects(
             "scaling_sum": scaling_sum,
             "declared_value": declared.get("value"),
             "source_value": source_value,
+            "per_attribute": dict(per_attribute) if per_attribute is not None else None,
         }
         results.append(EffectResult(effect_id, label, status, reason, contribution, source_facts, payload, evidence, check))
     return results
@@ -1788,6 +1855,7 @@ KNOWN_RULE_HANDLERS = frozenset(
         "stat_transfer",
         "derived_events",
         "node_attribute_scaled",
+        "equipment_condition_effects",
     }
 )
 KNOWN_EFFECT_SOURCE_KINDS = frozenset(EFFECT_SOURCE_KINDS)
@@ -1955,6 +2023,12 @@ def _finite_nonnegative(value: Any, field_name: str) -> float:
 
 
 def validate_plan_v3_rules(rules: Mapping[str, Any]) -> None:
+    if rules.get("equipment_condition_effects") is not None:
+        # 早期属性阶段规则只在 v1/v2 装配链实现；v3 装配器不执行，禁止静默忽略声明。
+        raise BindingError(
+            "plan-v3 装配不支持 rules.equipment_condition_effects"
+            "（该早期属性规则仅 v1/v2 装配链实现）"
+        )
     """plan-v3 规则结构校验；未知规则/未知字段/未实现语义一律拒绝。"""
     if not isinstance(rules, Mapping):
         raise BindingError("rules 必须是对象")
@@ -2331,8 +2405,332 @@ def _validate_derived_events_rule(declared: Any) -> None:
         raise BindingError(f"rules.derived_events.derivation 非法：{exc}") from exc
 
 
+# ---------------------------------------------------------------------------
+# 装备数量条件 effect（早期阶段：参与属性汇总）
+# ---------------------------------------------------------------------------
+EQUIPMENT_CONDITION_EFFECT_FIELDS = frozenset({
+    "id", "label", "source", "requires", "stat", "operation", "value", "value_source",
+    "unit", "tags", "scope", "source_kind", "source_path", "status", "required",
+    "evidence", "notes",
+})
+EQUIPMENT_CONDITION_REQUIRES_FIELDS = frozenset({
+    "min_items", "channel", "exclude_roles", "include_roles",
+})
+EQUIPMENT_CONDITION_SOURCE_FIELDS = frozenset({
+    "kind", "binding_selector", "mod_id", "item_instance_id",
+    "expected_definition_entity_id", "expected_base_entity_id", "expected_property",
+    "expected_special_tag", "expected_tags", "expected_readable_text_contains",
+    "expected_stat_name_contains", "expected_source", "evidence", "notes",
+})
+EQUIPMENT_CONDITION_SELECTOR_FIELDS = frozenset({
+    "kind", "item_definition_entity_id", "item_base_entity_id", "expected_source",
+    "expected_property", "expected_special_tag", "expected_tags",
+    "expected_unique_mod_index", "expected_item_mod_index",
+    "expected_description_index", "selection",
+})
+EQUIPMENT_CONDITION_OPERATIONS = ("added", "increased", "more", "base")
+_EQUIPMENT_ROLE_PREFIXES = {"idols": "idol", "idol": "idol", "blessings": "blessing", "blessing": "blessing"}
+
+
+def _equipment_instance_role(item: Mapping[str, Any]) -> str:
+    """实例角色：优先显式 role；否则按 instance_id 前缀推断（equipment./idols./blessings.）。"""
+    role = str(item.get("role") or "").strip().lower()
+    if role:
+        return _EQUIPMENT_ROLE_PREFIXES.get(role, role)
+    prefix = str(item.get("instance_id") or "").split(".", 1)[0].lower()
+    return _EQUIPMENT_ROLE_PREFIXES.get(prefix, "equipment")
+
+
+def normalize_equipment_condition_effects(declared: Any) -> list[dict[str, Any]]:
+    """校验并规范化 ``rules.equipment_condition_effects``（对象或数组）。
+
+    未知字段/枚举、非数值 value、min_items<1、缺少 source/stat/operation 一律拒绝；
+    不猜测缺失字段默认值（除 unit/required 等展示性默认）。
+    """
+    if declared is None:
+        return []
+    items = declared if isinstance(declared, list) else [declared]
+    normalized: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for index, item in enumerate(items):
+        label = f"rules.equipment_condition_effects[{index}]" if isinstance(declared, list) else "rules.equipment_condition_effects"
+        if not isinstance(item, dict):
+            raise BindingError(f"{label} 必须是对象")
+        unknown = sorted(set(item) - EQUIPMENT_CONDITION_EFFECT_FIELDS)
+        if unknown:
+            raise BindingError(f"{label} 含未支持字段：{unknown}")
+        rule_id = str(item.get("id") or "").strip()
+        if not rule_id:
+            raise BindingError(f"{label}.id 缺失")
+        if rule_id in seen:
+            raise BindingError(f"{label}.id 重复：{rule_id}")
+        seen.add(rule_id)
+        stat = str(item.get("stat") or "").strip()
+        if not stat:
+            raise BindingError(f"{label}.stat 缺失")
+        operation = str(item.get("operation") or "")
+        if operation not in EQUIPMENT_CONDITION_OPERATIONS:
+            raise BindingError(f"{label}.operation 不受支持：{operation!r}")
+        raw_value = item.get("value")
+        if isinstance(raw_value, bool) or not isinstance(raw_value, (int, float)):
+            raise BindingError(f"{label}.value 必须是有限数值")
+        value = float(raw_value)
+        if value != value or value in (float("inf"), float("-inf")):
+            raise BindingError(f"{label}.value 必须是有限数值")
+        source = item.get("source")
+        if not isinstance(source, dict) or not source:
+            raise BindingError(f"{label}.source 必须是装备词条来源对象")
+        unknown_source = sorted(set(source) - EQUIPMENT_CONDITION_SOURCE_FIELDS)
+        if unknown_source:
+            raise BindingError(f"{label}.source 含未支持字段：{unknown_source}")
+        if str(source.get("kind") or "") != EFFECT_SOURCE_KINDS[2]:
+            raise BindingError(f"{label}.source.kind 只支持 equipment_mod")
+        selector = source.get("binding_selector")
+        if selector is not None:
+            if not isinstance(selector, dict):
+                raise BindingError(f"{label}.source.binding_selector 必须是对象")
+            unknown_selector = sorted(set(selector) - EQUIPMENT_CONDITION_SELECTOR_FIELDS)
+            if unknown_selector:
+                raise BindingError(f"{label}.source.binding_selector 含未支持字段：{unknown_selector}")
+            if str(selector.get("kind") or "equipment_mod") != "equipment_mod":
+                raise BindingError(f"{label}.source.binding_selector.kind 只支持 equipment_mod")
+            if not selector.get("item_definition_entity_id") and not selector.get("item_base_entity_id"):
+                raise BindingError(
+                    f"{label}.source.binding_selector 缺少 item_definition_entity_id/item_base_entity_id"
+                )
+            if str(selector.get("selection") or "one") != "one":
+                raise BindingError(f"{label}.source.binding_selector.selection 只支持 one")
+        elif not source.get("mod_id"):
+            raise BindingError(f"{label}.source 必须提供 binding_selector 或 mod_id")
+        requires = item.get("requires")
+        if not isinstance(requires, dict) or not requires:
+            raise BindingError(f"{label}.requires 必须是非空对象")
+        unknown_requires = sorted(set(requires) - EQUIPMENT_CONDITION_REQUIRES_FIELDS)
+        if unknown_requires:
+            raise BindingError(f"{label}.requires 含未支持字段：{unknown_requires}")
+        min_items = requires.get("min_items")
+        if isinstance(min_items, bool) or not isinstance(min_items, int) or min_items < 1:
+            raise BindingError(f"{label}.requires.min_items 必须是 >=1 的整数")
+        channel = str(requires.get("channel") or "").strip()
+        if not channel:
+            raise BindingError(f"{label}.requires.channel 缺失")
+        exclude_roles = requires.get("exclude_roles") or []
+        include_roles = requires.get("include_roles") or []
+        if not isinstance(exclude_roles, list) or any(not isinstance(x, str) for x in exclude_roles):
+            raise BindingError(f"{label}.requires.exclude_roles 必须是字符串数组")
+        if not isinstance(include_roles, list) or any(not isinstance(x, str) for x in include_roles):
+            raise BindingError(f"{label}.requires.include_roles 必须是字符串数组")
+        tags = item.get("tags") or []
+        if not isinstance(tags, list) or any(not isinstance(tag, str) for tag in tags):
+            raise BindingError(f"{label}.tags 必须是字符串数组")
+        evidence = item.get("evidence") or []
+        if not isinstance(evidence, list):
+            raise BindingError(f"{label}.evidence 必须是数组")
+        value_source = str(item.get("value_source") or "declared")
+        if value_source not in ("declared", "source_value"):
+            raise BindingError(f"{label}.value_source 不受支持：{value_source!r}")
+        unit = str(item.get("unit") or ("percent" if operation in ("increased", "more") else "flat"))
+        normalized.append(
+            {
+                "id": rule_id,
+                "label": str(item.get("label") or rule_id),
+                "source": dict(source),
+                "requires": {
+                    "min_items": int(min_items),
+                    "channel": channel,
+                    "exclude_roles": [str(x) for x in exclude_roles],
+                    "include_roles": [str(x) for x in include_roles],
+                },
+                "stat": stat,
+                "operation": operation,
+                "value": value,
+                "value_source": value_source,
+                "unit": unit,
+                "tags": [str(tag) for tag in tags],
+                "scope": str(item.get("scope") or "owner"),
+                "source_kind": str(item.get("source_kind") or "equipment"),
+                "source_path": str(item.get("source_path") or "rules.equipment_condition_effects"),
+                "status": str(item.get("status") or model.STATUS_DERIVED),
+                "required": bool(item.get("required", True)),
+                "evidence": list(evidence),
+                "notes": item.get("notes"),
+            }
+        )
+    return normalized
+
+
+def _validate_equipment_condition_effects_rule(declared: Any) -> None:
+    normalize_equipment_condition_effects(declared)
+
+
+def resolve_equipment_condition_source(
+    calc: Mapping[str, Any], source: Mapping[str, Any]
+) -> BindingCheck:
+    """解析 equipment_condition_effects 的来源装备词条（唯一命中，否则返回失败状态）。
+
+    支持两种声明：已解析的 ``mod_id`` 或 ``binding_selector``（item 定义/基底 + expected
+    property/special_tag/tags/来源）。多个候选同时通过语义与身份校验时返回 unresolved，
+    由调用方按 required 决定拒绝或记录缺口；不静默挑选。
+    """
+    if not isinstance(source, Mapping):
+        return BindingCheck(BINDING_UNRESOLVED, "equipment_condition_effects source 必须是对象")
+    if str(source.get("kind") or "") != EFFECT_SOURCE_KINDS[2]:
+        return BindingCheck(BINDING_UNRESOLVED, "equipment_condition_effects source.kind 只支持 equipment_mod")
+    selector = source.get("binding_selector") if isinstance(source.get("binding_selector"), dict) else {}
+    expected_source = selector.get("expected_source") or source.get("expected_source")
+    definition_id = (
+        selector.get("item_definition_entity_id")
+        or source.get("expected_definition_entity_id")
+    )
+    base_id = selector.get("item_base_entity_id") or source.get("expected_base_entity_id")
+    expected_property = (
+        selector.get("expected_property")
+        if selector.get("expected_property") is not None
+        else source.get("expected_property")
+    )
+    expected_special_tag = (
+        selector.get("expected_special_tag")
+        if selector.get("expected_special_tag") is not None
+        else source.get("expected_special_tag")
+    )
+    expected_tags = (
+        selector.get("expected_tags")
+        if selector.get("expected_tags") is not None
+        else source.get("expected_tags")
+    )
+    readable_contains = source.get("expected_readable_text_contains") or selector.get(
+        "expected_readable_text_contains"
+    )
+    stat_name_contains = source.get("expected_stat_name_contains") or selector.get(
+        "expected_stat_name_contains"
+    )
+    expected_mask = _int_or_none(expected_tags) if expected_tags is not None else None
+    items_by_id = {
+        str(item.get("instance_id")): item for item in (calc.get("items") or []) if isinstance(item, dict)
+    }
+    mod_id_resolved = str(source.get("mod_id") or "").strip()
+    candidates: list[dict[str, Any]] = []
+    for mod in calc.get("mods") or []:
+        if not isinstance(mod, dict):
+            continue
+        mod_id = str(mod.get("mod_id") or "")
+        if not mod_id:
+            continue
+        if mod_id_resolved and mod_id != mod_id_resolved:
+            continue
+        instance_id = str(mod.get("item_instance_id") or source.get("item_instance_id") or "")
+        item = items_by_id.get(instance_id)
+        if item is None:
+            continue
+        if expected_source and str(mod.get("source") or "") != str(expected_source):
+            continue
+        if definition_id and str(item.get("definition_entity_id") or "") != str(definition_id):
+            continue
+        if base_id and str(item.get("base_entity_id") or "") != str(base_id):
+            continue
+        if expected_property is not None and _int_or_none(mod.get("property")) != _int_or_none(
+            expected_property
+        ):
+            continue
+        if expected_special_tag is not None and _int_or_none(
+            mod.get("special_tag")
+        ) != _int_or_none(expected_special_tag):
+            continue
+        if expected_mask is not None:
+            actual_mask = _int_or_none(mod.get("tags")) or 0
+            if actual_mask & int(expected_mask) != int(expected_mask):
+                continue
+        candidates.append(mod)
+    verified: list[tuple[dict[str, Any], BindingCheck]] = []
+    for mod in candidates:
+        check = verify_mod(
+            calc,
+            mod_id=str(mod.get("mod_id")),
+            item_instance_id=str(mod.get("item_instance_id") or "") or None,
+            expected_property=expected_property,
+            expected_special_tag=expected_special_tag,
+            expected_definition_entity_id=definition_id,
+            expected_base_entity_id=base_id,
+            expected_readable_text_contains=readable_contains,
+            expected_stat_name_contains=stat_name_contains,
+        )
+        if check.ok:
+            verified.append((mod, check))
+    if not verified:
+        return BindingCheck(
+            BINDING_SOURCE_ABSENT,
+            "equipment_condition_effects source 未在当前装备词条中唯一命中"
+            f"（selector={sorted(selector) or 'mod_id'}）",
+            {"candidate_count": len(candidates)},
+        )
+    if len(verified) > 1:
+        return BindingCheck(
+            BINDING_UNRESOLVED,
+            f"equipment_condition_effects source 选择不唯一：{len(verified)} 条词条同时满足身份与语义锚点",
+            {"candidate_count": len(verified), "mod_ids": [str(m.get("mod_id")) for m, _c in verified]},
+        )
+    mod, check = verified[0]
+    facts = dict(check.facts)
+    facts.update(
+        {
+            "mod_id": str(mod.get("mod_id")),
+            "item_instance_id": mod.get("item_instance_id"),
+            "expected_source": expected_source,
+            "tags_mask": _int_or_none(mod.get("tags")) or 0,
+            "tags": model.decode_tags(_int_or_none(mod.get("tags")) or 0),
+            "readable_text": mod.get("readable_text"),
+        }
+    )
+    return BindingCheck(BINDING_VERIFIED, check.detail, facts)
+
+
+def count_equipment_condition_items(
+    calc: Mapping[str, Any], requires: Mapping[str, Any]
+) -> dict[str, Any]:
+    """统计满足装备数量条件的实例数（按 channel 与角色过滤；不读模板/技能名）。"""
+    min_items = int(requires.get("min_items") or 0)
+    channel = str(requires.get("channel") or "")
+    exclude_roles = {str(x) for x in requires.get("exclude_roles") or []}
+    include_roles = {str(x) for x in requires.get("include_roles") or []}
+    mods_by_instance: dict[str, list[dict[str, Any]]] = {}
+    for mod in calc.get("mods") or []:
+        if not isinstance(mod, dict):
+            continue
+        instance_id = str(mod.get("item_instance_id") or "")
+        if instance_id:
+            mods_by_instance.setdefault(instance_id, []).append(mod)
+    instance_ids: list[str] = []
+    for item in calc.get("items") or []:
+        if not isinstance(item, dict):
+            continue
+        instance_id = str(item.get("instance_id") or "")
+        role = _equipment_instance_role(item)
+        if include_roles and role not in include_roles:
+            continue
+        if role in exclude_roles:
+            continue
+        embedded = [mod for mod in item.get("mods") or [] if isinstance(mod, dict)]
+        mods = embedded + mods_by_instance.get(instance_id, [])
+        if any(
+            str(mod.get("channel") or "") == channel and (mod.get("mod_id") or mod.get("source"))
+            for mod in mods
+        ):
+            instance_ids.append(instance_id)
+    return {
+        "count": len(instance_ids),
+        "instance_ids": instance_ids,
+        "min_items": min_items,
+        "channel": channel,
+        "exclude_roles": sorted(exclude_roles),
+        "include_roles": sorted(include_roles),
+        "satisfied": len(instance_ids) >= min_items,
+    }
+
+
 def validate_plan_v2_rules(rules: Mapping[str, Any]) -> None:
     """plan-v2 规则校验；由定义契约与计划装配共同调用。"""
+    if rules.get("equipment_condition_effects") is not None:
+        _validate_equipment_condition_effects_rule(rules.get("equipment_condition_effects"))
     if rules.get("stat_transfer") is not None:
         from . import actor_pool  # noqa: PLC0415
 
@@ -2468,6 +2866,12 @@ def validate_definition_contract(
         validate_plan_v2_rules(payload.get("rules") or {})
     for effect in payload.get("effects") or []:
         effect_id = effect.get("id")
+        unknown_fields = sorted(set(effect) - EFFECT_ALLOWED_FIELDS)
+        if unknown_fields:
+            raise BindingError(
+                f"effect {effect_id!r} 含未支持字段：{unknown_fields}"
+                f"（允许 {sorted(EFFECT_ALLOWED_FIELDS)}）"
+            )
         source = effect.get("source") or {}
         if not isinstance(source, dict):
             raise BindingError(f"effect {effect_id!r}.source 必须是对象")
@@ -2483,6 +2887,7 @@ def validate_definition_contract(
             _finite(effect.get("value"), f"effects.{effect_id}.value")
         if "required" in effect and not isinstance(effect.get("required"), bool):
             raise BindingError(f"effect {effect_id!r} 的 required 必须是布尔值")
+        validate_per_attribute(effect.get("per_attribute"), effect_id=str(effect_id))
         if not (allow_unresolved_sources and source.get("_binding_source_absent")):
             _require_source_anchors(source, field=f"effects.{effect_id}.source")
     rules = payload.get("rules") or {}
@@ -2698,6 +3103,8 @@ __all__ = [
     "evaluate_planner_condition",
     "load_json_document",
     "passive_condition_evaluator",
+    "resolve_per_attribute",
+    "validate_per_attribute",
     "validate_profile",
     "verify_mod",
     "verify_skill_constants",

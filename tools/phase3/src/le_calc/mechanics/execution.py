@@ -8,6 +8,17 @@ application ledgers and computed coverage diagnostics.
 from __future__ import annotations
 
 from typing import Any, Mapping
+from .tag_match import damage_channel_tags, TagPolicy, UNKNOWN_RESTRICT, tags_match
+
+_CHANNEL_POLICY = TagPolicy(frozenset(), frozenset(), UNKNOWN_RESTRICT, "execution-damage-channel")
+
+
+def _damage_tags(component: Mapping[str, Any]) -> set[str]:
+    dtype = str(component.get("damage_type") or component.get("damage_channel") or "")
+    tags = set(damage_channel_tags(component.get("tags") or [], dtype))
+    tags |= {tag.lower() for tag in tags}
+    return tags
+
 
 ALLOWED_UNITS = {"damage"}
 ALLOWED_SCOPES = {"body", "ailment", "actor", "owner", "all"}
@@ -90,7 +101,7 @@ def _component_effects(
             applications.append({"effect_id": effect_id, "component_id": component["component_id"], "status": "not_applicable", "reason": "scope", "coverage_class": effect.get("coverage_class")})
             continue
         channels = {str(item) for item in effect.get("channel_tags") or []}
-        if not channels & {str(component.get("damage_channel")), str(component.get("damage_type")), *[str(t) for t in component.get("tags") or []]}:
+        if channels and not tags_match(channels, _damage_tags(component), _CHANNEL_POLICY):
             gap = _source_gap(execution, effect)
             if gap:
                 coverage_gaps.append(gap)
@@ -522,9 +533,8 @@ def settle_execution_effects(
             "ledger_ref": str(effect.get("ownership_key") or effect.get("handler_id") or "unassigned"),
         }
         for component in components:
-            tags = {str(item) for item in component.get("tags") or []}
-            tags |= {str(component.get("damage_channel")), str(component.get("damage_type"))}
-            if row["damage_tags"] and not (set(str(t) for t in row["damage_tags"]) & tags):
+            tags = _damage_tags(component)
+            if not tags_match(row["damage_tags"], tags, _CHANNEL_POLICY):
                 continue
             row["component_ids"].append(str(component.get("component_id")))
             if not included:

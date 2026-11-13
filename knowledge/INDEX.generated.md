@@ -7,11 +7,11 @@
 | 项 | 值 |
 |---|---|
 | index_format | `le-knowledge-index-v1` |
-| source_digest | `sha256:bac0d7e258bdf2a89db5313d60ab86ef281ceabc15f7f8b11d08c28adbcac7e4` |
+| source_digest | `sha256:07ac7a3faa76dbf9bafdbea2421967b629d74fda8434cf5598578d21d7e7202f` |
 | 生成命令 | `.\scripts\le.ps1 knowledge rebuild` |
-| 内容文件 | 126（mechanisms 123 / skills 3）+ schema 4 |
-| 条目 | mechanisms 123 / skill_templates 3 |
-| 索引明细 | selectors 392 / aliases 578 |
+| 内容文件 | 130（mechanisms 127 / skills 3）+ schema 4 |
+| 条目 | mechanisms 127 / skill_templates 3 |
+| 索引明细 | selectors 403 / aliases 592 |
 
 ## 机制条目（knowledge/mechanisms）
 
@@ -20,11 +20,11 @@
 | attribute-strength-to-brutality | 力量转换为 Brutality 与按法耗独立近战增伤 | 1 | derived | reusable | hit | stat:letools:coreDB.playerPropertyList:650, stat:650, item:affix:letools:affixList.multiAffixes:1083, item:1083 | ruleset_rule:attribute-conversions-v1:brutality | knowledge/mechanisms/attribute-strength-to-brutality.json |
 | ballista-death-explosion | Ballista 到期/销毁爆炸与敏捷倍率 | 2 | confirmed | reusable | death_event, explosion | ability:ba1574, node:ba1574:5 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.frequency | knowledge/mechanisms/ballista-death-explosion.json |
 | ballista-dexterity-frequency-and-increased | Ballista 敏捷伤害与放置/攻击速度 | 2 | derived | reusable | attribute_scaling, frequency | ability:ba1574, node:ba1574:18 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.node_attribute_scaled | knowledge/mechanisms/ballista-dexterity-frequency-and-increased.json |
-| ballista-explosion-damage-composition | Ballista 爆炸伤害构成（ability_gen327） | 1 | derived | reusable | hit, frequency | ability:ba1574, node:ba1574:5, node:ba1574:14, node:ba1574:23, node:ba1574:25, node:ba1574:26 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.skill | knowledge/mechanisms/ballista-explosion-damage-composition.json |
+| ballista-explosion-damage-composition | Ballista 爆炸伤害构成（ability_gen327） | 4 | derived | reusable | hit, frequency | ability:ba1574, node:ba1574:5, node:ba1574:14, node:ba1574:23, node:ba1574:25, node:ba1574:26 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.skill | knowledge/mechanisms/ballista-explosion-damage-composition.json |
 | ballista-potion-construction-window | 药剂条件与 Ballista 召唤时状态 | 2 | derived | reusable | condition, snapshot | ability:ba1574, node:ba1574:25, node:ba1574:31 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.effects#elixir_more | knowledge/mechanisms/ballista-potion-construction-window.json |
 | ballista-projectile-explosion | Ballista 命中爆炸与火伤/点燃 | 2 | confirmed | draft | minion_hit, explosion, ailment | ability:ba1574, node:ba1574:10, node:ba1574:12 | ruleset_rule:本轮 DPS 口径不含 bolt 命中爆炸（用户指定只算 Armed Construction 的 Explodes） | knowledge/mechanisms/ballista-projectile-explosion.json |
 | ballista-summon-limit-lifetime | Ballista 召唤上限、存续与替换事件 | 2 | confirmed | reusable | summon, lifecycle | ability:ba1574, node:ba1574:2, node:ba1574:14, node:ba1574:15 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.frequency#derivation.lifecycle | knowledge/mechanisms/ballista-summon-limit-lifetime.json |
-| ballista-trap-triggered-summon | Explosive Trap 触发 Ballista 的来源链 | 2 | derived | reusable | trigger, summon, frequency | ability:ba1574, node:ex4tp:29, node:ex4tp:30, node:ex4tp:31 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.frequency#derivation | knowledge/mechanisms/ballista-trap-triggered-summon.json |
+| ballista-trap-triggered-summon | Explosive Trap 触发 Ballista 的来源链 | 3 | derived | reusable | trigger, summon, frequency | ability:ba1574, node:ex4tp:29, node:ex4tp:30, node:ex4tp:31 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.frequency#derivation | knowledge/mechanisms/ballista-trap-triggered-summon.json |
 | bh-attribute-scaling | Intelligence 属性缩放（本体） | 2 | confirmed | validated | body | stat:damage, node:bh2:0 | ruleset_rule:rule-bh-attribute-scaling | knowledge/mechanisms/bh-attribute-scaling.json |
 | bh-baseline-profiles | 双基线口径：legacy_single_skill 与 build_base | 1 | derived | validated | loop, ledger, conditional | mechanism:bh-baseline-profiles | none:基线 profile 是案例/场景口径（conditional registry baseline_profiles + conditional-scenario），没有游戏规则 ID。 | knowledge/mechanisms/bh-baseline-profiles.json |
 | bh-binary-system | Binary System 双星结构 + 独立 more | 2 | confirmed | validated | body, body_fire, body_cold, ignite | node:bh2:9 | ruleset_rule:rule-bh-binary-system | knowledge/mechanisms/bh-binary-system.json |
@@ -84,6 +84,7 @@
 | common-more-groups | more 分组与逐组独立相乘 | 2 | confirmed | validated | hit, dot, tick, ignite +1 | mechanism:common-more-groups | ruleset_rule:rule-bh-more-aggregation | knowledge/mechanisms/common-more-groups.json |
 | common-tag-match | 伤害标签适用性匹配 | 2 | confirmed | validated | hit, dot, tick, ignite +2 | mechanism:common-tag-match, mechanism:bh-ignite-scaling-pool, stat:damage, stat:added_damage, stat:penetration, stat:ailment_duration | none:标签适用性是共享判据，没有单条规则 ID：具体规则的标签写在 ruleset 各节点/词条 damage_tags 与 dataset stats 的 tags 位图中。 | knowledge/mechanisms/common-tag-match.json |
 | common-target-resistance-penetration | 目标抗性/穿透结算（穿透可压到 0 以下） | 2 | confirmed | validated | target_side, body, ignite, hit +1 | mechanism:common-target-resistance-penetration, stat:penetration, stat:penetration_with_ignite, stat:resistance, condition:target.resistances | ruleset_rule:rule-penetration-dot | knowledge/mechanisms/common-target-resistance-penetration.json |
+| damage-channel-added-and-multipliers | 技能基础元素、附加点伤与分量增伤的独立匹配 | 1 | derived | reusable | hit | stat:added_damage, stat:damage, stat:crit_chance, stat:crit_multiplier, stat:penetration | none:公共标签/组件装配规则由受限 Python handler 实现，无独立规则 JSON；实际入口见 handler_ref | knowledge/mechanisms/damage-channel-added-and-multipliers.json |
 | fr-effect-ambition-gain-source | Ambition 层数获取来源（idols.2：命中 boss/rare 得层，1s 冷却） | 2 | unresolved | not_implemented | hit | idol:equipment:idols.2, condition:boss_or_rare | ruleset_effect:ambition_gain_source | knowledge/mechanisms/fr-effect-ambition-gain-source.json |
 | fr-effect-ambition-stacks | Throne of Ambition 层数增伤 | 3 | derived | reusable | hit, dot | item:letools:uniqueList.uniques:211, mechanism:letools:UIBuffs:79, mechanism:79 | ruleset_effect:fr-effect-ambition-stacks | knowledge/mechanisms/fr-effect-ambition-stacks.json |
 | fr-effect-army-of-skin-high-health | Army of Skin：高血量敌人 +49% more Melee（条件效果） | 2 | assumed | validated | hit | item:letools:uniqueList.uniques:443 | ruleset_effect:global_conditional_damage_feet | knowledge/mechanisms/fr-effect-army-of-skin-high-health.json |
@@ -128,9 +129,11 @@
 | item-sword-catcher-frenzy-added-melee | Sword Catcher 的 Frenzy 附加近战伤害 | 1 | derived | reusable | hit | item:letools:uniqueList.uniques:338 | ruleset_effect:item-sword-catcher-frenzy-added-melee | knowledge/mechanisms/item-sword-catcher-frenzy-added-melee.json |
 | item-vaions-chariot-movement-to-damage | Vaion's Chariot 移速转加算伤害 | 1 | derived | reusable | hit, dot | item:letools:uniqueList.uniques:264 | ruleset_effect:item-vaions-chariot-movement-to-damage | knowledge/mechanisms/item-vaions-chariot-movement-to-damage.json |
 | minion-attribute-scaling-dexterity | Ballista 召唤的敏捷属性缩放（玩家 Dex → minion 增伤） | 1 | derived | reusable | hit, frequency | ability:ba1574, node:ba1574:5, node:ba1574:18 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.attribute_scaling | knowledge/mechanisms/minion-attribute-scaling-dexterity.json |
-| minion-explicit-owner-stat-transfer | 节点驱动的玩家→召唤物属性转移 | 2 | confirmed | reusable | attribute_transfer, crit | ability:ba1574, node:ba1574:22, node:ba1574:27 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.stat_transfer | knowledge/mechanisms/minion-explicit-owner-stat-transfer.json |
+| minion-explicit-owner-stat-transfer | 节点驱动的玩家→召唤物属性转移 | 3 | confirmed | reusable | attribute_transfer, crit | ability:ba1574, node:ba1574:22, node:ba1574:27 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.stat_transfer | knowledge/mechanisms/minion-explicit-owner-stat-transfer.json |
 | minion-level-damage-scaling | Minion 等级伤害缩放（公式已核、应用未确认） | 1 | unresolved | not_implemented | hit | ability:ba1574 | dataset_entity:skill:letools:classInfoForSources:4 extensions.minion level scaling | knowledge/mechanisms/minion-level-damage-scaling.json |
 | minion-owner-stat-isolation | 召唤物与玩家属性池隔离 | 2 | confirmed | reusable | actor_binding, source_scope | ability:ba1574 | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.actor | knowledge/mechanisms/minion-owner-stat-isolation.json |
+| mourningfrost-cold-per-dexterity | Mourningfrost：每点敏捷 +1 冰霜伤害（攻击/法术） | 1 | confirmed | reusable | hit, frequency | item:letools:uniqueList.uniques:19, mechanism:mourningfrost-cold-per-dexterity | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.effects | knowledge/mechanisms/mourningfrost-cold-per-dexterity.json |
+| phantom-grip-crit-chance-per-dexterity | Phantom Grip：每点敏捷 +1% increased Critical Strike Chance（腐化词条） | 1 | confirmed | reusable | hit | item:letools:uniqueList.uniques:348, mechanism:phantom-grip-crit-chance-per-dexterity | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.effects | knowledge/mechanisms/phantom-grip-crit-chance-per-dexterity.json |
 | skill-abyssal-retribution | Abyssal Retribution 后续主技能增伤 | 1 | assumed | reusable | hit, dot | node:gs15de:21 | ruleset_effect:skill-abyssal-retribution | knowledge/mechanisms/skill-abyssal-retribution.json |
 | skill-added-damage-spell-to-melee | Arcane Severance：每 4 点附加法术伤害转为附加近战伤害 | 1 | assumed | reusable | hit | node:fr11mv:12, stat:added_damage, ability:fr11mv | none:plan-v2 rules.added_damage_conversion（迁移规则数据） | knowledge/mechanisms/skill-added-damage-spell-to-melee.json |
 | skill-dark-duellist | Dark Duellist 准备反击时的全局增伤 | 1 | derived | reusable | hit, dot | node:gs15de:3 | ruleset_effect:skill-dark-duellist | knowledge/mechanisms/skill-dark-duellist.json |
@@ -140,6 +143,7 @@
 | skill-void-supremacy | Void Supremacy 对减速目标增伤 | 1 | assumed | reusable | hit, dot | node:ab0lh:19 | ruleset_effect:skill-void-supremacy | knowledge/mechanisms/skill-void-supremacy.json |
 | skill-vorpal-force | Vorpal Force 的 Bleed 层数增伤及上限 | 1 | derived | reusable | hit | node:v01cv:29 | ruleset_effect:skill-vorpal-force | knowledge/mechanisms/skill-vorpal-force.json |
 | target-critical-vulnerability | Critical Vulnerability 目标被暴击率 | 1 | assumed | reusable | hit | node:v01cv:11, mechanism:letools:LEAbilities.ailmentList:85, mechanism:85 | ruleset_effect:target-critical-vulnerability | knowledge/mechanisms/target-critical-vulnerability.json |
+| urzil-pride-all-attributes-corrupted-condition | Urzil's Pride：≥7 件 corrupted 非神像装备时 +8 All Attributes | 1 | confirmed | reusable | hit, frequency | item:letools:uniqueList.uniques:10, mechanism:urzil-pride-all-attributes-corrupted-condition | ruleset_rule:knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.equipment_condition_effects | knowledge/mechanisms/urzil-pride-all-attributes-corrupted-condition.json |
 
 ## 技能模板（knowledge/skills）
 
@@ -208,6 +212,7 @@
 | common-more-groups | confirmed | 3 |
 | common-tag-match | confirmed | 2 |
 | common-target-resistance-penetration | confirmed | 3 |
+| damage-channel-added-and-multipliers | derived | 1 |
 | fr-effect-ambition-gain-source | unresolved | 3 |
 | fr-effect-army-of-skin-high-health | assumed | 3 |
 | fr-effect-blade-weaving-consume | derived | 3 |
@@ -249,6 +254,9 @@
 | minion-explicit-owner-stat-transfer | confirmed | 1 |
 | minion-level-damage-scaling | unresolved | 1 |
 | minion-owner-stat-isolation | confirmed | 1 |
+| mourningfrost-cold-per-dexterity | confirmed | 2 |
+| phantom-grip-crit-chance-per-dexterity | confirmed | 1 |
+| urzil-pride-all-attributes-corrupted-condition | confirmed | 1 |
 | bh-black-hole |  | 12 |
 | fr-flame-reave |  | 16 |
 | void-cleave-fire-main |  | 2 |

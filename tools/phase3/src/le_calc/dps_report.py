@@ -7,6 +7,8 @@ from . import recalc
 from .report_ui import components as c, shared_ui as ui
 from .report_ui.document import DocumentSpec, render_document, renderer_fingerprint, UI_CONTRACT_VERSION
 
+#: 本机重算请求体上限（binding 现包含完整装备词条明细，旧 150000 字节上限会误拒）。
+MAX_RECALC_REQUEST_BYTES = 2_000_000
 def _legacy_dps():
     """Legacy profile renderer 需要时才加载；统一 v4/v5/v6 生产路径不加载旧 dps。"""
     from . import dps as legacy
@@ -330,8 +332,8 @@ def _serve_unified(root, case, report, port):
                 return
             try:
                 size = int(self.headers.get('Content-Length', '0'))
-                if not 0 < size <= 150000:
-                    raise ValueError('请求大小无效')
+                if not 0 < size <= MAX_RECALC_REQUEST_BYTES:
+                    raise ValueError('请求大小无效（本次请求超过本机重算上限）')
                 p = json.loads(self.rfile.read(size))
                 if set(p) != {'binding', 'scenario', 'request_id', 'client_session_id', 'client_edit_revision'}:
                     raise ValueError('请求字段不完整或不受支持')
@@ -395,7 +397,7 @@ def serve(root,case,report,port):
             if self.path!='/recompute':self.send(404,{'error':'接口不存在'});return
             try:
                 size=int(self.headers.get('Content-Length','0'))
-                if not 0<size<=150000:raise ValueError('请求大小无效')
+                if not 0<size<=MAX_RECALC_REQUEST_BYTES:raise ValueError('请求大小无效（本次请求超过本机重算上限）')
                 p=json.loads(self.rfile.read(size))
                 if set(p)!={'binding','scenario','request_id','client_session_id','client_edit_revision'}:raise ValueError('请求字段不完整或不受支持')
                 session=p.get('client_session_id');revision=p.get('client_edit_revision');request=p.get('request_id')

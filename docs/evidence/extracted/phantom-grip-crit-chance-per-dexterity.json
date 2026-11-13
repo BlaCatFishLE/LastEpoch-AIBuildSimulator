@@ -1,0 +1,77 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "phantom-grip-crit-chance-per-dexterity",
+  "kind": "mechanism",
+  "title": {
+    "zh": "Phantom Grip：每点敏捷 +1% increased Critical Strike Chance（腐化词条）",
+    "en": "Phantom Grip: increased critical strike chance per Dexterity"
+  },
+  "source_path": "knowledge/mechanisms/phantom-grip-crit-chance-per-dexterity.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [],
+  "compatibility_baseline": null,
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.effects",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "effects[5] = phantom_grip_crit_chance_per_dexterity",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/ballista-armed-construction-v4.json#definition.effects",
+      "note": "ref 指向共享定义内的规则段（不是外部规则包 ID），已在该定义文件确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "Phantom Grip：每点敏捷 +1% increased Critical Strike Chance（腐化词条）",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：hit；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "玩家装备 Phantom Grip 时腐化词条以 increased crit chance per Dex 生成 Stat（SP=4 CritChance），经 Perfect Aim 100% 复制给 Ballista，使爆炸 crit chance 由 0.8106 升至 cap 1.0。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "通用 effect.per_attribute；设备词条来源由 effect_binding.verify_mod 锚定。",
+      "source": "$.handler_ref.note（le_calc.plan_compiler._apply_per_attribute_scaling）"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：increased_crit_per_dexterity、transfer_ratio",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/3/locator",
+      "original": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#mods equipment.ring2#affix#corrupted#0.1"
+    },
+    {
+      "pointer": "$/evidence_refs/4/locator",
+      "original": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "increased/added 分桶：按 stat 名称与显示元数据判为 increased；即使误读为 added，在 Dex=228 时也会 cap 1.0，DPS 结论不敏感。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    },
+    {
+      "text": "转移依赖：仅经 Perfect Aim(SP=4) 100% 复制对 Ballista 生效；玩家自身攻击不影响本 DPS 口径。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[1]"
+    },
+    {
+      "text": "游戏内单次暴击是否已完全 cap（非平均）需实测确认。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-13T05:06:40Z"
+}

@@ -1,0 +1,1550 @@
+{
+  "schema": "le-evidence-ballista-remaining-equipment-audit-v1",
+  "date": "2026-11-13",
+  "scope": "当前 Ballista 构筑（archive://examples/ballista-beta5-native-20261112）剩余暗金/特殊词条 + 伤害相关 coverage 缺口的只读核实与可补入提案",
+  "analysis_only": true,
+  "code_or_template_changes_made": false,
+  "inputs": {
+    "calculation_input": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json",
+    "dataset": "data/releases/phase1-dataset-003/data.sqlite (URI mode=ro&immutable=1)",
+    "il_assets": [
+      ".scratch/cpp2il_cs/DiffableCs/LE/",
+      ".scratch/cpp2il_isil/IsilDump/LE/"
+    ],
+    "template_reference": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "baseline_run": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-5"
+  },
+  "baseline": {
+    "run": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-5",
+    "totals": {
+      "single_event_damage": 390345.2308856763,
+      "horizon_dps": 312276.184708541,
+      "cast_count": 96,
+      "windows_s": [
+        5,
+        30,
+        120
+      ]
+    },
+    "components_single_event": {
+      "hit:Physical": 961.6989245750689,
+      "hit:Fire": 81926.2951246157,
+      "hit:Cold": 267272.85633809987,
+      "hit:Lightning": 40184.38049838565
+    },
+    "component_inputs": {
+      "hit:Physical": {
+        "base": 0.0,
+        "added": 0.75,
+        "added_effectiveness": 2.5,
+        "increased_multiplier": 16.1,
+        "more_multiplier": 41.908944,
+        "target_multiplier": 0.13
+      },
+      "hit:Fire": {
+        "base": 50.0,
+        "added": 45.75,
+        "added_effectiveness": 2.5,
+        "increased_multiplier": 15.645,
+        "more_multiplier": 41.908944,
+        "target_multiplier": 0.13
+      },
+      "hit:Cold": {
+        "base": 0.0,
+        "added": 214.5,
+        "added_effectiveness": 2.5,
+        "increased_multiplier": 15.645,
+        "more_multiplier": 41.908944,
+        "target_multiplier": 0.13
+      },
+      "hit:Lightning": {
+        "base": 0.0,
+        "added": 32.25,
+        "added_effectiveness": 2.5,
+        "increased_multiplier": 15.645,
+        "more_multiplier": 41.908944,
+        "target_multiplier": 0.13
+      }
+    },
+    "crit": {
+      "crit_chance": 0.8106,
+      "crit_multiplier": 6.98,
+      "average_crit": 5.847388000000001,
+      "derivation": "(0.05 base + 0.16 added) × (1 + 2.86 increased) = 0.8106；added 池 = Sharpened Tips 0.03 + ring2 unique_mod#1 0.02 + ring2 unique_mod#2 0.04 + relic unique_mod#2 0.03 + idols.3 corrupted 0.02 + passive 20:2 0.02（owner 行与 Perfect Aim 转移行分别计入 actor 池）；increased 池 = ring2 implicit 0.50 + idols 0.45/0.09/0.06/0.50/0.14 + passive 20:1 0.40 + passive 100:0 0.36（owner x1.00 转移）+ passive 100:1 0.36（Minion 原生行）= 2.86",
+      "cap_source": "tools/phase3/src/le_calc/mechanics/crit_expected.py#DEFAULT_CHANCE_CAP = 1.0（clamp((base+Σadded)×(1+Σincreased)×Π(1+more), 0, 1)）"
+    },
+    "dexterity": {
+      "value": 228.0,
+      "derivation": "显式属性行合计 226（base 3 + 装备/被动行）+ quest all_attributes 2 = 228；由 result.effect_ledger.attribute_scaling.payload.parts[0].value = 9.120000000000001 = 228 × 0.04 反证",
+      "attribute_scaling": {
+        "ratio_per_dex": 0.04,
+        "output": "increased damage (Minion)"
+      },
+      "armed_construction_per_dex_more": {
+        "ratio_per_dex": 0.04,
+        "current_group_value": 9.12
+      }
+    },
+    "estimate_method": "用 run-5 result.report_details.components 的 base/added/added_effectiveness/increased_multiplier/more_multiplier/target_multiplier 重算：damage = (base + added×2.5) × inc × more × avg_crit × 0.13；重算基线与 reported 完全一致（ratio 1.0），再对每项只改对应输入得到估计值。估计值未做成新 run，不作为 canonical。"
+  },
+  "items": [
+    {
+      "audit_id": "phantom_grip_crit_chance_per_dexterity",
+      "classification": "add",
+      "kind": "corrupted_affix",
+      "item": {
+        "instance_id": "equipment.ring2",
+        "display_name": "Phantom Grip",
+        "definition_entity_id": "item:letools:uniqueList.uniques:348",
+        "base_name": "Copper Ring"
+      },
+      "source_row": {
+        "mod_id": "equipment.ring2#affix#corrupted#0.1",
+        "source": "affix",
+        "channel": "corrupted",
+        "property": 98,
+        "tags": 427,
+        "special_tag": 0,
+        "modifier_type": 0,
+        "value_numeric": 0.01,
+        "unit": "percent",
+        "display_value": "1%",
+        "readable_text": "1% Increased Critical Strike Chance per Dexterity",
+        "affix": {
+          "entity_id": "affix:letools:affixList.multiAffixes:1075",
+          "name": "Added Critical Strike Multiplier and Increased Critical Strike Chance per Dexterity",
+          "channel": "corrupted",
+          "affix_slot": "prefix",
+          "source_tier": 3
+        }
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.playerPropertyList:427",
+            "detail": "name='Increased Critical Strike Chance per Dexterity', unit=percent；extensions.displayAddedAsPercentage=1, dontDisplayPlus=1（显示为 increased 型百分比；marker property 98 的 modType 字段恒为 0，不代表 added 语义）。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#affixes affix:letools:affixList.multiAffixes:1075",
+            "detail": "multiAffixes:1075 = 'Added Critical Strike Multiplier and Increased Critical Strike Chance per Dexterity'，affixProperties[1] = {property:98, tags:427, modifierType:0}；corrupted prefix，tier 3。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#translations key=Properties.Property_Player_427_Name",
+            "detail": "en = 'Increased Critical Strike Chance per Dexterity'。"
+          }
+        ],
+        "il": [
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/CharacterMutator.cs#L533",
+            "detail": "public const int playerPropertyCritChancePerDex = 427;（属性 98 marker 的 tag 427 在 CharacterMutator switch 中被消费）"
+          },
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/CharacterMutator.cs#L2241",
+            "detail": "public float critChancePerDex; //Field offset: 0x1934；另有 0x1938 currentCritChancePerDex、0x193C previous/accumulated。"
+          },
+          {
+            "locator": ".scratch/cpp2il_isil/IsilDump/LE/CharacterMutator.txt#disassembly L19614-L19642 / #ISIL seq 11648-11692",
+            "detail": "applyModifiersBeforeExternalStatsCalculation 中：critChancePerDex(0x1934) 非零 → 以 SP=22(Dexterity) 调用 GetStatValue 取当前 Dex → dex × critChancePerDex → 写 0x1938 并累加到 0x193C → 以 SP=4(CriticalChance)、value=累计值 调用 Stat 创建（0x180186BB0；该 call target 在 ISIL 无符号名，故 added/increased 分桶按语义/显示名判定为 increased）。"
+          },
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/BallistaMutator.cs#L264,L290-L295 / .scratch/cpp2il_isil/IsilDump/LE/BallistaMutator.txt#ISIL seq 085-132",
+            "detail": "BallistaMutator.GetStatsFromPlayer 遍历玩家 Stats 列表，逐 Stat 读 SP=[stat+0x10]；SP=4 且 playerCritChanceEffectivenessRatio(0x13C)>0 时按 ratio 复制（new Stat(stat, ratio)）。当前节点 27 Perfect Aim 4/4 → ratio=1.00。"
+          }
+        ],
+        "template_transfer": [
+          {
+            "locator": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.stat_transfer.transfers[id=perfect_aim_crit_chance_increased]",
+            "detail": "input_pool.stat_key=crit_chance, operations=[increased], exclude_tags=[Minion] → owner 行以 ratio 1.00 复制给 actor。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "increased",
+        "operation_basis": "dataset stat 名为 'Increased Critical Strike Chance per Dexterity'、displayAddedAsPercentage=1；IL 侧该 Stat 由 0x180186BB0 创建且按 per-Dex 累计值注入 SP=4，call target 无符号名无法直接读 ModType。",
+        "per_attribute": {
+          "attribute": "dexterity",
+          "per": 1.0,
+          "value_per_point": 0.01
+        },
+        "condition": "none（常驻；物品已 corrupted）",
+        "transfer_to_ballista": "Perfect Aim（节点27 4/4）把玩家 SP=4 increased crit 行 100% 复制给 minion；该 per-Dex increased crit 行属于玩家 CritChance Stat 行，路径与现有 ring2 implicit/idols increased crit 行一致（当前 run 已把这些行作为 transfer 行计入）。"
+      },
+      "applies_to_ballista_explosion": "yes",
+      "formula": "crit_chance = clamp( (0.05 + 0.16) × (1 + 2.86 + 0.01×Dex) , 0, 1 )；Dex=228 → 0.21 × (1+2.86+2.28) = 0.21 × 6.14 = 1.2894 → clamp 后 = 1.0",
+      "formula_if_added_instead": "(0.05 + 0.16 + 0.01×Dex) × (1 + 2.86) = (0.21+2.28) × 3.86 = 9.61 → clamp 后 = 1.0（两种分桶读法都被 cap 到 1.0，DPS 结论相同）",
+      "required_template_effect": {
+        "id": "phantom_grip_crit_chance_per_dexterity",
+        "label": "Phantom Grip：每点敏捷 +1% increased Critical Strike Chance（corrupted affix）",
+        "source": {
+          "kind": "equipment_mod",
+          "binding_selector": {
+            "kind": "equipment_mod",
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:348",
+            "expected_source": "affix",
+            "expected_property": 98,
+            "expected_tags": 427,
+            "expected_special_tag": 0,
+            "selection": "one"
+          },
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:348",
+          "expected_property": 98,
+          "expected_special_tag": 0,
+          "expected_stat_name_contains": "Critical Strike Chance per Dexterity"
+        },
+        "stat": "crit_chance",
+        "operation": "increased",
+        "value_source": "source_value",
+        "per_attribute": {
+          "attribute": "dexterity",
+          "per": 1.0
+        },
+        "scope": "owner",
+        "source_kind": "equipment",
+        "status": "derived",
+        "required": false,
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "equipment.ring2#affix#corrupted#0.1 property 98/tags 427，value=0.01（1% per Dexterity）",
+            "locator": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#mods equipment.ring2#affix#corrupted#0.1"
+          },
+          {
+            "kind": "reverse_engineering",
+            "detail": "CharacterMutator.playerPropertyCritChancePerDex=427；critChancePerDex×Dex → SP=4 CriticalChance Stat；Perfect Aim 100% 复制玩家 CritChance 行。",
+            "locator": ".scratch/cpp2il_isil/IsilDump/LE/CharacterMutator.txt#ISIL seq 11648-11692; .scratch/cpp2il_isil/IsilDump/LE/BallistaMutator.txt#ISIL seq 085-132"
+          }
+        ],
+        "notes": "可直接以现有 effect 结构落盘（equipment_mod selector + per_attribute）。value_source=source_value 使每点值随实例词条 roll 变化，per_attribute 由属性池在编译后折算为 Dex×0.01。"
+      },
+      "estimated_dps_effect": {
+        "assumption": "其它输入不变；只把 actor crit_chance 由 0.8106 变为 clamp 后 1.0",
+        "crit_chance_before": 0.8106,
+        "crit_chance_after": 1.0,
+        "average_crit_before": 5.847388000000001,
+        "average_crit_after": 6.98,
+        "single_event_damage_before": 390345.2308856763,
+        "single_event_damage_after": 465953.2959984903,
+        "ratio": 1.1936953730451954,
+        "horizon_dps_before": 312276.184708541,
+        "horizon_dps_after": 372762.6367987922,
+        "delta_dps": 60486.452090251,
+        "delta_percent": 19.3695
+      },
+      "out_of_scope_reason": null,
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "urzil_all_attributes_with_7_corrupted_items",
+      "classification": "add",
+      "kind": "corrupted_affix",
+      "item": {
+        "instance_id": "equipment.chest",
+        "display_name": "Urzil's Pride",
+        "definition_entity_id": "item:letools:uniqueList.uniques:10",
+        "base_name": "Iron Armor"
+      },
+      "source_row": {
+        "mod_id": "equipment.chest#affix#corrupted#0.0",
+        "source": "affix",
+        "channel": "corrupted",
+        "property": 98,
+        "tags": 649,
+        "special_tag": 0,
+        "modifier_type": 0,
+        "value_numeric": 8,
+        "unit": "flat",
+        "display_value": "8",
+        "readable_text": "+8 to All Attributes with at least 7 Corrupted non-Idol Items equipped",
+        "affix": {
+          "entity_id": "affix:letools:affixList.singleAffixes:1011",
+          "name": "All Attributes with at least 7 Corrupted non-Idol Items equipped",
+          "channel": "corrupted",
+          "affix_slot": "prefix",
+          "source_tier": 1
+        }
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.playerPropertyList:649",
+            "detail": "name='All Attributes with at least 7 Corrupted non-Idol Items equipped', unit=flat；extensions.displayAddedTo=1。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#affixes affix:letools:affixList.singleAffixes:1011",
+            "detail": "singleAffixes:1011 affixProperties[0] = {property:98, tags:649, modifierType:0}；corrupted prefix。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#translations key=Properties.Property_Player_649_Name",
+            "detail": "en = 'All Attributes with at least 7 Corrupted non-Idol Items equipped'。"
+          }
+        ],
+        "il": [
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/CharacterMutator.cs#L2621-L2622",
+            "detail": "public float addedAllAttributesWith7Corrupted; (0x1FD8) / private float currentAddedAllAttributesWith7Corrupted; (0x1FDC)。"
+          },
+          {
+            "locator": ".scratch/cpp2il_isil/IsilDump/LE/CharacterMutator.txt#ISIL seq 4439-4478（applyModifiersBeforeExternalStatsCalculation；disassembly L28258-L28310）",
+            "detail": "value = addedAllAttributesWith7Corrupted(0x1FD8)；若 value!=0 且 corruptedItemCount >= 7 才保留，否则置 0；UpdateDynamicStat 后以 SP=46(AllAttributes) 创建 Stat(value)。"
+          },
+          {
+            "locator": ".scratch/cpp2il_isil/IsilDump/LE/CharacterMutator.txt#ISIL seq 4361-4426",
+            "detail": "计数循环：遍历装备容器条目，`ItemData.isIdol` 为 false 且 item corrupted 标志（[item+0x52]）非 0 时 rbx+=1；随后 Compare rbx,7 判定条件。"
+          },
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/SP.cs#L51",
+            "detail": "AllAttributes = 46；与工具链 STAT_ALL_ATTRIBUTES 的分配逻辑一致（tools/phase3/src/le_calc/plan_executor_v3.py#L412、v4_execution.py#L776）。"
+          }
+        ],
+        "instance_count": {
+          "locator": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#items+mods（本地统计见 .scratch/unique-audit/count_corrupted.py 输出）",
+          "detail": "当前输入中带 corrupted affix 的非神像装备 11 件：equipment.head/chest/weapon1/weapon2/hands/waist/feet/ring2/ring1/amulet/relic；若把 equipment.idol_altar 也按非神像装备计入则 12 件。两种读法均 ≥ 7，条件满足。"
+        }
+      },
+      "semantics": {
+        "operation_assumption": "added",
+        "per_attribute": null,
+        "condition": {
+          "kind": "equipped_item_count",
+          "predicate": {
+            "is_idol": false,
+            "corrupted": true
+          },
+          "min": 7,
+          "satisfied": true
+        },
+        "transfer_to_ballista": "AllAttributes(SP=46) 在当前流水线按 5 个基础属性各自 +N 分配（quest all_attributes +2 已通过同一路径进入 Dex=228），因此 Dex 由 228 → 236；再由 attribute_scaling（Dex×4% increased）、Armed Construction per-Dex more（Dex×4% more）、Mourningfrost（Dex×1 cold/Bow，经 Shared Enhancements 0.75 转移）产生连锁伤害变化。"
+      },
+      "applies_to_ballista_explosion": "yes",
+      "formula": "condition: corrupted_non_idol_equipped >= 7 → Dex' = Dex + 8（其余属性同样 +8，但与本口径伤害无关）；本输入满足条件。伤害侧：inc_part = 0.04×Dex'（+0.32）、armed_construction_more_group = 0.04×Dex'（9.12→9.44）、Mourningfrost owner added = Dex'（228→236，经 shared 0.75 → actor +6 added → ×2.5 effectiveness → Cold subtotal +15）",
+      "required_template_effect": {
+        "id": "urzil_all_attributes_with_7_corrupted_items",
+        "label": "Urzil's Pride：≥7 件 corrupted 非神像装备时 +8 全属性（corrupted affix）",
+        "source": {
+          "kind": "equipment_mod",
+          "binding_selector": {
+            "kind": "equipment_mod",
+            "item_definition_entity_id": "item:letools:uniqueList.uniques:10",
+            "expected_source": "affix",
+            "expected_property": 98,
+            "expected_tags": 649,
+            "expected_special_tag": 0,
+            "selection": "one"
+          },
+          "expected_definition_entity_id": "item:letools:uniqueList.uniques:10",
+          "expected_property": 98,
+          "expected_special_tag": 0,
+          "expected_stat_name_contains": "All Attributes with at least 7 Corrupted non-Idol Items equipped"
+        },
+        "stat": "all_attributes",
+        "operation": "added",
+        "value": 8.0,
+        "value_source": "declared",
+        "scope": "owner",
+        "source_kind": "equipment",
+        "status": "derived",
+        "required": false,
+        "evidence": [
+          {
+            "kind": "game_data",
+            "detail": "equipment.chest#affix#corrupted#0.0 property 98/tags 649，value=8；当前输入 corrupted 非神像装备 11 件（含 altar 则 12）≥7。",
+            "locator": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#mods equipment.chest#affix#corrupted#0.0"
+          },
+          {
+            "kind": "reverse_engineering",
+            "detail": "CharacterMutator.addedAllAttributesWith7Corrupted(0x1FD8)；count(corrupted && !isIdol)>=7 时以 SP=46 AllAttributes 创建 Stat(value)。",
+            "locator": ".scratch/cpp2il_isil/IsilDump/LE/CharacterMutator.txt#ISIL seq 4361-4478"
+          }
+        ],
+        "notes": "该条目依赖当前 effect 结构尚不存在的条件字段（equipped_item_count）。在条件能力实现前不能直接粘入生效；需新增最小条件求值器，或在输入层把布尔条件显式登记（不能伪造数值）。"
+      },
+      "estimated_dps_effect": {
+        "assumption": "Dex 228→236（condition 满足）；只改 inc +0.32、armed construction more 9.44、Cold added +6（effective +15 subtotal）；crit 不变（0.8106）",
+        "dex_before": 228.0,
+        "dex_after": 236.0,
+        "single_event_damage_before": 390345.2308856763,
+        "single_event_damage_after": 418794.41609724046,
+        "ratio": 1.0728821129619395,
+        "horizon_dps_before": 312276.184708541,
+        "horizon_dps_after": 335035.5328777924,
+        "delta_dps": 22759.3481692514,
+        "delta_percent": 7.2882
+      },
+      "out_of_scope_reason": null,
+      "misclassified_as": "unmapped:out_of_scope（原 coverage 把它当作未映射属性排除；核实后应改判为可补入）",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "hydra_arc_global_conditional_damage",
+      "classification": "not_applicable",
+      "kind": "corrupted_affix",
+      "item": {
+        "instance_id": "equipment.weapon1",
+        "display_name": "Hydra Arc",
+        "definition_entity_id": "item:letools:uniqueList.uniques:441"
+      },
+      "source_row": {
+        "mod_id": "equipment.weapon1#affix#corrupted#0.1",
+        "source": "affix",
+        "channel": "corrupted",
+        "property": 117,
+        "tags": 0,
+        "special_tag": 19,
+        "modifier_type": 2,
+        "value_numeric": 0.04,
+        "unit": "flat",
+        "display_value": "4%",
+        "readable_text": "4% more Global Conditional Damage",
+        "affix": {
+          "entity_id": "affix:letools:affixList.multiAffixes:983",
+          "name": "Chance to inflict Bleed on Hit and More Damage against Bleeding Enemies",
+          "channel": "corrupted"
+        }
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.propertyList:117",
+            "detail": "name='Global Conditional Damage', unit=flat；affixProperties 里该行 modifierType=2（more）。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#affixes affix:letools:affixList.multiAffixes:983",
+            "detail": "affix_display_name='Chance to inflict Bleed on Hit and More Damage against Bleeding Enemies'；第二行 {property:117, specialTag:19, modifierType:2}。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#translations key=Properties.Property_Master_Global Conditional Damage_AltText",
+            "detail": "en='Multiplicative with other modifiers'（无自身条件文本；条件由 specialTag 编码）。"
+          }
+        ],
+        "il": [
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/ConditionalDamageProperty.cs#L24",
+            "detail": "ToBleedingEnemies = 19；即 special_tag 19 的条件语义为『对流血敌人』。"
+          },
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/CharacterMutator.cs#L3316",
+            "detail": "ApplyConditionalTemporaryStats(ref List<Stat> tempStats, AbilityInfo abilityInfo, UseType useType, bool canChangeState)；CallerCount(0)，与 SP=117 等条件伤害 Stat 相关，作用对象是玩家 Ability 的 tempStats。"
+          },
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/GlobalDamageConditionals.cs#L131 / BaseStats.cs#L57,L242",
+            "detail": "SP=117 类 Stat 经 BaseStats.globalDamageConditionalEffects → DamageConditionalEffect，再在 ProtectionClass.ApplyDamage(玩家侧 DamageStats) 的 conditionalEffects 上求值；minion explosion 的 DamageStats 不继承玩家 conditionalEffects。"
+          }
+        ],
+        "template_transfer": [
+          {
+            "locator": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.stat_transfer",
+            "detail": "Perfect Aim/Shared Enhancements 只复制 SP∈{Damage(0), CritChance(4), CritMulti(5), AilmentChance(1,42,43)}；SP=117 不在转移白名单。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "more（modifierType=2）",
+        "condition": "special_tag 19 = ConditionalDamageProperty.ToBleedingEnemies；需要目标处于 bleeding",
+        "transfer_to_ballista": "否：SP=117 行既非 actor 原生 Minion 行（tags=0，无 Minion 标签），也不在 Shared Enhancements/Perfect Aim 的 SP 白名单；同词条的 55% bleed chance 行（property 1）是玩家施加上限，explosion 本身不带 bleed。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "若作用于爆炸：more 组 × (1+0.04) 且要求目标 bleeding；当前口径不满足条件且不转移 → ×1.0",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "不适用，0 影响；若假设被错误地按常驻 4% more 全量加入则单发/事件 DPS ×1.04（+4.0%），不应采用。",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "玩家侧『对流血敌人』的条件更多伤害，不在 minion explosion 的转移/条件白名单；当前 Boss Dummy 口径没有流血来源。",
+      "unresolved_reason": "残余 unknown：游戏内是否把玩家 global conditional 效果传播到 minion 伤害未直接实测；即使传播，爆炸也不施加流血，条件需外部来源。"
+    },
+    {
+      "audit_id": "zeurial_lightning_pen_bow_to_throwing",
+      "classification": "not_applicable",
+      "kind": "unique_mod",
+      "item": {
+        "instance_id": "equipment.weapon2",
+        "display_name": "Zeurial's Hunt",
+        "definition_entity_id": "item:letools:uniqueList.uniques:251"
+      },
+      "source_row": {
+        "mod_id": "equipment.weapon2#unique_mod#2",
+        "source": "unique_mod",
+        "property": 98,
+        "tags": 229,
+        "special_tag": 0,
+        "modifier_type": 0,
+        "value_numeric": 0.71,
+        "unit": "percent",
+        "hidden": true,
+        "readable_text": null,
+        "description_row": {
+          "mod_id": "equipment.weapon2#unique_description#1",
+          "readable_text": "When you use a Lightning Bow Attack your next Throwing Attack within 2 seconds has +71% Lightning Penetration"
+        }
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.playerPropertyList:229",
+            "detail": "name='Lightning Penetration with your next Throwing Attack within two seconds when you directly use a Lightning Bow Attack' (source row 里 229/230 两条同名描述，按 thowing/bow 方向分开)。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#affixes / #items item:letools:uniqueList.uniques:251",
+            "detail": "unique 251 tooltipDescriptions 含 3 条描述；mods 中 property 98 tags 229/230/231 为 hidden 行为标记。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "conditional player-side penetration buff（玩家下一次投掷攻击）",
+        "transfer_to_ballista": "否：buff 绑定玩家『下一次 Throwing Attack』；Ballista 爆炸是 minion ability object，既不是玩家投掷攻击，也不在转移/条件白名单。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "若作用于爆炸 Lightning 通道：penetration_multiplier ×(1+0.71) 只看 Lightning 分量；当前口径不成立 → ×1.0",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "不适用，0；参考上界：即使把 71% pen 全量加到 Lightning 分量（40,184/390,345=10.3%），约 +7.3% 总伤害，但条件与作用对象均不成立。",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "条件要求玩家直接使用 Lightning Bow Attack 后下一次 Throwing Attack；当前 DPS 口径只有 Ballista 爆炸，不含玩家投掷攻击。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "zeurial_lightning_pen_throwing_to_bow",
+      "classification": "not_applicable",
+      "kind": "unique_mod",
+      "item": {
+        "instance_id": "equipment.weapon2",
+        "display_name": "Zeurial's Hunt",
+        "definition_entity_id": "item:letools:uniqueList.uniques:251"
+      },
+      "source_row": {
+        "mod_id": "equipment.weapon2#unique_mod#3",
+        "source": "unique_mod",
+        "property": 98,
+        "tags": 230,
+        "special_tag": 0,
+        "modifier_type": 0,
+        "value_numeric": 0.71,
+        "unit": "percent",
+        "hidden": true,
+        "description_row": {
+          "mod_id": "equipment.weapon2#unique_description#2",
+          "readable_text": "When you use a Lightning Throwing Attack your next Bow Attack within 2 seconds has +71% Lightning Penetration"
+        }
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.playerPropertyList:230",
+            "detail": "name 同 229（方向相反：Lightning Throwing Attack → next Bow Attack）。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "conditional player-side penetration buff（玩家下一次 Bow Attack）",
+        "transfer_to_ballista": "否：Ballista 爆炸不是玩家 Bow Attack；也不在转移/条件白名单。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "当前口径 ×1.0",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "不适用，0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "同上：仅作用于玩家『下一次 Bow Attack』。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "zeurial_haste",
+      "classification": "not_applicable",
+      "kind": "unique_description",
+      "item": {
+        "instance_id": "equipment.weapon2",
+        "display_name": "Zeurial's Hunt",
+        "definition_entity_id": "item:letools:uniqueList.uniques:251"
+      },
+      "source_row": {
+        "mod_id": "equipment.weapon2#unique_description#0",
+        "source": "unique_mod",
+        "property": null,
+        "tags": null,
+        "special_tag": null,
+        "modifier_type": null,
+        "value_numeric": null,
+        "readable_text": "Triggering both effects within 2 seconds grants Haste for 2 seconds"
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.playerPropertyList:231",
+            "detail": "name='Seconds of Haste when you proc both of Zeurial\\'s Hunt\\'s effects within 2 seconds'；Haste 属于玩家攻击/施法速度。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "buff",
+        "transfer_to_ballista": "否：Haste 是玩家 attack/cast speed；当前 DPS 口径按场景事件率驱动，不建模玩家攻击速度与爆炸频率耦合。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "当前口径 ×1.0",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "不适用，0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "玩家 Haste；不影响 minion explosion 单发伤害或本口径事件率（事件率由场景控件假设）。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "blood_roost_minion_physical_pen_with_bleed",
+      "classification": "not_applicable",
+      "kind": "unique_mod",
+      "item": {
+        "instance_id": "equipment.hands",
+        "display_name": "Blood Roost",
+        "definition_entity_id": "item:letools:uniqueList.uniques:332"
+      },
+      "source_row": {
+        "mod_id": "equipment.hands#unique_mod#1",
+        "source": "unique_mod",
+        "property": 43,
+        "tags": 8192,
+        "special_tag": 2,
+        "modifier_type": 0,
+        "value_numeric": 0.26,
+        "unit": "percent",
+        "readable_text": "26% Minion Physical Penetration with Bleed"
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.propertyList:43",
+            "detail": "property 43 的 special_tag_display 把 specialTag 2 显示为 'Physical Penetration with Bleed'；unit=percent。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#items item:letools:uniqueList.uniques:332",
+            "detail": "unique 332 mods[1] = {value:0.1, property:43, specialTag:2, tags:8192}；corrupted/hands 实例 roll 为 26%。"
+          }
+        ],
+        "il": [
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/GlobalDamageConditionals.cs#L112-L131",
+            "detail": "conditional ailment/penetration Stat（specialTag 区分 Penetration with <ailment>）会被转换为 DamageConditionalEffect（DamageEffectPenetration），在 DamageConditional 满足时才生效。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "conditional penetration（Minion 标签；条件=目标有对应 ailment/流血）",
+        "transfer_to_ballista": "stat 本身带 Minion 标签，是 actor 原生行；但条件要求目标流血。Ballista 爆炸没有施加流血的来源（同武器 55% bleed 行是玩家侧、tags=0，不作用于 minion）；当前 Boss Dummy 口径目标不流血。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "若目标处于 bleeding：Physical 分量 penetration_multiplier = (1+0.26) → 仅 Physical 分量受益；当前条件不满足 → ×1.0",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "不适用，0；上界（假设条件永远满足且只作用 Physical 分量 961.70 / 390,345.23 = 0.246%）：26% pen → 总伤害 +0.064%",
+        "delta_percent_upper_bound": 0.064,
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "条件『with Bleed』在当前口径没有流血来源（explosion 不施加流血，玩家侧 bleed 行不转移给 minion）；即使满足，Physical 分量占比 <0.25%。",
+      "unresolved_reason": "残余 unknown：『with Bleed』是否也可解释为『该 hit 自身有 bleed chance』而非『目标 bleeding』；两种读法在本口径下都无来源，因此结论不敏感。"
+    },
+    {
+      "audit_id": "urzil_mana_regen_description",
+      "classification": "not_applicable",
+      "kind": "unique_description",
+      "item": {
+        "instance_id": "equipment.chest",
+        "display_name": "Urzil's Pride",
+        "definition_entity_id": "item:letools:uniqueList.uniques:10"
+      },
+      "source_row": {
+        "mod_id": "equipment.chest#unique_description#0",
+        "source": "unique_mod",
+        "readable_text": "1% increased mana regeneration per 2% uncapped Lightning Resistance"
+      },
+      "evidence": {
+        "il": [
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/Urzils_Pride.cs#L6-L10",
+            "detail": "manaRegenPercent=0.5（=1%/2% Lightning Res）；effectiveProtectionCap=40；组件只写 ManaRegen Stat。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "increased mana regeneration（防御/资源）",
+        "transfer_to_ballista": "否；与伤害分量无关。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "不进入 DPS 口径",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "法力回复；不影响 DPS（除非后续把 mana 约束纳入循环建模）。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "hydra_arc_repeat_bow_attack_descriptions",
+      "classification": "not_applicable",
+      "kind": "unique_description_group",
+      "item": {
+        "instance_id": "equipment.weapon1",
+        "display_name": "Hydra Arc",
+        "definition_entity_id": "item:letools:uniqueList.uniques:441"
+      },
+      "source_row": {
+        "mod_id": "equipment.weapon1#unique_description#0/#1/#2",
+        "source": "unique_mod",
+        "readable_texts": [
+          "After evading you repeat your most recently used bow attack at a nearby enemy (excludes channeled attacks and attacks with cooldowns), consuming 50% of its mana cost",
+          "If you have at least 75 Dexterity you repeat it at up to 2 nearby enemies instead",
+          "If you have at least 135 Dexterity you repeat it at up to 3 nearby enemies instead"
+        ]
+      },
+      "evidence": {
+        "il": [
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/CharacterMutator.cs#L3013",
+            "detail": "`<OnAbilityUse>g__addJulraStardialBuffs|2559_0` 一侧有 OnAbilityUse 分支；Hydra Arc 的 repeat 也走玩家 OnAbilityUse/Evade 处理器（描述本身是玩家行为，且唯一行为标记 mod property 98 tag 591 = chance to Repeat your most recent Bow Attack after Evading）。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "player-side extra attack proc（Evade 后）",
+        "transfer_to_ballista": "否：重复攻击由玩家在 Evade 后触发；Ballista 爆炸不是玩家攻击事件，也不在 DPS 口径内；Explosive Trap 投掷也不因此增加。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "不进入 DPS 口径（事件率由场景控件 trap_detonation_rate_per_s 驱动，不建模 Evade 重复攻击）",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "0（当前口径）",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "玩家侧 Evade 触发；不改变 Ballista 数量/爆炸次数，且当前口径无玩家攻击循环。",
+      "unresolved_reason": "残余 unknown：若未来把玩家攻击循环纳入并统计其产生的 Ballista（Siege Engineering 来自 Explosive Trap，不是 bow attack），需另行建模。"
+    },
+    {
+      "audit_id": "phantom_grip_forged_weapons_description",
+      "classification": "not_applicable",
+      "kind": "unique_description",
+      "item": {
+        "instance_id": "equipment.ring2",
+        "display_name": "Phantom Grip",
+        "definition_entity_id": "item:letools:uniqueList.uniques:348"
+      },
+      "source_row": {
+        "mod_id": "equipment.ring2#unique_description#0",
+        "source": "unique_mod",
+        "readable_text": "The Stats on your Gloves apply to your Forged Weapons at 78% effectiveness"
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#items item:letools:uniqueList.uniques:348",
+            "detail": "关联 hidden mod property 98 tag 220 specialTag 6 = 'Glove Stats apply to Forged Weapons'（0.78）；对象是 Forged Weapons（Sentinel 召唤物），不是 Ballista minion 100053。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "cross-actor stat copy（手套→Forged Weapons）",
+        "transfer_to_ballista": "否：目标 actor 是 Forged Weapons，不是 Ballista。Blood Roost 手套词条也不会经此进入 Ballista。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "不进入 DPS 口径",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "对象非 Ballista。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "mourningfrost_resistance_description",
+      "classification": "not_applicable",
+      "kind": "unique_description",
+      "item": {
+        "instance_id": "equipment.feet",
+        "display_name": "Mourningfrost",
+        "definition_entity_id": "item:letools:uniqueList.uniques:19"
+      },
+      "source_row": {
+        "mod_id": "equipment.feet#unique_description#1",
+        "source": "unique_mod",
+        "readable_text": "-1% physical and cold resistance per point of dexterity"
+      },
+      "evidence": {
+        "il": [
+          {
+            "locator": ".scratch/cpp2il_isil/IsilDump/LE/Mourningfrost.txt / docs/evidence/ballista/ballista-mourningfrost-20261113.json",
+            "detail": "EquipUnique 另创建 2 个抗性 Stat，addedValue 常量 = -0.01/点；纯防御属性。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "added resistance（负）",
+        "transfer_to_ballista": "否；防御属性不进入 DPS 口径。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "不进入 DPS 口径",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "防御属性；已在 Mourningfrost 证据中登记为未建模项。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "blood_roost_implicit_durations",
+      "classification": "not_applicable",
+      "kind": "item_implicit",
+      "item": {
+        "instance_id": "equipment.hands",
+        "display_name": "Blood Roost",
+        "definition_entity_id": "item:letools:uniqueList.uniques:332"
+      },
+      "source_row": {
+        "mod_ids": [
+          "equipment.hands#implicit#1",
+          "equipment.hands#implicit#2"
+        ],
+        "property": 42,
+        "tags": 0,
+        "modifier_type": 0,
+        "readable_texts": [
+          "15% Increased Bleed Duration",
+          "15% Increased Poison Duration"
+        ]
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.propertyList:42",
+            "detail": "Increased Ailment Duration；只影响 DoT 持续时间。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "increased ailment duration",
+        "transfer_to_ballista": "否：Ballista 爆炸是 hit 口径，不施加/不统计 bleed/poison DoT。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "不进入 DPS 口径",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "DoT/异常持续时间；当前口径无 DoT 分量。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "hydra_arc_implicit_poison_duration",
+      "classification": "not_applicable",
+      "kind": "item_implicit",
+      "item": {
+        "instance_id": "equipment.weapon1",
+        "display_name": "Hydra Arc",
+        "definition_entity_id": "item:letools:uniqueList.uniques:441"
+      },
+      "source_row": {
+        "mod_id": "equipment.weapon1#implicit#2",
+        "property": 42,
+        "tags": 0,
+        "modifier_type": 0,
+        "value_numeric": 0.2,
+        "readable_text": "20% Increased Poison Duration"
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.propertyList:42",
+            "detail": "Increased Ailment Duration。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "increased ailment duration",
+        "transfer_to_ballista": "否：无 DoT 分量。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "不进入 DPS 口径",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "DoT/异常持续时间。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "hydra_arc_repeat_after_evade_mod",
+      "classification": "not_applicable",
+      "kind": "unique_mod",
+      "item": {
+        "instance_id": "equipment.weapon1",
+        "display_name": "Hydra Arc",
+        "definition_entity_id": "item:letools:uniqueList.uniques:441"
+      },
+      "source_row": {
+        "mod_id": "equipment.weapon1#unique_mod#5",
+        "property": 98,
+        "tags": 591,
+        "special_tag": 0,
+        "modifier_type": 0,
+        "value_numeric": 1.0,
+        "hidden": true,
+        "readable_text": null
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.playerPropertyList:591",
+            "detail": "name='chance to Repeat your most recent Bow Attack after Evading'（隐藏行为标记，配合 3 条 description）。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "player-side proc flag",
+        "transfer_to_ballista": "否：玩家 Evade 后重复 bow attack，不改变 Ballista 爆炸频率/伤害。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "不进入 DPS 口径",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "玩家侧行为标记；当前口径不含玩家攻击循环。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "idol_frenzy_after_evade",
+      "classification": "not_applicable",
+      "kind": "idol_affix",
+      "item": {
+        "instance_id": "idols.4",
+        "display_name": "Large Umbral Omen Idol"
+      },
+      "source_row": {
+        "mod_id": "idols.4#affix#corrupted#0.0",
+        "property": 98,
+        "tags": 459,
+        "special_tag": 0,
+        "modifier_type": 0,
+        "value_numeric": 3.3,
+        "readable_text": "3.3 Seconds of Frenzy after you use Evade"
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.playerPropertyList:459",
+            "detail": "name='Seconds of Frenzy after you use Evade'；Frenzy 为玩家攻速/施法速度 buff。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "player buff duration",
+        "transfer_to_ballista": "否：玩家攻速；且需要 Evade 触发。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "不进入 DPS 口径",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "玩家攻速 buff，条件触发，不影响爆炸单发伤害与本口径事件率。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "melvern_crossbow_mercenaries",
+      "classification": "not_applicable",
+      "kind": "unique_mod",
+      "item": {
+        "instance_id": "equipment.relic",
+        "display_name": "Melvern's Writ",
+        "definition_entity_id": "item:letools:uniqueList.uniques:108"
+      },
+      "source_row": {
+        "mod_id": "equipment.relic#unique_mod#0",
+        "property": 98,
+        "tags": 75,
+        "special_tag": 0,
+        "modifier_type": 0,
+        "value_numeric": 1.0,
+        "readable_text": "+1 Crossbow Mercenaries"
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.playerPropertyList:75",
+            "detail": "name='Crossbow Mercenaries'（不同 minion 种类）。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "summon count for a different mercenary type",
+        "transfer_to_ballista": "否：不是 Ballista，也不影响爆炸。"
+      },
+      "applies_to_ballista_explosion": "no",
+      "formula": "不进入 DPS 口径",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "0",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": "不同 minion 类型。",
+      "unresolved_reason": null
+    },
+    {
+      "audit_id": "idol_refraction_impervious_altar",
+      "classification": "unresolved",
+      "kind": "idol_altar_affix_group",
+      "item": {
+        "instance_id": "equipment.idol_altar",
+        "display_name": "Impervious Altar"
+      },
+      "source_row": {
+        "mod_ids": [
+          "equipment.idol_altar#implicit#0",
+          "equipment.idol_altar#implicit#1",
+          "equipment.idol_altar#affix#normal#0.0",
+          "equipment.idol_altar#affix#normal#0.1",
+          "equipment.idol_altar#affix#normal#1.0",
+          "equipment.idol_altar#affix#normal#2.0",
+          "equipment.idol_altar#affix#normal#3.0",
+          "equipment.idol_altar#affix#corrupted#0.0"
+        ],
+        "property": 130,
+        "readable_texts": [
+          "+35 Ward Decay Threshold per Equipped Corrupted Idol",
+          "2 Weaver Idols equipped at Maximum",
+          "+2 Maximum Omen Idols",
+          "+7 Health per Equipped Omen Idol",
+          "29% increased Effect of Suffixes for Idols in Refracted Slots",
+          "+3 Mana per Idol in a Refracted Slot",
+          "7% increased Health per Equipped Huge Idol",
+          "48% increased Effect of Prefixes for Idols in Refracted Slots"
+        ]
+      },
+      "evidence": {
+        "input": [
+          {
+            "locator": "archive://examples/ballista-beta5-native-20261112/inputs/idol-refraction-selection.json",
+            "detail": "refracted_idols: []，altar_prefix_effect: 0.0，altar_suffix_effect: 0.0，status: assumed；note：当前输入未确认折射，显式使用无放大假设。"
+          },
+          {
+            "locator": "archive://examples/ballista-beta5-native-20261112/inputs/corrections.json#refraction",
+            "detail": "同一假设登记在 corrections.json；selection_file 指向 idol-refraction-selection.json。"
+          }
+        ],
+        "il": [
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/IdolAltarPropertyID.cs#L6",
+            "detail": "EffectOfPrefixesAndSuffixesInRefractedSlots = 1；另有 Mana/Health/Ward/Max 等 altar property ID。"
+          },
+          {
+            "locator": ".scratch/cpp2il_cs/DiffableCs/LE/ItemData.cs#L2943 / ItemList.cs#L843",
+            "detail": "ItemData.IsIdolAltarWithModThatAffectsRefractedSlots / EpochExtensions.AffectsRefractedSlots(IdolAltarPropertyID) 表明倍率只作用于 refracted slot 里的神像词条。"
+          }
+        ],
+        "potential_amplified_idol_affixes": [
+          "idols.0: +25% crit multi / +25% minion crit multi / 45% increased crit chance",
+          "idols.1: +22% crit multi / minion crit multi",
+          "idols.2/3: crit multi + crit chance + minion crit multi",
+          "idols.4: +19% crit multi / minion crit multi / 50% increased crit chance",
+          "idols.5/6: +2% cold pen / +2% minion cold pen",
+          "idols.7: +2% physical pen / +2% minion physical pen / 14% increased crit chance"
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "refracted-slot affix effect multiplier（prefix ×(1+0.48)、suffix ×(1+0.29)）",
+        "transfer_to_ballista": "若神像位于 refracted slot 且其词条为伤害相关：放大后的词条按原路径进入 player/actor 池；若没有 refracted 神像则完全无影响。"
+      },
+      "applies_to_ballista_explosion": "unknown",
+      "formula": "idol_affix_effective_value = base_value × (1 + altar_prefix_effect) 若该神像在 refracted slot 且词条在 prefix；suffix 用 altar_suffix_effect。当前输入 0.0/0.0 且 refracted_idols=[] → 全部 ×1.0",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "按当前输入假设（无 refracted 神像）→ 0；若实际存档有 n 个伤害词条神像在 refracted slot，影响量取决于具体神像/词条，当前无法确认，不给数值。",
+        "ratio": 1.0
+      },
+      "out_of_scope_reason": null,
+      "unresolved_reason": "当前输入把折射选择登记为 assumed 空集；真实存档是否使用 refracted slot、哪几个神像在其中，缺少直接证据。需要：存档中 idol slot 的 refracted 标志/权威解析，或用户明确指定 selection_file。另：altar 自身 8 条属性中只有 2 条是 refracted 倍率，其余为 Ward/Health/Mana/Max idol 等非伤害属性——即使解析出 refracted 神像也只影响被折射神像的词条，不影响 altar 自身其余行。"
+    },
+    {
+      "audit_id": "julra_stardial_triple_item_stats",
+      "classification": "unresolved",
+      "kind": "unique_description",
+      "item": {
+        "instance_id": "equipment.ring1",
+        "display_name": "Julra's Stardial",
+        "definition_entity_id": "item:letools:uniqueList.uniques:238"
+      },
+      "source_row": {
+        "mod_id": "equipment.ring1#unique_description#0",
+        "source": "unique_mod",
+        "readable_text": "When you use a movement or time travel skill all stats on this item are tripled for 4 seconds (12 second cooldown)",
+        "hidden_behavior_mod": "equipment.ring1#unique_mod#2 (property 98 tag 197 'When you use a movement skill stats on Julra's Stardial are tripled for 4 seconds (12 second cooldown)')"
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#stats stat:letools:coreDB.playerPropertyList:197",
+            "detail": "name='When you use a movement skill stats on Julra\\'s Stardial are tripled for 4 seconds (12 second cooldown)'。"
+          },
+          {
+            "locator": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#items equipment.ring1",
+            "detail": "该物品被三倍化的 stats：implicit +20 Mana / 12% increased Mana Regen；unique 29% Mana Spent Gained as Ward、72% increased Spell Damage；normal affix +16 Dex；corrupted affix +6 Dex / 11% Dodge；unique description 本条。伤害相关只有 Dex 22 点（16+6）与 Spell Damage（Spell 标签，不适用于 Ballista 爆炸）。"
+          }
+        ]
+      },
+      "semantics": {
+        "operation_assumption": "conditional temporary stat multiplier ×3（4s / 12s CD）",
+        "transfer_to_ballista": "Dex 部分通过玩家属性池影响 attribute scaling / Armed Construction per-Dex / Mourningfrost；但需要『临时窗口 + 召唤快照』能力，当前模板不支持，且三倍是否包含 corrupted affix 也不确定。"
+      },
+      "applies_to_ballista_explosion": "unknown",
+      "formula": "窗口内：item Dex 22→66（若 corrupted affix 也被三倍），Dex 228→272（+44）；窗口 4s / CD 12s → 假设按 CD 使用、召唤均匀分布 → 平均 Dex ≈ 228 + 44×(4/12) = 242.67。DPS 估计：窗口内 ×1.4435；1/3 uptime 加权 ×1.1362（仅为上界估计，假设三倍含 corrupted Dex、按 CD 触发、召唤统计平均）。",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "UNSUPPORTED_CONDITIONAL_WINDOW；以下为区间估计，不是 canonical 数值",
+        "window_full_ratio": 1.443535,
+        "uptime_1_3_ratio": 1.136183,
+        "window_full_dps": 450781.73,
+        "uptime_1_3_dps": 354802.77,
+        "ratio_when_not_modeled": 1.0
+      },
+      "out_of_scope_reason": null,
+      "unresolved_reason": "需要 (a) 行动/时间窗口与召唤快照语义（当前模板只有静态 states 开关，不能表达 4s/12s 循环），(b) 三倍是否作用于 corrupted affix 的确认。在两项确认前不加入；不建议用常驻 100% uptime 近似。"
+    },
+    {
+      "audit_id": "passive_agility_per_movement_speed_damage",
+      "classification": "unresolved",
+      "kind": "passive_bonus",
+      "item": {
+        "instance_id": "passive_tree",
+        "display_name": "Agility (rg-1 node 8)"
+      },
+      "source_row": {
+        "mod_id": "passive:8:1",
+        "property": 0,
+        "tags": 0,
+        "modifier_type": 1,
+        "operation": "increased",
+        "value_normalized": 0.01,
+        "per": {
+          "stat": 9,
+          "value": 0.01
+        },
+        "readable_hint": "Skills.Skill_rg-1_8_1_Stat = 'Increased Damage per 1% Increased Movement Speed'"
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=passive_bonus source_id=rg-1",
+            "detail": "node 8 stats[1] = {value:0.002, type:1, property:0, per:[{stat:9, value:0.01, perPoint:true}]}；5 点 → normalized value 0.01。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#translations key=Skills.Skill_rg-1_8_1_Stat",
+            "detail": "en='Increased Damage per 1% Increased Movement Speed'；node 8 名称 Agility。"
+          }
+        ],
+        "gap_locator": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-5/result.json#contributions passive:8:1（status=unresolved, exclusion_reason='per 缩放属性 9 未声明（覆盖缺口）'）"
+      },
+      "semantics": {
+        "operation_assumption": "increased damage per point of Increased Movement Speed（SP=0 player 行，可被 Shared Enhancements 0.75 转移给 actor）",
+        "transfer_to_ballista": "可能的通道：owner increased damage 行经 Shared Enhancements 0.75 复制给 minion；但『per stat 9' 未在模型中声明，无法折算。"
+      },
+      "applies_to_ballista_explosion": "unknown",
+      "formula": "candidate: Δincreased_damage = k × IncreasedMovementSpeed(%)，其中 k 由 data 的 per.value 编码（0.01 对应 1%/1%）；模型当前不能解析 stat 9=movespeed 的 per 缩放。",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "不做数值估计（禁止猜）；若按 1%/1% movespeed 读法且 movespeed 为两位数百分比，经 Shared Enhancements 0.75 后对 increased 池有可见影响（数量级：数个百分点 DPS）。",
+        "ratio": null
+      },
+      "out_of_scope_reason": null,
+      "unresolved_reason": "通用能力缺口：effect_binding.resolve_per_attribute 只支持 5 个基础属性（ATTRIBUTE_PROPERTIES），不支持任意 stat_key 的 per 缩放；需把 per 缩放从『属性』扩展到『已声明的 stat 池』（movespeed / crit avoidance），并登记 stat 9/89 的映射。"
+    },
+    {
+      "audit_id": "passive_finesse_them_minion_crit_multi_per_crit_avoidance",
+      "classification": "unresolved",
+      "kind": "passive_bonus",
+      "item": {
+        "instance_id": "passive_tree",
+        "display_name": "Finesse Them (rg-1 node 106)"
+      },
+      "source_row": {
+        "mod_id": "passive:106:2",
+        "property": 5,
+        "tags": 8192,
+        "modifier_type": 0,
+        "operation": "added",
+        "value_normalized": 0.01,
+        "per": {
+          "stat": 89,
+          "value": 0.03
+        },
+        "readable_hint": "Skills.Skill_rg-1_106_2_Stat = 'Minion Critical Multiplier per 3% Crit Avoidance'"
+      },
+      "evidence": {
+        "dataset": [
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#source_records entity_kind=passive_bonus source_id=rg-1",
+            "detail": "node 106 stats[2] = {value:0.01, type:0, property:5, tags:8192, per:[{stat:89, value:0.03}], noScaling:true, noScalingPointThreshold:5}；5/5 点。"
+          },
+          {
+            "locator": "data/releases/phase1-dataset-003/data.sqlite#translations key=Skills.Skill_rg-1_106_2_Stat",
+            "detail": "en='Minion Critical Multiplier per 3% Crit Avoidance'；node 106 名称 Finesse Them。"
+          }
+        ],
+        "gap_locator": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-5/result.json#contributions passive:106:2（status=unresolved, exclusion_reason='per 缩放属性 89 未声明（覆盖缺口）'）"
+      },
+      "semantics": {
+        "operation_assumption": "added minion crit multiplier per 3% uncapped Critical Strike Avoidance",
+        "transfer_to_ballista": "tags=8192 Minion → 按 actor 原生 Minion 行路径可作用于 Ballista；但 per stat 89 未声明，无法折算。"
+      },
+      "applies_to_ballista_explosion": "unknown",
+      "formula": "candidate: Δcrit_multiplier = 0.01 × (CritAvoidance / 0.03)（由 per.value=0.03 决定，需确认）；crit multiplier 从 6.98 提高会直接乘 avg_crit。",
+      "required_template_effect": null,
+      "estimated_dps_effect": {
+        "assumption": "不做数值估计（禁止猜）。参考敏感度：若 Δcrit_multiplier = +0.1，avg_crit 在 100% crit 时从 6.98→7.08（+1.4%）；在 0.8106 crit 时约 +1.2%。具体值取决于 per 读法。",
+        "ratio": null
+      },
+      "out_of_scope_reason": null,
+      "unresolved_reason": "同 U3 的通用能力缺口（任意 stat 的 per 缩放）；另外需要先确认 per.value=0.03 的精确除法/乘法语义（dataset 只给编码，未给公式）。"
+    }
+  ],
+  "out_of_scope_crosswalk": [
+    {
+      "contribution_id": "passive:8:0",
+      "display": "Agility｜50",
+      "raw": {
+        "property": 50,
+        "type": 0,
+        "value": 0.05,
+        "points": 5
+      },
+      "verdict": "not_applicable",
+      "reason": "property 50 = Haste On Hit Chance（translations Skills.Skill_rg-1_8_0_Stat），不是 Dex/暴击/增伤；同节点另一行 passive:8:1（per movespeed 增伤）是单独的 unresolved 伤害缺口（见 U3）。"
+    },
+    {
+      "contribution_id": "mod:equipment.hands#implicit#1",
+      "display": "Blood Roost｜Increased Bleed Duration",
+      "raw": {
+        "property": 42,
+        "special_tag": 2
+      },
+      "verdict": "not_applicable",
+      "reason": "异常持续时间；无 DoT 分量。"
+    },
+    {
+      "contribution_id": "mod:equipment.hands#implicit#2",
+      "display": "Blood Roost｜Increased Poison Duration",
+      "raw": {
+        "property": 42,
+        "special_tag": 7
+      },
+      "verdict": "not_applicable",
+      "reason": "同上。"
+    },
+    {
+      "contribution_id": "passive:50:1",
+      "display": "Cloak of Shadows｜62",
+      "raw": {
+        "property": 62,
+        "type": 0,
+        "value": 0.02
+      },
+      "verdict": "not_applicable",
+      "reason": "SP 62 = GlancingBlowChance（防御）。"
+    },
+    {
+      "contribution_id": "passive:92:2",
+      "display": "Evasion Tactics｜11",
+      "raw": {
+        "property": 11,
+        "type": 1,
+        "value": 0.02
+      },
+      "verdict": "not_applicable",
+      "reason": "SP 11 = Dodge Rating（防御）。"
+    },
+    {
+      "contribution_id": "passive:7:1",
+      "display": "Evasion｜113",
+      "raw": {
+        "property": 113,
+        "type": 2,
+        "value": -0.04
+      },
+      "verdict": "not_applicable",
+      "reason": "SP 113 = DamageTakenWhileMoving（防御）。"
+    },
+    {
+      "contribution_id": "passive:7:0",
+      "display": "Evasion｜11",
+      "raw": {
+        "property": 11,
+        "type": 1,
+        "value": 0.05
+      },
+      "verdict": "not_applicable",
+      "reason": "Dodge Rating。"
+    },
+    {
+      "contribution_id": "passive:103:0",
+      "display": "Expediency｜43",
+      "raw": {
+        "property": 43,
+        "specialTag": 33,
+        "type": 0,
+        "value": 0.04
+      },
+      "verdict": "not_applicable",
+      "reason": "property 43 specialTag 33 = Increased Haste Effect（translations：Increased Haste Effect）；不是伤害/暴击/Dex。Haste 影响玩家攻速。"
+    },
+    {
+      "contribution_id": "passive:103:2",
+      "display": "Expediency｜49",
+      "raw": {
+        "property": 49,
+        "type": 0,
+        "value": 1
+      },
+      "verdict": "not_applicable",
+      "reason": "SP 49 = Potion Slots。"
+    },
+    {
+      "contribution_id": "passive:106:1",
+      "display": "Finesse Them｜89",
+      "raw": {
+        "property": 89,
+        "type": 0,
+        "value": 0.05
+      },
+      "verdict": "not_applicable",
+      "reason": "SP 89 = Crit Avoidance（防御）；但同节点 passive:106:2（minion crit multi per 3% crit avoidance）是需另行解决的伤害缺口（U4）。"
+    },
+    {
+      "contribution_id": "passive:1:0",
+      "display": "Guile｜11",
+      "raw": {
+        "property": 11,
+        "type": 0,
+        "value": 10
+      },
+      "verdict": "not_applicable",
+      "reason": "Dodge Rating。"
+    },
+    {
+      "contribution_id": "passive:1:1",
+      "display": "Guile｜28",
+      "raw": {
+        "property": 28,
+        "type": 0,
+        "value": 0.05
+      },
+      "verdict": "not_applicable",
+      "reason": "SP 28 = Poison Resistance。"
+    },
+    {
+      "contribution_id": "mod:equipment.weapon1#implicit#2",
+      "display": "Hydra Arc｜Increased Poison Duration",
+      "raw": {
+        "property": 42
+      },
+      "verdict": "not_applicable",
+      "reason": "无 DoT 分量。"
+    },
+    {
+      "contribution_id": "mod:equipment.weapon1#unique_mod#5",
+      "display": "Hydra Arc｜repeat after evading",
+      "raw": {
+        "property": 98,
+        "tags": 591
+      },
+      "verdict": "not_applicable",
+      "reason": "玩家 Evade 后重复 bow attack；不改变爆炸。"
+    },
+    {
+      "contribution_id": "mod:idols.4#affix#corrupted#0.0",
+      "display": "Large Umbral Omen Idol｜Frenzy after Evade",
+      "raw": {
+        "property": 98,
+        "tags": 459
+      },
+      "verdict": "not_applicable",
+      "reason": "玩家 Frenzy（攻速）buff。"
+    },
+    {
+      "contribution_id": "passive:28:0",
+      "display": "Meditation｜11",
+      "raw": {
+        "property": 11,
+        "type": 0,
+        "value": 40
+      },
+      "verdict": "not_applicable",
+      "reason": "Dodge Rating。"
+    },
+    {
+      "contribution_id": "mod:equipment.relic#unique_mod#0",
+      "display": "Melvern's Writ｜Crossbow Mercenaries",
+      "raw": {
+        "property": 98,
+        "tags": 75
+      },
+      "verdict": "not_applicable",
+      "reason": "不同 mercenary 类型。"
+    },
+    {
+      "contribution_id": "passive:105:2",
+      "display": "Tailwind｜113",
+      "raw": {
+        "property": 113,
+        "type": 2,
+        "value": -0.01
+      },
+      "verdict": "not_applicable",
+      "reason": "DamageTakenWhileMoving（防御）。"
+    },
+    {
+      "contribution_id": "passive:105:1",
+      "display": "Tailwind｜11",
+      "raw": {
+        "property": 11,
+        "type": 1,
+        "value": 0.01
+      },
+      "verdict": "not_applicable",
+      "reason": "Dodge Rating。"
+    },
+    {
+      "contribution_id": "mod:equipment.chest#affix#corrupted#0.0",
+      "display": "Urzil's Pride｜All Attributes with at least 7 Corrupted non-Idol Items equipped",
+      "raw": {
+        "property": 98,
+        "tags": 649,
+        "value": 8
+      },
+      "verdict": "reclassify_add",
+      "reason": "条件已满足（11 件 corrupted 非神像装备 ≥ 7），+8 All Attributes 进入 Dex 池，链式提升伤害：见 A2；原 out_of_scope 是误标。"
+    }
+  ],
+  "coverage_gap_delta": {
+    "previous_run_coverage": {
+      "gap_count": 32,
+      "out_of_scope": 20,
+      "idol_refraction": 8,
+      "damage_relevant_unknown": 4
+    },
+    "recommended_after_audit": {
+      "add": [
+        "mod:equipment.ring2#affix#corrupted#0.1",
+        "mod:equipment.chest#affix#corrupted#0.0"
+      ],
+      "keep_unresolved": [
+        "mod:equipment.idol_altar#*（8 行）",
+        "mod:equipment.ring1#unique_description#0",
+        "passive:8:1",
+        "passive:106:2"
+      ],
+      "move_to_not_applicable": [
+        "mod:equipment.weapon1#affix#corrupted#0.1",
+        "mod:equipment.weapon2#unique_mod#2",
+        "mod:equipment.weapon2#unique_mod#3",
+        "mod:equipment.weapon2#unique_description#0",
+        "mod:equipment.hands#unique_mod#1"
+      ],
+      "note": "其余 out_of_scope 19 项维持不适用（逐条理由见 out_of_scope_crosswalk）；idol_refraction 仍保留为 unresolved（不因本次审计变为已解决）。"
+    }
+  },
+  "implementation_suggestions": [
+    {
+      "priority": 1,
+      "item": "phantom_grip_crit_chance_per_dexterity",
+      "capability": "无需新能力",
+      "note": "现有 effect 结构即可：equipment_mod binding_selector（expected_property 98 / expected_tags 427 / expected_source affix）+ per_attribute(dexterity, per=1) + value_source=source_value + operation=increased。写入后仍需一次正式 run 复核 crit_chance 与 cap，本次只给草案。"
+    },
+    {
+      "priority": 2,
+      "item": "urzil_all_attributes_with_7_corrupted_items",
+      "capability": "最小通用条件：装备数量谓词",
+      "note": "建议在 effect 层新增条件类型（例如 condition.kind='equipped_item_count'，predicate={is_idol:false, corrupted:true}, min=7），由 InputSnapshot 统一计算并写入 coverage/审计；不要在模板里硬编码本 BD 的数值。template effect 的 stat=all_attributes/operation=added 已被流水线支持。"
+    },
+    {
+      "priority": 3,
+      "item": "idol_refraction",
+      "capability": "最小通用能力：refracted-slot affix 倍率",
+      "note": "输入层已存在 idol-refraction-selection.json（当前 assumed 空集）；若后续能解析存档/用户指定，则对 refracted slot 内神像的 prefix/suffix 词条乘 (1+altar_prefix_effect)/(1+altar_suffix_effect) 后再进入常规映射。未确认前保持 unresolved，不要默认乘。"
+    },
+    {
+      "priority": 4,
+      "item": "per-stat 缩放（U3/U4）",
+      "capability": "通用能力：任意已声明 stat 的 per 缩放",
+      "note": "把 resolve_per_attribute 的『5 个基础属性』扩展为『属性 + 已声明 stat 池（movespeed、crit avoidance）』，并登记 planner per.stat 9/89 → stat_key；否则所有 'per X' 被动都会继续以 coverage gap 形式漏掉。"
+    },
+    {
+      "priority": 5,
+      "item": "julra_stardial_triple_item_stats",
+      "capability": "条件窗口 + 召唤快照（较大能力）",
+      "note": "需要 action/time 窗口建模（4s buff / 12s CD）并对 minion 召唤时快照；若只做静态近似会把条件伤害常驻化，不建议。保持 unresolved/limitation。"
+    }
+  ],
+  "summary": {
+    "items_total": 20,
+    "add": 2,
+    "not_applicable": 14,
+    "unresolved": 4,
+    "out_of_scope_reviewed": 20,
+    "out_of_scope_confirmed_not_applicable": 19,
+    "out_of_scope_reclassified_add": 1,
+    "headline": "两项可补入：Phantom Grip per-Dex crit（crit 0.8106→1.0 cap，+19.37% DPS）与 Urzil's Pride +8 All Attributes（条件满足，Dex 228→236，+7.29% DPS；需 item-count 条件能力）；两项同时约 +28.07% DPS。其余 14 项不适用、4 项 unresolved（idol refraction、Julra 条件窗口、两条 per-stat 被动伤害缺口）。"
+  },
+  "limitations": [
+    "本审计未修改模板/源码/run，也未生成新 run；所有 DPS 数值是同一 run-5 组件公式的重算估计，不是 canonical 结果。",
+    "Phantom Grip 的 per-Dex crit 分桶（increased vs added）依据 stat 名称与显示元数据判定为 increased；IL 中创建该 Stat 的 call target 0x180186BB0 在 ISIL 无符号名，无法直接读 ModType。两种读法在本构筑都会把 crit 顶到 1.0，因此 DPS 结论不受分桶影响。",
+    "Urzil 的装备计数在游戏里按『非神像且 corrupted』统计；本输入 11 件（altar 若计入 12 件），均 ≥7。计数口径（是否包含 idol_altar 槽）不影响条件成立。",
+    "Hydra Arc 4% more 的残余 unknown：未直接实测玩家 global conditional 效果是否可能传播到 minion 伤害；当前按转移白名单和 conditional 求值链判定不适用。",
+    "Julra 的 1/3 uptime 与三倍包含 corrupted affix 是未确认假设，只作为『如果建模』的上界估计，不应写入结果。",
+    "未做游戏内实测；无法确认 idol refraction 在真实存档中的选择。"
+  ],
+  "not_performed": [
+    "全仓回归/完整测试",
+    "修改 template、tools、knowledge、examples、reports",
+    "新 run / 新 HTML",
+    "浏览器验收",
+    "游戏内逐项实测"
+  ],
+  "scripts": [
+    ".scratch/unique-audit/probe_input.py",
+    ".scratch/unique-audit/probe_item_mods.py",
+    ".scratch/unique-audit/count_corrupted.py",
+    ".scratch/unique-audit/probe_dataset.py",
+    ".scratch/unique-audit/probe_crit_contribs.py",
+    ".scratch/unique-audit/probe_dex.py",
+    ".scratch/unique-audit/probe_oos2.py",
+    ".scratch/unique-audit/probe_descriptions.py",
+    ".scratch/unique-audit/probe_translations.py",
+    ".scratch/unique-audit/isil_getstats.py",
+    ".scratch/unique-audit/estimate_dps.py",
+    ".scratch/unique-audit/estimate_dps2.py"
+  ],
+  "draft_validation": {
+    "performed": "2026-11-13，只读内存验证（未写模板）：把 proposed-template-effects.json 的 effect 追加到模板副本后调用 le_calc.definitions_v3.validate_template + effect_binding.verify_mod。",
+    "phantom_grip_crit_chance_per_dexterity": {
+      "validate_template": "OK",
+      "binding_selector_matches": 1,
+      "verify_mod": "verified（identity+semantics 通过）",
+      "source_value_numeric": 0.01
+    },
+    "urzil_all_attributes_with_7_corrupted_items": {
+      "validate_template": "OK（但 condition 键被静默忽略——当前 effect 结构不读未知键，直接落盘会变成常驻 +8，故仍标记 blocked_on_capability）",
+      "binding_selector_matches": 1,
+      "verify_mod": "verified（identity+semantics 通过）",
+      "source_value_numeric": 8
+    },
+    "scripts": [
+      ".scratch/unique-audit/validate_proposed_effects.py",
+      ".scratch/unique-audit/validate_selectors.py",
+      ".scratch/unique-audit/validate_drafts_full.py"
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "mourningfrost-cold-per-dexterity",
+  "revision": 1,
+  "title": {
+    "zh": "Mourningfrost：每点敏捷 +1 冰霜伤害（攻击/法术）",
+    "en": "Mourningfrost: +1 cold damage to attacks and spells per Dexterity"
+  },
+  "aliases": [
+    "Mourningfrost",
+    "Leather Boots unique",
+    "mourningfrost_cold_per_dexterity"
+  ],
+  "selectors": [
+    {
+      "kind": "item",
+      "namespace": "item",
+      "ids": [
+        "item:letools:uniqueList.uniques:19"
+      ]
+    },
+    {
+      "kind": "mechanism",
+      "namespace": "mechanism",
+      "ids": [
+        "mourningfrost-cold-per-dexterity"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit",
+      "frequency"
+    ],
+    "tags": [
+      "Cold",
+      "Bow"
+    ],
+    "conditions": [
+      "none"
+    ],
+    "notes": "玩家装备 Mourningfrost 时创建 4 个 SP=Damage 的 per-Dex 冰霜 added Stat（Melee/Spell/Throwing/Bow 四分支，各 +1×Dex）；Ballista 爆炸（Bow+Fire）仅 Bow|Cold 分支按 otherTags 匹配生效。经 Shared Enhancements（节点22 3/3 ×0.25=0.75）复制给 minion，再乘 250% added effectiveness。",
+    "required_nodes": []
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "added_per_dexterity",
+      "source": "knowledge/definitions/ballista-armed-construction-v4.json#definition.effects[4].per_attribute",
+      "unit": "flat cold per 1 Dexterity",
+      "per_point": true,
+      "note": "IL 常量 0x18457CC18=1.0；当前构筑 Dex=228 → 玩家 Stat 228。"
+    },
+    {
+      "parameter": "transfer_ratio",
+      "source": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.stat_transfer",
+      "unit": "ratio",
+      "note": "Shared Enhancements 3/3 ×0.25 = 0.75；只对 owner SP=Damage Stat 逐行复制。"
+    },
+    {
+      "parameter": "added_damage_effectiveness",
+      "source": "ability_gen327",
+      "unit": "multiplier",
+      "note": "爆炸 added damage effectiveness=2.5（250%）。"
+    }
+  ],
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.effects",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "effects[4] = mourningfrost_cold_per_dexterity"
+  },
+  "handler_ref": {
+    "module": "le_calc.plan_compiler",
+    "symbol": "_apply_per_attribute_scaling",
+    "note": "通用 effect.per_attribute：绑定后 value×属性/per；unique_description 来源锚点沿用 effect_binding.verify_unique_description。"
+  },
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/ballista/ballista-mourningfrost-20261113.json",
+      "note": "IL/常量/输入文本与本轮修正数值"
+    },
+    {
+      "kind": "reverse_engineering",
+      "locator": "docs/evidence/ballista/ballista-gamecode-mechanics-20261113.zh-CN.md",
+      "note": "属性转移与伤害乘区背景"
+    },
+    {
+      "kind": "game_data",
+      "locator": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json#items equipment.feet",
+      "note": "Mourningfrost(unique 19) 的 unique_description#0 文本"
+    },
+    {
+      "kind": "document",
+      "locator": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md",
+      "note": "修正轮复验记录（Mourningfrost 补遗）"
+    }
+  ],
+  "limitations": [
+    {
+      "item": "每点数值来源",
+      "reason": "unique 说明文本 + IL 常量 1.0；未做游戏内逐点实测。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "Melee/Spell/Throwing 变体",
+      "reason": "对 Ballista 爆炸不适用（otherTags 与 ability tags 不匹配），仅 Bow|Cold 进入本口径。",
+      "blocks_full_dps": false
+    },
+    {
+      "item": "防御副作用",
+      "reason": "-1% physical/cold resistance per Dex 属防御属性，未进入 DPS 口径。",
+      "blocks_full_dps": false
+    }
+  ],
+  "research_notes": {
+    "checked_sources": [
+      ".scratch/cpp2il_cs/DiffableCs/LE/Mourningfrost.cs",
+      ".scratch/cpp2il_isil/IsilDump/LE/Mourningfrost.txt",
+      ".scratch/cpp2il_isil/IsilDump/LE/Stats_NestedType_Stat.txt",
+      ".scratch/cpp2il_isil/IsilDump/LE/DamageStats.txt",
+      "E:/SteamLibrary/steamapps/common/Last Epoch/GameAssembly.dll"
+    ],
+    "open_questions": [
+      "游戏内单次爆炸的冰霜点伤是否与模型 171×2.5 完全一致（需 LEns 实测）。",
+      "其它暗金说明行（如 Phantom Grip 的 per-Dex 暴击）是否也应逐条建模。"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [],
+  "case_scope": []
+}

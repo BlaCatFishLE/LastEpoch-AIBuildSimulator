@@ -1,0 +1,341 @@
+{
+  "run": "archive://reports/ballista-beta5-native-20261112/dps-ballista-damage-channels-1",
+  "manifest_files": {
+    "calculation-plan.json": true,
+    "compile-result.json": true,
+    "dps-report.html": true,
+    "input-snapshot.json": true,
+    "plan-diagnostics.json": true,
+    "report-binding.json": true,
+    "report-capabilities.json": true,
+    "result.json": true,
+    "scenario.json": true,
+    "source-ledger.json": true,
+    "validation-result.json": true,
+    "pipeline-state.json": true
+  },
+  "readonly_validate": true,
+  "validation_file_unchanged": true,
+  "equipment_items": 30,
+  "mods_expected": 189,
+  "mods_displayed": 189,
+  "mod_identity_counts_match": true,
+  "unique_records": 67,
+  "unique_records_displayed_once": 67,
+  "compiler_sources_changed_after_run": [],
+  "totals": {
+    "application_damage": 0.0,
+    "cast_count": 96,
+    "dot_damage": 0.0,
+    "hit_damage": 499912.95675243996,
+    "horizon_damage": 47991643.848234236,
+    "horizon_dps": 399930.36540195195,
+    "max_concurrent": 1,
+    "unsettled_tail_damage": 0.0
+  },
+  "coverage": {
+    "gap_count": 31,
+    "gaps": [
+      {
+        "code": "unmapped:damage_relevant_unknown",
+        "contribution_ids": [
+          "mod:equipment.hands#unique_mod#1"
+        ],
+        "count": 1,
+        "detail": "Blood Roost (Serrated Bracers)｜Physical Penetration with Bleed：可能是伤害相关属性，但当前模型无对应规则（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:damage_relevant_unknown",
+        "contribution_ids": [
+          "mod:equipment.weapon1#affix#corrupted#0.1"
+        ],
+        "count": 1,
+        "detail": "Hydra Arc (Serpent Bow)｜Global Conditional Damage：可能是伤害相关属性，但当前模型无对应规则（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:damage_relevant_unknown",
+        "contribution_ids": [
+          "mod:equipment.weapon2#unique_mod#2"
+        ],
+        "count": 1,
+        "detail": "Zeurial's Hunt (Skalnir Quiver)｜Lightning Penetration with your next Throwing Attack within two seconds when you directly use a Lightning Bow Attack：可能是伤害相关属性，但当前模型无对应规则（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:idol_refraction",
+        "contribution_ids": [
+          "mod:equipment.idol_altar#affix#corrupted#0.0"
+        ],
+        "count": 1,
+        "detail": "Impervious Altar｜Effect of Prefixes for Idols in Refracted Slots：神像折射词条强度；折射是否放大尚未确认（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:idol_refraction",
+        "contribution_ids": [
+          "mod:equipment.idol_altar#affix#normal#1.0"
+        ],
+        "count": 1,
+        "detail": "Impervious Altar｜Effect of Suffixes for Idols in Refracted Slots：神像折射词条强度；折射是否放大尚未确认（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:idol_refraction",
+        "contribution_ids": [
+          "mod:equipment.idol_altar#affix#normal#0.1"
+        ],
+        "count": 1,
+        "detail": "Impervious Altar｜Health per Equipped Omen Idol：神像折射词条强度；折射是否放大尚未确认（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:idol_refraction",
+        "contribution_ids": [
+          "mod:equipment.idol_altar#affix#normal#2.0"
+        ],
+        "count": 1,
+        "detail": "Impervious Altar｜Mana per Idol in a Refracted Slot：神像折射词条强度；折射是否放大尚未确认（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:idol_refraction",
+        "contribution_ids": [
+          "mod:equipment.idol_altar#affix#normal#0.0"
+        ],
+        "count": 1,
+        "detail": "Impervious Altar｜Maximum Omen Idols：神像折射词条强度；折射是否放大尚未确认（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:idol_refraction",
+        "contribution_ids": [
+          "mod:equipment.idol_altar#implicit#0"
+        ],
+        "count": 1,
+        "detail": "Impervious Altar｜Ward Decay Threshold per Equipped Corrupted Idol：神像折射词条强度；折射是否放大尚未确认（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:idol_refraction",
+        "contribution_ids": [
+          "mod:equipment.idol_altar#implicit#1"
+        ],
+        "count": 1,
+        "detail": "Impervious Altar｜Weaver Idols equipped at Maximum：神像折射词条强度；折射是否放大尚未确认（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:idol_refraction",
+        "contribution_ids": [
+          "mod:equipment.idol_altar#affix#normal#3.0"
+        ],
+        "count": 1,
+        "detail": "Impervious Altar｜increased Health per Equipped Huge Idol：神像折射词条强度；折射是否放大尚未确认（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:8:0"
+        ],
+        "count": 1,
+        "detail": "Agility｜50：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "mod:equipment.hands#implicit#1"
+        ],
+        "count": 1,
+        "detail": "Blood Roost (Serrated Bracers)｜Increased Bleed Duration：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "mod:equipment.hands#implicit#2"
+        ],
+        "count": 1,
+        "detail": "Blood Roost (Serrated Bracers)｜Increased Poison Duration：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:50:1"
+        ],
+        "count": 1,
+        "detail": "Cloak of Shadows｜62：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:92:2"
+        ],
+        "count": 1,
+        "detail": "Evasion Tactics｜11：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:7:1"
+        ],
+        "count": 1,
+        "detail": "Evasion｜113：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:7:0"
+        ],
+        "count": 1,
+        "detail": "Evasion｜11：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:103:0"
+        ],
+        "count": 1,
+        "detail": "Expediency｜43：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:103:2"
+        ],
+        "count": 1,
+        "detail": "Expediency｜49：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:106:1"
+        ],
+        "count": 1,
+        "detail": "Finesse Them｜89：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:1:0"
+        ],
+        "count": 1,
+        "detail": "Guile｜11：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:1:1"
+        ],
+        "count": 1,
+        "detail": "Guile｜28：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "mod:equipment.weapon1#implicit#2"
+        ],
+        "count": 1,
+        "detail": "Hydra Arc (Serpent Bow)｜Increased Poison Duration：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "mod:equipment.weapon1#unique_mod#5"
+        ],
+        "count": 1,
+        "detail": "Hydra Arc (Serpent Bow)｜chance to Repeat your most recent Bow Attack after Evading：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "mod:idols.4#affix#corrupted#0.0"
+        ],
+        "count": 1,
+        "detail": "Large Umbral Omen Idol｜Seconds of Frenzy after you use Evade：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:28:0"
+        ],
+        "count": 1,
+        "detail": "Meditation｜11：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "mod:equipment.relic#unique_mod#0"
+        ],
+        "count": 1,
+        "detail": "Melvern's Writ (Lost Journal)｜Crossbow Mercenaries：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:105:2"
+        ],
+        "count": 1,
+        "detail": "Tailwind｜113：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "passive:105:1"
+        ],
+        "count": 1,
+        "detail": "Tailwind｜11：未映射属性；当前计算范围未包含（覆盖缺口）"
+      },
+      {
+        "code": "unmapped:out_of_scope",
+        "contribution_ids": [
+          "mod:equipment.chest#affix#corrupted#0.0"
+        ],
+        "count": 1,
+        "detail": "Urzil's Pride (Iron Armor)｜All Attributes with at least 7 Corrupted non-Idol Items equipped：未映射属性；当前计算范围未包含（覆盖缺口）"
+      }
+    ],
+    "scope_note": "complete 仅指声明的计算范围，不代表整套 BD 全部伤害齐备",
+    "status": "partial"
+  },
+  "components": [
+    {
+      "component_id": "hit:Physical",
+      "damage_type": "Physical",
+      "base": 0.0,
+      "added": 0.75,
+      "increased_multiplier": 16.42,
+      "more_multiplier": 43.234127999999984,
+      "damage": 1207.8135675169199
+    },
+    {
+      "component_id": "hit:Fire",
+      "damage_type": "Fire",
+      "base": 50.0,
+      "added": 45.75,
+      "increased_multiplier": 15.965,
+      "more_multiplier": 43.234127999999984,
+      "damage": 102950.90475481536
+    },
+    {
+      "component_id": "hit:Cold",
+      "damage_type": "Cold",
+      "base": 0.0,
+      "added": 220.5,
+      "increased_multiplier": 15.965,
+      "more_multiplier": 43.234127999999984,
+      "damage": 345257.40682033135
+    },
+    {
+      "component_id": "hit:Lightning",
+      "damage_type": "Lightning",
+      "base": 0.0,
+      "added": 32.25,
+      "increased_multiplier": 15.965,
+      "more_multiplier": 43.234127999999984,
+      "damage": 50496.83160977635
+    }
+  ],
+  "tests": {
+    "count": 27,
+    "failures": 0,
+    "errors": 0
+  },
+  "not_executed": [
+    "full_regression",
+    "historical_case_group",
+    "browser_matrix",
+    "game_measurements",
+    "new_HTTP_interaction_in_this_scope"
+  ]
+}

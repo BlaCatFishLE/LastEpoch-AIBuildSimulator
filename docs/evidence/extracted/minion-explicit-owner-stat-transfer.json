@@ -1,0 +1,79 @@
+{
+  "schema": "le-extracted-evidence-v1",
+  "entry_id": "minion-explicit-owner-stat-transfer",
+  "kind": "mechanism",
+  "title": {
+    "zh": "节点驱动的玩家→召唤物属性转移",
+    "en": null
+  },
+  "source_path": "knowledge/mechanisms/minion-explicit-owner-stat-transfer.json",
+  "evidence_state": "confirmed",
+  "implementation_state": "reusable",
+  "reuse_mode": "shared",
+  "case_scope": [],
+  "compatibility_baseline": null,
+  "rule_ref": {
+    "kind": "ruleset_rule",
+    "ref": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.stat_transfer",
+    "path": "knowledge/definitions/ballista-armed-construction-v4.json",
+    "locator": "definition.rules.stat_transfer",
+    "verification": {
+      "status": "verified",
+      "checked_against": "knowledge/definitions/ballista-armed-construction-v4.json#definition.rules.stat_transfer",
+      "note": "ref 指向共享定义内的规则段（不是外部规则包 ID），已在该定义文件确认"
+    }
+  },
+  "rule_refs": [],
+  "dataset_locators": [],
+  "reusable_conclusions": [
+    {
+      "text": "节点驱动的玩家→召唤物属性转移",
+      "source": "$.title.zh"
+    },
+    {
+      "text": "作用组件：attribute_transfer、crit；伤害标签：Minion；条件 code：none",
+      "source": "$.applicability"
+    },
+    {
+      "text": "Shared Enhancements 的 Damage Stat Ratio 每点 25%；Perfect Aim 的暴击率/暴伤转移各每点 25%。参数来自当前节点点数，转移限定属性/操作/标签，必须保留原来源及派生所有权。",
+      "source": "$.applicability.notes"
+    },
+    {
+      "text": "参数绑定（数值不在知识条目内，运行时从当前输入读取）：current_points_and_mods",
+      "source": "$.parameter_bindings[].parameter"
+    }
+  ],
+  "author_local_refs": [
+    {
+      "pointer": "$/evidence_refs/7/locator",
+      "original": "archive://docs/reviews/ballista-armed-construction-fix-20261113.zh-CN.md"
+    }
+  ],
+  "limitations": [
+    {
+      "text": "转移行聚合：实现按输入 Contribution 逐行复制并保留 tags；同 tag 多条会分别进入 tag 匹配。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[0]"
+    },
+    {
+      "text": "基础暴击是否共享：玩家 Stat 不含技能自身 5% 基础暴击；本轮按只转移 Stat 行处理。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[1]"
+    },
+    {
+      "text": "转移来源白名单：通用默认 include_source_kinds 已加入 unique_description（暗金说明行属玩家来源）；技能节点行仍排除；unique_description 行仍须通过 stat/operation/tag/scope 过滤。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[2]"
+    },
+    {
+      "text": "Mourningfrost 特例：Mourningfrost 的 +1 cold/Dex 在 Bow|Cold 分支上经 75% 转移后为 171 added cold（见 mourningfrost-cold-per-dexterity 条目）。",
+      "blocks_full_dps": false,
+      "source": "$.limitations[3]"
+    },
+    {
+      "text": "玩家 weapon base damage 是否以 Stat 形式被复制未实测。",
+      "source": "$.research_notes.open_questions[0]"
+    }
+  ],
+  "generated_at": "2026-11-13T05:06:40Z"
+}

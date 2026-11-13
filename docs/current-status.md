@@ -1,14 +1,15 @@
 # 当前状态（current-status）
 
 > 本页是公开版的能力摘要，不是导入前检查清单，也不复制日常操作规则（见 [workflow.md](workflow.md)、[AGENTS.md](../AGENTS.md)）。
-> 版本：0.4.0（候选发布状态，2026-11-13）。数值与结论以当前案例输入、规则包和结果中的 `issues` / `coverage` 为准，不要从本文抄写数值。
+> 版本：0.4.1（发布准备中，2026-11-13；v0.4.0 已发布，本版同步 2026-11-13 修复批次）。数值与结论以当前案例输入、规则包和结果中的 `issues` / `coverage` 为准，不要从本文抄写数值。
 
 ## 1. 摘要
 
 - 项目已能把用户的**离线存档**导入为独立构筑输入，匹配沉淀的机制知识，走统一的“计划 → 执行 → 结果 → 报告”链，生成离线 HTML 报告，并可在本机回环服务中做条件重算。
 - **输入路径有两条，能力边界不同**：① 存档路径：clean-room 解析存档 → BD；若要自动生成 BuildSpec/calculation-input/snapshot 并 run 出 DPS/HTML（“完整首接”），需要用户自备可选的 Node + `lastepochsupertools v1.3.1`（不随仓库分发，缺失时明确 `needs_input`）；干净 clone 不能直接对任意存档出 DPS。② planner 路径：用户提供 Last Epoch Tools planner payload 的本地 JSON → BuildSpec（离线、不依赖 Node），再按手工流程补齐案例字段后 prepare/run。
 - 现行计划/结果格式是 **plan-v4 / result-v6**；VC（Void Cleave）、FR（Flame Reave）、BH（Black Hole）三个 execution-v1 计算切片在作者本地完成过限定范围的签收验证。
-- Ballista（Armed Construction 到期/销毁爆炸口径）为 **partial**：已接入统一 plan-v4 actor/派生事件能力，但玩家侧仍有未建模来源，`coverage` 保留缺口。
+- **2026-11-13 修复批次（v0.4.1）**：共享 damage channel 规则明确按实际伤害类型构造组件闭包（Elemental 仅覆盖 Fire/Cold/Lightning，技能标签不得让其它类型分量误吃增伤；无类型 added 使用显式 adaptive）；装备页改为消费 `calculation_input` 的完整解码词条并输出 `equipment_projection` 完整性标记；结果门禁补强。规则见 [calculation-plan-v4](contracts/calculation-plan-v4.md) 的“伤害类型与行为标签的现行约束”、[player-report-ui](contracts/player-report-ui.md) §6.9。
+- Ballista（Armed Construction 到期/销毁爆炸口径）为 **partial**：2026-11-13 修正轮修复了伤害通道类型串扰、来源绑定可被场景点数/容忍补回、结果门禁不足与编译期暴击折叠等问题，并用复核反例闭合；装备页已展示完整解码词条。仍不宣称 canonical、不扩大为任意 Minion 技能支持；旧候选数值已作废。
 - 这是**有限技能范围**的构筑模拟工具：不是任意技能可用，也不是完整战斗模拟或实战 DPS；结果保留 `assumed` / `unresolved` / `coverage` 缺口。
 - 项目由 AI 协作开发，结果按 **AS IS** 提供。
 
@@ -22,7 +23,9 @@
 | 词缀库（`data/affix-db/v1`）按基底/位置修正 roll 范围 | 支持 | 数据来源自报游戏 1.5.2 |
 | 构筑知识检索（`knowledge rebuild/search/show`） | 支持 | JSON 权威源 + 可重建 SQLite 索引 |
 | Void Cleave / Flame Reave / Black Hole execution-v1 | 支持（限定范围） | plan-v4 / result-v6；各自覆盖缺口见结果与证据 |
-| Ballista / Armed Construction | **partial** | 爆炸口径已接入；玩家侧未建模来源不阻断该口径，但不得当作完整技能支持 |
+| 共享 damage channel（多类型 added / 增伤闭包） | 支持（现行契约约束） | 按实际伤害类型构造闭包；Elemental 仅 Fire/Cold/Lightning；跨类型标签不误吃增伤；无类型 added 显式 adaptive |
+| 装备页完整词条投影（含 `unique_description`） | 支持（v0.4.1 校正后） | 完整 mods 来自 `calculation_input`；旧 affixes 摘要须标注；输出 `equipment_projection` 完整性标记 |
+| Ballista / Armed Construction | **partial** | 2026-11-13 修正轮已修复伤害通道/来源绑定/门禁/编译期折叠问题；旧候选数值作废；不得当作完整技能或 canonical 支持 |
 | 玩家离线 HTML 报告 + 本机条件重算 | 支持 | 页面只读结果 JSON，前端不重算伤害规则 |
 | 其它技能、天赋树效果 | 不支持 | 可作为研究/条件来源登记，但没有可用 DPS 结论 |
 | 组队 Buff、队友、法力消耗与恢复、完整循环/资源/操作序列 | 不支持 | 报告是限定来源、限定目标场景的模型 |
@@ -52,9 +55,9 @@
 - 完整性/指纹检查、来源检查、语义门禁分别证明“产物未变”“输入身份”“声明范围自洽”，三者互不替代；已有正式门禁与测试位于 `tools/**/tests/`。
 - 规则状态（confirmed / derived / assumed / unresolved）与证据入口见 [mechanisms.md](mechanisms.md)。
 
-**最近验证（作者本地，2026-11-13）**：Ballista Armed Construction partial 交付完成（统一 plan-v4 `v4-actor` 路径；结果 validate PASS、HTML 已生成）。这属于作者本地候选验证，**不是**干净 clone 上的公开发布验证。
+**最近验证（作者本地，2026-11-13 修复批次）**：Ballista Armed Construction 修正轮完成 P1-A 伤害通道类型串扰、P1-B 来源绑定可被场景点数/容忍补回、P1-C 结果门禁不足、P1-D 编译期暴击折叠等问题修复，并用复核反例闭合验证；修正候选 run 的 validate 10/10 PASS、单目标 horizon DPS 399,930.37（事件率 0.8/s、4 个伤害类型组件、coverage=partial/31），一次 HTTP 重算成功路径已验，装备页展示完整 189 条词条（含 `unique_description`）。旧候选 run 的 205,207.90 已作废，仅保留历史候选产物；不宣称 canonical、全仓回归或游戏内确认。这属于作者本地候选验证，**不是**干净 clone 上的公开发布验证。
 
-**公开发布验证（tag v0.4.0，2026-11-13）**：已在干净 clone + Release 下载环境完成，命令与结果见 [README](../README.md) 末尾的“验证状态”区块。当前发布树内：
+**公开发布验证**：v0.4.0 已在干净 clone + Release 下载环境完成（tag v0.4.0，2026-11-13，命令与结果见 [README](../README.md) 末尾的“验证状态”区块）；v0.4.1 的发布验证由发布者在同步本批修复后按 README 复核并更新该区块。当前发布树内：
 
 - 代码、配置、测试与测试夹具保留；依赖作者本地案例/报告的测试在缺少数据时会显式 **SKIP**（不是失败）。
 - `test --suite <name>` 按套件运行；完整 `--suite all` 不属于默认验证要求。
@@ -69,11 +72,12 @@
 | 3 | 结果是限定来源、限定目标场景的模型 | 不是实战 DPS；不要与游戏面板直接等同 |
 | 4 | 结果含 assumed/unresolved/coverage 缺口 | 不能称“精确值”；缺口须随报告展示 |
 | 5 | dataset 1.5.2 vs 部分逆向证据 1.5.3 | 机制结论与数值须分别标注版本 |
-| 6 | Ballista partial | 玩家侧未建模来源存在；不得据此扩大为任意 Minion 技能支持 |
+| 6 | Ballista partial | 2026-11-13 修正轮后仍非 canonical；玩家侧未建模来源存在；旧候选数值（205,207.90）已作废，不得引用为当前结果 |
 | 7 | 公开版不含作者本地案例/历史 run | 依赖这些数据的测试/复核会 SKIP；历史证据以 `docs/evidence/` 文本为准 |
 | 8 | 平台限定 Windows 10/11 + PowerShell 5.1+ + Python 3.12+ | 其它平台/解释器未验证 |
 | 9 | 项目由 AI 协作生成 | 可能存在错误，使用前自行复核 |
 | 10 | 浏览器自动验收需要额外环境（如 Chromium 等） | 不属于普通计算依赖；未做完整网页矩阵 |
+| 11 | v0.4.0 快照不含 2026-11-13 修复批次 | v0.4.1 同步 damage channel / 装备完整投影 / 结果门禁修复与 Ballista 修正；以 v0.4.1 tag 与 README 验证为准 |
 
 ## 6. 如何确认某项能力
 

@@ -2,8 +2,8 @@
 
 本目录把 `knowledge/` 条目中**可复用的结论**与**作者本地归档定位**分开记录，使知识脱离作者的历史案例后仍然可理解、可核对、可复用。
 
-- 生成时间：2026-11-13（公开版发布整理）。
-- 覆盖范围：`knowledge/mechanisms/`（机制元数据）、`knowledge/skills/`（技能模板）、`knowledge/definitions/`（共享定义模板）中**含作者本地引用**的 106 个条目。
+- 生成时间：2026-11-13（公开版发布整理；v0.4.1 同步追加 7 个机制条目并更新 1 个共享定义条目）。
+- 覆盖范围：`knowledge/mechanisms/`（机制元数据）、`knowledge/skills/`（技能模板）、`knowledge/definitions/`（共享定义模板）中**含作者本地引用**的 113 个条目。
   没有作者本地引用的条目不需要提取文件：它们本身已在候选树内自洽（规则包、dataset、`docs/evidence/` 证据文档均可直接访问）。
 - 索引清单：[_index.json](_index.json)（条目、类别、作者引用数量、结论/限制数量）。
 
@@ -36,7 +36,7 @@
 | `limitations` | 已知限制、未覆盖项、open questions、coverage gaps（含 `blocks_full_dps`，如条目提供） |
 | `generated_at` | 生成时间（UTC） |
 
-`rule_ref.verification` 的判定方法：在该 `path` 指向的候选树文件内检查 `rules[]` / `effects[]` / 顶层规则段 / `definition.rules` 的 ID 或 section；描述性引用（不是规则 ID）则解析 `locator` 的 JSON pointer。本轮 106 个条目：92 个 `verified`、5 个 `verified_locator`、7 个 `declared_none`（条目显式声明没有可引用的游戏规则 ID）、2 个 `external_dataset`（dataset 实体，需 fetch 的 dataset 文件），**0 个 failed**。
+`rule_ref.verification` 的判定方法：在该 `path` 指向的候选树文件内检查 `rules[]` / `effects[]` / 顶层规则段 / `definition.rules` 的 ID 或 section；描述性引用（不是规则 ID）则解析 `locator` 的 JSON pointer。本轮 113 个条目：98 个 `verified`、5 个 `verified_locator`、8 个 `declared_none`（条目显式声明没有可引用的游戏规则 ID）、2 个 `external_dataset`（dataset 实体，需 fetch 的 dataset 文件），**0 个 failed**。
 
 ## 3. 怎么用
 

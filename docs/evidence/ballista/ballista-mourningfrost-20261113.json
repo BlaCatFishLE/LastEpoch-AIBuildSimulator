@@ -1,0 +1,110 @@
+{
+  "schema": "le-evidence-ballista-unique-v1",
+  "date": "2026-11-13",
+  "scope": "mourningfrost-cold-per-dexterity-correction",
+  "trigger": "用户指出当前 Ballista 案例漏算 Mourningfrost 暗金词条“+1 cold damage to attacks and spells per point of dexterity”。",
+  "item": {
+    "instance_id": "equipment.feet",
+    "definition_entity_id": "item:letools:uniqueList.uniques:19",
+    "display_name": "Mourningfrost",
+    "base": "Leather Boots",
+    "case_input": "archive://examples/ballista-beta5-native-20261112/inputs/calculation-input.corrected.json",
+    "unique_description_index": 0,
+    "unique_description_text": "+1 cold damage to attacks and spells per point of dexterity",
+    "unique_description_1_text": "-1% physical and cold resistance per point of dexterity"
+  },
+  "il_evidence": {
+    "assets": [
+      ".scratch/cpp2il_cs/DiffableCs/LE/Mourningfrost.cs",
+      ".scratch/cpp2il_isil/IsilDump/LE/Mourningfrost.txt",
+      ".scratch/cpp2il_isil/IsilDump/LE/Stats_NestedType_Stat.txt",
+      ".scratch/cpp2il_isil/IsilDump/LE/DamageStats.txt"
+    ],
+    "findings": [
+      "Mourningfrost : UniqueItemComponent；字段 stats(0x90)、currentDexterity(0x98)、lastDexterity(0x9C)、modifiersPerDexterity(0xA0)；EquipUnique/UpdateModifiers/UpdateModsFromDexterity。",
+      "EquipUnique 创建 4 个 Stat(SP=Damage=0, AT=Melee|Cold(0x204)、Spell|Cold(0x104)、Throwing|Cold(0x404)、Bow|Cold(0x804))，addedValue=常量 0x18457CC18=1.0；另创建 2 个抗性 Stat，addedValue=常量 0x18457D504=-0.01（-1%/点）。",
+      "UpdateModifiers(当前Dex) 按 (currentDex-lastDex) 乘以各 Stat 的 addedValue 写入 BaseStats，即 Stat addedValue 净值为 Dex×1.0。",
+      "Stats.Stat.hasTags: (tags & _tags) == _tags（subset 语义）。",
+      "DamageStats.buildDamageStats 先调用 Stats.getDamageTypeAndOtherTags，把 Stat 的伤害类型位拆出作为“added 伤害类型”，其余 tags（Bow 等）参与 ability tag 匹配（IL 中为 otherTags & abilityTags == otherTags）；因此 Bow|Cold Stat 对 Bow+Fire 的 Ballista 爆炸有效，Melee/Spell/Throwing 变体不适用。"
+    ],
+    "constants": {
+      "0x18457CC18": 1.0,
+      "0x18457D504": -0.01,
+      "source": "GameAssembly.dll .rdata (image base 0x180000000, RVA 0x457CC18/0x457D504, pefile 读取)"
+    }
+  },
+  "model": {
+    "player_stat": {
+      "contribution_id": "equipment.feet#unique_description#0:Mourningfrost：每点敏捷 +1 冰霜伤害（攻击/法术词条中的 Bow 分支）",
+      "source_kind": "unique_description",
+      "stat_key": "added_damage",
+      "operation": "added",
+      "value": 228.0,
+      "damage_tags": ["Cold", "Bow"],
+      "per_attribute": {"attribute": "dexterity", "per": 1.0},
+      "value_formula": "1 × Dexterity(228) / 1"
+    },
+    "shared_enhancements_transfer": {
+      "rule": "rules.stat_transfer / shared_enhancements_added (节点22 3/3 ×0.25 = 0.75)",
+      "actor_value": 171.0,
+      "added_effectiveness": 2.5,
+      "effective_added_damage": 427.5,
+      "tags_preserved": ["Cold", "Bow"],
+      "note": "只进 hit:Cold 通道（隔离闭包）；Fire/Physical/Lightning 通道不匹配。"
+    },
+    "cold_component": {
+      "added": 214.5,
+      "subtotal": 536.25,
+      "note": "214.5 = 武器 Cold added 转移 24 + 19.5 + Mourningfrost 171；×2.5 = 536.25"
+    },
+    "unmodeled": [
+      "同词条 -1% physical/cold resistance per Dex（防御属性，不进入本 DPS 口径）",
+      "Melee/Spell/Throwing|Cold 三个变体对 Ballista 爆炸不适用（otherTags 不匹配）"
+    ]
+  },
+  "run": {
+    "run_dir": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-5",
+    "plan_sha256": "e898ded7a0f08adb8f2fc8568576c497670dbf6dcf7afbcc78eacffcab150f82",
+    "plan_file_sha256": "45619d5b8d93f1af937c9bfb7aa1112fa847fe4e21234cc91bac679d7457289f",
+    "result_file_sha256": "3674b133c011a30c695405db9ebed3bf2f741728e6cdcc5280177a24fa4070ca",
+    "html_sha256": "a6e9f8c077027898ebf8527f07e62b4626c4d9a7faa160a1eff09b1d4db89f73",
+    "template_sha256": "6d85f32abfa325436e1f46eddb295105ba5e1ca1612b65b882720e0de6699e49",
+    "scenario_sha256": "e2b18cd39c83fdd2e75cc5630982f5b97da1740d7dd2d33c42d3637a0bca60df",
+    "execution_fingerprint": "453adcf6a554e7bdd0cbcdddec4f12908f996466e2be36673a5968869de3d721",
+    "totals": {
+      "single_event_damage": 390345.2308856763,
+      "horizon_dps": 312276.184708541,
+      "cast_count": 96,
+      "windows_s": [5, 30, 120],
+      "window_dps": [312276.184708541, 312276.184708541, 312276.184708541]
+    },
+    "components_single_event": {
+      "hit:Physical": 961.6989245750689,
+      "hit:Fire": 81926.2951246157,
+      "hit:Cold": 267272.85633809987,
+      "hit:Lightning": 40184.38049838565
+    },
+    "frequency": {"event_rate_per_s": 0.8, "event_interval_s": 1.25, "gate_probability": 0.2},
+    "coverage": {"status": "partial", "gap_count": 32, "codes": {"out_of_scope": 20, "idol_refraction": 8, "damage_relevant_unknown": 4}},
+    "validation": {"checks": "10/10 PASS", "cli_exit_code": 3, "exit_note": "partial coverage，非失败"}
+  },
+  "http_recompute": {
+    "endpoint": "http://127.0.0.1:8765/recompute",
+    "run": "archive://reports/ballista-beta5-native-20261112/dps-ballista-armed-construction-5",
+    "request": {"trap_detonation_rate_per_s": 5},
+    "response_status": 200,
+    "recomputed_horizon_dps": 390345.2308856763,
+    "note": "事件率 1.0/s 时 DPS=单发 390345.23；一次页面 GET + 一次 POST 成功，未做多请求/错误分支/浏览器矩阵"
+  },
+  "tests": {
+    "new": "tools/phase3/tests/test_step5_v4_attribute_scaled_effect.py 16 passed",
+    "combined": "test_step5_v4_attribute_scaled_effect + actor_binding + result_gates → 42 passed + 6 subtests"
+  },
+  "not_performed": ["全仓回归", "浏览器矩阵", "游戏内实测", "其它暗金说明行（如 Phantom Grip per-Dex crit）仍为覆盖缺口"],
+  "limitations": [
+    "每点 1 冰霜伤害来自 unique 说明文本 + IL 常量；尚未做游戏内逐点实测。",
+    "只有 Bow|Cold 变体对 Ballista 爆炸生效（otherTags 匹配）；其余三个变体不进入本口径。",
+    "同词条 -1% physical/cold resistance per Dex 属防御属性，未建模。",
+    "per_attribute 为通用新字段；与 stack_control 组合语义未在真实案例验证（当前模板不使用组合）。"
+  ]
+}

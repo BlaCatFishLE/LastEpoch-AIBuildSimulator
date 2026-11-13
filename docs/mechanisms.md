@@ -198,7 +198,7 @@
 
 ### 3.5 机制条目总表
 
-共 123 条。JSON 是权威源；索引 `knowledge/INDEX.generated.md` 由 `le.ps1 knowledge rebuild` 生成。提取证据见 [`docs/evidence/extracted/`](evidence/extracted/README.zh-CN.md)。
+共 127 条。JSON 是权威源；索引 `knowledge/INDEX.generated.md` 由 `le.ps1 knowledge rebuild` 生成。提取证据见 [`docs/evidence/extracted/`](evidence/extracted/README.zh-CN.md)。
 
 | mechanism_id | 标题 | evidence/implementation | 主 rule_ref |
 |---|---|---|---|
@@ -269,6 +269,7 @@
 | `common-more-groups` | more 分组与逐组独立相乘 | confirmed/validated | ruleset_rule:rule-bh-more-aggregation |
 | `common-tag-match` | 伤害标签适用性匹配 | confirmed/validated | none:标签适用性是共享判据，没有单条规则 ID：具体规则的标签写在 ruleset 各节点/词条 damage_t… |
 | `common-target-resistance-penetration` | 目标抗性/穿透结算（穿透可压到 0 以下） | confirmed/validated | ruleset_rule:rule-penetration-dot |
+| `damage-channel-added-and-multipliers` | 技能基础元素、附加点伤与分量增伤的独立匹配 | derived/reusable | none:公共标签/组件装配规则由受限 Python handler 实现，无独立规则 JSON；实际入口见 hand… |
 | `fr-effect-ambition-gain-source` | Ambition 层数获取来源（idols.2：命中 boss/rare 得层，1s 冷却） | unresolved/not_implemented | ruleset_effect:ambition_gain_source |
 | `fr-effect-ambition-stacks` | Throne of Ambition 层数增伤 | derived/reusable | ruleset_effect:fr-effect-ambition-stacks |
 | `fr-effect-army-of-skin-high-health` | Army of Skin：高血量敌人 +49% more Melee（条件效果） | assumed/validated | ruleset_effect:global_conditional_damage_feet |
@@ -316,6 +317,8 @@
 | `minion-explicit-owner-stat-transfer` | 节点驱动的玩家→召唤物属性转移 | confirmed/reusable | ruleset_rule:knowledge/definitions/ballista-armed-construct… |
 | `minion-level-damage-scaling` | Minion 等级伤害缩放（公式已核、应用未确认） | unresolved/not_implemented | dataset_entity:skill:letools:classInfoForSources:4 extensio… |
 | `minion-owner-stat-isolation` | 召唤物与玩家属性池隔离 | confirmed/reusable | ruleset_rule:knowledge/definitions/ballista-armed-construct… |
+| `mourningfrost-cold-per-dexterity` | Mourningfrost：每点敏捷 +1 冰霜伤害（攻击/法术） | confirmed/reusable | ruleset_rule:knowledge/definitions/ballista-armed-construct… |
+| `phantom-grip-crit-chance-per-dexterity` | Phantom Grip：每点敏捷 +1% increased Critical Strike Chance（腐化词条） | confirmed/reusable | ruleset_rule:knowledge/definitions/ballista-armed-construct… |
 | `skill-abyssal-retribution` | Abyssal Retribution 后续主技能增伤 | assumed/reusable | ruleset_effect:skill-abyssal-retribution |
 | `skill-added-damage-spell-to-melee` | Arcane Severance：每 4 点附加法术伤害转为附加近战伤害 | assumed/reusable | none:plan-v2 rules.added_damage_conversion（迁移规则数据） |
 | `skill-dark-duellist` | Dark Duellist 准备反击时的全局增伤 | derived/reusable | ruleset_effect:skill-dark-duellist |
@@ -325,6 +328,7 @@
 | `skill-void-supremacy` | Void Supremacy 对减速目标增伤 | assumed/reusable | ruleset_effect:skill-void-supremacy |
 | `skill-vorpal-force` | Vorpal Force 的 Bleed 层数增伤及上限 | derived/reusable | ruleset_effect:skill-vorpal-force |
 | `target-critical-vulnerability` | Critical Vulnerability 目标被暴击率 | assumed/reusable | ruleset_effect:target-critical-vulnerability |
+| `urzil-pride-all-attributes-corrupted-condition` | Urzil's Pride：≥7 件 corrupted 非神像装备时 +8 All Attributes | confirmed/reusable | ruleset_rule:knowledge/definitions/ballista-armed-construct… |
 
 ### 3.6 共享定义候选
 
@@ -380,3 +384,48 @@
 - 覆盖边界：[`coverage-boundaries.json`](evidence/extracted/coverage-boundaries.json)
 - 知识库入口：[`knowledge/README.md`](../knowledge/README.md)；查询命令见 §3
 - 支持范围与限制：[`current-status.md`](current-status.md)
+
+## 7. 2026-11-13 知识同步（v0.4.1）
+
+本版同步作者仓库 2026-11-13 的知识/证据修复（独立复核后的修复轮与补遗）。修复/评审记录属作者本地归档
+（`archive://docs/reviews/…`），不随公开仓库分发；结构化证据随仓库提供于 `docs/evidence/ballista/`。
+逐条结论、来源定位与限制见 [`docs/evidence/extracted/`](evidence/extracted/README.zh-CN.md)。
+
+### 7.1 新增机制（4）
+
+| mechanism_id | 标题 | evidence/implementation | 入口 |
+|---|---|---|---|
+| `mourningfrost-cold-per-dexterity` | Mourningfrost：每点敏捷 +1 冰霜伤害（攻击/法术） | confirmed/reusable | 共享定义模板（见 §7.3）；`le_calc.plan_compiler._apply_per_attribute_scaling` |
+| `phantom-grip-crit-chance-per-dexterity` | Phantom Grip：每点敏捷 +1% increased Critical Strike Chance（腐化词条） | confirmed/reusable | 共享定义模板（见 §7.3）；`le_calc.plan_compiler._apply_per_attribute_scaling` |
+| `urzil-pride-all-attributes-corrupted-condition` | Urzil's Pride：≥7 件 corrupted 非神像装备时 +8 All Attributes | confirmed/reusable | 共享定义模板（见 §7.3）；`le_calc.effect_binding.count_equipment_condition_items` |
+| `damage-channel-added-and-multipliers` | 技能基础元素、附加点伤与分量增伤的独立匹配 | derived/reusable | `le_calc.mechanics.tag_match.damage_channel_tags` |
+
+### 7.2 更新机制（3）
+
+| mechanism_id | revision | evidence/implementation | 主要更新 |
+|---|---|---|---|
+| `ballista-trap-triggered-summon` | rev3 | derived/reusable | 点数只从当前输入专精绑定，场景 points 控件移除；points=0/专精缺失时编译拒绝；陷阱引爆率控件 min=1。 |
+| `ballista-explosion-damage-composition` | rev4 | derived/reusable | actor 命中按伤害通道隔离（Fire added 不再串入其它分量）；暴击改为执行期逐行结算，crit_absorbed 废弃。 |
+| `minion-explicit-owner-stat-transfer` | rev3 | confirmed/reusable | 属性转移按当前输入 Contribution 逐行复制（added/increased/more 按比例、保留 tags、召唤时快照）；同 tag 多条分别进入匹配。 |
+
+### 7.3 共享定义
+
+`knowledge/definitions/ballista-armed-construction-v4.json` 新增装备条件与 per-attribute 规则段：
+
+- 新增 per-attribute effects：`effects[4]=mourningfrost_cold_per_dexterity`、`effects[5]=phantom_grip_crit_chance_per_dexterity`（Mourningfrost / Phantom Grip）。
+- 原有 effects 保持不变：effects[0]=heavy_bolts_more、effects[1]=practical_build_more、effects[2]=elixir_more、effects[3]=sharpened_tips_crit。
+- 新增装备条件规则段：`equipment_condition_effects[0]=urzil_all_attributes_with_7_corrupted_items`（Urzil's Pride）。
+- `definitions/index.json` 的 `sha256`/`revision` 已按同步后的实际定义文件重算（7 个候选一致）。
+- 装备页完整词条/`unique_description` 投影属实现层修复（非游戏机制）；自动完整性门禁尚未实现，
+  不宣称报告契约 §6.9（UR-15）自动通过。
+
+### 7.4 共享伤害分量匹配
+
+`damage-channel-added-and-multipliers`（derived/reusable，入口 `le_calc.mechanics.tag_match.damage_channel_tags`）：基础类型不构成点伤白名单；行为/主体/条件仍需匹配。其它类型点伤生成对应分量，typed 修正只匹配最终分量，Elemental 仅火冰电。转换或排除需另有显式规则。
+
+覆盖范围限制：未宣称任意技能的特殊转换、伤害排除与事件生命周期均已支持；特殊规则仍需单独绑定与验证。
+
+### 7.5 证据文件
+
+`docs/evidence/ballista/` 新增：`ballista-fix-verification-20261113.json`、`ballista-mourningfrost-20261113.json`、`ballista-remaining-equipment-audit-20261113.json`（含 `.zh-CN.md`）、`ballista-remaining-equipment-fixes-20261113.json`、`damage-channel-contract-verification-20261113.json`。
+提取证据目录同步新增 7 个机制条目、更新 1 个共享定义条目（`_index.json` 共 113 条）。

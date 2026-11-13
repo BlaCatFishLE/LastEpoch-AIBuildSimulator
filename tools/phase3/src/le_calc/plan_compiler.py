@@ -775,6 +775,79 @@ def _node_ledger_entry(rule_id: str, tree_id: str, node_id: str, stat_index: int
     }
 
 
+#: effect ``per_attribute`` 缩放：绑定阶段只保留声明，属性池就绪后由本函数换算，
+#: 使序列化 effects 与 execution_v1 都拿到最终值（运行期不再回读属性或规则）。
+def _apply_per_attribute_scaling(
+    result: Any,
+    attributes: dict[str, Any],
+) -> Optional[dict[str, Any]]:
+    """把已绑定的 ``per_attribute`` 声明换算为最终值并写入审计事实。
+
+    语义：final = 绑定后的 value × attributes[attribute] / per。
+    返回审计事实 dict；effect 未声明 ``per_attribute`` 时返回 ``None``。
+    属性值缺失或不为正数时不静默按 0 折算：本应生效的 effect 转为 unresolved
+    （不产出贡献，覆盖缺口带明确 reason），本来就不生效的保留原状态并记录原因。
+    """
+    declared = (result.payload or {}).get("per_attribute")
+    if not declared:
+        return None
+    attribute = str(declared.get("attribute") or "")
+    per = float(declared.get("per") or 0.0)
+    contribution = result.contribution
+    facts: dict[str, Any] = {
+        "attribute": attribute,
+        "per": per,
+        "declared_value": float(contribution.value) if contribution is not None else None,
+        "attribute_value": None,
+        "scaled_value": None,
+        "status": result.status,
+        "reason": None,
+    }
+    if contribution is None:
+        result.payload["per_attribute"] = dict(facts)
+        return facts
+    raw_attribute = attributes.get(attribute)
+    attribute_value: Optional[float]
+    try:
+        attribute_value = float(raw_attribute) if raw_attribute is not None else None
+    except (TypeError, ValueError):
+        attribute_value = None
+    reason: Optional[str] = None
+    if not math.isfinite(per) or per <= 0:
+        reason = f"per_attribute.per 非法（{per!r}），不能折算"
+    elif attribute_value is None or not math.isfinite(attribute_value) or attribute_value <= 0:
+        reason = (
+            f"per_attribute 缩放属性 {attribute!r} 在当前输入中缺失或不为正数，"
+            "不能静默按 0 折算"
+        )
+    if reason is not None:
+        facts["status"] = binding.BINDING_UNRESOLVED
+        facts["reason"] = reason
+        result.payload["per_attribute"] = dict(facts)
+        contribution.raw = {**(contribution.raw or {}), "per_attribute": dict(facts)}
+        if bool(contribution.included):
+            # 本应生效：不产出贡献，转为 unresolved（由覆盖缺口记录明确 reason）。
+            result.contribution = None
+            result.status = binding.BINDING_UNRESOLVED
+            result.reason = reason
+        else:
+            contribution.exclusion_reason = reason
+            contribution.notes = (
+                f"{contribution.notes}；{reason}" if contribution.notes else reason
+            )
+        return facts
+    scaled = float(contribution.value) * float(attribute_value) / per
+    facts["attribute_value"] = float(attribute_value)
+    facts["scaled_value"] = scaled
+    facts["status"] = binding.BINDING_APPLIED
+    result.payload["per_attribute"] = dict(facts)
+    contribution.raw = {**(contribution.raw or {}), "per_attribute": dict(facts)}
+    note = f"按 {attribute} 缩放（每 {per:g} 点，当前 {attribute_value:g}）"
+    contribution.notes = f"{contribution.notes}；{note}" if contribution.notes else note
+    contribution.value = scaled
+    return facts
+
+
 def compile_from_resolved_model(
     context: FrozenContext, resolved_model: "ResolvedModel"
 ) -> CompileResult:
@@ -856,6 +929,7 @@ def compile_from_resolved_model(
         "attribute_conversion": [],
         "cooldown_reduction": [],
         "ailment_chance_sources": [],
+        "equipment_condition_effects": [],
     }
     duplicates: list[dict[str, Any]] = []
     owned: dict[str, str] = {}
@@ -989,6 +1063,131 @@ def compile_from_resolved_model(
             "coverage_class": (row.raw or {}).get("coverage_class"),
             "coverage_status": "mapped",
         })
+    # -- 装备数量条件 effect（早期阶段，必须参与属性汇总） ------------------
+    # 语义：当当前输入满足“满足某 channel 的装备实例数（可排除角色）>= min_items”时，
+    # 产出 owner 行（如 all_attributes added +8），从而 Dex/属性汇总/attribute_scaling/
+    # per_attribute/actor per-Dex 全部按新 Dex 计算；不满足时只记 not_applicable 账本，
+    # 不产出 0 值贡献。规则来源身份用 verify_mod 唯一校验，未知结构在 validate 阶段拒绝。
+    for rule in binding.normalize_equipment_condition_effects(
+        rules_declared.get("equipment_condition_effects")
+    ):
+        rule_id = str(rule["id"])
+        rule_label = str(rule["label"])
+        try:
+            source_check = binding.resolve_equipment_condition_source(calc, rule["source"])
+        except binding.BindingError as exc:
+            raise PlanCompileError(
+                f"equipment_condition_effects[{rule_id}] 来源绑定失败：{exc}"
+            ) from exc
+        condition = binding.count_equipment_condition_items(calc, rule["requires"])
+        required = bool(rule.get("required", True))
+        status = binding.BINDING_APPLIED
+        reason: Optional[str] = None
+        if not source_check.ok:
+            if required:
+                raise PlanCompileError(
+                    f"equipment_condition_effects[{rule_id}] 来源不可用：{source_check.detail}"
+                )
+            status = source_check.status
+            reason = source_check.detail
+        elif not condition["satisfied"]:
+            status = binding.BINDING_NOT_APPLICABLE
+            reason = (
+                f"条件未满足：{condition['count']} < min_items {condition['min_items']}"
+                f"（channel={condition['channel']}, exclude_roles={condition['exclude_roles']}）"
+            )
+        contribution = None
+        if status == binding.BINDING_APPLIED:
+            evidence_rows = [
+                model.Evidence(
+                    kind=str(item.get("kind") or "user_rule"),
+                    detail=str(item.get("detail") or ""),
+                    locator=item.get("locator"),
+                )
+                for item in rule.get("evidence") or []
+            ]
+            contribution = mapping.make_contribution(
+                contribution_id=f"rule:equipment_condition:{rule_id}",
+                source_kind=str(rule.get("source_kind") or "equipment"),
+                source_label=rule_label,
+                source_path=str(rule.get("source_path") or "rules.equipment_condition_effects"),
+                stat_name=str(rule["stat"]),
+                stat_key=str(rule["stat"]),
+                operation=str(rule["operation"]),
+                value=float(rule["value"]),
+                unit=str(rule.get("unit") or "flat"),
+                damage_tags=list(rule.get("tags") or []),
+                group=f"equipment_condition:{rule_id}",
+                included=True,
+                value_source="derived",
+                status=str(rule.get("status") or model.STATUS_DERIVED),
+                evidence_rows=evidence_rows,
+                notes=rule.get("notes"),
+                raw={
+                    "rule_id": rule_id,
+                    "mod_id": source_check.facts.get("mod_id"),
+                    "item_instance_id": source_check.facts.get("item_instance_id"),
+                    "source": source_check.to_dict(),
+                    "requires": copy.deepcopy(rule["requires"]),
+                    "condition": copy.deepcopy(condition),
+                },
+            )
+            append(
+                contribution,
+                {
+                    "category": "base",
+                    "stage": "baseline",
+                    "handler_id": "base_contribution-v1",
+                    "included_static": True,
+                    "value_mode": "static",
+                    "coverage_status": "mapped",
+                    "ledger_kind": "equipment_condition_effects",
+                },
+            )
+        ledger_row = {
+            "rule_id": rule_id,
+            "label": rule_label,
+            "status": status,
+            "reason": reason,
+            "required": required,
+            "contribution_id": contribution.contribution_id if contribution else None,
+            "stat": rule["stat"],
+            "operation": rule["operation"],
+            "value": float(rule["value"]),
+            "unit": rule.get("unit"),
+            "condition": condition,
+            "source": source_check.to_dict(),
+        }
+        ledger["equipment_condition_effects"].append(ledger_row)
+        coverage_effect_statuses.append(
+            {
+                "effect_id": f"rule:equipment_condition:{rule_id}",
+                "label": rule_label,
+                "status": status,
+                "reason": reason,
+            }
+        )
+        if contribution is None:
+            pseudo_effects.append(
+                {
+                    "effect_id": f"rule:equipment_condition:{rule_id}",
+                    "ledger": ledger_row,
+                    "coverage_status": status,
+                    "required": required,
+                    "included_static": False,
+                    "pseudo_row": {
+                        "effect_id": f"rule:equipment_condition:{rule_id}",
+                        "label": rule_label,
+                        "stat_key": str(rule["stat"]),
+                        "operation": str(rule["operation"]),
+                        "unit": str(rule.get("unit") or "flat"),
+                        "damage_tags": list(rule.get("tags") or []),
+                        "target": None,
+                        "group": f"equipment_condition:{rule_id}",
+                    },
+                }
+            )
+
     attribute_info = mapping.attribute_detail(rows, class_base)
     attributes = attribute_info["attributes"]
     for row, stat in deferred:
@@ -1328,6 +1527,8 @@ def compile_from_resolved_model(
             (item for item in profile.get("effects") or [] if str(item.get("id")) == result.effect_id),
             {},
         )
+        # per_attribute：属性池已就绪，在 append/序列化之前换算成最终值（含审计事实）。
+        per_attribute_facts = _apply_per_attribute_scaling(result, attributes)
         terms: list[dict[str, Any]] = [
             _control_term(str(key)) for key in declared.get("states") or []
         ]
@@ -1352,6 +1553,10 @@ def compile_from_resolved_model(
             "required": bool(declared.get("required", True)),
             "source_facts": copy.deepcopy(result.source or {}),
         }
+        if per_attribute_facts is not None:
+            # 审计事实随 ledger（result.to_dict() → payload）与 contribution.raw 序列化；
+            # 此处的 meta 只供编译期门禁/调试读取，不新增计划字段。
+            meta["per_attribute"] = dict(per_attribute_facts)
         if result.contribution is not None:
             duplicate_of = append(result.contribution, meta)
             if duplicate_of:
@@ -2311,6 +2516,7 @@ def compile_from_resolved_model(
                 "attribute_conversion": copy.deepcopy(ledger["attribute_conversion"][0] if ledger["attribute_conversion"] else {}),
                 "cooldown_reduction": copy.deepcopy(ledger["cooldown_reduction"][0] if ledger["cooldown_reduction"] else {}),
                 "ailment_chance_sources": copy.deepcopy(ledger["ailment_chance_sources"]),
+                "equipment_condition_effects": copy.deepcopy(ledger["equipment_condition_effects"]),
             },
         },
         "parameters": parameters,

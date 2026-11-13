@@ -1,0 +1,86 @@
+{
+  "schema": "le-knowledge-mechanism-v1",
+  "mechanism_id": "damage-channel-added-and-multipliers",
+  "revision": 1,
+  "title": {
+    "zh": "技能基础元素、附加点伤与分量增伤的独立匹配"
+  },
+  "aliases": [
+    "typed added damage",
+    "伤害分量",
+    "元素点伤",
+    "typed increased",
+    "damage-channel-added-and-multipliers"
+  ],
+  "selectors": [
+    {
+      "kind": "stat",
+      "namespace": "stat",
+      "ids": [
+        "added_damage",
+        "damage",
+        "crit_chance",
+        "crit_multiplier",
+        "penetration"
+      ]
+    }
+  ],
+  "applicability": {
+    "components": [
+      "hit"
+    ],
+    "tags": [],
+    "conditions": [
+      "none"
+    ],
+    "required_nodes": [],
+    "notes": "基础类型不构成点伤白名单；行为/主体/条件仍需匹配。其它类型点伤生成对应分量，typed 修正只匹配最终分量，Elemental 仅火冰电。转换或排除需另有显式规则。"
+  },
+  "parameter_bindings": [
+    {
+      "parameter": "typed_contribution_rows",
+      "source": "current:matched_instances",
+      "unit": "current",
+      "note": "读取当前数值/标签/作用主体；不固化具体构筑或技能倍率。"
+    }
+  ],
+  "rule_ref": {
+    "kind": "none",
+    "ref": "公共标签/组件装配规则由受限 Python handler 实现，无独立规则 JSON；实际入口见 handler_ref"
+  },
+  "handler_ref": {
+    "module": "le_calc.mechanics.tag_match",
+    "symbol": "damage_channel_tags",
+    "note": "由 dps_components/build_hit_components 与通用 execution primitive 复用；v4/显式 v2 多击装配均按分量展开。"
+  },
+  "evidence_state": "derived",
+  "implementation_state": "reusable",
+  "evidence_refs": [
+    {
+      "kind": "document",
+      "locator": "archive://docs/reviews/shared-damage-channel-and-equipment-fix-20261113.zh-CN.md",
+      "note": "手算 oracle、当前真实输入链及限定验证范围"
+    },
+    {
+      "kind": "evidence_doc",
+      "locator": "docs/evidence/ballista/damage-channel-contract-verification-20261113.json",
+      "note": "当前正式产物，只读验证与装备词条身份核对"
+    }
+  ],
+  "validation_refs": [
+    "tools/phase3/tests/test_damage_channel_contract.py",
+    "tools/phase3/tests/test_step5_v4_type_isolation.py"
+  ],
+  "research_notes": {
+    "open_questions": [
+      "未宣称任意技能的特殊转换、伤害排除与事件生命周期均已支持；遇到特殊规则单独绑定与验证。"
+    ],
+    "checked_sources": [
+      "tools/phase3/src/le_calc/mechanics/tag_match.py",
+      "tools/phase3/src/le_calc/dps_components.py"
+    ]
+  },
+  "reuse_mode": "shared",
+  "required_abilities": [],
+  "case_scope": []
+}

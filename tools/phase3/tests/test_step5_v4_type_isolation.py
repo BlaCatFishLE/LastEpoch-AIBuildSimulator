@@ -10,8 +10,8 @@
    ``adaptive_damage_type`` 通道；
 2. increased/more/crit/penetration 行同样按隔离闭包匹配；
 3. 未选中行在应用账本记为 ``not_applicable``（reason=标签不匹配该组件）；
-4. 默认 ``isolate_damage_channels=False`` 与修复前默认路径逐字节一致
-   （canonical JSON 指纹守卫），参数为关时仍保留历史的类型串扰口径；
+4. 默认开启隔离；历史口径只允许显式关闭并声明 legacy added 策略，
+   canonical JSON 指纹仅约束这条显式兼容调用；
 5. 参数保持独立：``isolate=True`` 与 ``typed_added_policy="legacy"`` 同时出现时
    归一为 ``by_type`` 语义（隔离闭包下两者对 eligible 行等价；显式归一避免
    未定义行为）。
@@ -191,7 +191,7 @@ class ChannelIsolationTest(unittest.TestCase):
 
         self.assertEqual([component["component_id"] for component in components], ["hit:Fire"])
         fire = components[0]
-        self.assertEqual(fire["tags"], ["Fire", "Bow", "Minion"])
+        self.assertEqual(fire["tags"], ["Fire", "Bow", "Minion", "Elemental"])
         self.assertAlmostEqual(fire["added"], 10.5, delta=1e-12)
         self.assertAlmostEqual(fire["target_multiplier"], 0.8, delta=1e-12)
         # (50 + 10.5×250%) × 暴击期望 1.05 × 目标乘区 0.8
@@ -352,22 +352,17 @@ class IsolatedClosureTest(unittest.TestCase):
 
 
 class LegacyCompatibilityTest(unittest.TestCase):
-    """默认参数路径必须与修复前逐字节一致，并保留历史串扰口径。"""
+    """默认使用正确隔离；历史指纹仅用于显式兼容调用。"""
 
-    def test_default_path_is_byte_identical_to_pre_fix_baseline(self):
+    def test_default_path_matches_safe_isolated_path(self):
         components, applications = _build(_rich_contributions())
-        self.assertEqual(_fingerprint(components, applications), LEGACY_FINGERPRINT)
-
-        # 显式 isolate_damage_channels=False 与省略参数的输出完全相同。
-        explicit_components, explicit_applications = _build(
-            _rich_contributions(), isolate=False
-        )
-        self.assertEqual(
-            _fingerprint(explicit_components, explicit_applications), LEGACY_FINGERPRINT
-        )
+        isolated, apps = _build(_rich_contributions(), isolate=True, typed_added_policy="by_type")
+        self.assertEqual(_fingerprint(components, applications), _fingerprint(isolated, apps))
+        explicit, explicit_apps = _build(_rich_contributions(), isolate=False, typed_added_policy="legacy")
+        self.assertEqual(_fingerprint(explicit, explicit_apps), LEGACY_FINGERPRINT)
 
     def test_legacy_path_keeps_historical_type_leak(self):
-        components, _applications = _build(_rich_contributions())
+        components, _applications = _build(_rich_contributions(), isolate=False, typed_added_policy="legacy")
         by_type = _by_type(components)
         # 修复前的口径：公共 tags 含 Fire，于是 Fire added 行串入其余六种组件。
         self.assertEqual(set(by_type), set(DAMAGE_TYPES))
@@ -387,14 +382,14 @@ class LegacyCompatibilityTest(unittest.TestCase):
 class ComponentTagsTest(unittest.TestCase):
     """``component_tags`` 闭包：默认口径与隔离口径。"""
 
-    def test_component_tags_keeps_legacy_closure_by_default(self):
+    def test_component_tags_isolates_by_default(self):
         self.assertEqual(
             dps_components.component_tags(COMPONENT, "Physical"),
-            ["Physical", "Bow", "Fire", "Minion"],
+            ["Physical", "Bow", "Minion"],
         )
         self.assertEqual(
             dps_components.component_tags(COMPONENT, "Fire"),
-            ["Fire", "Bow", "Minion"],
+            ["Fire", "Bow", "Minion", "Elemental"],
         )
 
     def test_component_tags_isolates_other_damage_types(self):
@@ -405,17 +400,18 @@ class ComponentTagsTest(unittest.TestCase):
         # 当前通道的 damage_type 始终保留在闭包里（即使组件 tags 也声明了它）。
         self.assertEqual(
             dps_components.component_tags(COMPONENT, "Fire", isolate_damage_channels=True),
-            ["Fire", "Bow", "Minion"],
+            ["Fire", "Bow", "Minion", "Elemental"],
         )
         self.assertEqual(
             dps_components.component_tags(COMPONENT, "Cold", isolate_damage_channels=True),
-            ["Cold", "Bow", "Minion"],
+            ["Cold", "Bow", "Minion", "Elemental"],
         )
 
     def test_tag_ok_follows_isolation_flag(self):
         fire_row = _contribution("inc:fire", value=0.5, damage_tags=["Fire"])
         untyped_row = _contribution("inc:untyped", value=0.1)
-        self.assertTrue(dps_components._tag_ok(fire_row, COMPONENT, "Physical"))
+        self.assertFalse(dps_components._tag_ok(fire_row, COMPONENT, "Physical"))
+        self.assertTrue(dps_components._tag_ok(fire_row, COMPONENT, "Physical", isolate_damage_channels=False))
         self.assertFalse(
             dps_components._tag_ok(fire_row, COMPONENT, "Physical", isolate_damage_channels=True)
         )
@@ -441,9 +437,9 @@ class ParameterIndependenceTest(unittest.TestCase):
         )
 
     def test_added_policy_independent_when_isolation_off(self):
-        legacy_components, _apps = _build(_rich_contributions())
+        legacy_components, _apps = _build(_rich_contributions(), isolate=False, typed_added_policy="legacy")
         by_type_components, _apps = _build(
-            _rich_contributions(), typed_added_policy="by_type"
+            _rich_contributions(), isolate=False, typed_added_policy="by_type"
         )
         legacy_ids = {component["component_id"] for component in legacy_components}
         by_type_ids = {component["component_id"] for component in by_type_components}

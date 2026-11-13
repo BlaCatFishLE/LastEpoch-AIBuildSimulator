@@ -112,6 +112,18 @@
 
 遇到已知实现错误，只阻断受影响范围。修复后按新的依赖指纹与新 run-id 交付；需要验证网页重算时只做一条直接相关成功路径。未请求的全仓回归、网页矩阵、旧案例成组运行仍不执行。
 
+## 暗金说明行与特殊词条（每个 BD 必做）
+
+新存档/换技能/换物品时，除常规 dataset mods 外，必须枚举并核实当前实例的全部 `unique_description`、`unique_mod` 与 `property 98` 等特殊 playerProperty 行（它们可能只有说明文本 + 游戏代码，没有可计算 Stat 编码）：
+
+1. **来源**：以当前 `calculation_input.items[].mods` 为清单；同时查 dataset `stats/affixes/translations` 与 IL（类型/方法/常量/`Stats.getDamageTypeAndOtherTags`、`Stats.hasTags`、`buildDamageStats`）。
+2. **分类**：每条标注 可计算 / 不适用（写明机制理由与上界，例如对象是玩家攻击、无流血来源、不同 minion） / 未解决（登记缺什么证据）。伤害相关项不得误标 out_of_scope；当前输入条件是否满足要有可复现统计。
+3. **落盘**：可计算项用通用声明（`effect.per_attribute`、`rules.equipment_condition_effects`、条件/转移规则）写入模板；不得硬编码当前 Dex/装备数量。effect/规则未知字段必须由白名单拒绝，禁止静默忽略；条件未满足不得写成常驻。
+4. **证据与知识**：新增/更新 `docs/evidence/` 证据与 `knowledge/mechanisms/` 条目；模板 limitations 记录不适用/未解决项。模板/规则引用以发布树实际文件为准。
+5. **装备页与重算**：装备页必须展示完整解码词条（含 unique_description，不按 DPS 相关性裁剪）；完整 mods 来自 calculation_input，旧 affixes 摘要须标注；本机重算请求体上限需容纳完整 binding（当前 `MAX_RECALC_REQUEST_BYTES=2_000_000`）。
+
+以上为功能与交付要求；验证仍按“网页验证默认最小范围”，不自动触发全量浏览器/历史案例矩阵。
+
 ## 知识收尾（结果先交付，任务结束前完成）
 
 本轮新增、修正或临时写进案例 profile 的可复用机制，完成实现后必须收尾：先查已有条目，复用或更新；没有则在 `knowledge/mechanisms/` 登记稳定 ID、当前参数绑定、规则/处理器与证据入口，并把通用规则从案例实例配置中分离。确属案例私有的输入可保留在案例中，但要写明不能共享的原因。

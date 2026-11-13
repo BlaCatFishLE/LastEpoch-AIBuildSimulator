@@ -1,6 +1,6 @@
 {
   "schema": "le-release-version-audit-v1",
-  "generated_at": "2026-11-12T21:55:33Z",
+  "generated_at": "2026-11-13T05:06:56Z",
   "scope": "候选树内 tools/phase3/rules/ 规则包、knowledge/definitions/ 共享定义、tools/phase3/data/ 共享数据",
   "method": "按依赖判断而不是按版本后缀：全树扫描代码/测试/配置/知识/文档对文件名的引用，并核对配置默认值与运行时加载点；只有确认运行时不读取且仅被历史记录引用的旧版本才删除。扫描范围排除 .git/.venv/__pycache__/data 与二进制。",
   "decision_basis": {
@@ -188,7 +188,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 5
+            "occurrences": 3
           }
         ],
         "knowledge": [
@@ -570,7 +570,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 3
+            "occurrences": 2
           }
         ],
         "docs": [
@@ -986,7 +986,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 3
+            "occurrences": 2
           }
         ],
         "knowledge": [
@@ -1260,7 +1260,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 3
+            "occurrences": 2
           }
         ],
         "knowledge": [
@@ -1592,7 +1592,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 4
+            "occurrences": 3
           }
         ],
         "knowledge": [
@@ -1648,7 +1648,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 6
+            "occurrences": 4
           }
         ],
         "docs": [
@@ -1714,7 +1714,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 3
+            "occurrences": 2
           }
         ],
         "knowledge": [
@@ -1766,7 +1766,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 3
+            "occurrences": 2
           }
         ],
         "docs": [
@@ -1820,7 +1820,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 3
+            "occurrences": 2
           }
         ],
         "knowledge": [
@@ -1874,7 +1874,7 @@
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
-            "occurrences": 3
+            "occurrences": 2
           }
         ],
         "knowledge": [
@@ -1901,6 +1901,14 @@
           {
             "path": "docs/evidence/ballista/ballista-armed-construction-run-20261113.json",
             "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/ballista/ballista-fix-verification-20261113.json",
+            "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.json",
+            "occurrences": 3
           }
         ],
         "extracted_evidence": [
@@ -1909,8 +1917,32 @@
             "occurrences": 1
           },
           {
+            "path": "docs/evidence/extracted/ballista-explosion-damage-composition.json",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/evidence/extracted/ballista-trap-triggered-summon.json",
+            "occurrences": 3
+          },
+          {
             "path": "docs/evidence/extracted/coverage-boundaries.json",
             "occurrences": 1
+          },
+          {
+            "path": "docs/evidence/extracted/minion-explicit-owner-stat-transfer.json",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/evidence/extracted/mourningfrost-cold-per-dexterity.json",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/evidence/extracted/phantom-grip-crit-chance-per-dexterity.json",
+            "occurrences": 3
+          },
+          {
+            "path": "docs/evidence/extracted/urzil-pride-all-attributes-corrupted-condition.json",
+            "occurrences": 3
           },
           {
             "path": "docs/evidence/extracted/version-audit.json",
@@ -1971,12 +2003,30 @@
           {
             "path": "knowledge/mechanisms/minion-owner-stat-isolation.json",
             "occurrences": 3
+          },
+          {
+            "path": "knowledge/mechanisms/mourningfrost-cold-per-dexterity.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/phantom-grip-crit-chance-per-dexterity.json",
+            "occurrences": 4
+          },
+          {
+            "path": "knowledge/mechanisms/urzil-pride-all-attributes-corrupted-condition.json",
+            "occurrences": 4
+          }
+        ],
+        "tool_tests_or_fixtures": [
+          {
+            "path": "tools/phase3/tests/test_step5_v4_equipment_condition_effect.py",
+            "occurrences": 1
           }
         ]
       },
       "present": true,
-      "bytes": 27110,
-      "sha256": "1611b8a0f4975d7c8f3509f84868ae922b3ad62ae7e34aecfb7f6f30ec1c16d5"
+      "bytes": 33962,
+      "sha256": "25e64696a3ea8e13aba2914ee740cf34b164112fdda6cb5fb3d8b4d0a722a410"
     }
   ],
   "shared_data_files": [
@@ -2078,6 +2128,67 @@
       "knowledge_test_suite": "PASS 91 tests, skipped 0",
       "json_validity": "knowledge/rules/docs/evidence 范围 279 个 JSON 全部合法",
       "bare_author_local_refs_in_knowledge_and_rules": 0
-    }
+    },
+    "incremental_syncs": [
+      {
+        "version": "v0.4.1",
+        "synced_at_local": "2026-11-13T13:09+0800",
+        "source_changes": "作者仓库 2026-11-13 05:24–12:53 的知识/证据修复（独立复核后的修复轮与补遗；不随本仓库分发，相关修复记录以 archive://docs/reviews/… 标记）",
+        "synced_knowledge": {
+          "mechanisms_new": [
+            "mourningfrost-cold-per-dexterity",
+            "phantom-grip-crit-chance-per-dexterity",
+            "urzil-pride-all-attributes-corrupted-condition",
+            "damage-channel-added-and-multipliers"
+          ],
+          "mechanisms_updated": [
+            "ballista-trap-triggered-summon",
+            "ballista-explosion-damage-composition",
+            "minion-explicit-owner-stat-transfer"
+          ],
+          "definitions_updated": [
+            "ballista-armed-construction-v4"
+          ],
+          "definitions_catalog_rehashed": true
+        },
+        "synced_evidence": {
+          "ballista_evidence_files_added": [
+            "docs/evidence/ballista/ballista-fix-verification-20261113.json",
+            "docs/evidence/ballista/ballista-mourningfrost-20261113.json",
+            "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.json",
+            "docs/evidence/ballista/ballista-remaining-equipment-audit-20261113.zh-CN.md",
+            "docs/evidence/ballista/ballista-remaining-equipment-fixes-20261113.json",
+            "docs/evidence/ballista/damage-channel-contract-verification-20261113.json"
+          ],
+          "extracted_added": [
+            "ballista-explosion-damage-composition",
+            "ballista-trap-triggered-summon",
+            "damage-channel-added-and-multipliers",
+            "minion-explicit-owner-stat-transfer",
+            "mourningfrost-cold-per-dexterity",
+            "phantom-grip-crit-chance-per-dexterity",
+            "urzil-pride-all-attributes-corrupted-condition"
+          ],
+          "extracted_updated": [
+            "ballista-armed-construction-v4",
+            "_index.json",
+            "coverage-boundaries.json"
+          ]
+        },
+        "docs": [
+          "docs/mechanisms.md（§7 同步补遗；机制总表 123 → 127 条）"
+        ],
+        "normalization": "复制到公开树的 JSON/文档中作者本地路径统一改为 archive:// 前缀（本次 43 处）；definitions/index.json 的 sha256/revision 按同步后实际文件重算。",
+        "checks": {
+          "knowledge_rebuild": "OK（134 内容文件 / 130 条目；INDEX.generated.md 已重建）",
+          "knowledge_test_suite": "PASS 91 tests, skipped 0",
+          "json_validity": "knowledge/rules/docs/evidence 294 个 JSON 全部合法",
+          "extracted_index_entries": 113,
+          "bare_author_local_refs_in_knowledge_rules_docs": 0,
+          "local_machine_paths_in_tracked_files": 0,
+          "definitions_catalog_consistency": "OK（7 个候选 sha256/revision 与实际文件一致）"
+        }
+      }
+    ]
   }
 }

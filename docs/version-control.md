@@ -67,7 +67,7 @@
 ## 5. dataset 分发与恢复
 
 - 运行所需 dataset 是 `phase1-dataset-003`（约 251 MB），作为 GitHub Release 附件 `data.sqlite` 分发（tag 与仓库地址见 README）。
-- 下载脚本：`scripts/fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator [-Tag v0.4.0] [-Url <直链>] [-OutFile <路径>]`。
+- 下载脚本：`scripts/fetch_dataset.ps1 -Repo BlaCatFishLE/LastEpoch-AIBuildSimulator [-Tag v0.4.1] [-Url <直链>] [-OutFile <路径>]`。
   默认落盘 `data/releases/phase1-dataset-003/data.sqlite`，先写 `.part` 再校验 `data/current.json` 的 `file_sha256`（`afa79e9f…`），成功后原子改名；失败删除临时文件并打印期望/实际 sha256。
 - 手动恢复：从 Releases 下载 `data.sqlite` → 放到 `data/releases/phase1-dataset-003/data.sqlite` → 用 `Get-FileHash -Algorithm SHA256` 核对 `data/current.json` 的 `file_sha256`。
 - 恢复后跑 `.\scripts\le.ps1 doctor`；如需重建指针，只通过 publish 流程，不手改 `data/current.json`。
@@ -97,8 +97,8 @@
 
 1. **创建新仓库**（不含旧历史），完成单次初始提交，确认 `git status` 干净、待提交清单与 `.gitignore` 一致。
 2. 在干净 clone 上按 [README](../README.md)“快速开始”复核：创建 venv → `doctor` → `knowledge rebuild` + `search` → 受影响 `test --suite` → 模板/合成最小输入 `import → prepare → run → validate/serve` → 打开 HTML；把结果填入 README 的“验证状态”区块。
-3. 打 annotated tag：`v0.4.0`（发布后不再悄悄修改该版本对应的提交）。
-4. 创建 GitHub Release（tag `v0.4.0`），上传 dataset 附件：
+3. 打 annotated tag：`v0.4.1`（发布后不再悄悄修改该版本对应的提交）。
+4. 创建 GitHub Release（tag `v0.4.1`），上传 dataset 附件：
    - 附件名 `data.sqlite`，内容为 `phase1-dataset-003/data.sqlite`；
    - 发布说明中给出 sha256（与 `data/current.json` 的 `file_sha256` 一致：`afa79e9f…`）与下载后放置路径；
    - 若 dataset 或仓库地址变化，同步更新 README 的示例命令与占位符。
@@ -106,7 +106,7 @@
 
 ## 8. 发布前检查清单
 
-- [ ] 工作树干净，当前提交就是验收提交；tag `v0.4.0` 已打。
+- [ ] 工作树干净，当前提交就是验收提交；tag `v0.4.1` 已打。
 - [ ] `.gitignore` / `.gitattributes` 与第 2、4 节一致；待提交清单无用户产物、第三方原始快照、本机配置。
 - [ ] 公开文件中**没有**个人机器绝对路径、用户名、邮箱、QQ、第三方版权代码或未授权游戏数据。
 - [ ] `doctor`、`knowledge rebuild`、受影响 `test --suite` 通过（失败/跳过项已记录并说明原因）。
